@@ -62,3 +62,5 @@ data/interim/  data/processed/  data/reales_anon/   outputs/   docs/   src/sdg/ 
 - No marcar nada como validado sin haberlo ejecutado.
 - Si un supuesto no se puede verificar con los datos a la mano, **decirlo**; no rellenar.
 - Commits pequeños, mensaje en español: `[chat-NN] qué cambió`.
+- `docs/historico/` es archivo de referencia, solo lectura. 
+  Nunca parchear ni reutilizar su código: el análisis se reconstruye desde cero sobre `data/raw` normalizado.
