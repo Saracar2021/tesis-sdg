@@ -14,19 +14,44 @@ Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega fi
 - Responder y documentar en **español**. Sé concisa; señala riesgos metodológicos de frente.
 - Entregables en **.md** o **notebooks reproducibles**. Nunca Word salvo pedido explícito.
 
-## Dominio de análisis (decisión de alcance)
-- **El dominio objetivo es URBANO.** Los datos reales del TSTR son extractos bancarios de
-  voluntarios urbanos; calibrar contra rural rompería la comparación sintético↔real.
-- Los 6 archivos `ENPH_2017/rural/` **quedan fuera de alcance** y se declara la exclusión en
-  la tesis. No se mezclan con urbano: son instrumentos distintos (gasto semanal vs. diario).
-- Ciudad de calibración: **por definir** (Bogotá vs. urbano nacional). Hasta que se decida,
-  todo análisis reporta la cifra urbana nacional Y la de Bogotá por separado.
-- Toda cifra declara explícitamente su dominio. Nunca presentar una cifra urbana como nacional,
-  ni una rural como urbana.
-- **VERIFICAR antes de reusar cifras del informe:** el prefijo `NC2R_` parece indicar
-  «cuadernillo 2 RURAL». El 73,1 % de efectivo del informe se atribuyó a `NC2R_CC_P6`.
-  Si esa variable es rural, la cifra es rural y no sostiene un pipeline urbano.
-  Confirmar contra el cuadernillo y el DDI antes de usarla.
+## Dominio de análisis (decisión cerrada, 20 sep 2026)
+- **Dominio de calibración y validación: BOGOTÁ, urbano.** Los 20 voluntarios del componente
+  de datos reales son todos de Bogotá; calibrar contra otro dominio rompería la comparación
+  sintético↔real del TSTR.
+- **Encuadre para la tesis:** el *protocolo* es colombiano y reutilizable; la *calibración y
+  validación empírica* se hace sobre Bogotá como caso de estudio. Declararlo así, no como si
+  las cifras fueran nacionales. La generalización a otras ciudades es trabajo futuro.
+- Los 6 archivos `ENPH_2017/rural/` **quedan fuera de alcance**, con la exclusión declarada.
+  No se mezclan con urbano: son instrumentos distintos (gasto semanal vs. diario).
+- **Respaldo para celdas ralas (jerárquico).** Bogotá reduce el n. Cuando una celda
+  (estrato × ingreso × categoría) no tenga soporte suficiente en Bogotá, el prior se encoge
+  hacia la distribución **urbana nacional** en vez de inventar la celda. Umbral de soporte,
+  método de encogimiento y lista de celdas afectadas se declaran en el Chat 05 y quedan en
+  `outputs/`. Esto es una ventaja del enfoque bayesiano, no un parche: se documenta como tal.
+- Toda cifra declara su dominio explícitamente. Nunca presentar una cifra de Bogotá como
+  nacional, una urbana como nacional, ni una rural como urbana.
+- **Variable de dominio (verificado 20 sep):** GEIH → `AREA = 11` (Bogotá urbano; fuente:
+  diccionario 2025, hoja «Plantilla Diccionario de Datos», fila 169). **No usar `DPTO = 11`**,
+  que suma 237 hogares rurales con `AREA` vacía y rompe la comparabilidad con ENPH urbano.
+  ENPH → `DOMINIO = 'BOGOTÁ'` en `viviendas_hogares` (texto, sin código numérico; `REGION`
+  selecciona los mismos hogares). El respaldo documental de ENPH es débil: ni el `.sav` ni el
+  DDI traen etiquetas y los cuadernillos no mencionan Bogotá. Declararlo como tal.
+- **Tamaño de muestra en Bogotá (sin ponderar):** ENPH 3.918 hogares (4,5 %) y 12.279 personas;
+  GEIH 9.733 hogares y 13.552 ocupados en los 12 meses (793–849 hogares/mes).
+  **ENPH es la restricción activa**, y es donde vive el gasto, que es el núcleo de la tesis.
+- **Cortes de calibración — DECISIÓN:** el cruce estrato (6) × quintil (5) deja 12 de 30 celdas
+  con menos de 30 observaciones en ENPH Bogotá, concentradas en estratos 4–6.
+  Se agrupa **estrato en 3 (1–2 bajo, 3–4 medio, 5–6 alto)** y se **conservan los 5 quintiles
+  de ingreso**: la sensibilidad al ingreso es la contribución central de la tesis (limitación 1
+  de Pancholi), así que esa dimensión no se sacrifica. Estrato e ingreso están muy
+  correlacionados en Colombia, de modo que agrupar estrato pierde poca información.
+  Revalidar el conteo de celdas tras agrupar; lo que siga ralo va a encogimiento jerárquico
+  hacia urbano nacional, con el umbral declarado.
+- **Ingreso — no confundir fuentes:** ENPH usa ingreso del hogar (`ICGU`, ingreso corriente de
+  la unidad de gasto) y GEIH `INGLABO` es ingreso **laboral individual**. No son comparables.
+  Declarar en cada tabla cuál se usa y qué calibra. Los quintiles se calculan **dentro de
+  Bogotá**, no sobre el total nacional.
+
 
 ## Estructura de datos (canónica — no improvisar otra)
 ```
@@ -118,7 +143,23 @@ Todo lo de esta sección va **declarado en la tesis**, no escondido.
   medio de pago). Una discontinuidad entre meses es señal de cambio de instrumento.
   El chequeo detecta saltos grandes, no reformulaciones sutiles: es evidencia corroborante,
   no prueba. Pendiente: control de cambios de las etapas 2501–2512 (consulta al DANE).
-- **Dominio de calibración** (Bogotá vs. urbano nacional): pendiente, ver arriba.
+- **Dominio:** cerrado en Bogotá urbano (ver arriba). El respaldo jerárquico hacia urbano
+  nacional para celdas ralas es un supuesto declarado, con su umbral documentado.
+- **`NC2R_CC_P6` — CORREGIDO (20 sep).** El prefijo `NC2R_` NO implica rural: la variable vive
+  en `hogares/viviendas_hogares.csv`, su etiqueta coincide con la redacción del cuadernillo
+  urbano y está diligenciada en 61.930 hogares urbanos (3.517 de 3.918 en Bogotá, 89,8 %).
+  **Pero su unidad es otra cosa:** la etiqueta es «La principal forma de pago usada para comprar
+  los bienes mencionados en este cuadernillo fue:» → es la forma de pago **principal declarada
+  por hogar**, acotada a **un cuadernillo**, no una participación de transacciones.
+  Un 73,1 % así NO significa «73,1 % de las transacciones son en efectivo». Antes de reusar esa
+  cifra hay que (a) precisar a qué cuadernillo se refiere «este cuadernillo» y (b) corregir su
+  enunciado en el informe. Decidir además cómo se trata el 10,2 % sin dato.
+- **Rotación de hogares en GEIH — PENDIENTE CRÍTICO.** GEIH tiene panel rotativo. Si los hogares
+  se repiten entre meses, apilar 12 meses NO da 12 muestras independientes: los errores estándar
+  saldrían subestimados y los 9.733 hogares de Bogotá serían muchos menos hogares únicos.
+  Verificar si `DIRECTORIO` se repite entre meses **antes** de fijar priors o reportar precisión.
+- **Diccionario GEIH desactualizado:** todos los códigos de tabla terminan en `2401` (versión
+  2024), igual que el formulario. Refuerza el pendiente de comparabilidad semántica.
 - **Mezcla ENPH 2016-2017 con GEIH 2025:** ~9 años de diferencia. Declarar qué calibra cada
   fuente y por qué.
 

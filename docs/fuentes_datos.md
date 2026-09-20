@@ -22,6 +22,10 @@ Los archivos se extrajeron **tal cual** (bytes intactos); el SHA-256 de cada uno
 | 4 | `gastos_diarios_hogar.txt` | VERIFICADO (autoconsistencia) | Descarga fresca del 20 sep 2026; conteo de referencia en §5. No hay cifra oficial contra la cual cotejar. |
 | 5 | Unidad de análisis y **llave de hogar** ENPH | RIESGO (afecta una regla de CLAUDE.md) | Solo 3 de 16 archivos son una fila por hogar/persona; los otros 13 son registros de gasto. En ENPH el hogar se identifica solo por `DIRECTORIO`; la regla de unión `DIRECTORIO + SECUENCIA_P + HOGAR` es de GEIH y en ENPH pierde filas (ver §4). |
 | 6 | DDI de GEIH desactualizado | RIESGO | Título «GRAN ENCUESTA INTEGRADA DE HOGARES 2016 metodologia», «estructura … aplica para el 2023», `caseQnty` = 0. No usar como fuente de conteos ni de etiquetas 2025. |
+| 7 | Definición de Bogotá | RIESGO | En GEIH, `AREA=11` (urbano) y `DPTO=11` (incluye zona rural) no son equivalentes; en ENPH solo existe el texto `BOGOTÁ` (sin código). Ver §10.1. |
+| 8 | Tamaño de muestra de Bogotá | RIESGO | Cruce estrato × quintil: 12 de 30 celdas con <30 observaciones en ENPH (3.918 hogares); 8 de 30 en GEIH con 12 meses apilados y 16–20 con un solo mes. Ver §10.3. |
+| 9 | Prefijo `NC2R_` | RIESGO | No está documentado y `NC2R_CC_P6` viene rellena en hogares urbanos: no usar el prefijo para filtrar por área. Ver §10.4. |
+| 10 | Rotación / independencia de los 12 meses de GEIH | PENDIENTE (parcial) | Ningún hogar aparece en más de un mes (292.942 hogares únicos = filas apiladas), pero `DIRECTORIO` es un contador por mes y la frecuencia de revisita no está documentada; sin identificador de segmento no hay errores estándar de diseño. `FEX_C18/12` sigue siendo válido. Ver §11. |
 
 **Sobre 1 y 2 (son dos cosas distintas).** Que los nombres y el orden de columnas coincidan sostiene el apilamiento *técnico* de los 12 meses. No sostiene la comparabilidad *semántica*: un cambio de redacción de una pregunta, de una alternativa de respuesta o de una definición no altera el nombre de la columna. Esa revisión depende del control de cambios del formulario, y ese documento no llega a 2025 (§7).
 
@@ -353,4 +357,232 @@ Es decir, **«proporcional en todos los módulos» no se sostiene del todo**: di
 | `ENPH_2017/_metadatos/Ficha_metodologica_ENPH.pdf` | 580.256 | `e04c00c249d9de959013efc3b23bbd4aba0a9e4fa8920604889083c1c3473de3` |
 | `ENPH_2017/_metadatos/MANUAL_ENPH.pdf` | 4.794.339 | `7b32810c03418df2369705d49032de23da0e1f1da16fcf7067346e3b5062d0db` |
 | `ENPH_2017/_metadatos/Metodologia_ENPH.pdf` | 2.763.605 | `ddcdaae8cfc6d0ea06cef514d4d51c9380347173fb17efb87715c4081789e559` |
+
+## 10. Verificaciones previas: Bogotá
+
+Las tres se hicieron antes de escribir código de análisis. Los códigos se leen de las fuentes (no se escriben a mano).
+
+### 10.1 ¿Qué variable identifica a Bogotá?
+
+| Base | Variable | Valor de Bogotá | Fuente (cita) | Estado |
+|---|---|---|---|---|
+| GEIH 2025 | `AREA` (identificador de área metropolitana / ciudad) | `11` | Diccionario de datos GEIH 2025, hoja «Plantilla Diccionario de Datos», fila 169: «11 | BOGOTA» (se repite en 8 tablas del diccionario). DDI GEIH: «11 Bogotá DC». | CONCORDANTE |
+| GEIH 2025 | `DPTO` (identificador de departamento) | `11` | Diccionario, fila 112: «11 | BOGOTA» (9 tablas). DDI GEIH: «11 Bogotá DC». | CONCORDANTE |
+| ENPH 2016-2017 | `DOMINIO` (en `viviendas_hogares.csv`) | texto `BOGOTÁ` | No existe código numérico: en el CSV y en el `.sav` el valor es texto y el DDI no lista categorías. Respaldo: la lista de «dominios de estudio: 32 ciudades de departamento» del DDI menciona Bogotá. | TEXTO, sin código |
+| ENPH 2016-2017 | `REGION` (idéntico a `DOMINIO` para Bogotá) | texto `BOGOTÁ` | El DDI lista las regiones en el texto de la pregunta («…BOGOTÁ…»). `REGION` y `DOMINIO` seleccionan exactamente los mismos hogares. | TEXTO, sin código |
+
+**Lo que NO pude confirmar.** Los 5 cuadernillos de ENPH mencionan «Bogotá» 0 veces (son formularios en blanco, sin listas de códigos de dominio), así que no sirven de respaldo para ese valor. Los `.SAV` de enero de GEIH traen 0 etiquetas de valor para `AREA`, 0 para `DPTO` y 0 para `CLASE`; la fuente de los códigos de GEIH es el diccionario (y el DDI), no el SAV.
+
+**Precisión en GEIH: `AREA` y `DPTO` no son lo mismo.**
+
+- `AREA == '11'` es siempre un subconjunto de `DPTO == '11'` (hogares con `AREA` de Bogotá fuera de `DPTO` de Bogotá: 0). `DPTO == '11'` agrega 237 hogares en los 12 meses (rurales, `CLASE` de resto, con `AREA` vacía).
+- Para comparar con **ENPH urbano** (todo Bogotá en ENPH es «Cabeceras»: `P3` = 1: 3.918) el equivalente es `AREA == '11'`. `DPTO == '11'` incluye la zona rural de Bogotá D.C.
+- `CLASE` está etiquetada distinto según la fuente: diccionario «1 Cabecera; 2 Resto» vs. DDI «1 Urbano; 2 Rural». No usar la etiqueta para filtrar; usar los códigos.
+- El diccionario de GEIH tiene todos sus códigos de tabla en la etapa **2401** (2024): es la misma versión 2024 del formulario, otro indicio del pendiente de comparabilidad semántica de §7.
+
+### 10.2 Tamaño de la submuestra de Bogotá (sin ponderar)
+
+Son tamaños muestrales (observaciones), no poblaciones expandidas.
+
+| ENPH 2016-2017 | Bogotá | Total ENPH | % del total |
+|---|---|---|---|
+| Hogares (`viviendas_hogares`, `DOMINIO`) | 3.918 | 87.201 | 4,5 % |
+| Personas (`caracteristicas_generales_personas`, por `DIRECTORIO`) | 12.279 | 291.590 | 4,2 % |
+
+| Mes | Hogares `AREA=11` | Ocupados `AREA=11` | Hogares `DPTO=11` | Ocupados `DPTO=11` |
+|---|---|---|---|---|
+| enero | 797 | 1.083 | 818 | 1.113 |
+| febrero | 822 | 1.160 | 845 | 1.188 |
+| marzo | 793 | 1.118 | 810 | 1.139 |
+| abril | 805 | 1.096 | 822 | 1.119 |
+| mayo | 795 | 1.097 | 815 | 1.126 |
+| junio | 796 | 1.116 | 816 | 1.142 |
+| julio | 808 | 1.161 | 828 | 1.194 |
+| agosto | 811 | 1.090 | 831 | 1.111 |
+| septiembre | 839 | 1.126 | 859 | 1.149 |
+| octubre | 811 | 1.162 | 831 | 1.188 |
+| noviembre | 849 | 1.196 | 870 | 1.222 |
+| diciembre | 807 | 1.147 | 825 | 1.175 |
+| **12 meses** | **9.733** | **13.552** | **9.970** | **13.866** |
+| mín–máx mensual | 793–849 | 1.083–1.196 | 810–870 | 1.111–1.222 |
+
+*Ocupados* = filas de `ocupados.csv` (personas ocupadas). Los meses no son muestras independientes de hogares distintos: hay rotación de segmentos, y este documento no verificó cuántos hogares se repiten entre meses.
+
+### 10.3 Cruce estrato × quintil de ingreso (solo Bogotá)
+
+Los cuantiles se calculan **ponderados por el factor de expansión** dentro de Bogotá; los conteos de celda son **observaciones sin ponderar**. Los empates de ingreso quedan en el mismo quintil, por lo que los quintiles no son exactamente del 20 % (ver «% de peso»). **Se hicieron dos cruces porque la pregunta no decía cuál fuente; son unidades distintas y no comparables entre sí.** Celda «pequeña» = menos de 30 observaciones (en negrita).
+
+**A) ENPH — hogares de Bogotá** (unidad: hogar/unidad de gasto). Estrato: `P8520S1A1` («¿Con cuáles de los siguientes servicios cuenta la vivienda? a. Energía eléctrica Estrato para tarifa:»). Ingreso: `ICGU` («Ingreso Corriente de la Unidad de Gasto»), ponderado con `FEX_C`. 3.899 de 3.918 hogares entran al cruce (excluidos por estrato fuera de 1–6 o vacío: 19; hogares con `ICGU` = 0 incluidos: 31).
+
+| Estrato \ Quintil | Q1 | Q2 | Q3 | Q4 | Q5 | Total |
+|---|---|---|---|---|---|---|
+| 1 | 248 | 172 | 158 | 79 | **19** | 676 |
+| 2 | 406 | 407 | 358 | 301 | 108 | 1580 |
+| 3 | 173 | 215 | 253 | 311 | 258 | 1210 |
+| 4 | **16** | **21** | **14** | 44 | 122 | 217 |
+| 5 | **5** | **2** | **12** | **17** | 94 | 130 |
+| 6 | **4** | **3** | **1** | **4** | 74 | 86 |
+
+**Celdas con menos de 30 observaciones: 12 de 30** (vacías: 0; mínimo: 1). Cortes del quintil (ICGU, COP): 1.128.000, 1.815.000, 2.775.333, 4.518.575. % de peso por quintil: 20,0, 20,0, 20,0, 20,0, 20,0.
+Sensibilidad a la variable de ingreso (celdas < 30): `ICGU` 12 de 30; `IT` 12 de 30; `ICMUG` 11 de 30; `ICMDUG` 11 de 30.
+
+**B) GEIH — ocupados de Bogotá (`AREA=11`), 12 meses apilados** (unidad: persona ocupada; pesos `FEX_C18/12`). Estrato: `P4030S1A1` del hogar («0 Conexión pirata; 1 Bajo - bajo; 2 Bajo…», DDI GEIH). Ingreso: `INGLABO` (ingresos laborales de la persona, **no** ingreso del hogar). 13.081 de 13.552 ocupados entran (sin estrato válido: 29; sin ingreso: 442; con ingreso 0 incluidos: 45).
+
+| Estrato \ Quintil | Q1 | Q2 | Q3 | Q4 | Q5 | Total |
+|---|---|---|---|---|---|---|
+| 1 | 431 | 348 | 229 | 110 | **25** | 1143 |
+| 2 | 1546 | 1496 | 1371 | 775 | 269 | 5457 |
+| 3 | 938 | 773 | 953 | 1018 | 833 | 4515 |
+| 4 | 78 | 67 | 123 | 249 | 782 | 1299 |
+| 5 | **18** | **21** | **25** | 57 | 290 | 411 |
+| 6 | **6** | **9** | **21** | **19** | 201 | 256 |
+
+**Celdas con menos de 30 observaciones: 8 de 30** (vacías: 0; mínimo: 6). Si se usara **un solo mes** (cruce mensual): entre 16 y 20 de 30 celdas con menos de 30 (mediana 18).
+
+**Decisiones mías que conviene que confirmes:** (1) quintiles calculados dentro de Bogotá, no sobre el total nacional; (2) ingreso del hogar completo (`ICGU`) en ENPH pero solo ingreso laboral individual en GEIH, porque en los 8 módulos GEIH no construí un ingreso del hogar; (3) estratos válidos = 1 a 6 (se excluyen `0` y vacío); para ENPH el DDI no trae categorías de `P8520S1A1` (0 categorías) y el Cuadernillo 1 solo dice «Estrato para tarifa», así que asumo que sus códigos son los del DDI de GEIH para la misma pregunta (`P4030S1A1`): **supuesto no verificado en ENPH**.
+
+**C) ENPH — estrato agrupado en 3 (1-2, 3-4, 5-6) × 5 quintiles de `ICGU`.** Los conteos de celda son observaciones **sin ponderar**. Los cortes de quintil se calcularon con `FEX_C` (regla de CLAUDE.md); como sensibilidad se reporta también el resultado con cortes **sin ponderar**. Los quintiles se calculan dentro de cada población (Bogotá; urbano nacional).
+
+*Bogotá* — 3.899 de 3.918 hogares entran al cruce (estrato fuera de 1–6 o vacío: 19).
+
+| Estrato \ Quintil | Q1 | Q2 | Q3 | Q4 | Q5 | Total |
+|---|---|---|---|---|---|---|
+| 1-2 | 654 | 579 | 516 | 380 | 127 | 2256 |
+| 3-4 | 189 | 236 | 267 | 355 | 380 | 1427 |
+| 5-6 | **9** | **5** | **13** | **21** | 168 | 216 |
+
+**Celdas con menos de 30 observaciones: 4 de 15** con cortes ponderados (mínimo 5); con cortes sin ponderar: 4 de 15 (mínimo 5).
+
+*Urbano nacional (P3=1, incluye Bogotá)* — 80.725 de 81.438 hogares entran al cruce (estrato fuera de 1–6 o vacío: 713).
+
+| Estrato \ Quintil | Q1 | Q2 | Q3 | Q4 | Q5 | Total |
+|---|---|---|---|---|---|---|
+| 1-2 | 14373 | 13581 | 12335 | 10176 | 6257 | 56722 |
+| 3-4 | 2374 | 2913 | 4054 | 5291 | 7238 | 21870 |
+| 5-6 | 71 | 79 | 137 | 248 | 1598 | 2133 |
+
+**Celdas con menos de 30 observaciones: 0 de 15** con cortes ponderados (mínimo 71); con cortes sin ponderar: 0 de 15 (mínimo 68).
+
+### 10.4 Prefijo `NC2R_` y la variable `NC2R_CC_P6`
+
+**Respuesta corta: no está confirmado que `NC2R_` signifique «cuadernillo 2 rural», y para `NC2R_CC_P6` los datos lo contradicen.**
+
+- **Dónde vive:** `ENPH_2017/hogares/viviendas_hogares.csv` (tabla DDI «Viviendas y hogares»), **no** en un archivo rural de gasto. Un hogar por fila.
+- **Etiqueta exacta (DDI):** «La principal forma de pago usada para comprar los bienes mencionados en este cuadernillo fue:». Categorías: 1 Tarjeta Débito; 2 Tarjeta de Crédito; 3 Efectivo; 4 Fiador; 5 Bonos; 6 Otro.
+- **Pregunta en los cuadernillos:** Cuadernillo 2 rural: «La principal forma de pago usada para comprar o adquirir los bienes mencionados en este cuadernillo fue:» | Cuadernillo 2 urbano: «La principal forma de pago usada para comprar los bienes mencionados en este cuadernillo fue:». La etiqueta del DDI coincide con la redacción del cuadernillo **urbano** («comprar los bienes…»), no con la del rural («comprar o adquirir los bienes…»).
+- **A quién se le aplicó (datos):** viene rellena en 61.930 de 81.438 hogares urbanos (`P3`=1) y en 3.517 de 3.918 hogares de Bogotá; por clase: `P3`=1: 61.930/81.438; `P3`=2: 1.327/3.005; `P3`=3: 1.736/2.758. Es decir, **no es exclusiva de hogares rurales**.
+- **Documentación del prefijo:** 65 menciones de «NC2R» en 10 PDFs de ENPH (listado de variables), pero 0 definiciones del prefijo. No está documentado.
+- **Evidencia a favor de «rural»:** las demás familias `NC2R_*` (`NC2R_CA`, `NC2R_CE`, `NC2R_CE1`, `NC2R_CJ`) viven en archivos rurales de gasto (`gastos_personales_comidas_fuera.csv`, `gastos_personales.csv`, `gastos_semanales_comidas_fuera.csv`, `gastos_semanales.csv`).
+- **Evidencia en contra de que la «R» sea una regla:** archivos rurales que usan `NC2_` **sin** «R» (`gastos_semanales_capitulo_c.csv`, `gastos_semanales_mercados.csv`); y `NC2R_CC_*` está poblada en hogares urbanos.
+- **Hipótesis compatible con todo lo anterior (no documentada):** el DANE unificó en una sola columna de `viviendas_hogares` la respuesta de las preguntas equivalentes de los cuadernillos 2 urbano y rural, y la nombró con el prefijo rural. Explicaría por qué está rellena en hogares urbanos y por qué la etiqueta usa la redacción urbana. No la puedo verificar con los archivos disponibles.
+- **Conclusión operativa:** tratar `NC2R_` como un nombre heredado de la codificación del cuadernillo 2, no como un indicador de área. Para filtrar por área usar `P3`/`DOMINIO`, nunca el prefijo.
+- **Relevante para la tesis (forma de pago):** variables con «forma/medio de pago» en su etiqueta DDI: «Gastos menos frecuentes - Medio de pago»: 29 (p. ej. `P438A11`, `P438B11`, `P438B12`, `P438C11`); «Viviendas y hogares»: 1 (p. ej. `NC2R_CC_P6`).
+
+### 10.5 ¿A qué cuadernillo se refiere «los bienes mencionados en este cuadernillo»?
+
+**Al cuadernillo 2 (versión urbana o rural, según el hogar). No al cuadernillo 3.** Comparación del texto de los cinco cuadernillos:
+
+| Cuadernillo | Preguntas de forma/medio de pago | Primera redacción | «en este cuadernillo» | «este subcapítulo» |
+|---|---|---|---|---|
+| Cuadernillo 1 | 0 | — | 0 | 0 |
+| Cuadernillo 2 rural | 1 | «La principal forma de pago usada para comprar o adquirir los bienes mencionados en este cuadernillo fue:» | 2 | 0 |
+| Cuadernillo 2 urbano | 1 | «La principal forma de pago usada para comprar los bienes mencionados en este cuadernillo fue:» | 2 | 0 |
+| Cuadernillo 3 | 31 | «El medio de pago usado principalmente para comprar los artículos y servicios enunciados en este subcapítulo fue:» | 1 | 32 |
+| Cuadernillo 4 | 0 | — | 3 | 0 |
+
+- **Cuadernillo 2 urbano:** la pregunta cierra el diario (el encuestador la hace «el día que recoja este cuadernillo diligenciado»); el periodo de referencia de la pregunta anterior es «los catorce días». Capítulos con encabezado detectado: C, D, D1. Capítulo D: «D. GASTOS DIARIOS (comprende los gastos diarios para el hogar y los gastos personales de quien diligencia el cuadernillo)».
+- **Cuadernillo 2 rural:** misma pregunta con «comprar o adquirir»; periodo de referencia «la semana pasada». Capítulo D: «D. GASTOS SEMANALES DEL HOGAR (incluye los gastos de la persona que brinda la información)».
+- **Cuadernillo 3 (gastos menos frecuentes):** no comparte la pregunta. Pregunta el medio de pago **por subcapítulo** («este subcapítulo», 32 menciones), que en los datos son las variables `P438*` del archivo `hogares/gastos_menos_frecuentes_medio_pago.csv`; no es `NC2R_CC_P6`.
+- **Cuadernillo 4 (gastos diarios personales):** 0 preguntas de forma de pago; sus diarios personales quedan fuera de `NC2R_CC_P6`. Ojo: el capítulo D del cuadernillo 2 incluye «los gastos personales de quien diligencia/brinda la información», así que la respuesta puede abarcar parte del gasto personal de esa persona.
+- **Alcance real de la respuesta:** una sola respuesta por hogar sobre los bienes registrados en el cuadernillo 2 (gastos frecuentes: alimentos, comidas fuera del hogar y demás diario/semanal). **No cubre todo el gasto del hogar** (los menos frecuentes son del cuadernillo 3).
+- **Matiz sobre las etiquetas DDI:** `NC2R_CC_P5` dice «Durante la semana pasada (de lunes a domingo) ¿El hogar tuvo algún gasto en alimentos debido a fiestas, reuniones o invitados?» (redacción del cuadernillo **rural**: «semana pasada»), mientras `NC2R_CC_P6` usa la redacción **urbana**. Es coherente con una columna que reúne las respuestas de ambos cuadernillos, pero mezcla periodos de referencia distintos (los catorce días en el urbano; la semana pasada en el rural).
+
+### 10.6 Forma de pago principal en Bogotá (hogares, expandido con `FEX_C`)
+
+Enunciado correcto: **«% de hogares cuya forma de pago principal es X»**. No es un % de transacciones ni de gasto: es una respuesta por hogar, sobre los bienes del cuadernillo 2.
+
+| Código | Forma de pago principal | Hogares en la muestra | % de hogares (expandido) |
+|---|---|---|---|
+| 1 | Tarjeta Débito | 67 | 1,97 % |
+| 2 | Tarjeta de Crédito | 17 | 0,48 % |
+| 3 | Efectivo | 3.413 | 97,03 % |
+| 4 | Fiador | 4 | 0,09 % |
+| 5 | Bonos | 1 | 0,02 % |
+| 6 | Otro | 15 | 0,41 % |
+|  | **Total con respuesta** | **3.517** | **100,00 %** |
+
+Base: 3.517 de 3.918 hogares de Bogotá con respuesta (2.263.757 hogares expandidos). Sin respuesta: 401 hogares (11,42 % expandido); no están en el denominador de la tabla. Valores fuera de las 6 categorías: 0. La expansión con `FEX_C` no corrige la no respuesta del ítem, y no se calcularon errores estándar (el archivo no trae identificador de segmento). Con categorías de pocos hogares en la muestra, el % expandido es poco fiable.
+
+
+## 11. Rotación de la muestra GEIH y apilamiento de 12 meses
+
+### 11.1 Qué documenta el DANE
+
+- **Metodología general (mantenimiento de la muestra):** «El agotamiento de la fuente aparece cuando se encuesta al hogar en repetidas ocasiones. Para evitar este inconveniente, se procede a rotar la medida de tamaño cada año.»
+- **Ficha metodológica (texto extraído del PDF; el PDF trae letras recortadas):** «El mantenimiento de la muestra se da mediante una rotación que consiste en encuestar cada año una medid de tamaño vecina que no haya sido encuestada por alguna investigación en los dos años anteriores com mínimo.»
+- **Metodología general (unidades de muestreo):** «Unidades Secundarias de Muestreo (USM): Son conglomerados de 10 viviendas contiguas en promedio, también llamados segmentos o medidas de tamaño (MT), ubicados tanto en la cabe de cada municipio, con límites fácilmente identificables en los que se encuestan todas las viviendas, hogares y personas.»
+- **Metodología general (pertinencia y desgaste de la fuente):** «se generan muestras trimestrales que cumplen con los criterios estadísticos y se realiza la rotación de la muestra, en donde se selecciona una manzana o se se toma un segmento aleatoriamente, y para la siguiente iteración de la encuesta, se elige un segmento diferente al inicialmente seleccionado.»
+
+**Lectura.** La rotación documentada es **anual** (se cambia la «medida de tamaño» o segmento cada año) y el DANE reconoce que el desgaste aparece cuando el hogar se encuesta «en repetidas ocasiones». **No documenta** cuántas veces ni en qué meses se vuelve a visitar un hogar dentro de un mismo año. Las unidades de muestreo son segmentos de ~10 viviendas donde se encuestan todos los hogares.
+
+### 11.2 Qué muestran los archivos públicos de 2025
+
+| Medida (`datos_hogar` de los 12 meses apilados) | Nacional | Bogotá (`AREA=11`) |
+|---|---|---|
+| Filas de hogares apiladas | 292.942 | 9.733 |
+| Hogares únicos (`DIRECTORIO`+`SECUENCIA_P`+`HOGAR`) | 292.942 | 9.733 |
+| `DIRECTORIO` únicos (viviendas) | 290.925 | 9.692 |
+| Filas por hogar único | 1,000 | 1,000 |
+| Meses en que aparece cada hogar (nº de meses: nº de hogares) | 1: 292.942 | 1: 9.733 |
+| Meses por hogar: media | 1,00 | 1,00 |
+| Meses en que aparece cada `DIRECTORIO` | 1: 290.925 | 1: 9.692 |
+| Filas de personas apiladas | 817.550 | 25.655 |
+| Personas únicas (llave de hogar + `ORDEN`) | 817.550 | 25.655 |
+
+**Un hogar típico aparece en 1 mes.** La diferencia entre filas de hogares y `DIRECTORIO` únicos (2.017) viene de viviendas con más de un hogar **dentro del mismo mes** (3.680 filas comparten `DIRECTORIO` con otra del mismo mes), no de repeticiones entre meses. `HOGAR` es idéntico a `SECUENCIA_P` en todas las filas.
+
+### 11.3 Por qué eso no basta: `DIRECTORIO` parece un contador por mes
+
+| Mes | `DIRECTORIO` mínimo | `DIRECTORIO` máximo | % de pasos de +1 entre valores ordenados |
+|---|---|---|---|
+| enero | 8.086.872 | 8.115.688 | 87,8 % |
+| febrero | 8.115.690 | 8.144.357 | 88,5 % |
+| marzo | 8.144.358 | 8.181.795 | 88,9 % |
+| abril | 8.173.631 | 8.207.970 | 88,1 % |
+| mayo | 8.207.971 | 8.238.895 | 88,8 % |
+| junio | 8.238.974 | 8.283.062 | 88,4 % |
+| julio | 8.283.143 | 8.316.747 | 83,1 % |
+| agosto | 8.316.823 | 8.345.515 | 89,2 % |
+| septiembre | 8.345.569 | 8.374.030 | 89,9 % |
+| octubre | 8.374.095 | 8.403.015 | 88,9 % |
+| noviembre | 8.403.077 | 8.435.840 | 89,6 % |
+| diciembre | 8.435.963 | 8.473.908 | 88,7 % |
+
+Los rangos son bloques consecutivos y crecientes en el tiempo (solo se solapan los rangos de: marzo). Es compatible con un número asignado por orden de extracción (hipótesis; no está documentado) y no con un identificador persistente de vivienda. Por tanto, que ningún `DIRECTORIO` se repita entre meses **no prueba por sí solo** que los hogares no se repitan: podría ser un efecto del identificador.
+
+### 11.4 Prueba independiente del identificador (composición del hogar)
+
+Huella del hogar = (`DPTO`, `AREA`, sexo y edad de sus miembros). Si hubiera hogares repetidos entre meses, los pares con la misma huella serían **más frecuentes entre meses distintos que dentro del mismo mes**. Se compara la tasa de pares iguales (sobre los pares posibles del mismo estrato) en ambos casos:
+
+| Hogares comparados | Edad | Hogares | Pares iguales, mismo mes | Pares iguales, meses distintos | Razón (entre meses / mismo mes) | Nota |
+|---|---|---|---|---|---|---|
+| 3 o más personas | exacta | 152.326 | 62 | 697 | 1,02 |  |
+| 3 o más personas | tramos de 5 años | 152.326 | 7.041 | 78.382 | 1,01 |  |
+| 4 o más personas | exacta | 83.135 | 2 | 51 | 2,32 | pocos pares: razón inestable |
+| 4 o más personas | tramos de 5 años | 83.135 | 1.106 | 12.446 | 1,02 |  |
+
+Una razón cercana a 1 significa que no hay exceso de coincidencias entre meses. La prueba detectaría una repetición sustancial de hogares, pero no repeticiones aisladas ni hogares cuya composición cambió entre visitas (nacimientos, cambios de edad de más de un tramo, mudanzas).
+
+### 11.5 Conclusión e implicaciones
+
+**Estado: PENDIENTE (parcial).** Lo verificado y lo no verificado, por separado:
+
+- **Verificado en los archivos:** hogares únicos = filas apiladas (292.942 en el país; 9.733 en Bogotá); ningún hogar en más de un mes; la prueba por composición no muestra exceso de coincidencias entre meses.
+- **No verificado:** que el diseño no vuelva a visitar hogares dentro del año. El DANE solo documenta rotación anual de segmentos y el identificador no es persistente; la frecuencia de revisita no está escrita en ningún documento del repositorio.
+- **Apilar los 12 meses:** no hay duplicados que eliminar y no corresponde deduplicar por `DIRECTORIO` (los extra son hogares de la misma vivienda). No se detectó nada que lo contradiga: cada fila-hogar puede tratarse como un hogar distinto, con las salvedades de más abajo.
+- **`FEX_C18 / 12`:** la suma mensual de `FEX_C18` (personas) va de 51,831 a 52,296 millones: es casi constante y crece de mes a mes, coherente con la calibración mensual que menciona la Metodología (no verifiqué cómo se construye `FEX_C18`). Dividir entre 12 da el promedio anual de 12 cortes mensuales, y esa aritmética no depende de que haya rotación. En principio, si hubiera hogares repetidos lo afectado sería la varianza, no el peso.
+- **Lo que sí importa (conglomerados):** la metodología define segmentos de ~10 viviendas donde se encuestan todos los hogares, lo que induce correlación dentro del segmento. Los archivos **no traen identificador de segmento ni de UPM** (columnas buscadas: ninguna), así que no se pueden calcular errores estándar de diseño y los ingenuos subestiman la incertidumbre.
+- **Para la partición train/test (CTGAN, TSTR):** no se detectaron hogares repetidos, así que no se espera filtración por repetición; pero las viviendas vecinas comparten características (hipótesis, no verificada). Como sensibilidad se podría particionar por bloques de `DIRECTORIO` o por mes; la decisión es tuya.
+- **CLAUDE.md:** la regla `FEX_C18 / 12` sigue vigente. Conviene añadir la nota «GEIH 2025 público: sin panel detectable ni identificador de segmento».
+
 

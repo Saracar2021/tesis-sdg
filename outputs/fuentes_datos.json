@@ -4230,6 +4230,1136 @@
    "total": 25470
   }
  },
+ "bogota": {
+  "codigos": {
+   "diccionario": {
+    "AREA": {
+     "apariciones": 8,
+     "filas": [
+      169,
+      510,
+      644
+     ],
+     "codigos": [
+      "11"
+     ],
+     "nombres": [
+      "BOGOTA"
+     ]
+    },
+    "DPTO": {
+     "apariciones": 9,
+     "filas": [
+      112,
+      145,
+      477
+     ],
+     "codigos": [
+      "11"
+     ],
+     "nombres": [
+      "BOGOTA"
+     ]
+    }
+   },
+   "diccionario_clase": [
+    "1 Cabecera",
+    "2 Resto"
+   ],
+   "diccionario_etapas": [
+    "2401"
+   ],
+   "ddi_bogota": {
+    "AREA": [
+     "11 Bogotá DC"
+    ],
+    "DPTO": [
+     "11 Bogotá DC"
+    ]
+   },
+   "ddi_clase": [
+    "1 Urbano",
+    "2 Rural"
+   ],
+   "ddi_estrato": [
+    "0 Conexión pirata",
+    "1 Bajo - bajo",
+    "2 Bajo",
+    "3 Medio - bajo",
+    "4 Medio",
+    "5 Medio - alto",
+    "6 Alto",
+    "9 No sabe o cuenta con planta eléctrica"
+   ],
+   "sav_etiquetas_valor": {
+    "AREA": 0,
+    "DPTO": 0,
+    "CLASE": 0
+   }
+  },
+  "cod_area": "11",
+  "cod_dpto": "11",
+  "estratos": [
+   "1",
+   "2",
+   "3",
+   "4",
+   "5",
+   "6"
+  ],
+  "geih": {
+   "meses": [
+    {
+     "mes": "enero",
+     "hogares_area": 797,
+     "ocupados_area": 1083,
+     "hogares_dpto": 818,
+     "ocupados_dpto": 1113,
+     "hogares_dpto_fuera_area": 21,
+     "area_no_contenida_en_dpto": 0
+    },
+    {
+     "mes": "febrero",
+     "hogares_area": 822,
+     "ocupados_area": 1160,
+     "hogares_dpto": 845,
+     "ocupados_dpto": 1188,
+     "hogares_dpto_fuera_area": 23,
+     "area_no_contenida_en_dpto": 0
+    },
+    {
+     "mes": "marzo",
+     "hogares_area": 793,
+     "ocupados_area": 1118,
+     "hogares_dpto": 810,
+     "ocupados_dpto": 1139,
+     "hogares_dpto_fuera_area": 17,
+     "area_no_contenida_en_dpto": 0
+    },
+    {
+     "mes": "abril",
+     "hogares_area": 805,
+     "ocupados_area": 1096,
+     "hogares_dpto": 822,
+     "ocupados_dpto": 1119,
+     "hogares_dpto_fuera_area": 17,
+     "area_no_contenida_en_dpto": 0
+    },
+    {
+     "mes": "mayo",
+     "hogares_area": 795,
+     "ocupados_area": 1097,
+     "hogares_dpto": 815,
+     "ocupados_dpto": 1126,
+     "hogares_dpto_fuera_area": 20,
+     "area_no_contenida_en_dpto": 0
+    },
+    {
+     "mes": "junio",
+     "hogares_area": 796,
+     "ocupados_area": 1116,
+     "hogares_dpto": 816,
+     "ocupados_dpto": 1142,
+     "hogares_dpto_fuera_area": 20,
+     "area_no_contenida_en_dpto": 0
+    },
+    {
+     "mes": "julio",
+     "hogares_area": 808,
+     "ocupados_area": 1161,
+     "hogares_dpto": 828,
+     "ocupados_dpto": 1194,
+     "hogares_dpto_fuera_area": 20,
+     "area_no_contenida_en_dpto": 0
+    },
+    {
+     "mes": "agosto",
+     "hogares_area": 811,
+     "ocupados_area": 1090,
+     "hogares_dpto": 831,
+     "ocupados_dpto": 1111,
+     "hogares_dpto_fuera_area": 20,
+     "area_no_contenida_en_dpto": 0
+    },
+    {
+     "mes": "septiembre",
+     "hogares_area": 839,
+     "ocupados_area": 1126,
+     "hogares_dpto": 859,
+     "ocupados_dpto": 1149,
+     "hogares_dpto_fuera_area": 20,
+     "area_no_contenida_en_dpto": 0
+    },
+    {
+     "mes": "octubre",
+     "hogares_area": 811,
+     "ocupados_area": 1162,
+     "hogares_dpto": 831,
+     "ocupados_dpto": 1188,
+     "hogares_dpto_fuera_area": 20,
+     "area_no_contenida_en_dpto": 0
+    },
+    {
+     "mes": "noviembre",
+     "hogares_area": 849,
+     "ocupados_area": 1196,
+     "hogares_dpto": 870,
+     "ocupados_dpto": 1222,
+     "hogares_dpto_fuera_area": 21,
+     "area_no_contenida_en_dpto": 0
+    },
+    {
+     "mes": "diciembre",
+     "hogares_area": 807,
+     "ocupados_area": 1147,
+     "hogares_dpto": 825,
+     "ocupados_dpto": 1175,
+     "hogares_dpto_fuera_area": 18,
+     "area_no_contenida_en_dpto": 0
+    }
+   ],
+   "n_ocupados": 13552,
+   "sin_estrato": 29,
+   "sin_ingreso": 442,
+   "ingreso_cero": 45,
+   "cruce_12m": {
+    "n": 13081,
+    "cortes": [
+     1300000.0,
+     1500000.0,
+     2000000.0,
+     3700000.0
+    ],
+    "tabla": {
+     "1": [
+      431,
+      348,
+      229,
+      110,
+      25
+     ],
+     "2": [
+      1546,
+      1496,
+      1371,
+      775,
+      269
+     ],
+     "3": [
+      938,
+      773,
+      953,
+      1018,
+      833
+     ],
+     "4": [
+      78,
+      67,
+      123,
+      249,
+      782
+     ],
+     "5": [
+      18,
+      21,
+      25,
+      57,
+      290
+     ],
+     "6": [
+      6,
+      9,
+      21,
+      19,
+      201
+     ]
+    },
+    "celdas": 30,
+    "celdas_menos_30": 8,
+    "celdas_vacias": 0,
+    "minimo": 6,
+    "pct_peso_por_quintil": [
+     22.1,
+     20.1,
+     20.6,
+     17.2,
+     20.0
+    ]
+   },
+   "cruce_un_mes": {
+    "celdas_menos_30_min": 16,
+    "mediana": 18.5,
+    "max": 20,
+    "celdas": 30
+   }
+  },
+  "enph": {
+   "dominio_valores": [
+    "BOGOTÁ"
+   ],
+   "region_valores": [
+    "BOGOTÁ"
+   ],
+   "hogares_bogota": 3918,
+   "hogares_total": 87201,
+   "personas_bogota": 12279,
+   "personas_total": 291590,
+   "p3_en_bogota": {
+    "1": 3918
+   },
+   "region_igual_dominio": true,
+   "ddi_lista_dominios_menciona_bogota": true,
+   "ddi_region_qstn_menciona_bogota": true,
+   "estrato_valores": {
+    "2": 1580,
+    "3": 1210,
+    "1": 676,
+    "4": 217,
+    "5": 130,
+    "6": 86,
+    "0": 12,
+    "(vacío)": 7
+   },
+   "sin_estrato_valido": 19,
+   "ingreso_cero_ICGU": 31,
+   "cruces": {
+    "ICGU": {
+     "n": 3899,
+     "cortes": [
+      1128000.0,
+      1815000.0,
+      2775333.33333333,
+      4518575.0
+     ],
+     "tabla": {
+      "1": [
+       248,
+       172,
+       158,
+       79,
+       19
+      ],
+      "2": [
+       406,
+       407,
+       358,
+       301,
+       108
+      ],
+      "3": [
+       173,
+       215,
+       253,
+       311,
+       258
+      ],
+      "4": [
+       16,
+       21,
+       14,
+       44,
+       122
+      ],
+      "5": [
+       5,
+       2,
+       12,
+       17,
+       94
+      ],
+      "6": [
+       4,
+       3,
+       1,
+       4,
+       74
+      ]
+     },
+     "celdas": 30,
+     "celdas_menos_30": 12,
+     "celdas_vacias": 0,
+     "minimo": 1,
+     "pct_peso_por_quintil": [
+      20.0,
+      20.0,
+      20.0,
+      20.0,
+      20.0
+     ]
+    },
+    "IT": {
+     "n": 3899,
+     "cortes": [
+      1137700.0,
+      1837500.0,
+      2816666.66666667,
+      4650000.0
+     ],
+     "tabla": {
+      "1": [
+       249,
+       177,
+       153,
+       77,
+       20
+      ],
+      "2": [
+       406,
+       410,
+       361,
+       293,
+       110
+      ],
+      "3": [
+       173,
+       214,
+       251,
+       316,
+       256
+      ],
+      "4": [
+       15,
+       21,
+       16,
+       44,
+       121
+      ],
+      "5": [
+       5,
+       1,
+       12,
+       17,
+       95
+      ],
+      "6": [
+       4,
+       3,
+       2,
+       3,
+       74
+      ]
+     },
+     "celdas": 30,
+     "celdas_menos_30": 12,
+     "celdas_vacias": 0,
+     "minimo": 1,
+     "pct_peso_por_quintil": [
+      20.0,
+      20.0,
+      20.0,
+      20.0,
+      20.0
+     ]
+    },
+    "ICMUG": {
+     "n": 3899,
+     "cortes": [
+      860000.0,
+      1500000.0,
+      2277700.0,
+      3933333.33333333
+     ],
+     "tabla": {
+      "1": [
+       244,
+       195,
+       134,
+       79,
+       24
+      ],
+      "2": [
+       384,
+       406,
+       374,
+       307,
+       109
+      ],
+      "3": [
+       174,
+       215,
+       250,
+       301,
+       270
+      ],
+      "4": [
+       30,
+       15,
+       11,
+       43,
+       118
+      ],
+      "5": [
+       12,
+       9,
+       6,
+       16,
+       87
+      ],
+      "6": [
+       6,
+       1,
+       3,
+       7,
+       69
+      ]
+     },
+     "celdas": 30,
+     "celdas_menos_30": 11,
+     "celdas_vacias": 0,
+     "minimo": 1,
+     "pct_peso_por_quintil": [
+      20.0,
+      20.4,
+      19.6,
+      20.0,
+      20.0
+     ]
+    },
+    "ICMDUG": {
+     "n": 3899,
+     "cortes": [
+      803833.333333333,
+      1400132.0,
+      2150000.0,
+      3645000.0
+     ],
+     "tabla": {
+      "1": [
+       233,
+       199,
+       138,
+       80,
+       26
+      ],
+      "2": [
+       374,
+       405,
+       377,
+       311,
+       113
+      ],
+      "3": [
+       179,
+       208,
+       253,
+       303,
+       267
+      ],
+      "4": [
+       34,
+       10,
+       14,
+       42,
+       117
+      ],
+      "5": [
+       14,
+       5,
+       10,
+       15,
+       86
+      ],
+      "6": [
+       6,
+       1,
+       3,
+       5,
+       71
+      ]
+     },
+     "celdas": 30,
+     "celdas_menos_30": 11,
+     "celdas_vacias": 0,
+     "minimo": 1,
+     "pct_peso_por_quintil": [
+      20.0,
+      20.0,
+      20.0,
+      20.0,
+      20.0
+     ]
+    }
+   },
+   "ddi_estrato_categorias": 0,
+   "etiquetas_ddi": {
+    "ICGU": "Ingreso Corriente de la Unidad de Gasto",
+    "IT": "Ingreso Total",
+    "ICMUG": "Ingreso Corriente Monetario de la Unidad de Gasto",
+    "ICMDUG": "Ingreso Corriente Monetario Disponible de la Unidada de Gasto",
+    "P8520S1A1": "¿Con cuáles de los siguientes servicios cuenta la vivienda? a. Energía eléctrica Estrato para tarifa:",
+    "NC2R_CC_P5": "Durante la semana pasada (de lunes a domingo) ¿El hogar tuvo algún gasto en alimentos debido a fiestas, reuniones o invitados?"
+   },
+   "relleno_NC2R_CC_P5": {
+    "por_P3": {
+     "1": {
+      "llenos": 61909,
+      "hogares": 81438
+     },
+     "2": {
+      "llenos": 3005,
+      "hogares": 3005
+     },
+     "3": {
+      "llenos": 2758,
+      "hogares": 2758
+     }
+    },
+    "bogota": {
+     "llenos": 3517,
+     "hogares": 3918
+    }
+   },
+   "relleno_NC2R_CC_P6": {
+    "por_P3": {
+     "1": {
+      "llenos": 61930,
+      "hogares": 81438
+     },
+     "2": {
+      "llenos": 1327,
+      "hogares": 3005
+     },
+     "3": {
+      "llenos": 1736,
+      "hogares": 2758
+     }
+    },
+    "bogota": {
+     "llenos": 3517,
+     "hogares": 3918
+    }
+   },
+   "NC2R_CC_P6_valores": {
+    "3": 63712,
+    "(vacío)": 22208,
+    "4": 444,
+    "6": 390,
+    "1": 266,
+    "2": 174,
+    "5": 7
+   }
+  },
+  "nc2r": {
+   "ddi_tabla": "Viviendas y hogares",
+   "ddi_etiqueta": "La principal forma de pago usada para comprar los bienes mencionados en este cuadernillo fue:",
+   "ddi_categorias": [
+    "1 Tarjeta Débito",
+    "2 Tarjeta de Crédito",
+    "3 Efectivo",
+    "4 Fiador",
+    "5 Bonos",
+    "6 Otro"
+   ],
+   "archivos_con_NC2R": {
+    "ENPH_2017/hogares/viviendas_hogares.csv": [
+     "NC2R_CC"
+    ],
+    "ENPH_2017/rural/gastos_personales_comidas_fuera.csv": [
+     "NC2R_CA",
+     "NC2R_CJ"
+    ],
+    "ENPH_2017/rural/gastos_personales.csv": [
+     "NC2R_CE"
+    ],
+    "ENPH_2017/rural/gastos_semanales_comidas_fuera.csv": [
+     "NC2R_CE1"
+    ],
+    "ENPH_2017/rural/gastos_semanales.csv": [
+     "NC2R_CA"
+    ]
+   },
+   "archivo_de_NC2R_CC_P6": [
+    "ENPH_2017/hogares/viviendas_hogares.csv"
+   ],
+   "archivos_rurales_con_NC2_sin_R": [
+    "ENPH_2017/rural/gastos_semanales_capitulo_c.csv",
+    "ENPH_2017/rural/gastos_semanales_mercados.csv"
+   ],
+   "pregunta_en_cuadernillo": {
+    "Cuadernillo 2 rural": "La principal forma de pago usada para comprar o adquirir los bienes mencionados en este cuadernillo fue:",
+    "Cuadernillo 2 urbano": "La principal forma de pago usada para comprar los bienes mencionados en este cuadernillo fue:"
+   },
+   "bogota_en_cuadernillos": 0,
+   "n_cuadernillos": 5,
+   "menciones_en_pdfs": 65,
+   "definiciones_del_prefijo_en_pdfs": 0,
+   "n_pdfs": 10,
+   "variables_forma_de_pago": {
+    "Gastos menos frecuentes - Medio de pago": {
+     "n": 29,
+     "ejemplos": [
+      "P438A11",
+      "P438B11",
+      "P438B12",
+      "P438C11"
+     ]
+    },
+    "Viviendas y hogares": {
+     "n": 1,
+     "ejemplos": [
+      "NC2R_CC_P6"
+     ]
+    }
+   }
+  },
+  "agrupado": {
+   "grupos": [
+    "1-2",
+    "3-4",
+    "5-6"
+   ],
+   "Bogotá": {
+    "hogares": 3918,
+    "sin_grupo": 19,
+    "cuantiles_ponderados": {
+     "n": 3899,
+     "cortes": [
+      1128000.0,
+      1815000.0,
+      2775333.33333333,
+      4518575.0
+     ],
+     "tabla": {
+      "1-2": [
+       654,
+       579,
+       516,
+       380,
+       127
+      ],
+      "3-4": [
+       189,
+       236,
+       267,
+       355,
+       380
+      ],
+      "5-6": [
+       9,
+       5,
+       13,
+       21,
+       168
+      ]
+     },
+     "celdas": 15,
+     "celdas_menos_30": 4,
+     "celdas_vacias": 0,
+     "minimo": 5,
+     "pct_peso_por_quintil": [
+      20.0,
+      20.0,
+      20.0,
+      20.0,
+      20.0
+     ]
+    },
+    "cuantiles_sin_ponderar": {
+     "n": 3899,
+     "cortes": [
+      1073333.33333333,
+      1702666.66666667,
+      2570000.0,
+      4145333.33333333
+     ],
+     "tabla": {
+      "1-2": [
+       595,
+       563,
+       518,
+       415,
+       165
+      ],
+      "3-4": [
+       177,
+       212,
+       250,
+       347,
+       441
+      ],
+      "5-6": [
+       8,
+       5,
+       12,
+       18,
+       173
+      ]
+     },
+     "celdas": 15,
+     "celdas_menos_30": 4,
+     "celdas_vacias": 0,
+     "minimo": 5,
+     "pct_peso_por_quintil": [
+      20.0,
+      20.0,
+      20.0,
+      20.0,
+      20.0
+     ]
+    }
+   },
+   "Urbano nacional (P3=1, incluye Bogotá)": {
+    "hogares": 81438,
+    "sin_grupo": 713,
+    "cuantiles_ponderados": {
+     "n": 80725,
+     "cortes": [
+      834000.0,
+      1333333.33333333,
+      2001500.0,
+      3255166.66666667
+     ],
+     "tabla": {
+      "1-2": [
+       14373,
+       13581,
+       12335,
+       10176,
+       6257
+      ],
+      "3-4": [
+       2374,
+       2913,
+       4054,
+       5291,
+       7238
+      ],
+      "5-6": [
+       71,
+       79,
+       137,
+       248,
+       1598
+      ]
+     },
+     "celdas": 15,
+     "celdas_menos_30": 0,
+     "celdas_vacias": 0,
+     "minimo": 71,
+     "pct_peso_por_quintil": [
+      20.0,
+      20.0,
+      20.0,
+      20.0,
+      20.0
+     ]
+    },
+    "cuantiles_sin_ponderar": {
+     "n": 80725,
+     "cortes": [
+      810000.0,
+      1300000.0,
+      1950000.0,
+      3116666.66666667
+     ],
+     "tabla": {
+      "1-2": [
+       13835,
+       13517,
+       11990,
+       10517,
+       6863
+      ],
+      "3-4": [
+       2262,
+       2891,
+       3793,
+       5265,
+       7659
+      ],
+      "5-6": [
+       68,
+       77,
+       117,
+       249,
+       1622
+      ]
+     },
+     "celdas": 15,
+     "celdas_menos_30": 0,
+     "celdas_vacias": 0,
+     "minimo": 68,
+     "pct_peso_por_quintil": [
+      20.0,
+      20.4,
+      19.7,
+      19.9,
+      20.0
+     ]
+    }
+   }
+  },
+  "cuadernillos_pago": {
+   "Cuadernillo 1": {
+    "n_preguntas_pago": 0,
+    "primera": null,
+    "en_este_cuadernillo": 0,
+    "recoge_al_recoger": false,
+    "periodo": "la semana pasada",
+    "capitulos": [],
+    "este_subcapitulo": 0,
+    "capitulo_D": null
+   },
+   "Cuadernillo 2 rural": {
+    "n_preguntas_pago": 1,
+    "primera": "La principal forma de pago usada para comprar o adquirir los bienes mencionados en este cuadernillo fue:",
+    "en_este_cuadernillo": 2,
+    "recoge_al_recoger": false,
+    "periodo": "la semana pasada",
+    "capitulos": [
+     "C",
+     "D",
+     "D1"
+    ],
+    "este_subcapitulo": 0,
+    "capitulo_D": "D. GASTOS SEMANALES DEL HOGAR (incluye los gastos de la persona que brinda la información)"
+   },
+   "Cuadernillo 2 urbano": {
+    "n_preguntas_pago": 1,
+    "primera": "La principal forma de pago usada para comprar los bienes mencionados en este cuadernillo fue:",
+    "en_este_cuadernillo": 2,
+    "recoge_al_recoger": true,
+    "periodo": "los catorce días",
+    "capitulos": [
+     "C",
+     "D",
+     "D1"
+    ],
+    "este_subcapitulo": 0,
+    "capitulo_D": "D. GASTOS DIARIOS (comprende los gastos diarios para el hogar y los gastos personales de quien diligencia el cuadernillo)"
+   },
+   "Cuadernillo 3": {
+    "n_preguntas_pago": 31,
+    "primera": "El medio de pago usado principalmente para comprar los artículos y servicios enunciados en este subcapítulo fue:",
+    "en_este_cuadernillo": 1,
+    "recoge_al_recoger": false,
+    "periodo": null,
+    "capitulos": [],
+    "este_subcapitulo": 32,
+    "capitulo_D": null
+   },
+   "Cuadernillo 4": {
+    "n_preguntas_pago": 0,
+    "primera": null,
+    "en_este_cuadernillo": 3,
+    "recoge_al_recoger": false,
+    "periodo": null,
+    "capitulos": [
+     "C",
+     "C1"
+    ],
+    "este_subcapitulo": 0,
+    "capitulo_D": null
+   }
+  },
+  "forma_pago": {
+   "filas": [
+    {
+     "codigo": "1",
+     "categoria": "Tarjeta Débito",
+     "hogares_muestra": 67,
+     "pct_hogares_expandido": 1.97
+    },
+    {
+     "codigo": "2",
+     "categoria": "Tarjeta de Crédito",
+     "hogares_muestra": 17,
+     "pct_hogares_expandido": 0.48
+    },
+    {
+     "codigo": "3",
+     "categoria": "Efectivo",
+     "hogares_muestra": 3413,
+     "pct_hogares_expandido": 97.03
+    },
+    {
+     "codigo": "4",
+     "categoria": "Fiador",
+     "hogares_muestra": 4,
+     "pct_hogares_expandido": 0.09
+    },
+    {
+     "codigo": "5",
+     "categoria": "Bonos",
+     "hogares_muestra": 1,
+     "pct_hogares_expandido": 0.02
+    },
+    {
+     "codigo": "6",
+     "categoria": "Otro",
+     "hogares_muestra": 15,
+     "pct_hogares_expandido": 0.41
+    }
+   ],
+   "hogares_bogota": 3918,
+   "hogares_con_respuesta": 3517,
+   "hogares_sin_respuesta": 401,
+   "pct_sin_respuesta_ponderado": 11.42,
+   "hogares_expandidos_con_respuesta": 2263757,
+   "valores_fuera_de_categorias": 0
+  },
+  "rotacion": {
+   "nacional": {
+    "filas_hogares": 292942,
+    "directorios_unicos": 290925,
+    "hogares_unicos": 292942,
+    "meses_por_hogar": {
+     "1": 292942
+    },
+    "meses_por_directorio": {
+     "1": 290925
+    },
+    "media_meses_por_hogar": 1.0,
+    "filas_personas": 817550,
+    "personas_unicas": 817550,
+    "meses_por_persona": {
+     "1": 817550
+    }
+   },
+   "bogota": {
+    "filas_hogares": 9733,
+    "directorios_unicos": 9692,
+    "hogares_unicos": 9733,
+    "meses_por_hogar": {
+     "1": 9733
+    },
+    "meses_por_directorio": {
+     "1": 9692
+    },
+    "media_meses_por_hogar": 1.0,
+    "filas_personas": 25655,
+    "personas_unicas": 25655,
+    "meses_por_persona": {
+     "1": 25655
+    }
+   },
+   "directorio_por_mes": [
+    {
+     "mes": "enero",
+     "min": 8086872,
+     "max": 8115688,
+     "pct_pasos_de_1": 87.8
+    },
+    {
+     "mes": "febrero",
+     "min": 8115690,
+     "max": 8144357,
+     "pct_pasos_de_1": 88.5
+    },
+    {
+     "mes": "marzo",
+     "min": 8144358,
+     "max": 8181795,
+     "pct_pasos_de_1": 88.9
+    },
+    {
+     "mes": "abril",
+     "min": 8173631,
+     "max": 8207970,
+     "pct_pasos_de_1": 88.1
+    },
+    {
+     "mes": "mayo",
+     "min": 8207971,
+     "max": 8238895,
+     "pct_pasos_de_1": 88.8
+    },
+    {
+     "mes": "junio",
+     "min": 8238974,
+     "max": 8283062,
+     "pct_pasos_de_1": 88.4
+    },
+    {
+     "mes": "julio",
+     "min": 8283143,
+     "max": 8316747,
+     "pct_pasos_de_1": 83.1
+    },
+    {
+     "mes": "agosto",
+     "min": 8316823,
+     "max": 8345515,
+     "pct_pasos_de_1": 89.2
+    },
+    {
+     "mes": "septiembre",
+     "min": 8345569,
+     "max": 8374030,
+     "pct_pasos_de_1": 89.9
+    },
+    {
+     "mes": "octubre",
+     "min": 8374095,
+     "max": 8403015,
+     "pct_pasos_de_1": 88.9
+    },
+    {
+     "mes": "noviembre",
+     "min": 8403077,
+     "max": 8435840,
+     "pct_pasos_de_1": 89.6
+    },
+    {
+     "mes": "diciembre",
+     "min": 8435963,
+     "max": 8473908,
+     "pct_pasos_de_1": 88.7
+    }
+   ],
+   "meses_con_rango_solapado_con_el_siguiente": [
+    "marzo"
+   ],
+   "filas_con_directorio_compartido_en_el_mismo_mes": 3680,
+   "hogar_igual_secuencia_p": true,
+   "hogares_con_hogar_mayor_a_1": 2017,
+   "columnas_de_segmento": [],
+   "huellas": {
+    "3p_edad_exacta": {
+     "hogares": 152326,
+     "pares_mismo_mes": 62,
+     "pares_entre_meses": 697,
+     "tasa_mismo_mes": 2.6471126448045332e-06,
+     "tasa_entre_meses": 2.7043310898352635e-06,
+     "razon": 1.021615417516528
+    },
+    "3p_edad_tramos_5": {
+     "hogares": 152326,
+     "pares_mismo_mes": 7041,
+     "pares_entre_meses": 78382,
+     "tasa_mismo_mes": 0.00030061806664626967,
+     "tasa_entre_meses": 0.0003041189088715461,
+     "razon": 1.011645481804644
+    },
+    "4p_edad_exacta": {
+     "hogares": 83135,
+     "pares_mismo_mes": 2,
+     "pares_entre_meses": 51,
+     "tasa_mismo_mes": 2.838191441972963e-07,
+     "tasa_entre_meses": 6.582589785717988e-07,
+     "razon": 2.319290266460008
+    },
+    "4p_edad_tramos_5": {
+     "hogares": 83135,
+     "pares_mismo_mes": 1106,
+     "pares_entre_meses": 12446,
+     "tasa_mismo_mes": 0.00015695198674110485,
+     "tasa_entre_meses": 0.00016064100484910993,
+     "razon": 1.0235041185817557
+    }
+   },
+   "citas": {
+    "agotamiento": "El agotamiento de la fuente aparece cuando se encuesta al hogar en repetidas ocasiones. Para evitar este inconveniente, se procede a rotar la medida de tamaño cada año.",
+    "ficha_rotacion": "El mantenimiento de la muestra se da mediante una rotación que consiste en encuestar cada año una medid de tamaño vecina que no haya sido encuestada por alguna investigación en los dos años anteriores com mínimo.",
+    "usm": "Unidades Secundarias de Muestreo (USM): Son conglomerados de 10 viviendas contiguas en promedio, también llamados segmentos o medidas de tamaño (MT), ubicados tanto en la cabe de cada municipio, con límites fácilmente identificables en los que se encuestan todas las viviendas, hogares y personas.",
+    "trimestrales": "se generan muestras trimestrales que cumplen con los criterios estadísticos y se realiza la rotación de la muestra, en donde se selecciona una manzana o se se toma un segmento aleatoriamente, y para la siguiente iteración de la encuesta, se elige un segmento diferente al inicialmente seleccionado."
+   }
+  },
+  "fex_personas_M": [
+   51.831448999983934,
+   52.29626100000015
+  ]
+ },
  "metadatos": [
   {
    "ruta": "GEIH_2025/_etiquetas/Características generales, seguridad social en salud y educación.SAV",
