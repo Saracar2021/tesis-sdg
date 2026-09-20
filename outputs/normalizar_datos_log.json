@@ -1,0 +1,914 @@
+{
+  "lectura": {
+    "GEIH_csv": {
+      "encoding": "cp1252",
+      "sep": ";"
+    },
+    "ENPH_csv": {
+      "encoding": "utf-8-sig",
+      "sep": ";"
+    },
+    "ENPH_txt": {
+      "encoding": "utf-8",
+      "sep": "\t"
+    }
+  },
+  "archivos": [
+    {
+      "destino": "ENPH_2017/hogares/gastos_menos_frecuentes_articulos.txt",
+      "zip": "Gastos menos frecuentes - Articulos.zip",
+      "miembro": "Gastos menos frecuentes - Articulos.txt",
+      "bytes": 123889603,
+      "sha256": "f6ec098201f22ea2ba35afc65c5faddfcfb7032e09644cbad20b2b1365f63400",
+      "lectura": "ENPH_txt"
+    },
+    {
+      "destino": "ENPH_2017/hogares/gastos_menos_frecuentes_medio_pago.csv",
+      "zip": "Gastos menos frecuentes - Medio de pago.zip",
+      "miembro": "Gastos menos frecuentes - Medio de pago.csv",
+      "bytes": 27069716,
+      "sha256": "419d8a01418c8a43fbb513bf101caa6da405088eee7445e40f02606f50456b86",
+      "lectura": "ENPH_csv"
+    },
+    {
+      "destino": "ENPH_2017/hogares/viviendas_hogares.csv",
+      "zip": "Viviendas y hogares.zip",
+      "miembro": "Viviendas y hogares.csv",
+      "bytes": 31301376,
+      "sha256": "0ea7fed8f37c1358e3dc4f64e45bfc2f1a09c3264907f53b285d094d50fe9dba",
+      "lectura": "ENPH_csv"
+    },
+    {
+      "destino": "ENPH_2017/personas/caracteristicas_generales_personas.csv",
+      "zip": "Caracteristicas generales personas.zip",
+      "miembro": "Caracteristicas generales personas.csv",
+      "bytes": 163657528,
+      "sha256": "f606087298d77884e660fa951d12199dd8c71f87649cb3c4996a4f0f85b5eaf2",
+      "lectura": "ENPH_csv"
+    },
+    {
+      "destino": "ENPH_2017/rural/gastos_personales.csv",
+      "zip": "Gastos personales Rural.zip",
+      "miembro": "Gastos personales Rural.csv",
+      "bytes": 1061699,
+      "sha256": "36cc580771a47b63b6e3bfbb158892d18d8311bc4a44527f88a8b43b5d83ffe3",
+      "lectura": "ENPH_csv"
+    },
+    {
+      "destino": "ENPH_2017/rural/gastos_personales_comidas_fuera.csv",
+      "zip": "Gastos personales Rural - Comidas preparadas fuera del Hogar.zip",
+      "miembro": "Gastos personales Rural - Comidas preparadas fuera del Hogar.csv",
+      "bytes": 314744,
+      "sha256": "aee41c96a86d4e39f430f78ae2c2afe277e1c9cc296177b9759324d412626ea5",
+      "lectura": "ENPH_csv"
+    },
+    {
+      "destino": "ENPH_2017/rural/gastos_semanales.csv",
+      "zip": "Gastos semanales Rurales.zip",
+      "miembro": "Gastos semanales Rurales.csv",
+      "bytes": 14336896,
+      "sha256": "508a0e56ce1cda0072fd6cbce73e6ee225073a3f906a001a6a0342f65a8b257c",
+      "lectura": "ENPH_csv"
+    },
+    {
+      "destino": "ENPH_2017/rural/gastos_semanales_capitulo_c.csv",
+      "zip": "Gastos semanales Rural - Capitulo C.zip",
+      "miembro": "Gastos semanales Rural - Capitulo C.csv",
+      "bytes": 6080740,
+      "sha256": "14d3ba7f649d98d2f1de73d3d4b35035d398b973d6ba4e107b21dd40189ea4cc",
+      "lectura": "ENPH_csv"
+    },
+    {
+      "destino": "ENPH_2017/rural/gastos_semanales_comidas_fuera.csv",
+      "zip": "Gastos semanales Rural - Comidas preparadas fuera del hogar.zip",
+      "miembro": "Gastos semanales Rural - Comidas preparadas fuera del hogar.csv",
+      "bytes": 720632,
+      "sha256": "9216baeeaa8773aa4c636f01c3c1a644122239d26c10ac74127524e4c1bdf78a",
+      "lectura": "ENPH_csv"
+    },
+    {
+      "destino": "ENPH_2017/rural/gastos_semanales_mercados.csv",
+      "zip": "Gastos semanales Rurales - Mercados.zip",
+      "miembro": "Gastos semanales Rurales - Mercados.csv",
+      "bytes": 30491,
+      "sha256": "69a7ce9303a4436e449907eb4d41a7ee14460304f890d395544ae505478d2138",
+      "lectura": "ENPH_csv"
+    },
+    {
+      "destino": "ENPH_2017/urbano/gastos_diarios_capitulo_c.txt",
+      "zip": "Gastos diarios Urbano - Capitulo C.zip",
+      "miembro": "Gastos diarios Urbano - Capitulo C.txt",
+      "bytes": 81230127,
+      "sha256": "d8e8dcb2ff8559db0ed9b914723889a2de3a8efa6bf5e32ae53bee5bbee9d4e7",
+      "lectura": "ENPH_txt"
+    },
+    {
+      "destino": "ENPH_2017/urbano/gastos_diarios_hogar.txt",
+      "zip": "Gastos diarios Urbanos.zip",
+      "miembro": "Gastos diarios Urbanos.txt",
+      "bytes": 214949031,
+      "sha256": "93ef359a15210c84ae3e763ccd1db3ed77916d16296eaa7c8281d6790e5317ed",
+      "lectura": "ENPH_txt"
+    },
+    {
+      "destino": "ENPH_2017/urbano/gastos_diarios_hogar_comidas_fuera.csv",
+      "zip": "Gastos diarios del hogar Urbano - Comidas preparadas fuera del hogar.zip",
+      "miembro": "Gastos diarios del hogar Urbano - Comidas preparadas fuera del hogar.csv",
+      "bytes": 42041776,
+      "sha256": "f5463d5a31b8dc850b7e9da5d5f1e56de0f5d54604eb65d07080a5a98d0f3442",
+      "lectura": "ENPH_csv"
+    },
+    {
+      "destino": "ENPH_2017/urbano/gastos_diarios_mercados.csv",
+      "zip": "Gastos diarios Urbanos - Mercados.zip",
+      "miembro": "Gastos diarios Urbanos - Mercados.csv",
+      "bytes": 303988,
+      "sha256": "6ccb91f4e961774909cf64fc578519a2aee6d903eb713f23953d4d52c92eff6c",
+      "lectura": "ENPH_csv"
+    },
+    {
+      "destino": "ENPH_2017/urbano/gastos_diarios_personales.csv",
+      "zip": "Gastos diarios personales Urbano.zip",
+      "miembro": "Gastos diarios personales Urbano.csv",
+      "bytes": 28421849,
+      "sha256": "fc478e76893328fc166ae8dc4ab2719519a05e63d70e2ebea33e7fd2e7fb6181",
+      "lectura": "ENPH_csv"
+    },
+    {
+      "destino": "ENPH_2017/urbano/gastos_personales_comidas_fuera.csv",
+      "zip": "Gastos personales Urbano - Comidas preparadas fuera del hogar.zip",
+      "miembro": "Gastos personales Urbano - Comidas preparadas fuera del hogar.csv",
+      "bytes": 36795666,
+      "sha256": "805e6f2b7dc3b14d14088c4a3c5700c85dcc02e50fa2ab13e86f9c1d682232f9",
+      "lectura": "ENPH_csv"
+    },
+    {
+      "destino": "GEIH_2025/01_enero/caracteristicas_generales.csv",
+      "zip": "Enero 2025.zip",
+      "miembro": "CSV/Características generales, seguridad social en salud y educación.CSV",
+      "bytes": 9346248,
+      "sha256": "b69c4ebb584abc29d5cd947369b54cef2c5dc93505700824107be5aa7e808a53",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/01_enero/datos_hogar.csv",
+      "zip": "Enero 2025.zip",
+      "miembro": "CSV/Datos del hogar y la vivienda.CSV",
+      "bytes": 2954137,
+      "sha256": "50e846ae35b8e80a249ebfcd9dbd9568d8e11924a9049d7b68ffa53a8d198568",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/01_enero/fuerza_trabajo.csv",
+      "zip": "Enero 2025.zip",
+      "miembro": "CSV/Fuerza de trabajo.CSV",
+      "bytes": 5050212,
+      "sha256": "28ee662da6eb2588d7087792ecb85766fb88559304632466f376275f750732ba",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/01_enero/migracion.csv",
+      "zip": "Enero 2025.zip",
+      "miembro": "CSV/Migración.CSV",
+      "bytes": 7143248,
+      "sha256": "6b2a3a34d7f6163413c76fb726a7060d4f4e8d57cc4661002934988be1ca4feb",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/01_enero/no_ocupados.csv",
+      "zip": "Enero 2025.zip",
+      "miembro": "CSV/No ocupados.CSV",
+      "bytes": 2573877,
+      "sha256": "ba4793cfdc2425e0f5835922f234e91d3651e920e8dfb57addf2e537d27a776c",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/01_enero/ocupados.csv",
+      "zip": "Enero 2025.zip",
+      "miembro": "CSV/Ocupados.CSV",
+      "bytes": 9915660,
+      "sha256": "cffae16cf91033ed8a45684216ed0be8992c76a6a9363f09a95e639229e6f271",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/01_enero/otras_formas_trabajo.csv",
+      "zip": "Enero 2025.zip",
+      "miembro": "CSV/Otras formas de trabajo.CSV",
+      "bytes": 10156452,
+      "sha256": "d6498fab86732ab50251589e07f7c4c973dc1c1210a68bb07194986ca8bec36b",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/01_enero/otros_ingresos.csv",
+      "zip": "Enero 2025.zip",
+      "miembro": "CSV/Otros ingresos e impuestos.CSV",
+      "bytes": 6222263,
+      "sha256": "44b358d38e7390293d26102e8ffd3ba0132469f889c1951b0ce791b4066b00d6",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/02_febrero/caracteristicas_generales.csv",
+      "zip": "Febrero 2025.zip",
+      "miembro": "CSV/Características generales, seguridad social en salud y educación.CSV",
+      "bytes": 9362700,
+      "sha256": "8aca3bbe535a4be74522f78cd0ac10f946f2e2929ab5e6f7d1171fa03d281cc9",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/02_febrero/datos_hogar.csv",
+      "zip": "Febrero 2025.zip",
+      "miembro": "CSV/Datos del hogar y la vivienda.CSV",
+      "bytes": 2979811,
+      "sha256": "0754771f92c15e182bdba0cb40e5ae3caab02996baa2629492e7fbde7513c2d4",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/02_febrero/fuerza_trabajo.csv",
+      "zip": "Febrero 2025.zip",
+      "miembro": "CSV/Fuerza de trabajo.CSV",
+      "bytes": 5057826,
+      "sha256": "98df9a436f39c06ec05a8304cebcbb7a52dc2ac734678df897312e18431b70e1",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/02_febrero/migracion.csv",
+      "zip": "Febrero 2025.zip",
+      "miembro": "CSV/Migración.CSV",
+      "bytes": 7156224,
+      "sha256": "b0eaaa982b79c5bb3d0920c2f8345c84a3aa107e5dfa4f6b5e2fc99823cecb8e",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/02_febrero/no_ocupados.csv",
+      "zip": "Febrero 2025.zip",
+      "miembro": "CSV/No ocupados.CSV",
+      "bytes": 2505992,
+      "sha256": "78cdf13d22fb49b1446e1eca24013b3d64db8b8fc9fda5aaf44001dd5e099e3d",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/02_febrero/ocupados.csv",
+      "zip": "Febrero 2025.zip",
+      "miembro": "CSV/Ocupados.CSV",
+      "bytes": 10215387,
+      "sha256": "614900f5f2b9d85bcdde66228611a84f557597b2341adb0021e58d35b4a1cde1",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/02_febrero/otras_formas_trabajo.csv",
+      "zip": "Febrero 2025.zip",
+      "miembro": "CSV/Otras formas de trabajo.CSV",
+      "bytes": 10231936,
+      "sha256": "069c8629c8521888565b74bbfa70c1a0edc724742eb88edae0beac14788d9217",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/02_febrero/otros_ingresos.csv",
+      "zip": "Febrero 2025.zip",
+      "miembro": "CSV/Otros ingresos e impuestos.CSV",
+      "bytes": 6264438,
+      "sha256": "5acf860ea33d331627f5da2c9c3b486cb16aabaedf63334b22d6e79e9546b8ce",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/03_marzo/caracteristicas_generales.csv",
+      "zip": "Marzo 2025.zip",
+      "miembro": "CSV/Características generales, seguridad social en salud y educación.CSV",
+      "bytes": 9381371,
+      "sha256": "ebcd0cd2dee38c18101e5b5d5160c3ff5e18aa211f4e7d26aa9a2c2747afbc9a",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/03_marzo/datos_hogar.csv",
+      "zip": "Marzo 2025.zip",
+      "miembro": "CSV/Datos del hogar y la vivienda.CSV",
+      "bytes": 2968230,
+      "sha256": "0634b93ce9b61235b72624628ea4bb6bbf359af217a4ba12dac02108cb5ec452",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/03_marzo/fuerza_trabajo.csv",
+      "zip": "Marzo 2025.zip",
+      "miembro": "CSV/Fuerza de trabajo.CSV",
+      "bytes": 5048505,
+      "sha256": "3b679ebbba0556f88a323c7e6cd72b68b2ccff2f07e0bc7522bd9f7be9e4d74d",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/03_marzo/migracion.csv",
+      "zip": "Marzo 2025.zip",
+      "miembro": "CSV/Migración.CSV",
+      "bytes": 7166888,
+      "sha256": "8b3da305eb6377499806b72e05bd5c3b8a1649aefe8e451fd9e005ac0279bef8",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/03_marzo/no_ocupados.csv",
+      "zip": "Marzo 2025.zip",
+      "miembro": "CSV/No ocupados.CSV",
+      "bytes": 2469272,
+      "sha256": "8f1398fd825d1ccb5d5b14fd6193e38fb30119c775e073c5c5bc3d7f2eeee7f7",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/03_marzo/ocupados.csv",
+      "zip": "Marzo 2025.zip",
+      "miembro": "CSV/Ocupados.CSV",
+      "bytes": 10317815,
+      "sha256": "4a471d9fd3546c7c6d421fef392d042b85481070f612a56db1ec8fe28ac98683",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/03_marzo/otras_formas_trabajo.csv",
+      "zip": "Marzo 2025.zip",
+      "miembro": "CSV/Otras formas de trabajo.CSV",
+      "bytes": 10221153,
+      "sha256": "1009ae33ad5b7f35b9dfb31aa940dee04e517fb2800cede8530808531e938c9f",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/03_marzo/otros_ingresos.csv",
+      "zip": "Marzo 2025.zip",
+      "miembro": "CSV/Otros ingresos e impuestos.CSV",
+      "bytes": 6271017,
+      "sha256": "9fd2974b31a5226b8c07f3a3102148e644ab1b26f443a376099e67245fc56da7",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/04_abril/caracteristicas_generales.csv",
+      "zip": "Abril 2025.zip",
+      "miembro": "CSV/Características generales, seguridad social en salud y educación.CSV",
+      "bytes": 9410440,
+      "sha256": "b81065604b3644bad09911e1affb871dceed19ec663a4d95fd75973bce5a7178",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/04_abril/datos_hogar.csv",
+      "zip": "Abril 2025.zip",
+      "miembro": "CSV/Datos del hogar y la vivienda.CSV",
+      "bytes": 2974209,
+      "sha256": "ca5661becbd424c09baf10029080cd0a6f04f0ca7eca1a666886fac23251b39e",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/04_abril/fuerza_trabajo.csv",
+      "zip": "Abril 2025.zip",
+      "miembro": "CSV/Fuerza de trabajo.CSV",
+      "bytes": 5052551,
+      "sha256": "4669e358ec4bf2298be55bb168ebe901d351f83cbad5eb87ec9c4c9891897f1d",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/04_abril/migracion.csv",
+      "zip": "Abril 2025.zip",
+      "miembro": "CSV/Migración.CSV",
+      "bytes": 7181089,
+      "sha256": "9c0e35f2a2a4fa4acd187b9de76cfdcf0bec1834128433bc207c1009fa0ff5f5",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/04_abril/no_ocupados.csv",
+      "zip": "Abril 2025.zip",
+      "miembro": "CSV/No ocupados.CSV",
+      "bytes": 2452548,
+      "sha256": "bc7940a98ec86dd5f01ff2cd6acd67149ce4411d07cc264862919b0b68ca1984",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/04_abril/ocupados.csv",
+      "zip": "Abril 2025.zip",
+      "miembro": "CSV/Ocupados.CSV",
+      "bytes": 10335723,
+      "sha256": "168c3c3edb804d9a2709d25f6ed1b712655755db3667358dcaac712241db78a6",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/04_abril/otras_formas_trabajo.csv",
+      "zip": "Abril 2025.zip",
+      "miembro": "CSV/Otras formas de trabajo.CSV",
+      "bytes": 10212252,
+      "sha256": "1c67542e65de3f821d6cb22e96ca22fb2bfbbcee90026eb296e8d7c56371e60e",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/04_abril/otros_ingresos.csv",
+      "zip": "Abril 2025.zip",
+      "miembro": "CSV/Otros ingresos e impuestos.CSV",
+      "bytes": 6251755,
+      "sha256": "45a4c8a3dccb9aec615724a40470ec3248740fb3f23958c98d01ab9bd14a9ee0",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/05_mayo/caracteristicas_generales.csv",
+      "zip": "Mayo 2025.zip",
+      "miembro": "CSV/Características generales, seguridad social en salud y educación.CSV",
+      "bytes": 9437263,
+      "sha256": "0a452c7836f02b529b06e0af494ec3e06917cc74158d4e6aa9292f9dc5fbaca0",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/05_mayo/datos_hogar.csv",
+      "zip": "Mayo 2025.zip",
+      "miembro": "CSV/Datos del hogar y la vivienda.CSV",
+      "bytes": 2993111,
+      "sha256": "146e849e0d1bf263d1ebff6d037febdf8c2c444221ce5d14016489bfea04ec45",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/05_mayo/fuerza_trabajo.csv",
+      "zip": "Mayo 2025.zip",
+      "miembro": "CSV/Fuerza de trabajo.CSV",
+      "bytes": 5077360,
+      "sha256": "70e0ac4f934814569c86c5c6249db2740e62c1706fbd167487736e12e9be1d2e",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/05_mayo/migracion.csv",
+      "zip": "Mayo 2025.zip",
+      "miembro": "CSV/Migración.CSV",
+      "bytes": 7211022,
+      "sha256": "68f975c5eb704d8e40f4f9cd10673ead0d89b6bc3acd60b1af27a68fb9395adb",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/05_mayo/no_ocupados.csv",
+      "zip": "Mayo 2025.zip",
+      "miembro": "CSV/No ocupados.CSV",
+      "bytes": 2445836,
+      "sha256": "a08e30e4cb5d4ab873d6a2e1dd92416e3961e6be392949985e17be31fab901c9",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/05_mayo/ocupados.csv",
+      "zip": "Mayo 2025.zip",
+      "miembro": "CSV/Ocupados.CSV",
+      "bytes": 10499695,
+      "sha256": "8ecb7dbdce91ad2f8372e9d95fe60466aaaacd38b66a7805f1fd601c1f8ef305",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/05_mayo/otras_formas_trabajo.csv",
+      "zip": "Mayo 2025.zip",
+      "miembro": "CSV/Otras formas de trabajo.CSV",
+      "bytes": 10278099,
+      "sha256": "293bbfdfa8ebffc7e3eb983fe47156a4eb190405a06682dec952f8ad2ecf54f2",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/05_mayo/otros_ingresos.csv",
+      "zip": "Mayo 2025.zip",
+      "miembro": "CSV/Otros ingresos e impuestos.CSV",
+      "bytes": 6289663,
+      "sha256": "ec5c65d9a6c6b7b4017e2416462723f7477ca89d425016ad3b1c0be523a030d8",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/06_junio/caracteristicas_generales.csv",
+      "zip": "Junio 2025.zip",
+      "miembro": "CSV/Características generales, seguridad social en salud y educación.CSV",
+      "bytes": 9363114,
+      "sha256": "5ba6ed02c0465f96fb34359b98835fe4f198b745cd6a281efdb0bb067063f4d8",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/06_junio/datos_hogar.csv",
+      "zip": "Junio 2025.zip",
+      "miembro": "CSV/Datos del hogar y la vivienda.CSV",
+      "bytes": 2987592,
+      "sha256": "a069af0160cdc4490364a03d2bd1a89242773ce1590a21e333c83cf7fba2ee15",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/06_junio/fuerza_trabajo.csv",
+      "zip": "Junio 2025.zip",
+      "miembro": "CSV/Fuerza de trabajo.CSV",
+      "bytes": 5066025,
+      "sha256": "bc4adf3cdf1116c2124539e40d3851b187071ab1abd73a102cad7c93e0b817d6",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/06_junio/migracion.csv",
+      "zip": "Junio 2025.zip",
+      "miembro": "CSV/Migración.CSV",
+      "bytes": 7144988,
+      "sha256": "fef8ae7ca40017fdd440af5fcd298ff412f7353bce362de39586328b61018211",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/06_junio/no_ocupados.csv",
+      "zip": "Junio 2025.zip",
+      "miembro": "CSV/No ocupados.CSV",
+      "bytes": 2447266,
+      "sha256": "cb6a829ca28573334ab85cf1320ec604257aad49119bff6e6439de09ed4fe8de",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/06_junio/ocupados.csv",
+      "zip": "Junio 2025.zip",
+      "miembro": "CSV/Ocupados.CSV",
+      "bytes": 10415295,
+      "sha256": "a4f7aef8e960a91fee51b85d4162c2d022d4d73d9b38cfa54f32a6625d4ebf91",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/06_junio/otras_formas_trabajo.csv",
+      "zip": "Junio 2025.zip",
+      "miembro": "CSV/Otras formas de trabajo.CSV",
+      "bytes": 10234181,
+      "sha256": "3de54664911c7b4f1f5f8310ff9cab48648058e0c576c546a8bb182eb8ba763a",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/06_junio/otros_ingresos.csv",
+      "zip": "Junio 2025.zip",
+      "miembro": "CSV/Otros ingresos e impuestos.CSV",
+      "bytes": 6265484,
+      "sha256": "1023dd2db541ac63968b3fa8b67ed32b76995f0c1949841eb241c4734726dc6b",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/07_julio/caracteristicas_generales.csv",
+      "zip": "Julio 2025.zip",
+      "miembro": "CSV/Características generales, seguridad social en salud y educación.CSV",
+      "bytes": 9437713,
+      "sha256": "7de3c6028d8fe8c0e7fb802f691676cb6f04a2dd81fd393bc794645f2469f2dc",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/07_julio/datos_hogar.csv",
+      "zip": "Julio 2025.zip",
+      "miembro": "CSV/Datos del hogar y la vivienda.CSV",
+      "bytes": 3011937,
+      "sha256": "aa4dccec613c090a249c251fecc58a18660455967f2baf59f521a59f34e70009",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/07_julio/fuerza_trabajo.csv",
+      "zip": "Julio 2025.zip",
+      "miembro": "CSV/Fuerza de trabajo.CSV",
+      "bytes": 5078851,
+      "sha256": "1c3969665bc1d5247144b366d3eaf49d3fcba3e6e97146f2430c21a0a262670c",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/07_julio/migracion.csv",
+      "zip": "Julio 2025.zip",
+      "miembro": "CSV/Migración.CSV",
+      "bytes": 7209728,
+      "sha256": "67c4a4ccbe175eb4ba2d5b747f859f1017d9aacb114e7f1f267bb15fba6ec9ab",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/07_julio/no_ocupados.csv",
+      "zip": "Julio 2025.zip",
+      "miembro": "CSV/No ocupados.CSV",
+      "bytes": 2422461,
+      "sha256": "e3b3fc1df3f97974f6f22d0b04bbe12a0366623741835a1e11d3cd9b72e70534",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/07_julio/ocupados.csv",
+      "zip": "Julio 2025.zip",
+      "miembro": "CSV/Ocupados.CSV",
+      "bytes": 10572142,
+      "sha256": "c0ec1d20a7327d17532ce40ab718ed0f94a0a66a0727a5a430fc6d254fc4af08",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/07_julio/otras_formas_trabajo.csv",
+      "zip": "Julio 2025.zip",
+      "miembro": "CSV/Otras formas de trabajo.CSV",
+      "bytes": 10271737,
+      "sha256": "78d683ca8c8a535396a126c42ad6a2be2bcb4cdcac4b861c73d0cbf92de7abf2",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/07_julio/otros_ingresos.csv",
+      "zip": "Julio 2025.zip",
+      "miembro": "CSV/Otros ingresos e impuestos.CSV",
+      "bytes": 6285587,
+      "sha256": "37060e748d127f33592e9c7a43891f67335481299a26cd7ccb5c882c93e88b64",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/08_agosto/caracteristicas_generales.csv",
+      "zip": "Agosto 2025.zip",
+      "miembro": "CSV/Características generales, seguridad social en salud y  educación.CSV",
+      "bytes": 9458304,
+      "sha256": "a1adf5c39b661449c2d66564e43f76a7f4a877293f119a997428952e5c85ee00",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/08_agosto/datos_hogar.csv",
+      "zip": "Agosto 2025.zip",
+      "miembro": "CSV/Datos del hogar y la vivienda.CSV",
+      "bytes": 3019879,
+      "sha256": "e74d44e72213909c5657d58ead2e05b2555a3bef06431575e6c1d0122171f524",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/08_agosto/fuerza_trabajo.csv",
+      "zip": "Agosto 2025.zip",
+      "miembro": "CSV/Fuerza de trabajo.CSV",
+      "bytes": 5084631,
+      "sha256": "c60078e1d01e50fd3a5c82455a33bdcd302d95b4e65dc2a3a8024699efbb585d",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/08_agosto/migracion.csv",
+      "zip": "Agosto 2025.zip",
+      "miembro": "CSV/Migración.CSV",
+      "bytes": 7221378,
+      "sha256": "aba177673c338f5a55109c0d4eaa82d5083901e3f2fe066709f82e3052e81290",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/08_agosto/no_ocupados.csv",
+      "zip": "Agosto 2025.zip",
+      "miembro": "CSV/No ocupados.CSV",
+      "bytes": 2434595,
+      "sha256": "3466d5f2be1e55b60d755cb9b3347c84abd98c3b0e79e398b04dc1fa293b7ab4",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/08_agosto/ocupados.csv",
+      "zip": "Agosto 2025.zip",
+      "miembro": "CSV/Ocupados.CSV",
+      "bytes": 10567866,
+      "sha256": "91a6ddb55eeb518b9d1b9bfa3e19ddb0d0a7de482f2ec2ddcb9136c1aa932ab2",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/08_agosto/otras_formas_trabajo.csv",
+      "zip": "Agosto 2025.zip",
+      "miembro": "CSV/Otras formas de trabajo.CSV",
+      "bytes": 10300933,
+      "sha256": "79d48db326cb6c1f7b3d3f9570528617e7323005523f751bdd4468ca790b24b0",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/08_agosto/otros_ingresos.csv",
+      "zip": "Agosto 2025.zip",
+      "miembro": "CSV/Otros ingresos e impuestos.CSV",
+      "bytes": 6299969,
+      "sha256": "516ec207924fe54f093183b0301197952fd03d5680bb6b798ba9d5daaf89f8d7",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/09_septiembre/caracteristicas_generales.csv",
+      "zip": "Septiembre 2025.zip",
+      "miembro": "CSV/Características generales, seguridad social en salud y educación.CSV",
+      "bytes": 9413460,
+      "sha256": "72c164270869232d23bee4e9bce23ce2ddf36b30db892172910daef5722dc6a3",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/09_septiembre/datos_hogar.csv",
+      "zip": "Septiembre 2025.zip",
+      "miembro": "CSV/Datos del hogar y la vivienda.CSV",
+      "bytes": 3011538,
+      "sha256": "5fe81446654a21dddb986d64dba7ea7a70b8a25362641427eb680918bfead9a6",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/09_septiembre/fuerza_trabajo.csv",
+      "zip": "Septiembre 2025.zip",
+      "miembro": "CSV/Fuerza de trabajo.CSV",
+      "bytes": 5059387,
+      "sha256": "083a4c959bc79c822a15f258f55a8f65470a737673e98536414ec2941ffa0f59",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/09_septiembre/migracion.csv",
+      "zip": "Septiembre 2025.zip",
+      "miembro": "CSV/Migración.CSV",
+      "bytes": 7192068,
+      "sha256": "20e29a601c04a2c1a5602fbf91007da0b111d7637f12e349ec7e9c315e8386cd",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/09_septiembre/no_ocupados.csv",
+      "zip": "Septiembre 2025.zip",
+      "miembro": "CSV/No ocupados.CSV",
+      "bytes": 2408166,
+      "sha256": "4294aefbfeba35e8dd15aae54b2bb495baebaf69e2079a49acb6dc4bbb556cdf",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/09_septiembre/ocupados.csv",
+      "zip": "Septiembre 2025.zip",
+      "miembro": "CSV/Ocupados.CSV",
+      "bytes": 10578328,
+      "sha256": "026a62e6bd30ce5b1cbf9975a9f98cf7f9ace58e284c8c722a942f70c6efbeaa",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/09_septiembre/otras_formas_trabajo.csv",
+      "zip": "Septiembre 2025.zip",
+      "miembro": "CSV/Otras formas de trabajo.CSV",
+      "bytes": 10253485,
+      "sha256": "61dac0d2c0c7838f2507a76acca11811610759f5f9e178ac403c757bb7057c83",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/09_septiembre/otros_ingresos.csv",
+      "zip": "Septiembre 2025.zip",
+      "miembro": "CSV/Otros ingresos e impuestos.CSV",
+      "bytes": 6265986,
+      "sha256": "369bfc27ec13cb522bbbef8d126d6d89535fa610cfcc7a1091ec54692789e351",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/10_octubre/caracteristicas_generales.csv",
+      "zip": "Octubre 2025.zip",
+      "miembro": "CSV/Características generales, seguridad social en salud y educación.CSV",
+      "bytes": 9476061,
+      "sha256": "af2a0e2ed580041a0d36c5f826842a3b026fac4d5ad15537f3f687f7b55b7e0c",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/10_octubre/datos_hogar.csv",
+      "zip": "Octubre 2025.zip",
+      "miembro": "CSV/Datos del hogar y la vivienda.CSV",
+      "bytes": 3044720,
+      "sha256": "78deb481802d5721e9c0b1b171bd8162b13d1b135d72546add862939859319c5",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/10_octubre/fuerza_trabajo.csv",
+      "zip": "Octubre 2025.zip",
+      "miembro": "CSV/Fuerza de trabajo.CSV",
+      "bytes": 5115806,
+      "sha256": "095d027e90ac7d7a6ea25ad18a6cef81baa48f9aa14ea92b5ba9b21a5ec4e27c",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/10_octubre/migracion.csv",
+      "zip": "Octubre 2025.zip",
+      "miembro": "CSV/Migración.CSV",
+      "bytes": 7243308,
+      "sha256": "666446fc67f921d85647b5fce7caab758fa0bb52d1ee27d8a5abaadcb68c9ea0",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/10_octubre/no_ocupados.csv",
+      "zip": "Octubre 2025.zip",
+      "miembro": "CSV/No ocupados.CSV",
+      "bytes": 2407874,
+      "sha256": "a2c4718124270f20a5cd8c43a88b2d3e15bb760e90eba1af840012885a7e064a",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/10_octubre/ocupados.csv",
+      "zip": "Octubre 2025.zip",
+      "miembro": "CSV/Ocupados.CSV",
+      "bytes": 10813462,
+      "sha256": "b3b303ee034553213fdb5a06c91dd856af425e631a2c6dc072ca61021ba7c624",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/10_octubre/otras_formas_trabajo.csv",
+      "zip": "Octubre 2025.zip",
+      "miembro": "CSV/Otras formas de trabajo.CSV",
+      "bytes": 10365831,
+      "sha256": "a3515117e0748db3a5ed061a77b5a41146afa4ace8800223ec721ce5e32822b6",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/10_octubre/otros_ingresos.csv",
+      "zip": "Octubre 2025.zip",
+      "miembro": "CSV/Otros ingresos e impuestos.CSV",
+      "bytes": 6330873,
+      "sha256": "c14247264380f6f1c2041985d5f3d892a11f230e7150f81b51b5cc7dbf5e7453",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/11_noviembre/caracteristicas_generales.csv",
+      "zip": "Noviembre 2025.zip",
+      "miembro": "CSV/Características generales, seguridad social en salud y educación.CSV",
+      "bytes": 9462823,
+      "sha256": "026302b97c1a54cae30b98d7575e51361e0237be2912b015e69c6e2491bc569b",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/11_noviembre/datos_hogar.csv",
+      "zip": "Noviembre 2025.zip",
+      "miembro": "CSV/Datos del hogar y la vivienda.CSV",
+      "bytes": 3037370,
+      "sha256": "94488a8ff3800b7e27351655d213efc4a15169d38a48cfe1d8236f31876d31bc",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/11_noviembre/fuerza_trabajo.csv",
+      "zip": "Noviembre 2025.zip",
+      "miembro": "CSV/Fuerza de trabajo.CSV",
+      "bytes": 5104509,
+      "sha256": "9d887345e6a470ede58e22076a96c1da9b98ee552aa331e07d07911af1e16d9e",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/11_noviembre/migracion.csv",
+      "zip": "Noviembre 2025.zip",
+      "miembro": "CSV/Migración.CSV",
+      "bytes": 7231929,
+      "sha256": "8fe3aeb9d529188e593db7ba3a4dd0873b184a04cb001ae6d34ec51d18284a53",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/11_noviembre/no_ocupados.csv",
+      "zip": "Noviembre 2025.zip",
+      "miembro": "CSV/No ocupados.CSV",
+      "bytes": 2378046,
+      "sha256": "b7c7f677fc098a7464bc97141fe0a342757e5b64b4bb7b12f220477d08038b7c",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/11_noviembre/ocupados.csv",
+      "zip": "Noviembre 2025.zip",
+      "miembro": "CSV/Ocupados.CSV",
+      "bytes": 10853197,
+      "sha256": "0b07ee90b60b21770f45e6abb588258765c105ac93b86f234aa36aef2067aefc",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/11_noviembre/otras_formas_trabajo.csv",
+      "zip": "Noviembre 2025.zip",
+      "miembro": "CSV/Otras formas de trabajo.CSV",
+      "bytes": 10342730,
+      "sha256": "9e5384129d672f2f90db84c83b7df7c3fff2ea212d1b2c71a732f5198ad37b37",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/11_noviembre/otros_ingresos.csv",
+      "zip": "Noviembre 2025.zip",
+      "miembro": "CSV/Otros ingresos e impuestos.CSV",
+      "bytes": 6315956,
+      "sha256": "d4e9dd9e5dae963768913ee1eafbaad2c04ae21bc283804a30d28701452c0540",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/12_diciembre/caracteristicas_generales.csv",
+      "zip": "Diciembre 2025.zip",
+      "miembro": "CSV/Características generales, seguridad social en salud y educación.CSV",
+      "bytes": 9180028,
+      "sha256": "8eb927c0a1f30c9bff84662a72bed980c87f39b709bf6ba27722f2160ca71ee4",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/12_diciembre/datos_hogar.csv",
+      "zip": "Diciembre 2025.zip",
+      "miembro": "CSV/Datos del hogar y la vivienda.CSV",
+      "bytes": 2966114,
+      "sha256": "18dce1f0fddcd3a4f80979c50a251dbebec0a6b08a490a303e105512a7cec543",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/12_diciembre/fuerza_trabajo.csv",
+      "zip": "Diciembre 2025.zip",
+      "miembro": "CSV/Fuerza de trabajo.CSV",
+      "bytes": 4982467,
+      "sha256": "225d4e8d0e9b4f0da286db40b73e27745ecd7caea1f52c772bdf2709311c8503",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/12_diciembre/migracion.csv",
+      "zip": "Diciembre 2025.zip",
+      "miembro": "CSV/Migración.CSV",
+      "bytes": 7010816,
+      "sha256": "77cf01ce7aec157b633ff02d30844b6623797d6851b702ac30556465518026ed",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/12_diciembre/no_ocupados.csv",
+      "zip": "Diciembre 2025.zip",
+      "miembro": "CSV/No ocupados.CSV",
+      "bytes": 2362734,
+      "sha256": "a5568a00bdc1bba3b385b92799d8ebeae2b4431cef804f94b96314798aa9d2c6",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/12_diciembre/ocupados.csv",
+      "zip": "Diciembre 2025.zip",
+      "miembro": "CSV/Ocupados.CSV",
+      "bytes": 10376923,
+      "sha256": "0385c6fecf48ca30a3c59f86b37c898f713a5d324f0448327f21e670bb77c1d0",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/12_diciembre/otras_formas_trabajo.csv",
+      "zip": "Diciembre 2025.zip",
+      "miembro": "CSV/Otras formas de trabajo.CSV",
+      "bytes": 10044312,
+      "sha256": "ec791fafc60db1cd43ad7e4dab748353927ed37b1819a8659f862dd57243fedf",
+      "lectura": "GEIH_csv"
+    },
+    {
+      "destino": "GEIH_2025/12_diciembre/otros_ingresos.csv",
+      "zip": "Diciembre 2025.zip",
+      "miembro": "CSV/Otros ingresos e impuestos.CSV",
+      "bytes": 6135327,
+      "sha256": "f27db66bfaa77d1d7af17e7357fe0a53dfd0894a6b0509a1b6ec50f4682ca74a",
+      "lectura": "GEIH_csv"
+    }
+  ]
+}
