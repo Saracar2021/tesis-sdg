@@ -1,0 +1,9 @@
+data/
+outputs/*.png
+outputs/*.csv
+external/
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+*.pkl
+*.pt

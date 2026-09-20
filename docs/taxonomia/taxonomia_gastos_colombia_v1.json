@@ -1,0 +1,307 @@
+{
+  "metadata": {
+    "nombre": "Taxonomía de categorías de gasto para transacciones financieras — Contexto colombiano",
+    "version": "1.0.0",
+    "fecha": "2026-07-19",
+    "proposito": [
+      "Etiquetado manual de transacciones reales (validación TSTR)",
+      "Espacio de salida del clasificador automático de gastos",
+      "Esquema de categorías del generador de datos sintéticos"
+    ],
+    "anclaje": "COICOP (divisiones 01-12) según uso de la ENPH 2016-2017 (DANE), extendida con categorías operativas propias del ecosistema transaccional colombiano (P2P, retiros, movimientos propios, informalidad).",
+    "fuentes": [
+      "ENPH 2016-2017, Cuadernillo 3: códigos oficiales de medio de pago (P438: 1=Tarjeta débito, 2=Tarjeta de crédito, 3=Efectivo, 4=Bonos, 5=Cheques, 6=Otro) y de lugar de compra (listado *4)",
+      "ENPH 2016-2017, variable NC2R_CC_P6 (forma de pago, gastos diarios cuadernillo C)",
+      "Banco de la República, Encuesta de percepción sobre uso de instrumentos de pago 2024 (para instrumentos ausentes en ENPH: billeteras digitales, transferencias)",
+      "Clasificación COICOP de Naciones Unidas"
+    ],
+    "nota_metodologica": "El instrumento ENPH 2016-2017 NO contempla billeteras digitales ni transferencias electrónicas entre sus códigos de medio de pago; estos valores del enum medio_pago se calibran con fuentes 2024 (Banrep, Reporte de Inclusión Financiera). Esta asimetría de fuentes debe declararse en la sección de supuestos de calibración de la tesis."
+  },
+
+  "estructura": {
+    "descripcion": "Cada transacción se anota en tres dimensiones ortogonales: (1) categoria (jerarquía de 2 niveles), (2) medio_pago, (3) formalidad_comercio. Las dimensiones 2 y 3 son atributos, no categorías: una misma categoría puede ocurrir con cualquier medio de pago y grado de formalidad.",
+    "niveles": {
+      "nivel_1": "Macro-categoría. Espacio de salida del clasificador y unidad de reporte de métricas TSTR (F1 macro).",
+      "nivel_2": "Subtipo. Informativo y para análisis; no entra al cómputo de F1 macro salvo análisis secundarios."
+    },
+    "regla_de_reporte": "Las métricas TSTR se reportan sobre categorías nivel 1 con soporte >= 10 en el conjunto real; categorías con soporte menor se colapsan en 'otros' para el cómputo y se reportan por separado de forma descriptiva."
+  },
+
+  "dimension_medio_pago": {
+    "valores": [
+      {"id": "efectivo", "equivalencia_enph_p438": 3, "descripcion": "Pago en billetes/monedas. Incluye pago contraentrega en efectivo de compras por app."},
+      {"id": "billetera_digital", "equivalencia_enph_p438": null, "descripcion": "Nequi, Daviplata, Movii, dale!, Powwi y similares. Ausente en el instrumento ENPH 2016-2017; calibrado con Banrep 2024.", "ejemplos_texto": ["Nequi", "Daviplata", "Envío Movii"]},
+      {"id": "tarjeta_debito", "equivalencia_enph_p438": 1, "descripcion": "Compra con tarjeta débito en datáfono o e-commerce."},
+      {"id": "tarjeta_credito", "equivalencia_enph_p438": 2, "descripcion": "Compra con tarjeta de crédito. No confundir con el PAGO de la tarjeta (categoría obligaciones_financieras)."},
+      {"id": "transferencia_bancaria", "equivalencia_enph_p438": null, "descripcion": "PSE, transferencia interbancaria, llaves Bre-B. Ausente en el instrumento ENPH 2016-2017.", "ejemplos_texto": ["Pago PSE", "Transferencia ACH", "Llave Bre-B"]},
+      {"id": "fiado_credito_tienda", "equivalencia_enph_p438": null, "descripcion": "Crédito informal del comercio ('fiado'). En ENPH corresponde a forma de adquisición a crédito, no a un código P438.", "nota": "Solo observable si el voluntario lo declara; raro en extractos digitales."},
+      {"id": "bono_subsidio", "equivalencia_enph_p438": 4, "descripcion": "Bonos, vales, redención de subsidios en especie."},
+      {"id": "otro_nd", "equivalencia_enph_p438": 6, "descripcion": "Otro medio o sin dato."}
+    ]
+  },
+
+  "dimension_formalidad_comercio": {
+    "descripcion": "Grado de formalidad del establecimiento contraparte, inferido de la descripción. Anclada al listado oficial 'Lugar de compra' (*4) del Cuadernillo 3 ENPH.",
+    "valores": [
+      {"id": "formal", "descripcion": "Comercio con razón social identificable y presumible registro mercantil.", "anclaje_enph_lugar": [1, 4, 17, 21, 23], "ejemplos": ["Éxito", "Farmatodo", "Claro", "Rappi", "Netflix"]},
+      {"id": "informal", "descripcion": "Vendedores ambulantes, persona particular vendiendo bienes/servicios, comercio sin registro identificable.", "anclaje_enph_lugar": [13, 20], "ejemplos": ["venta ambulante", "compra a particular", "fiado donde doña Marta"]},
+      {"id": "pequeno_comercio_indeterminado", "descripcion": "Tiendas de barrio, plazas de mercado, misceláneas: formalidad no determinable por el texto.", "anclaje_enph_lugar": [6, 10, 14], "ejemplos": ["Tienda La Esquina", "Plaza de Paloquemao"]},
+      {"id": "no_aplica", "descripcion": "Transacciones sin comercio contraparte: P2P, retiros, movimientos propios, ingresos."}
+    ]
+  },
+
+  "categorias_nivel_1": [
+    {
+      "id": "alimentos_mercado",
+      "nombre": "Alimentos y bebidas para el hogar (mercado)",
+      "coicop": "01",
+      "definicion": "Compra de alimentos y bebidas no alcohólicas para preparar/consumir en el hogar, en cualquier canal (supermercado, tienda de barrio, plaza, domicilio de mercado).",
+      "incluye": ["mercado de supermercado o hipermercado", "tienda de barrio y cigarrería (alimentos)", "plaza de mercado", "fruver", "domicilios de mercado (Rappi Turbo/Market, Merqueo)", "panadería para consumo en casa"],
+      "excluye": [
+        {"item": "comida preparada consumida fuera o pedida a domicilio", "va_a": "comidas_fuera"},
+        {"item": "productos de aseo del hogar comprados en el mercado", "va_a": "hogar_articulos"},
+        {"item": "bebidas alcohólicas y cigarrillos", "va_a": "entretenimiento"}
+      ],
+      "subtipos": ["supermercado_cadena", "tienda_barrio", "plaza_fruver", "domicilio_mercado"],
+      "ejemplos_descripciones": ["COMPRA EXITO CALLE 80", "D1 SAS", "ARA KR 24", "Tienda Donde Jose", "MERQUEO SAS", "Pago Nequi FRUVER LA 68"],
+      "clasificabilidad_texto": "alta",
+      "casos_limite": ["Compra mixta mercado+aseo en supermercado: se asigna alimentos_mercado (regla de predominancia; el extracto no desagrega)."]
+    },
+    {
+      "id": "comidas_fuera",
+      "nombre": "Comidas preparadas fuera del hogar",
+      "coicop": "11.1",
+      "definicion": "Alimentos y bebidas preparados listos para consumir: restaurantes, corrientazos, comida rápida, cafeterías y plataformas de domicilios de comida.",
+      "incluye": ["restaurante y corrientazo", "comida rápida y callejera", "cafetería", "domicilios de comida (Rappi, DiDi Food)", "panadería consumo inmediato"],
+      "excluye": [
+        {"item": "mercado por plataforma", "va_a": "alimentos_mercado"},
+        {"item": "licor en bar o discoteca", "va_a": "entretenimiento"}
+      ],
+      "subtipos": ["restaurante_local", "domicilios_app", "comida_callejera"],
+      "ejemplos_descripciones": ["RAPPI COLOMBIA", "FRISBY SA", "Pago Daviplata CORRIENTAZO DONDE LUCHO", "CREPES Y WAFFLES", "empanadas de la esquina"],
+      "clasificabilidad_texto": "alta",
+      "casos_limite": ["Rappi sin más detalle: se asigna comidas_fuera.domicilios_app salvo que el voluntario declare que fue mercado (regla R4)."]
+    },
+    {
+      "id": "transporte",
+      "nombre": "Transporte",
+      "coicop": "07",
+      "definicion": "Movilidad de personas: transporte público, aplicaciones, taxi, combustible, peajes, parqueaderos, transporte intermunicipal y mantenimiento de vehículo propio.",
+      "incluye": ["recarga TuLlave/SITP/TransMilenio", "Uber, DiDi, Cabify, inDrive", "taxi", "gasolina/ACPM", "parqueadero y peajes", "buses intermunicipales y terminal", "mototaxi y bicitaxi", "mantenimiento y repuestos del vehículo"],
+      "excluye": [
+        {"item": "compra del vehículo", "va_a": "otros"},
+        {"item": "SOAT y seguro del vehículo", "va_a": "obligaciones_financieras"}
+      ],
+      "subtipos": ["publico_masivo", "apps_taxi", "combustible", "informal_mototaxi", "vehiculo_propio_mantenimiento"],
+      "ejemplos_descripciones": ["RECARGA TULLAVE", "UBER BV", "DIDI MOBILITY", "TERPEL LA CARO", "Nequi a JOSE MOTOTAXI"],
+      "clasificabilidad_texto": "alta",
+      "casos_limite": ["Pago P2P a conductor informal: si el voluntario declara transporte, se asigna transporte.informal_mototaxi con canal_p2p=true (regla R2)."]
+    },
+    {
+      "id": "vivienda_servicios",
+      "nombre": "Vivienda y servicios públicos",
+      "coicop": "04",
+      "definicion": "Arriendo, administración, servicios públicos domiciliarios (energía, agua, gas, aseo) y combustibles del hogar (gas propano/pipeta).",
+      "incluye": ["arriendo formal e informal", "administración de conjunto", "Enel/Codensa, EAAB, Vanti, aseo", "pipeta de gas", "reparaciones locativas menores"],
+      "excluye": [
+        {"item": "internet, TV y telefonía", "va_a": "telecom_conectividad"},
+        {"item": "cuota hipotecaria", "va_a": "obligaciones_financieras"},
+        {"item": "muebles y electrodomésticos", "va_a": "hogar_articulos"}
+      ],
+      "subtipos": ["arriendo", "servicios_publicos", "administracion", "gas_combustible_hogar"],
+      "ejemplos_descripciones": ["PAGO PSE ENEL COLOMBIA", "EAAB FACTURA", "VANTI SA ESP", "Transferencia a MARIA R (arriendo)", "PAGO ADMON CONJUNTO"],
+      "clasificabilidad_texto": "media",
+      "casos_limite": ["Arriendo pagado por transferencia a persona natural sin descriptor: solo clasificable si el voluntario lo declara; de lo contrario cae en transferencias_p2p.indeterminada. Documentar como techo de clasificabilidad del texto."]
+    },
+    {
+      "id": "telecom_conectividad",
+      "nombre": "Telecomunicaciones y conectividad",
+      "coicop": "08",
+      "definicion": "Recargas y planes de celular, paquetes de datos, internet hogar, telefonía y televisión por suscripción.",
+      "incluye": ["recargas Claro/Movistar/Tigo/WOM", "paquetes de datos", "plan pospago", "internet hogar", "TV por suscripción"],
+      "excluye": [
+        {"item": "streaming de contenido (Netflix, Spotify)", "va_a": "entretenimiento"},
+        {"item": "compra de celular o equipos", "va_a": "otros"}
+      ],
+      "subtipos": ["recarga_prepago", "plan_pospago", "internet_hogar_tv"],
+      "ejemplos_descripciones": ["RECARGA CLARO", "PAGO PSE TIGO UNE", "WOM COLOMBIA", "Recarga paquete Movistar"],
+      "clasificabilidad_texto": "alta",
+      "casos_limite": ["Recarga comprada en tienda de barrio en efectivo: sigue siendo telecom_conectividad; el canal no cambia la categoría (regla R1)."]
+    },
+    {
+      "id": "salud",
+      "nombre": "Salud",
+      "coicop": "06",
+      "definicion": "Medicamentos, farmacia, consultas, exámenes, copagos y cuotas moderadoras, odontología, óptica.",
+      "incluye": ["droguerías y farmacias", "copagos EPS y medicina prepagada (uso)", "consultas particulares", "laboratorio", "odontología", "gafas/óptica"],
+      "excluye": [
+        {"item": "aportes a EPS como cotización o plan prepagado recurrente", "va_a": "obligaciones_financieras"},
+        {"item": "productos de cuidado personal no medicinales", "va_a": "vestuario_cuidado_personal"}
+      ],
+      "subtipos": ["farmacia", "consultas_examenes", "otros_salud"],
+      "ejemplos_descripciones": ["FARMATODO", "CRUZ VERDE", "DROGUERIA LA REBAJA", "COPAGO COMPENSAR"],
+      "clasificabilidad_texto": "alta",
+      "casos_limite": []
+    },
+    {
+      "id": "educacion",
+      "nombre": "Educación",
+      "coicop": "10",
+      "definicion": "Matrículas, pensiones escolares, cursos, útiles, textos y plataformas educativas.",
+      "incluye": ["matrícula y pensión", "cursos y certificaciones", "útiles y textos escolares", "plataformas educativas de pago"],
+      "excluye": [
+        {"item": "crédito educativo ICETEX (cuota)", "va_a": "obligaciones_financieras"}
+      ],
+      "subtipos": ["matricula_pension", "cursos", "utiles_textos"],
+      "ejemplos_descripciones": ["PAGO PSE UNIVERSIDAD NACIONAL", "PLATZI", "PAPELERIA EL CID"],
+      "clasificabilidad_texto": "alta",
+      "casos_limite": ["Papelería puede ser educación u oficina; por defecto educacion.utiles_textos salvo declaración contraria."]
+    },
+    {
+      "id": "entretenimiento",
+      "nombre": "Entretenimiento, recreación y vicios",
+      "coicop": "09 (+02 alcohol/tabaco)",
+      "definicion": "Ocio y recreación: streaming, cine, eventos, bares y licor, apuestas y juegos de azar, deportes, mascotas, alcohol y tabaco.",
+      "incluye": ["Netflix, Spotify, Disney+, HBO, gaming", "cine y conciertos", "bares y discotecas", "apuestas (BetPlay, Wplay, chance, lotería)", "gimnasio y deporte", "mascotas", "cerveza/licor/cigarrillos en cualquier canal"],
+      "excluye": [
+        {"item": "comida en el evento si va discriminada", "va_a": "comidas_fuera"}
+      ],
+      "subtipos": ["streaming_suscripciones", "apuestas_azar", "bares_licor_tabaco", "eventos_recreacion", "mascotas"],
+      "ejemplos_descripciones": ["NETFLIX.COM", "SPOTIFY", "BETPLAY", "CINE COLOMBIA", "GALI CHANCE", "SMARTFIT"],
+      "clasificabilidad_texto": "alta",
+      "casos_limite": ["Apuestas: categoría sensible pero de alta frecuencia en billeteras; se anota sin juicio de valor y se reporta agregada como entretenimiento.apuestas_azar."]
+    },
+    {
+      "id": "vestuario_cuidado_personal",
+      "nombre": "Vestuario y cuidado personal",
+      "coicop": "03 + 12.1",
+      "definicion": "Ropa, calzado, peluquería/barbería, cosméticos y artículos de aseo personal.",
+      "incluye": ["ropa y calzado (formal e informal, sanandresito)", "peluquería, barbería, manicure", "cosméticos y aseo personal"],
+      "excluye": [
+        {"item": "aseo del hogar", "va_a": "hogar_articulos"}
+      ],
+      "subtipos": ["ropa_calzado", "peluqueria_estetica", "aseo_cosmeticos"],
+      "ejemplos_descripciones": ["ARTURO CALLE", "KOAJ", "Nequi a BARBERIA EL MONO", "compra ropa sanandresito"],
+      "clasificabilidad_texto": "media",
+      "casos_limite": []
+    },
+    {
+      "id": "hogar_articulos",
+      "nombre": "Artículos y aseo del hogar",
+      "coicop": "05",
+      "definicion": "Muebles, electrodomésticos, utensilios, productos de aseo del hogar y servicio doméstico.",
+      "incluye": ["muebles y colchones", "electrodomésticos", "utensilios de cocina", "detergentes y aseo del hogar", "servicio doméstico"],
+      "excluye": [
+        {"item": "reparaciones locativas", "va_a": "vivienda_servicios"}
+      ],
+      "subtipos": ["muebles_electrodomesticos", "aseo_hogar", "servicio_domestico"],
+      "ejemplos_descripciones": ["HOMECENTER", "ALKOSTO", "Pago Nequi SEÑORA DEL ASEO"],
+      "clasificabilidad_texto": "media",
+      "casos_limite": ["Pago a persona del servicio doméstico vía billetera: hogar_articulos.servicio_domestico con canal_p2p=true si el voluntario lo declara; si no, transferencias_p2p.indeterminada."]
+    },
+    {
+      "id": "obligaciones_financieras",
+      "nombre": "Obligaciones financieras y seguros",
+      "coicop": "12.4-12.6",
+      "definicion": "Pagos de deuda y protección: cuotas de crédito formal e informal, pago de tarjeta de crédito, hipoteca, ICETEX, seguros, aportes a seguridad social de independientes, comisiones bancarias (4x1000, cuotas de manejo).",
+      "incluye": ["pago tarjeta de crédito", "cuota de crédito de consumo/hipotecario/libranza", "ICETEX", "crédito informal ('gota a gota', préstamo de particular)", "SOAT y seguros", "aporte PILA independientes", "comisiones y GMF"],
+      "excluye": [
+        {"item": "compras hechas CON tarjeta de crédito", "va_a": "categoría del bien comprado (regla R1)"}
+      ],
+      "subtipos": ["pago_tarjeta_credito", "credito_formal", "credito_informal", "seguros", "seguridad_social", "comisiones_gmf"],
+      "ejemplos_descripciones": ["PAGO TC BANCOLOMBIA", "CUOTA CREDITO DAVIVIENDA", "ICETEX PSE", "SEGUROS SURA", "PILA APORTE", "IMPUESTO GMF 4X1000"],
+      "clasificabilidad_texto": "media",
+      "casos_limite": ["Crédito informal: casi nunca identificable en el texto (aparece como transferencia a persona). Solo se asigna con declaración del voluntario; se anota con la misma neutralidad que cualquier otra categoría."]
+    },
+    {
+      "id": "transferencias_p2p",
+      "nombre": "Transferencias entre personas (P2P)",
+      "coicop": null,
+      "definicion": "Envíos y recepciones de dinero entre personas naturales cuyo propósito NO es identificable como compra de un bien/servicio. Categoría central del ecosistema Nequi/Daviplata y contribución diferencial de esta taxonomía.",
+      "incluye": ["envío a familiar o amigo", "recepción de persona natural", "remesas nacionales o internacionales entre personas", "recolectas y 'vacas'"],
+      "excluye": [
+        {"item": "pago identificable a comercio o por bien/servicio, aunque el canal sea billetera", "va_a": "categoría del bien (regla R1)"},
+        {"item": "propósito declarado por el voluntario (arriendo, transporte, servicio doméstico...)", "va_a": "categoría del propósito con canal_p2p=true (regla R2)"},
+        {"item": "traslado entre cuentas propias", "va_a": "movimiento_propio"}
+      ],
+      "subtipos": ["enviada_persona", "recibida_persona", "remesa", "indeterminada"],
+      "ejemplos_descripciones": ["Transferencia enviada a JUAN P", "Nequi de MARIA RODRIGUEZ", "Envio Daviplata 3xx-xxx-xxxx", "GIRO EFECTY RECIBIDO"],
+      "clasificabilidad_texto": "baja",
+      "casos_limite": ["'Transferencia a María' sin contexto: p2p.indeterminada. Este subtipo define el techo de clasificabilidad por texto y debe discutirse explícitamente en la tesis: ningún clasificador basado solo en la descripción puede resolverlo."]
+    },
+    {
+      "id": "retiro_efectivo",
+      "nombre": "Retiro de efectivo",
+      "coicop": null,
+      "definicion": "Retiros en cajero, corresponsal bancario o punto físico desde cuenta o billetera. No es un gasto: es el puente entre el mundo digital y la economía en efectivo.",
+      "incluye": ["retiro en cajero ATM", "retiro en corresponsal (Éxito, tiendas, Baloto)", "retiro Nequi/Daviplata en punto"],
+      "excluye": [],
+      "subtipos": ["cajero_atm", "corresponsal"],
+      "ejemplos_descripciones": ["RETIRO ATM SERVIBANCA", "RETIRO CORRESPONSAL EXITO", "Retiro Nequi punto Baloto"],
+      "clasificabilidad_texto": "alta",
+      "casos_limite": ["Los retiros se excluyen del análisis de composición del gasto pero se conservan en el dataset: su frecuencia y monto son un indicador proxy del gasto en efectivo del usuario, relevante para el generador sintético."]
+    },
+    {
+      "id": "movimiento_propio",
+      "nombre": "Movimientos entre cuentas propias",
+      "coicop": null,
+      "definicion": "Traslados del usuario entre sus propios productos: recarga de billetera desde cuenta bancaria, paso Nequi→Bancolombia, envío a bolsillos/metas de ahorro.",
+      "incluye": ["recarga de billetera propia", "traslado entre cuentas propias", "bolsillos y metas de ahorro"],
+      "excluye": [
+        {"item": "envío a cuenta de otra persona", "va_a": "transferencias_p2p"}
+      ],
+      "subtipos": ["recarga_billetera", "traslado_cuentas", "ahorro_bolsillos"],
+      "ejemplos_descripciones": ["RECARGA NEQUI DESDE BANCOLOMBIA", "Traslado a Meta Nequi", "TRANSFERENCIA CTAS PROPIO TITULAR"],
+      "clasificabilidad_texto": "media",
+      "casos_limite": ["Distinguir p2p vs. cuenta propia exige conocer la titularidad; cuando el texto no lo indica, el voluntario lo declara en el etiquetado. En inferencia pura queda como p2p.indeterminada."]
+    },
+    {
+      "id": "ingreso",
+      "nombre": "Ingresos",
+      "coicop": null,
+      "definicion": "Entradas de dinero: salario, honorarios, ventas del negocio, subsidios estatales, rendimientos.",
+      "incluye": ["nómina", "honorarios y pagos por servicios prestados", "ventas de micronegocio", "subsidios (Renta Ciudadana, etc.)", "rendimientos e intereses"],
+      "excluye": [
+        {"item": "recepción P2P de persona natural sin propósito identificable", "va_a": "transferencias_p2p.recibida_persona"}
+      ],
+      "subtipos": ["salario_nomina", "honorarios_ventas", "subsidio_estatal", "rendimientos"],
+      "ejemplos_descripciones": ["PAGO NOMINA EMPRESA XYZ", "ABONO PROSPERIDAD SOCIAL", "ABONO INTERESES"],
+      "clasificabilidad_texto": "media",
+      "casos_limite": ["Ingresos de trabajador informal llegan como P2P recibida; solo la declaración del voluntario permite reclasificarlos como ingreso.honorarios_ventas. Este cruce P2P/ingreso es un hallazgo esperable y debe cuantificarse en la tesis."]
+    },
+    {
+      "id": "otros",
+      "nombre": "Otros / no clasificable",
+      "coicop": "12 (residual)",
+      "definicion": "Transacciones que no encajan en ninguna categoría o cuyo texto es ininteligible. También destino de colapso para categorías con soporte < 10 en el reporte TSTR.",
+      "incluye": ["impuestos no financieros (predial, vehículo)", "trámites y notariado", "donaciones a instituciones", "texto ininteligible"],
+      "excluye": [],
+      "subtipos": ["impuestos_tramites", "donaciones", "ininteligible"],
+      "ejemplos_descripciones": ["PAGO SIM PREDIAL", "DONACION CRUZ ROJA", "PAGO REF 99213"],
+      "clasificabilidad_texto": "baja",
+      "casos_limite": []
+    }
+  ],
+
+  "reglas_de_decision": [
+    {"id": "R1", "regla": "Predominio del bien sobre el canal: si la descripción identifica el comercio o el bien/servicio, se asigna la categoría del bien sin importar el medio de pago. Pagar la tienda con Nequi NO es P2P."},
+    {"id": "R2", "regla": "P2P residual: transferencias_p2p solo aplica cuando la contraparte es persona natural Y el propósito no es identificable. Si el voluntario declara el propósito, se asigna la categoría del propósito y se marca canal_p2p=true."},
+    {"id": "R3", "regla": "Retiros y movimientos propios nunca son gasto; se anotan en sus categorías operativas y se excluyen de la composición del gasto."},
+    {"id": "R4", "regla": "Plataformas de domicilios → comidas_fuera por defecto; alimentos_mercado solo con evidencia (descriptor de market o declaración)."},
+    {"id": "R5", "regla": "Pagos de factura vía PSE/corresponsal → categoría de la factura (servicios, telecom, educación...), no una categoría de 'pagos'."},
+    {"id": "R6", "regla": "Compras CON tarjeta de crédito → categoría del bien; el PAGO de la tarjeta → obligaciones_financieras.pago_tarjeta_credito."},
+    {"id": "R7", "regla": "Ante ambigüedad irresoluble tras aplicar R1-R6, usar el subtipo *indeterminada* de P2P o la categoría otros.ininteligible; nunca adivinar."}
+  ],
+
+  "atributos_de_anotacion": {
+    "descripcion": "Campos que acompañan cada transacción etiquetada en el conjunto real (TSTR).",
+    "campos": [
+      {"campo": "categoria_n1", "tipo": "enum categorias_nivel_1", "obligatorio": true},
+      {"campo": "categoria_n2", "tipo": "enum subtipos de la categoría", "obligatorio": false},
+      {"campo": "medio_pago", "tipo": "enum dimension_medio_pago", "obligatorio": true},
+      {"campo": "formalidad_comercio", "tipo": "enum dimension_formalidad_comercio", "obligatorio": true},
+      {"campo": "canal_p2p", "tipo": "boolean", "obligatorio": false, "nota": "true cuando el propósito fue declarado por el voluntario pero el canal fue transferencia a persona (regla R2). Permite medir cuánto gasto real viaja disfrazado de P2P."},
+      {"campo": "fuente_etiqueta", "tipo": "enum [texto, declaracion_voluntario]", "obligatorio": true, "nota": "Distingue lo clasificable por texto de lo que requirió declaración; define el techo de desempeño esperable del clasificador."}
+    ]
+  }
+}

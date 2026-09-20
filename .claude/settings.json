@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "deny": [
+      "Edit(data/raw/**)",
+      "Edit(data/_descargas/**)",
+      "Read(data/reales_crudos/**)"
+    ]
+  }
+}
