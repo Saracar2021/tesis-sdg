@@ -434,14 +434,14 @@ Los cuantiles se calculan **ponderados por el factor de expansión** dentro de B
 
 | Estrato \ Quintil | Q1 | Q2 | Q3 | Q4 | Q5 | Total |
 |---|---|---|---|---|---|---|
-| 1 | 248 | 172 | 158 | 79 | **19** | 676 |
-| 2 | 406 | 407 | 358 | 301 | 108 | 1580 |
-| 3 | 173 | 215 | 253 | 311 | 258 | 1210 |
+| 1 | 248 | 170 | 158 | 79 | **21** | 676 |
+| 2 | 405 | 402 | 362 | 303 | 108 | 1580 |
+| 3 | 172 | 215 | 253 | 312 | 258 | 1210 |
 | 4 | **16** | **21** | **14** | 44 | 122 | 217 |
 | 5 | **5** | **2** | **12** | **17** | 94 | 130 |
 | 6 | **4** | **3** | **1** | **4** | 74 | 86 |
 
-**Celdas con menos de 30 observaciones: 12 de 30** (vacías: 0; mínimo: 1). Cortes del quintil (ICGU, COP): 1.128.000, 1.815.000, 2.775.333, 4.518.575. % de peso por quintil: 20,0, 20,0, 20,0, 20,0, 20,0.
+**Celdas con menos de 30 observaciones: 12 de 30** (vacías: 0; mínimo: 1). Cortes del quintil (ICGU, COP): 1.127.000, 1.810.250, 2.766.667, 4.506.283. % de peso por quintil: 20,0, 19,9, 20,1, 20,1, 20,0.
 Sensibilidad a la variable de ingreso (celdas < 30): `ICGU` 12 de 30; `IT` 12 de 30; `ICMUG` 11 de 30; `ICMDUG` 11 de 30.
 
 **B) GEIH — ocupados de Bogotá (`AREA=11`), 12 meses apilados** (unidad: persona ocupada; pesos `FEX_C18/12`). Estrato: `P4030S1A1` del hogar («0 Conexión pirata; 1 Bajo - bajo; 2 Bajo…», DDI GEIH). Ingreso: `INGLABO` (ingresos laborales de la persona, **no** ingreso del hogar). 13.081 de 13.552 ocupados entran (sin estrato válido: 29; sin ingreso: 442; con ingreso 0 incluidos: 45).
@@ -457,7 +457,9 @@ Sensibilidad a la variable de ingreso (celdas < 30): `ICGU` 12 de 30; `IT` 12 de
 
 **Celdas con menos de 30 observaciones: 8 de 30** (vacías: 0; mínimo: 6). Si se usara **un solo mes** (cruce mensual): entre 16 y 20 de 30 celdas con menos de 30 (mediana 18).
 
-**Decisiones mías que conviene que confirmes:** (1) quintiles calculados dentro de Bogotá, no sobre el total nacional; (2) ingreso del hogar completo (`ICGU`) en ENPH pero solo ingreso laboral individual en GEIH, porque en los 8 módulos GEIH no construí un ingreso del hogar; (3) estratos válidos = 1 a 6 (se excluyen `0` y vacío); para ENPH el DDI no trae categorías de `P8520S1A1` (0 categorías) y el Cuadernillo 1 solo dice «Estrato para tarifa», así que asumo que sus códigos son los del DDI de GEIH para la misma pregunta (`P4030S1A1`): **supuesto no verificado en ENPH**.
+**Decisiones mías que conviene que confirmes:** (1) quintiles calculados dentro de Bogotá, no sobre el total nacional; (2) ingreso del hogar completo (`ICGU`) en ENPH pero solo ingreso laboral individual en GEIH, porque en los 8 módulos GEIH no construí un ingreso del hogar; (3) estratos válidos = 1 a 6 (se excluyen `0`, `9` y vacío, que no son estratos). **Códigos de estrato VERIFICADOS (20 sep 2026):** ENPH `P8520S1A1` según MANUAL_ENPH.pdf, Pregunta 4, «Estrato para tarifa» (códigos 1-6; 0 = conexión pirata; 9 = no establecible o planta eléctrica) (el DDI trae 0 categorías y el Cuadernillo 1 solo dice «Estrato para tarifa»: no son fuente de códigos); GEIH `P4030S1A1` según Diccionario GEIH 2025, fila 32 (P4030S1A1; rango 0-6 ó 9; sin etiquetas para 0 y 9). Cada esquema se mapea solo con su fuente.
+
+**Cortes de quintil:** se calculan sobre TODOS los hogares (u ocupados) con ingreso, con la misma función y regla que `tools/distribuciones_priors.py` (`sdg.pesos.cortes_ponderados`: menor valor con F ponderada ≥ j/5); después se cruza con el estrato válido. Los conteos de celda de este apartado coinciden con `outputs/distribuciones/enph_estrato_x_quintil.csv` (ENPH, estrato agrupado).
 
 **C) ENPH — estrato agrupado en 3 (1-2, 3-4, 5-6) × 5 quintiles de `ICGU`.** Los conteos de celda son observaciones **sin ponderar**. Los cortes de quintil se calcularon con `FEX_C` (regla de CLAUDE.md); como sensibilidad se reporta también el resultado con cortes **sin ponderar**. Los quintiles se calculan dentro de cada población (Bogotá; urbano nacional).
 
@@ -465,8 +467,8 @@ Sensibilidad a la variable de ingreso (celdas < 30): `ICGU` 12 de 30; `IT` 12 de
 
 | Estrato \ Quintil | Q1 | Q2 | Q3 | Q4 | Q5 | Total |
 |---|---|---|---|---|---|---|
-| 1-2 | 654 | 579 | 516 | 380 | 127 | 2256 |
-| 3-4 | 189 | 236 | 267 | 355 | 380 | 1427 |
+| 1-2 | 653 | 572 | 520 | 382 | 129 | 2256 |
+| 3-4 | 188 | 236 | 267 | 356 | 380 | 1427 |
 | 5-6 | **9** | **5** | **13** | **21** | 168 | 216 |
 
 **Celdas con menos de 30 observaciones: 4 de 15** con cortes ponderados (mínimo 5); con cortes sin ponderar: 4 de 15 (mínimo 5).
@@ -475,11 +477,11 @@ Sensibilidad a la variable de ingreso (celdas < 30): `ICGU` 12 de 30; `IT` 12 de
 
 | Estrato \ Quintil | Q1 | Q2 | Q3 | Q4 | Q5 | Total |
 |---|---|---|---|---|---|---|
-| 1-2 | 14373 | 13581 | 12335 | 10176 | 6257 | 56722 |
-| 3-4 | 2374 | 2913 | 4054 | 5291 | 7238 | 21870 |
-| 5-6 | 71 | 79 | 137 | 248 | 1598 | 2133 |
+| 1-2 | 14186 | 13543 | 12546 | 10134 | 6313 | 56722 |
+| 3-4 | 2334 | 2900 | 4099 | 5254 | 7283 | 21870 |
+| 5-6 | 71 | 76 | 140 | 244 | 1602 | 2133 |
 
-**Celdas con menos de 30 observaciones: 0 de 15** con cortes ponderados (mínimo 71); con cortes sin ponderar: 0 de 15 (mínimo 68).
+**Celdas con menos de 30 observaciones: 0 de 15** con cortes ponderados (mínimo 71); con cortes sin ponderar: 0 de 15 (mínimo 67).
 
 ### 10.4 Prefijo `NC2R_` y la variable `NC2R_CC_P6`
 

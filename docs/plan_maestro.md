@@ -13,8 +13,8 @@
 
 1. **La base empírica se reconstruyó desde cero.** Las cifras del análisis descriptivo del informe de avance estaban escritas a mano, sin factores de expansión y sobre un solo mes. Se re-descargaron los microdatos del DANE y se construyó una base verificable: 112 archivos con hash SHA-256 contra el original, cargador único con 29 pruebas automatizadas y distribuciones ponderadas para Bogotá.
 2. **El dominio quedó definido: Bogotá urbano.** Los 20 voluntarios de la validación son de Bogotá; calibrar contra otro dominio rompería la comparación del TSTR.
-3. **Hay resultados nuevos que refuerzan la tesis.** El efectivo domina en Bogotá (97 % de los hogares lo declara como forma de pago principal en gastos frecuentes), y el medio de pago **varía por categoría de gasto** (hasta 28 % de tarjeta de crédito en electrodomésticos y muebles). El pipeline de Pancholi genera 100 % tarjeta de crédito sin distinción de categoría.
-4. **Cuatro afirmaciones del informe de avance quedan retiradas** (§6) y **seis limitaciones quedan declaradas** (§7).
+3. **Hay resultados nuevos que refuerzan la tesis.** El efectivo domina en Bogotá (97 % de los hogares lo declara como forma de pago principal en gastos frecuentes), y el medio de pago **varía por categoría de gasto** (hasta 28 % de tarjeta de crédito en electrodomésticos y muebles). El informe de avance reporta que el pipeline de Pancholi genera 100 % tarjeta de crédito; **esa cifra no está verificada** hasta ejecutar la reevaluación del Chat 01B.
+4. **Cuatro afirmaciones del informe de avance quedan retiradas** (§6) y **ocho limitaciones quedan declaradas** (§7).
 5. **Lo que falta es casi todo el pipeline de generación y la validación empírica**, en 25 días. El punto de control del 25 de septiembre define si el alcance completo cabe.
 
 ---
@@ -28,8 +28,8 @@
 | 2 | Módulo de priors bayesianos | ❌ | 🟡 **Insumos listos** (distribuciones Bogotá con FEX); módulo sin escribir | `outputs/distribuciones/distribuciones_priors.md` |
 | 3 | CTGAN + dataset sintético v1 (≥ 5.000 tx) | ❌ | ❌ No empezado | — |
 | 4 | Taxonomía colombiana | ⚠️ Generada con IA | 🟡 Correcciones factuales identificadas; congelamiento pendiente | `docs/taxonomia/pendientes_v1.1.md` |
-| 5 | Recolección de transacciones reales | ❌ | 🟡 **20 voluntarios de Bogotá con acceso**; paquete de consentimiento y anonimización redactado (Chat 02, 15 sep) pero **por ajustar al nuevo alcance** | Chat 02 de claude.ai |
-| 6 | Etiquetado manual (2 anotadores) + Kappa | ❌ | 🟡 Guía de anotación redactada (Chat 02); anotadores por confirmar | Chat 02 de claude.ai |
+| 5 | Recolección de transacciones reales | ❌ | 🟡 **20 voluntarios de Bogotá con acceso**; paquete v1.1 listo (consentimiento, anonimización, diseño de muestra: dic 2025, abr y ago 2026). **Bloqueado por la consulta de ética** | `docs/datos_reales/` |
+| 6 | Etiquetado manual (2 anotadores) + Kappa | ❌ | 🟡 Guía v1.0 y muestra definida (600 movimientos, 30 por persona); guía por actualizar a la taxonomía v1.1; anotadores por confirmar | `docs/datos_reales/` |
 | 7 | Entrenamiento de 3 clasificadores + TSTR | ❌ | ❌ No empezado | — |
 | 01B | Reevaluación del pipeline de Pancholi | ❌ | 🟡 Notebook diseñado (Chat 01B); **no ejecutado** contra el pipeline real | Chat 01B de claude.ai; `external/` vacío |
 | — | Redacción de la tesis | ❌ | ❌ No empezada (el capítulo de datos ya tiene insumos) | — |
@@ -83,6 +83,7 @@ Todos quedan resueltos por **reconstrucción**, no por parche: el análisis viej
 | Celdas ralas → encogimiento jerárquico hacia urbano nacional | Quedan 4 de 15 celdas ralas en Bogotá (estrato 5-6 en Q1–Q4); urbano nacional no tiene ninguna | `CLAUDE.md`; umbral a fijar en Chat 05 |
 | **Se usan los 12 meses de GEIH 2025** | Sin marzo o sin julio, estrato y formalidad se mueven < 1 p.p.; lo que supera 1 p.p. es un efecto de frontera de `INGLABO` | `docs/bitacora.md` |
 | Formalidad: componentes separados, sin índice propio | Un indicador compuesto inventado no es defendible; si hace falta uno, se usa la definición oficial del DANE | `CLAUDE.md` |
+| **Los datos reales solo evalúan; nunca calibran el generador** | Si los mismos extractos calibran y evalúan, el TSTR queda contaminado. El generador se calibra solo con ENPH y GEIH | `docs/datos_reales/04_diseno_muestra_y_recoleccion_v1.1.md` |
 | Proporciones descriptivas sobre quienes responden; no respuesta declarada aparte, sin imputar | Evita el error del 73,1 % (§6) | `CLAUDE.md` |
 | No se reportan intervalos de confianza sobre cifras DANE | Los archivos públicos no traen segmento ni UPM | `CLAUDE.md` |
 
@@ -155,7 +156,7 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 |---|---|---|---|---|
 | P1 | **Enviar el correo a la directora** (avance + consulta de ética + punto de control 25 sep) | Relación con la directora; ética | Sara | Lun 21 sep |
 | P2 | **Confirmar si el programa exige aval de comité de ética** | Toda la recolección | Sara / directora | Esta semana |
-| P3 | **Ajustar el paquete del Chat 02** al nuevo alcance: Bogotá, 20 personas, periodo de extractos, terceros, muestra a anotar | Pedir el primer extracto | Chat 02 (claude.ai) | Lun 21 – mar 22 |
+| P3 | ~~Ajustar el paquete del Chat 02~~ ✅ v1.1 en `docs/datos_reales/` (20 sep). Falta: contactos, canal seguro de envío, script de anonimización | Pedir el primer extracto | Sara + Code | Mar 22 – mié 23 |
 | P4 | Confirmar los **2 anotadores** | Kappa | Sara | Esta semana |
 | P5 | **Documento técnico del protocolo** (Chat 04) | Actividad 1 del cronograma | Code + revisión de Sara | Esta semana |
 | P6 | **Módulo de priors** (Chat 05): umbral de soporte y método de encogimiento | Generador | Code | Mar 22 – mié 23 |
@@ -180,6 +181,8 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 | **R7 — Calendario (nuevo)** | **Alto**: 25 días para priors, generador, CTGAN, clasificadores, TSTR y redacción | Punto de control 25 sep; redacción del capítulo de datos desde ya |
 | **R8 — Comité de ética (nuevo)** | Desconocido | Preguntar el lunes; si aplica, iniciar el trámite de inmediato |
 | **R9 — Instrumento DANE 2025 (nuevo)** | Declarado | L2 y L3 |
+| **R10 — Universo del generador vs. universo del real (nuevo)** | **Alto, sin decidir** | Los priors describen el gasto del hogar (97 % efectivo); los extractos solo ven lo bancarizado. Decisión de diseño pendiente antes del Chat 06; se lleva al punto de control del 25 |
+| **R11 — Unidad de los priors de medio de pago (nuevo)** | Declarado | ENPH da forma de pago principal **por hogar**; el generador emite transacciones. Usarla como probabilidad por transacción es un supuesto a declarar |
 
 ---
 
@@ -256,7 +259,8 @@ Todo se corre desde Git Bash en `C:\tesis-sdg`, con el entorno activado (`source
 - [ ] Correo a la directora enviado
 - [ ] Consulta de comité de ética resuelta
 - [ ] Documento técnico del protocolo
-- [ ] Paquete Chat 02 ajustado (consentimiento, anonimización, muestra, guía)
+- [x] Paquete Chat 02 ajustado (consentimiento, anonimización, muestra) — v1.1
+- [ ] Guía de anotación actualizada a la taxonomía v1.1
 - [ ] Taxonomía v1.1 congelada
 - [ ] Módulo de priors (Etapa 1)
 - [ ] Generador por reglas + nombres de comercio (Etapa 2)

@@ -1,6 +1,6 @@
 {
  "script": "tools/distribuciones_priors.py",
- "commit_base": "d221c5d",
+ "commit_base": "5d5c13b",
  "pandas": "3.0.6",
  "numpy": "2.4.6",
  "python": "3.11.9",
@@ -74,6 +74,15 @@
   {
    "archivo": "enph_p438_matriz_categoria_x_medio.csv",
    "titulo": "ENPH · matriz subcapítulo × medio de pago (% de hogares con respuesta)",
+   "filas": 29,
+   "fuente": "ENPH 2016-2017, hogares/gastos_menos_frecuentes_medio_pago.csv",
+   "dominio": "Bogotá (DOMINIO = 'BOGOTÁ'), hogares",
+   "unidad": "hogar",
+   "peso": "FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+  },
+  {
+   "archivo": "enph_p438_resumen_efectivo.csv",
+   "titulo": "ENPH · subcapítulos P438* con efectivo > 85 % (resumen de la matriz)",
    "filas": 29,
    "fuente": "ENPH 2016-2017, hogares/gastos_menos_frecuentes_medio_pago.csv",
    "dominio": "Bogotá (DOMINIO = 'BOGOTÁ'), hogares",

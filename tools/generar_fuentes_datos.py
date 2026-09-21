@@ -32,6 +32,10 @@ import pyreadstat
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import normalizar_datos as nd  # noqa: E402  (reglas de mapeo y de lectura compartidas)
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+from sdg.pesos import cortes_ponderados, grupo_por_cortes  # noqa: E402  (única implementación de cuantiles ponderados)
+from sdg import codigos as cod_sdg  # noqa: E402
+
 csv.field_size_limit(2**31 - 1)
 ROOT = nd.ROOT
 RAW = nd.RAW
@@ -489,20 +493,13 @@ def _num(s: pd.Series) -> pd.Series:
     return pd.to_numeric(s.str.strip().str.replace(",", ".", regex=False), errors="coerce")
 
 
-def cuantiles_ponderados(x, w, k: int = 5):
-    """Cortes ponderados en j/k (el menor valor cuyo peso acumulado alcanza j/k); empates quedan en el mismo grupo."""
-    orden = np.argsort(x, kind="mergesort")
-    xs, cw = x[orden], np.cumsum(w[orden]) / w.sum()
-    cortes = [xs[min(int(np.searchsorted(cw, j / k, side="left")), len(xs) - 1)] for j in range(1, k)]
-    q = 1 + sum((x > c).astype(int) for c in cortes)
-    return q, [float(c) for c in cortes]
-
-
 def cruce_estrato_quintil(df: pd.DataFrame, est: str, ing: str, w: str, estratos: list[str], k: int = 5) -> dict:
-    """Cuantiles ponderados dentro del subconjunto; las celdas se cuentan SIN ponderar (observaciones)."""
-    d = df[df[est].isin(estratos) & df[ing].notna() & df[w].notna()].reset_index(drop=True)
-    q, cortes = cuantiles_ponderados(d[ing].to_numpy(float), d[w].to_numpy(float), k)
-    d["quintil"] = q
+    """Quintiles con la MISMA regla y código que tools/distribuciones_priors.py (sdg.pesos): los cortes se calculan sobre TODA la población
+    con ingreso y peso (no solo sobre quienes tienen estrato válido); luego se cruza con el estrato válido. Celdas SIN ponderar (observaciones)."""
+    pob = df[df[ing].notna() & df[w].notna()]
+    cortes = cortes_ponderados(pob[ing], pob[w], k)
+    d = pob[pob[est].isin(estratos)].reset_index(drop=True)
+    d["quintil"] = grupo_por_cortes(d[ing], cortes).astype(int)
     ct = pd.crosstab(d[est], d["quintil"]).reindex(index=estratos, columns=range(1, k + 1), fill_value=0)
     peso = d.groupby("quintil")[w].sum().reindex(range(1, k + 1)).fillna(0)
     return {"n": int(len(d)), "cortes": cortes, "tabla": {e: [int(v) for v in ct.loc[e]] for e in estratos},
@@ -866,8 +863,12 @@ def construir_seccion_bogota(bog: dict) -> str:
     A(f"\n**Celdas con menos de 30 observaciones: {fmt_c(cg)}** (vacías: {cg['celdas_vacias']}; mínimo: {cg['minimo']}). "
       f"Si se usara **un solo mes** (cruce mensual): entre {g['cruce_un_mes']['celdas_menos_30_min']} y {g['cruce_un_mes']['max']} de {g['cruce_un_mes']['celdas']} celdas con menos de 30 (mediana {fn(g['cruce_un_mes']['mediana'])}).\n")
     A("**Decisiones mías que conviene que confirmes:** (1) quintiles calculados dentro de Bogotá, no sobre el total nacional; (2) ingreso del hogar completo (`ICGU`) en ENPH pero solo ingreso laboral individual en GEIH, porque en los 8 módulos GEIH no construí un ingreso del hogar; "
-      "(3) estratos válidos = 1 a 6 (se excluyen `0` y vacío); para ENPH el DDI no trae categorías de `P8520S1A1` ("
-      + str(e["ddi_estrato_categorias"]) + " categorías) y el Cuadernillo 1 solo dice «Estrato para tarifa», así que asumo que sus códigos son los del DDI de GEIH para la misma pregunta (`P4030S1A1`): **supuesto no verificado en ENPH**.\n")
+      "(3) estratos válidos = 1 a 6 (se excluyen `0`, `9` y vacío, que no son estratos). **Códigos de estrato VERIFICADOS (20 sep 2026):** ENPH `P8520S1A1` según " + cod_sdg.ESTRATO_ENPH_FUENTE
+      + " (el DDI trae " + str(e["ddi_estrato_categorias"]) + " categorías y el Cuadernillo 1 solo dice «Estrato para tarifa»: no son fuente de códigos); GEIH `P4030S1A1` según " + cod_sdg.ESTRATO_GEIH_FUENTE
+      + ". Cada esquema se mapea solo con su fuente.\n")
+    A("**Cortes de quintil:** se calculan sobre TODOS los hogares (u ocupados) con ingreso, con la misma función y regla que `tools/distribuciones_priors.py` "
+      "(`sdg.pesos.cortes_ponderados`: menor valor con F ponderada ≥ j/5); después se cruza con el estrato válido. "
+      "Los conteos de celda de este apartado coinciden con `outputs/distribuciones/enph_estrato_x_quintil.csv` (ENPH, estrato agrupado).\n")
 
     ag = bog["agrupado"]
     A(f"**C) ENPH — estrato agrupado en 3 ({', '.join(ag['grupos'])}) × 5 quintiles de `ICGU`.** Los conteos de celda son observaciones **sin ponderar**. "

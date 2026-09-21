@@ -29,6 +29,7 @@ from sdg.pesos import cortes_ponderados, cruce, distribucion, fronteras, grupo_p
 OUT = RAIZ / "outputs" / "distribuciones"
 MIN_N_CELDA = 30          # solo para MARCAR celdas ralas; el umbral de soporte definitivo se declara en el Chat 05
 UMBRAL_DIF_PP = 1.0       # sensibilidad de diciembre (CLAUDE.md)
+UMBRAL_EFECTIVO_PCT = 85.0  # umbral del resumen «efectivo > 85 %» por subcapítulo P438*
 SECCIONES: list[str] = []
 INDICE: list[dict] = []
 
@@ -208,6 +209,17 @@ def tablas_enph() -> dict:
            nota="Esta es la tabla que usa el generador para condicionar `medio_pago` a la categoría de gasto (solo compras menos frecuentes). "
                 "**Cobertura incompleta:** faltan los subcapítulos J14 y K11 (ver la sección «COBERTURA FALTANTE» más abajo, con el % de hogares afectados).",
            fmt={m: 2 for m in cod.MEDIO_PAGO_P438.values()} | {"pct_hogares_bogota_con_respuesta": 2})
+    # resumen: en cuántos subcapítulos el efectivo supera el umbral (cifra citada en docs/plan_maestro.md y docs/protocolo_tecnico.md)
+    ef = matriz[["subcapitulo", "grupo", "Efectivo", "n_con_respuesta"]].rename(columns={"Efectivo": "efectivo_pct"})
+    ef["supera_umbral"] = ef["efectivo_pct"] > UMBRAL_EFECTIVO_PCT
+    ef = ef.sort_values("efectivo_pct").reset_index(drop=True)
+    n_sup, n_tot = int(ef["supera_umbral"].sum()), len(ef)
+    emitir("enph_p438_resumen_efectivo", ef, titulo=f"ENPH · subcapítulos P438* con efectivo > {es(UMBRAL_EFECTIVO_PCT, 0)} % (resumen de la matriz)",
+           meta={**meta5, "denominador": "hogares con código 1-6 en el subcapítulo (columna n_con_respuesta)", "umbral": f"efectivo > {es(UMBRAL_EFECTIVO_PCT, 0)} % (comparación estricta, sobre el valor sin redondear)"},
+           md_df=ef[~ef["supera_umbral"]].drop(columns="supera_umbral"), fmt={"efectivo_pct": 2},
+           nota=f"**El efectivo supera el {es(UMBRAL_EFECTIVO_PCT, 0)} % en {n_sup} de {n_tot} subcapítulos.** La tabla del informe lista solo los {n_tot - n_sup} subcapítulos donde NO lo supera; el CSV trae los {n_tot}. "
+                "Cada subcapítulo es un % de hogares con respuesta en ese subcapítulo (no de transacciones). No incluye J14 ni K11 (sin columna P438).")
+    res["p438_efectivo_supera_umbral"] = (n_sup, n_tot)
     res["p438_cobertura"], res["p438_largo"] = cobertura, largo
 
     # 6) vacíos de P438*: no respuesta vs no aplica (cruce con los registros de artículos, por DIRECTORIO + CAP)

@@ -247,6 +247,32 @@ Esta es la tabla que usa el generador para condicionar `medio_pago` a la categor
 Archivo: `outputs/distribuciones/enph_p438_matriz_categoria_x_medio.csv`
 
 
+### ENPH · subcapítulos P438* con efectivo > 85 % (resumen de la matriz)
+
+- **fuente:** ENPH 2016-2017, hogares/gastos_menos_frecuentes_medio_pago.csv
+- **dominio:** Bogotá (DOMINIO = 'BOGOTÁ'), hogares
+- **unidad:** hogar
+- **peso:** FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)
+- **codigos:** Cuadernillo 3.pdf, pregunta (6) de cada subcapítulo (NO es el esquema de NC2R_CC_P6)
+- **enunciado:** % de HOGARES (entre los que respondieron el subcapítulo) cuyo medio de pago principal en ese subcapítulo es X
+- **denominador:** hogares con código 1-6 en el subcapítulo (columna n_con_respuesta)
+- **umbral:** efectivo > 85 % (comparación estricta, sobre el valor sin redondear)
+
+| subcapitulo | grupo | efectivo_pct | n_con_respuesta |
+|---|---|---|---|
+| G14 | Electrodomésticos, muebles, enseres, utensilios domésticos y lencería para el hogar | 64,33 | 461 |
+| H12 | Transporte y comunicaciones | 69,52 | 886 |
+| J13 | Recreación, diversión, cultura y viajes | 72,79 | 201 |
+| G13 | Electrodomésticos, muebles, enseres, utensilios domésticos y lencería para el hogar | 75,22 | 464 |
+| F13 | Productos farmacéuticos, elementos médicos y pagos de servicios médicos | 80,55 | 679 |
+| I12 | Vehículo | 84,36 | 1.112 |
+| D12 | Prendas de vestir y accesorios personales | 84,39 | 1.504 |
+
+**El efectivo supera el 85 % en 22 de 29 subcapítulos.** La tabla del informe lista solo los 7 subcapítulos donde NO lo supera; el CSV trae los 29. Cada subcapítulo es un % de hogares con respuesta en ese subcapítulo (no de transacciones). No incluye J14 ni K11 (sin columna P438).
+
+Archivo: `outputs/distribuciones/enph_p438_resumen_efectivo.csv`
+
+
 ### ENPH · vacíos de P438*: no respuesta vs no aplica (cruce con registros de artículos)
 
 - **fuente:** ENPH 2016-2017, gastos_menos_frecuentes_medio_pago.csv × gastos_menos_frecuentes_articulos.txt (llave DIRECTORIO + CAP = subcapítulo)

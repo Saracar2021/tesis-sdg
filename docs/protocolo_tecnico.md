@@ -167,7 +167,7 @@ Los 112 archivos (96 GEIH + 16 ENPH) tienen SHA-256 idéntico al del zip origina
 - **Esquema de la transacción** (campos, tipos, granularidad temporal). Los documentos fuente solo fijan que existen categoría, medio de pago y nombre de comercio.
 - **Fuente de los nombres de comercio** y su mapeo a categorías.
 - **Fuente para medios digitales** (billeteras, transferencias): ENPH 2016-2017 no los trae (L4). No hay fuente elegida.
-- **Universo del generador frente al universo del dato real.** Los priors describen el gasto de los hogares (con 97,03 % de hogares que declaran efectivo como forma de pago principal en gastos frecuentes), pero el conjunto real —extractos bancarios— no ve el efectivo (L7). Cómo se reconcilia (por ejemplo, qué parte del gasto se emite como transacción bancarizada) **no está decidido** y condiciona directamente el TSTR.
+- **Universo del generador frente al universo del dato real: decisión abierta DP1 (§5), con dos opciones.** Los priors describen el gasto de los hogares (97,03 % de hogares con efectivo como forma de pago principal en gastos frecuentes, `enph_forma_pago_nc2r.csv`), pero los extractos bancarios no ven el efectivo (L7). Condiciona directamente el TSTR y bloquea el Chat 06.
 - **Reglas de generación** (estructura, jerarquía de condicionamiento): las define el Chat 06.
 
 ---
@@ -266,12 +266,26 @@ Cada tabla declara unidad y dominio. GEIH: 7 módulos son persona y `datos_hogar
 | D11 | **No respuesta declarada aparte, sin imputar** | Imputar la no respuesta como efectivo es un supuesto sin sustento | `enph_forma_pago_nc2r.csv` (11,42 % sin dato) |
 | D12 | **Sin intervalos de confianza sobre cifras DANE** | No hay segmento ni UPM en los archivos públicos | L1 |
 | D13 | **Reconstrucción desde cero de la base empírica** | El análisis anterior tenía cifras a mano, sin factores de expansión y con un solo mes; queda en `docs/historico/` como referencia de solo lectura | `docs/plan_maestro.md` §2 |
+| D14 | **Los datos reales solo evalúan; nunca calibran el generador** | Si los mismos extractos calibran y evalúan, el TSTR queda contaminado; el generador se calibra solo con ENPH y GEIH | `docs/plan_maestro.md` §4; `docs/datos_reales/04_diseno_muestra_y_recoleccion_v1.1.md` |
+| **DP1** | **PENDIENTE — universo del generador** (ver abajo) | Los priors describen el gasto del hogar; los extractos solo ven lo bancarizado | `docs/plan_maestro.md` R10 |
 
 **Detalle de D8 (12 meses).** Decisión de Sara del 20 sep 2026, cerrada.
 - **Diciembre** tiene −2,5 % de personas y −1,0 % de hogares frente a la mediana de los otros meses, sin explicación documental; los `FEX_C18` compensan y los totales expandidos no caen [`docs/fuentes_datos.md` §8]. Sensibilidad sin diciembre: 86 comparaciones, 4 con diferencia > 1,0 p.p., todas en grupos de `INGLABO`; el corte c1 pasa de 1.300.000 a 1.200.000 (8,33 % relativo) [`geih_sensibilidad_diciembre.csv`].
 - **Julio:** 86 comparaciones, 7 con diferencia > 1,0 p.p. [`geih_sensibilidad_julio.csv`]: 4 en `INGLABO` (mismo efecto de frontera) y 3 en la celda posición ocupacional × cotiza pensión (empleado doméstico y patrón), que son celdas pequeñas e inestables ya declaradas. **Estrato agrupado: máx. 0,73 p.p.; componentes de formalidad: máx. 0,29 p.p.** El estrato 3 de Bogotá cae a 26,04 % en julio [`outputs/julio/julio_estrato.md`]; la anomalía se repite, más fuerte, en las 23 ciudades y no es «sin dato»: es un desplazamiento 3 → 1-2.
 - **Marzo:** 2 comparaciones > 1,0 p.p., ambas en posición × pensión de «patrón» (−2,64 y +3,05 p.p.) [`geih_sensibilidad_marzo.csv`]. Estrato agrupado: máx. 0,31 p.p. La cifra de formalidad sin marzo (0,52 p.p.) proviene de `docs/bitacora.md`, no se re-verificó al redactar este documento.
 - **Por qué no se detiene el análisis:** lo único que supera 1 p.p. en los insumos de calibración es `INGLABO`, que no calibra nada (D4); las familias de ENPH (`ICGU`, forma de pago) no dependen de los meses de GEIH. Marzo y julio quedan como **anomalías declaradas**. No se investigan más las causas sin el control de cambios 2501–2512 del DANE. Las variables no son independientes: los hallazgos no se leen como 118 hallazgos.
+
+**Decisión abierta DP1 — universo del generador (PENDIENTE, sin decidir).** Qué transacciones emite el generador. Hay dos opciones; los documentos fuente no eligen ninguna.
+
+| | **Opción A — extracto sintético** | **Opción B — gasto total del hogar** |
+|---|---|---|
+| Qué emite | Solo lo que aparecería en un extracto bancario (movimientos bancarizados; el efectivo entra, como mucho, como retiro) | Todo el gasto del hogar, incluido el pagado en efectivo |
+| Coincide con el conjunto real | **Sí**: mismo universo que los extractos de los voluntarios (L7) | **No**: el real no ve el efectivo; la diferencia queda incorporada al TSTR |
+| Coincide con los priors de ENPH | **No directamente**: los priors describen gasto de hogares (97,03 % de hogares con efectivo como forma de pago principal en gastos frecuentes, `enph_forma_pago_nc2r.csv`); habría que definir cómo pasar de gasto del hogar a lo bancarizado | **Sí** (salvo la unidad hogar/transacción, D9) |
+| Qué exige | Una regla para derivar lo bancarizado desde ENPH, y una fuente para medios digitales, que ENPH 2016-2017 no trae (L4). Ambas sin definir | Restringir la evaluación al subconjunto bancarizado o ajustar el `medio_pago` del real, para que el TSTR no mida un desajuste de universo. Sin definir |
+| Riesgo principal | La regla de derivación sería un supuesto propio, no una cifra DANE | El TSTR podría reflejar la diferencia de universo y no la calidad del sintético |
+
+Estado: se lleva al punto de control del 25 sep (`docs/plan_maestro.md`, R10). **Bloquea el Chat 06 (generador por reglas).** Afecta la Etapa 2 (esquema de la transacción), la Etapa 3 y la interpretación del TSTR (§7.3).
 
 **Riesgo asociado a D9 (declarado de frente).** El prior de medio de pago es una respuesta **por hogar** («¿cuál fue el medio principal en este subcapítulo?»), y el generador emite **transacciones**. La equivalencia entre «medio principal del hogar» y «participación del medio entre transacciones» **no está demostrada** y no se asume; el generador usará la matriz como condicionante, no como frecuencia de transacciones. Cómo se traduce formalmente es PENDIENTE (Chat 05/06).
 
@@ -367,7 +381,7 @@ Criterio del punto de control: si el 25 no hay muestra sintética por reglas fun
 | PD5 | Montos y frecuencias de transacción | 1–2 | Generador |
 | PD6 | Esquema de la transacción | 2 | Generador |
 | PD7 | Fuente de nombres de comercio y de medios digitales | 2 | Generador |
-| PD8 | Reconciliación entre el universo del generador (gasto de hogares) y el del real (bancarizado) | 2, 4 | Validez del TSTR |
+| PD8 | **DP1**: universo del generador (extracto sintético vs. gasto total del hogar), ver §5 | 2, 4 | Validez del TSTR y Chat 06 |
 | PD9 | Traducción de prior de hogar a probabilidad de transacción | 1–2 | Generador |
 | PD10 | Arquitectura y parámetros del CTGAN; variables de entrada | 3 | CTGAN |
 | PD11 | **Métricas de fidelidad y umbrales** | 3 | Evaluación de Etapa 3 |
@@ -379,13 +393,13 @@ Criterio del punto de control: si el 25 no hay muestra sintética por reglas fun
 | PD17 | Definición oficial DANE de formalidad, solo si hace falta una sola variable | 1 | — |
 | PD18 | Aval de ética, anotadores y paquete de datos reales | 4 | Toda la recolección |
 
-### 8.2 Discrepancias entre documentos fuente (a revisar por la autora)
+### 8.2 Discrepancias entre documentos fuente (detectadas al redactar la v0.1) y su estado
 
-Detectadas al redactar; **no se corrigieron** los documentos originales.
-
-1. **`docs/fuentes_datos.md` §10.3** (texto «Decisiones mías que conviene que confirmes», punto 3) dice que el estrato de ENPH `P8520S1A1` es «supuesto no verificado». `CLAUDE.md` y `docs/bitacora.md` lo dan por **verificado** con el Manual ENPH, pregunta 4. Este documento sigue a `CLAUDE.md`. El §10.3 quedó desactualizado.
-2. **Cortes de quintil y conteos de celda:** `docs/fuentes_datos.md` §10.3 da cortes de `ICGU` 1.128.000 / 1.815.000 / 2.775.333 / 4.518.575 y, en el cruce agrupado, 654/579/516/380/127 (estratos 1-2). `outputs/distribuciones/enph_ingreso_quintil.csv` y `enph_estrato_x_quintil.csv` dan 1.127.000 / 1.810.250 / 2.766.667 / 4.506.283 y 653/572/520/382/129. Difieren por la definición del cuantil (interpolado frente a «menor valor con F ponderada ≥ j/5»). **Este documento usa las cifras de `outputs/`.** El conteo de celdas ralas (4 de 15) coincide en ambas versiones.
-3. **`docs/taxonomia/pendientes_v1.1.md`**, T2–T4: siguen «Por verificar» / «Bloqueado por T2», pero la verificación de los códigos de `P438*` (4 bonos, 5 cheques) y de `NC2R_CC_P6` (4 fiado) está cerrada según `CLAUDE.md` y la bitácora. El archivo no refleja el cierre.
-4. **`docs/fuentes_datos.md` §10.3 y §10.6** rotulan el código 4 de `NC2R_CC_P6` como «Fiador» (etiqueta del DDI); `CLAUDE.md` y `outputs/distribuciones/` usan «Fiado» según el Cuadernillo 2 urbano.
-5. **`docs/plan_maestro.md` §0.3** afirma que el pipeline de Pancholi genera 100 % de tarjeta de crédito, pero la reevaluación (Chat 01B) no se ha ejecutado (§1.4).
-6. **`docs/plan_maestro.md` §5** cita «efectivo supera el 85 % en 22 de 29 subcapítulos» sin archivo de origen. Al redactar se contó a mano sobre `enph_p438_matriz_categoria_x_medio.csv` (efectivo ≤ 85 % en D12, F13, G13, G14, H12, I12 y J13) y coincide, pero no es una salida de código. Los subcapítulos con crédito alto que sí se citan salen de `enph_p438_matriz_categoria_x_medio.csv`.
+| # | Discrepancia | Estado (20 sep 2026) |
+|---|---|---|
+| 1 | `docs/fuentes_datos.md` §10.3 daba el estrato ENPH como «supuesto no verificado» | **Corregida.** El texto se regenera con `tools/generar_fuentes_datos.py` y cita el Manual ENPH, pregunta 4 |
+| 2 | Cortes de quintil y conteos de celda distintos entre `docs/fuentes_datos.md` (1.128.000 / 1.815.000 / 2.775.333 / 4.518.575; celda 1-2 × Q1 = 654) y `outputs/distribuciones/` (1.127.000 / 1.810.250 / 2.766.667 / 4.506.283; 653) | **Corregida.** Ambos scripts usan ahora la misma función (`sdg.pesos.cortes_ponderados`). La diferencia venía de la **población** sobre la que se calculaban los cortes: `fuentes_datos.md` los calculaba solo sobre hogares con estrato válido (3.899); `outputs/` los calcula sobre todos los hogares de Bogotá con `ICGU` (3.918). Es correcta la de `outputs/`: el quintil describe la distribución del ingreso de la población de Bogotá y no debe depender de que el hogar tenga estrato válido. Los cruces GEIH (§10.3 B) también se recalcularon con esta regla |
+| 3 | `docs/taxonomia/pendientes_v1.1.md` T2–T4 seguían «Por verificar» / «Bloqueado por T2» | **Corregida.** T2 y T4 verificados; T3 desbloqueado y pendiente de aplicar al regenerar la taxonomía v1.1 |
+| 4 | `docs/fuentes_datos.md` §10.3–10.6 rotulan el código 4 de `NC2R_CC_P6` como «Fiador» | **Abierta.** Es la etiqueta del DDI (rotulado erróneo); `CLAUDE.md` y `outputs/` usan «Fiado» según el Cuadernillo 2 urbano. Conviene anotarlo en el script |
+| 5 | `docs/plan_maestro.md` §0.3 afirmaba que Pancholi genera 100 % de tarjeta de crédito | **Corregida** por la autora: el plan ya la presenta como cifra del informe de avance **no verificada** hasta ejecutar el Chat 01B (§1.4) |
+| 6 | «Efectivo supera el 85 % en 22 de 29 subcapítulos» sin salida de código | **Corregida.** Sale de `outputs/distribuciones/enph_p438_resumen_efectivo.csv` (29 filas, columna `supera_umbral`; comparación estricta sobre el valor sin redondear). Los 7 subcapítulos que no lo superan: G14 64,33 %, H12 69,52 %, J13 72,79 %, G13 75,22 %, F13 80,55 %, I12 84,36 %, D12 84,39 % |

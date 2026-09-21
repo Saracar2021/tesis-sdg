@@ -4,7 +4,7 @@
 > se abra el Chat 03. Fecha de apertura: 20 sep 2026.
 
 ## Condiciones para congelar v1.1
-1. Cerrada la verificación de `P438*` (¿es medio de pago por subcapítulo de gasto?).
+1. ~~Cerrada la verificación de `P438*` (¿es medio de pago por subcapítulo de gasto?).~~ **Cumplida (20 sep 2026):** son 29 columnas, una por subcapítulo del Cuadernillo 3, con sus códigos verificados (T2). Gaps abiertos que **no** bloquean el congelamiento pero deben declararse: no existen `P438J14` ni `P438K11`, y la correspondencia de `P438J13` con un bloque del Cuadernillo 3 no está verificada (`outputs/distribuciones/enph_p438_gaps.csv`).
 2. Revisadas al menos 50 descripciones reales de extractos, para validar que las categorías
    y los ejemplos corresponden a cómo aparecen los comercios en la práctica.
 
@@ -15,9 +15,9 @@ Congelar antes de (2) es congelar a ciegas: el esquema existe para anotar transa
 | # | Dónde | Dice | Debe decir | Estado |
 |---|---|---|---|---|
 | T1 | `metadata.fuentes` | «variable NC2R_CC_P6 (forma de pago, gastos diarios cuadernillo C)» | Cuadernillo **2, capítulo D**: gastos diarios urbanos (14 días) / semanales rurales. No es «cuadernillo C». | Verificado 20 sep |
-| T2 | `metadata.fuentes` | Códigos P438: 1 débito, 2 crédito, 3 efectivo, **4 bonos, 5 cheques**, 6 otro | Verificar contra `Cuadernillo 3.pdf`. **Conflicto:** el DDI da para `NC2R_CC_P6` 4 fiador, 5 bonos, 6 otro. Los dos esquemas difieren en 4 y 5. | Por verificar |
-| T3 | `dimension_medio_pago.*.equivalencia_enph_p438` | Cada valor mapea a un código P438 | Depende de T2. Si los esquemas difieren, hacen falta **dos** campos de equivalencia, uno por variable, nunca uno solo. | Bloqueado por T2 |
-| T4 | `dimension_medio_pago` | `fiado_credito_tienda` con `equivalencia_enph_p438: null` | Si `NC2R_CC_P6 = 4` es fiador, esa categoría **sí** tiene anclaje en ENPH para gastos frecuentes. | Bloqueado por T2 |
+| T2 | `metadata.fuentes` | Códigos P438: 1 débito, 2 crédito, 3 efectivo, **4 bonos, 5 cheques**, 6 otro | **Los códigos de la taxonomía son correctos.** Verificados contra `Cuadernillo 3.pdf`, pregunta (6) de cada subcapítulo: 1 débito, 2 crédito, 3 efectivo, **4 bonos, 5 cheques**, 6 otro. Los de `NC2R_CC_P6` son otros (Cuadernillo 2 urbano, sección D2, pregunta 2): 1 débito, 2 crédito, 3 efectivo, **4 fiado**, **5 bonos**, 6 otra. Los dos esquemas difieren en 4 y 5. El DDI rotula el 4 de `NC2R_CC_P6` como «fiador»: es un error de rotulado, el cuadernillo dice «Fiado». | **Verificado 20 sep** (`CLAUDE.md`, `docs/bitacora.md`) |
+| T3 | `dimension_medio_pago.*.equivalencia_enph_p438` | Cada valor mapea a un código P438 | Los esquemas difieren (T2), así que hacen falta **dos** campos de equivalencia, uno por variable (`P438*` y `NC2R_CC_P6`), nunca uno solo. Un mismo medio no tiene el mismo código en ambas: p. ej. «bonos» es 4 en `P438*` y 5 en `NC2R_CC_P6`. | **Desbloqueado (T2 verificado).** Falta aplicarlo al regenerar la taxonomía v1.1 |
+| T4 | `dimension_medio_pago` | `fiado_credito_tienda` con `equivalencia_enph_p438: null` | `NC2R_CC_P6 = 4` es **fiado** (no «fiador»): esa categoría **sí** tiene anclaje en ENPH, solo para gastos frecuentes y en el campo de `NC2R_CC_P6`. `P438*` no tiene código de fiado, así que `equivalencia_enph_p438` sigue en `null` para gastos menos frecuentes. Es un anclaje débil: 4 hogares en la muestra de Bogotá (0,09 % de los hogares con respuesta; `outputs/distribuciones/enph_forma_pago_nc2r.csv`). | **Verificado 20 sep.** Falta aplicarlo en v1.1 |
 
 ## Decisiones de alcance que afectan la taxonomía
 
