@@ -1,0 +1,6 @@
+codigo,categoria,n (sin ponderar),expandido,% base con respuesta,% del total,fuente,dominio,unidad,peso
+bajo (1-2),bajo (1-2),2256,1136926.0230524526,44.66656219946716,44.485352276076256,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+medio (3-4),medio (3-4),1427,1259142.0621816737,49.468079802944516,49.26739037197028,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+alto (5-6),alto (5-6),216,149294.6359336456,5.865357997588319,5.841562544769345,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+,sin dato (vacío),7,3855.715274729304,,0.15086544664715437,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+0,sin dato: 0 = conexión pirata (Manual ENPH),12,6512.753448242362,,0.2548293605369655,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"

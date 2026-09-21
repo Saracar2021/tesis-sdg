@@ -1,0 +1,92 @@
+{
+  "hogares/viviendas_hogares.csv": {
+    "filas": 87201,
+    "directorios": 87201,
+    "fex_nulos": 0,
+    "directorios_con_fex_no_constante": 0,
+    "filas_con_directorio_en_hogares": 87201,
+    "filas_fex_igual_a_hogares": 87201,
+    "pct_filas_fex_igual_a_hogares": 100.0
+  },
+  "hogares/gastos_menos_frecuentes_medio_pago.csv": {
+    "filas": 87201,
+    "directorios": 87201,
+    "fex_nulos": 0,
+    "directorios_con_fex_no_constante": 0,
+    "filas_con_directorio_en_hogares": 87201,
+    "filas_fex_igual_a_hogares": 87201,
+    "pct_filas_fex_igual_a_hogares": 100.0
+  },
+  "hogares/gastos_menos_frecuentes_articulos.txt": {
+    "filas": 2111331,
+    "directorios": 87193,
+    "fex_nulos": 0,
+    "directorios_con_fex_no_constante": 0,
+    "filas_con_directorio_en_hogares": 2111331,
+    "filas_fex_igual_a_hogares": 2111331,
+    "pct_filas_fex_igual_a_hogares": 100.0
+  },
+  "personas/caracteristicas_generales_personas.csv": {
+    "filas": 291590,
+    "directorios": 87201,
+    "fex_nulos": 0,
+    "directorios_con_fex_no_constante": 0,
+    "filas_con_directorio_en_hogares": 291590,
+    "filas_fex_igual_a_hogares": 291590,
+    "pct_filas_fex_igual_a_hogares": 100.0
+  },
+  "urbano/gastos_diarios_hogar_comidas_fuera.csv": {
+    "filas": 504031,
+    "directorios": 61774,
+    "fex_nulos": 0,
+    "directorios_con_fex_no_constante": 0,
+    "filas_con_directorio_en_hogares": 504031,
+    "filas_fex_igual_a_hogares": 504031,
+    "pct_filas_fex_igual_a_hogares": 100.0
+  },
+  "urbano/gastos_diarios_personales.csv": {
+    "filas": 524948,
+    "directorios": 58528,
+    "fex_nulos": 0,
+    "directorios_con_fex_no_constante": 0,
+    "filas_con_directorio_en_hogares": 524948,
+    "filas_fex_igual_a_hogares": 524948,
+    "pct_filas_fex_igual_a_hogares": 100.0
+  },
+  "urbano/gastos_diarios_capitulo_c.txt": {
+    "filas": 2035950,
+    "directorios": 81438,
+    "fex_nulos": 0,
+    "directorios_con_fex_no_constante": 0,
+    "filas_con_directorio_en_hogares": 2035950,
+    "filas_fex_igual_a_hogares": 2035950,
+    "pct_filas_fex_igual_a_hogares": 100.0
+  },
+  "urbano/gastos_diarios_mercados.csv": {
+    "filas": 7569,
+    "directorios": 6807,
+    "fex_nulos": 0,
+    "directorios_con_fex_no_constante": 0,
+    "filas_con_directorio_en_hogares": 7569,
+    "filas_fex_igual_a_hogares": 7569,
+    "pct_filas_fex_igual_a_hogares": 100.0
+  },
+  "urbano/gastos_diarios_hogar.txt": {
+    "filas": 3393520,
+    "directorios": 79794,
+    "fex_nulos": 0,
+    "directorios_con_fex_no_constante": 0,
+    "filas_con_directorio_en_hogares": 3393520,
+    "filas_fex_igual_a_hogares": 3393520,
+    "pct_filas_fex_igual_a_hogares": 100.0
+  },
+  "urbano/gastos_personales_comidas_fuera.csv": {
+    "filas": 475963,
+    "directorios": 53641,
+    "fex_nulos": 0,
+    "directorios_con_fex_no_constante": 0,
+    "filas_con_directorio_en_hogares": 475963,
+    "filas_fex_igual_a_hogares": 475963,
+    "pct_filas_fex_igual_a_hogares": 100.0
+  }
+}

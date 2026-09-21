@@ -1,0 +1,87 @@
+tabla,categoria,medida,v12,valt,dif_pp_12_menos_alt,supera_1pp
+geih_estrato_agrupado,sin dato: 0 (sin etiqueta en el diccionario GEIH),pct_total,0.22088445696890155,0.24098701902302144,-0.020102562054119893,False
+geih_estrato_agrupado,alto (5-6),pct_con_respuesta,6.777156138488465,6.724958357562217,0.05219778092624772,False
+geih_estrato_agrupado,alto (5-6),pct_total,6.762186453954031,6.708752080885788,0.05343437306824228,False
+geih_estrato_agrupado,bajo (1-2),pct_con_respuesta,47.26481176876976,46.59090107518053,0.6739106935892281,False
+geih_estrato_agrupado,bajo (1-2),pct_total,47.16041114595695,46.47862305154349,0.6817880944134629,False
+geih_estrato_agrupado,medio (3-4),pct_con_respuesta,45.95803209274176,46.68414056725725,-0.7261084745154918,False
+geih_estrato_agrupado,medio (3-4),pct_total,45.85651794312012,46.5716378485477,-0.715119905427585,False
+geih_estrato_detalle,sin dato: 0 (sin etiqueta en el diccionario GEIH),pct_total,0.22088445696890155,0.24098701902302144,-0.020102562054119893,False
+geih_estrato_detalle,Estrato 1,pct_con_respuesta,8.15450818858104,7.732543414540296,0.4219647740407444,False
+geih_estrato_detalle,Estrato 1,pct_total,8.13649614745021,7.713908988670934,0.4225871587792751,False
+geih_estrato_detalle,Estrato 2,pct_con_respuesta,39.11030358018873,38.858357660640245,0.2519459195484828,False
+geih_estrato_detalle,Estrato 2,pct_total,39.02391499850675,38.76471406287256,0.25920093563419044,False
+geih_estrato_detalle,Estrato 3,pct_con_respuesta,34.0816397182409,34.8151513823388,-0.7335116640978967,False
+geih_estrato_detalle,Estrato 3,pct_total,34.00635867342317,34.73125138685415,-0.7248927134309753,False
+geih_estrato_detalle,Estrato 4,pct_con_respuesta,11.876392374500861,11.868989184918453,0.007403189582408487,False
+geih_estrato_detalle,Estrato 4,pct_total,11.85015926969695,11.840386461693553,0.009772808003397415,False
+geih_estrato_detalle,Estrato 5,pct_con_respuesta,3.9033437948227734,3.9566909151299003,-0.05334712030712696,False
+geih_estrato_detalle,Estrato 5,pct_total,3.89472191507795,3.9471558036415737,-0.05243388856362374,False
+geih_estrato_detalle,Estrato 6,pct_con_respuesta,2.8738123436656937,2.7682674424323164,0.10554490123337734,False
+geih_estrato_detalle,Estrato 6,pct_total,2.8674645388760824,2.7615962772442137,0.10586826163186869,False
+geih_posicion_ocupacional,Obrero o empleado de empresa particular,pct_con_respuesta,58.87274292246505,58.6956604633472,0.17708245911784815,False
+geih_posicion_ocupacional,Obrero o empleado de empresa particular,pct_total,58.87274292246505,58.6956604633472,0.17708245911784815,False
+geih_posicion_ocupacional,Obrero o empleado del gobierno,pct_con_respuesta,4.330025973448808,4.3982259958531245,-0.06820002240431666,False
+geih_posicion_ocupacional,Obrero o empleado del gobierno,pct_total,4.330025973448808,4.3982259958531245,-0.06820002240431666,False
+geih_posicion_ocupacional,Empleado doméstico,pct_con_respuesta,2.683303203894781,2.6352430061510033,0.04806019774377779,False
+geih_posicion_ocupacional,Empleado doméstico,pct_total,2.683303203894781,2.6352430061510033,0.04806019774377779,False
+geih_posicion_ocupacional,Trabajador por cuenta propia,pct_con_respuesta,30.548438864469066,30.672581596991908,-0.12414273252284147,False
+geih_posicion_ocupacional,Trabajador por cuenta propia,pct_total,30.548438864469066,30.672581596991908,-0.12414273252284147,False
+geih_posicion_ocupacional,Patrón o empleador,pct_con_respuesta,2.7671974530839107,2.7831736237607805,-0.01597617067686974,False
+geih_posicion_ocupacional,Patrón o empleador,pct_total,2.7671974530839107,2.7831736237607805,-0.01597617067686974,False
+geih_posicion_ocupacional,Trabajador familiar sin remuneración,pct_con_respuesta,0.7644724252535303,0.7781841149313561,-0.013711689677825767,False
+geih_posicion_ocupacional,Trabajador familiar sin remuneración,pct_total,0.7644724252535303,0.7781841149313561,-0.013711689677825767,False
+geih_posicion_ocupacional,Jornalero o peón,pct_con_respuesta,0.004653111774897081,0.005081291494282841,-0.00042817971938576005,False
+geih_posicion_ocupacional,Jornalero o peón,pct_total,0.004653111774897081,0.005081291494282841,-0.00042817971938576005,False
+geih_posicion_ocupacional,Otro,pct_con_respuesta,0.029166045609944072,0.031849907470351324,-0.0026838618604072516,False
+geih_posicion_ocupacional,Otro,pct_total,0.029166045609944072,0.031849907470351324,-0.0026838618604072516,False
+geih_formalidad_componentes,P6440: Sí,pct_con_respuesta,73.29845458220197,73.1428850829983,0.15556949920366492,False
+geih_formalidad_componentes,P6440: Sí,pct_total,73.29845458220197,73.1428850829983,0.15556949920366492,False
+geih_formalidad_componentes,P6440: No,pct_con_respuesta,26.701545417798012,26.85711491700171,-0.1555694992036969,False
+geih_formalidad_componentes,P6440: No,pct_total,26.701545417798012,26.85711491700171,-0.1555694992036969,False
+geih_formalidad_componentes,P6450: sin dato (vacío),pct_total,26.701545417798012,26.85711491700171,-0.1555694992036969,False
+geih_formalidad_componentes,P6450: Verbal,pct_con_respuesta,19.710529203941704,19.810338060844394,-0.09980885690269048,False
+geih_formalidad_componentes,P6450: Verbal,pct_total,14.447513296462867,14.48985280239689,-0.042339505934021915,False
+geih_formalidad_componentes,P6450: Escrito,pct_con_respuesta,80.28947079605828,80.18966193915561,0.09980885690266916,False
+geih_formalidad_componentes,P6450: Escrito,pct_total,58.8509412857391,58.653032280601415,0.1979090051376815,False
+geih_formalidad_componentes,P6920: Sí,pct_con_respuesta,64.07854327441011,63.80269454137042,0.2758487330396875,False
+geih_formalidad_componentes,P6920: Sí,pct_total,64.07854327441011,63.80269454137042,0.2758487330396875,False
+geih_formalidad_componentes,P6920: No,pct_con_respuesta,33.397704004897534,33.683285617708435,-0.2855816128109012,False
+geih_formalidad_componentes,P6920: No,pct_total,33.397704004897534,33.683285617708435,-0.2855816128109012,False
+geih_formalidad_componentes,P6920: Ya es pensionado,pct_con_respuesta,2.5237527206923454,2.5140198409211623,0.00973287977118309,False
+geih_formalidad_componentes,P6920: Ya es pensionado,pct_total,2.5237527206923454,2.5140198409211623,0.00973287977118309,False
+geih_formalidad_componentes,P6990: Sí,pct_con_respuesta,62.59184266176483,62.30450714440688,0.2873355173579526,False
+geih_formalidad_componentes,P6990: Sí,pct_total,62.56333699103464,62.28361689310136,0.27972009793327857,False
+geih_formalidad_componentes,P6990: No,pct_con_respuesta,37.40815733823517,37.695492855593116,-0.2873355173579455,False
+geih_formalidad_componentes,P6990: No,pct_total,37.39112085919318,37.68285382906148,-0.2917329698682991,False
+geih_formalidad_componentes,"P6990: sin dato: No sabe, no informa",pct_total,0.045542149772166696,0.03352927783717788,0.012012871934988817,False
+geih_posicion_x_pension,Obrero o empleado de empresa particular | Sí,pct_dentro_de_posicion,81.75106678563385,81.5961034597376,0.15496332589624728,False
+geih_posicion_x_pension,Obrero o empleado de empresa particular | No,pct_dentro_de_posicion,17.18347822968174,17.363141904397185,-0.17966367471544586,False
+geih_posicion_x_pension,Obrero o empleado de empresa particular | Ya es pensionado,pct_dentro_de_posicion,1.0654549846844041,1.0407546358652222,0.024700348819181928,False
+geih_posicion_x_pension,Obrero o empleado del gobierno | Sí,pct_dentro_de_posicion,97.79663034053061,97.97632567807922,-0.17969533754860834,False
+geih_posicion_x_pension,Obrero o empleado del gobierno | Ya es pensionado,pct_dentro_de_posicion,2.2033696594693843,2.023674321920773,0.17969533754861144,False
+geih_posicion_x_pension,Empleado doméstico | Sí,pct_dentro_de_posicion,40.859918398925494,38.995348958577715,1.864569440347779,True
+geih_posicion_x_pension,Empleado doméstico | No,pct_dentro_de_posicion,52.594442192439104,54.76852960764318,-2.1740874152040774,True
+geih_posicion_x_pension,Empleado doméstico | Ya es pensionado,pct_dentro_de_posicion,6.545639408635406,6.236121433779106,0.30951797485630017,False
+geih_posicion_x_pension,Trabajador por cuenta propia | Sí,pct_dentro_de_posicion,30.642153628469945,30.47151584705088,0.17063778141906383,False
+geih_posicion_x_pension,Trabajador por cuenta propia | No,pct_dentro_de_posicion,64.81185094757375,64.9755346903533,-0.1636837427795541,False
+geih_posicion_x_pension,Trabajador por cuenta propia | Ya es pensionado,pct_dentro_de_posicion,4.545995423956309,4.552949462595834,-0.006954038639525706,False
+geih_posicion_x_pension,Patrón o empleador | Sí,pct_dentro_de_posicion,42.527411517018415,41.137933208928246,1.389478308090169,True
+geih_posicion_x_pension,Patrón o empleador | No,pct_dentro_de_posicion,50.43124474282224,51.40389472186373,-0.972649979041492,False
+geih_posicion_x_pension,Patrón o empleador | Ya es pensionado,pct_dentro_de_posicion,7.041343740159352,7.458172069208024,-0.4168283290486716,False
+geih_posicion_x_pension,Trabajador familiar sin remuneración | Sí,pct_dentro_de_posicion,9.573298156683512,9.341950335359378,0.23134782132413356,False
+geih_posicion_x_pension,Trabajador familiar sin remuneración | No,pct_dentro_de_posicion,84.95027166759536,84.78305275148409,0.16721891611126694,False
+geih_posicion_x_pension,Trabajador familiar sin remuneración | Ya es pensionado,pct_dentro_de_posicion,5.4764301757211165,5.874996913156541,-0.3985667374354245,False
+geih_posicion_x_pension,Jornalero o peón | No,pct_dentro_de_posicion,100.0,100.0,0.0,False
+geih_posicion_x_pension,Otro | Sí,pct_dentro_de_posicion,26.505663874635328,26.505663874635328,0.0,False
+geih_posicion_x_pension,Otro | No,pct_dentro_de_posicion,73.49433612536467,73.49433612536468,-1.4210854715202004e-14,False
+geih_ingreso_laboral_individual,G1,pct_ocupados_con_ingreso,22.204597965612745,20.007143086477143,2.197454879135602,True
+geih_ingreso_laboral_individual,G2,pct_ocupados_con_ingreso,20.14374140948989,22.44623860402462,-2.3024971945347303,True
+geih_ingreso_laboral_individual,G3,pct_ocupados_con_ingreso,20.552244438765605,20.51120566175292,0.04103877701268388,False
+geih_ingreso_laboral_individual,G4,pct_ocupados_con_ingreso,17.195329097086262,17.041817117832906,0.1535119792533557,False
+geih_ingreso_laboral_individual,G5,pct_ocupados_con_ingreso,19.90408708904548,19.993595529912422,-0.08950844086694332,False
+geih_ingreso_laboral_individual,G1,pct_cotiza_pension,12.930003807166573,8.479526266241782,4.4504775409247905,True
+geih_ingreso_laboral_individual,G2,pct_cotiza_pension,73.34087002424529,70.75786421562931,2.5830058086159795,True
+geih_ingreso_laboral_individual,G3,pct_cotiza_pension,71.20286603328559,70.9286981905611,0.2741678427244949,False
+geih_ingreso_laboral_individual,G4,pct_cotiza_pension,82.24490757758144,81.98238982765422,0.2625177499272269,False
+geih_ingreso_laboral_individual,G5,pct_cotiza_pension,90.1256708852794,90.10495915995978,0.020711725319628727,False

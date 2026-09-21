@@ -1,0 +1,6 @@
+# Versiones fijas (entorno .venv, Python 3.11.9). Solo lo que el repo importa hoy (src/, tools/, tests/).
+# Pendiente: fijar torch, ctgan y jupyter/ipykernel cuando se instalen para el pipeline de modelos y los notebooks.
+pandas==3.0.6
+numpy==2.4.6
+openpyxl==3.1.5
+pyreadstat==1.3.6

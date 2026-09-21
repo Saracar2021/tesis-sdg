@@ -1,0 +1,3 @@
+cap_en_articulos,columna_p438,n_hogares_con_registros,hogares_expandidos,pct_hogares_bogota,fuente,dominio,unidad,peso
+J14,NO EXISTE,910,617374.1040699763,24.156456927552256,"ENPH 2016-2017, hogares/gastos_menos_frecuentes_medio_pago.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+K11,NO EXISTE,574,352582.59162747505,13.795761973016722,"ENPH 2016-2017, hogares/gastos_menos_frecuentes_medio_pago.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"

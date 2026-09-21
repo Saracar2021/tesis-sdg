@@ -1,0 +1,6 @@
+grupo,n,expandido,pct_ocupados_con_ingreso,inglabo_min,inglabo_max,pct_cotiza_pension,fuente,dominio,unidad,peso
+G1,3029,924387.0228423916,22.204597965612745,0.0,1300000.0,12.930003807166573,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+G2,2724,838592.6725294583,20.14374140948989,1320000.0,1500000.0,73.34087002424529,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+G3,2728,855598.8304269833,20.552244438765605,1503500.0,2000000.0,71.20286603328559,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+G4,2229,715848.9919730499,17.195329097086262,2010000.0,3700000.0,82.24490757758144,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+G5,2400,828615.7594536166,19.90408708904548,3750000.0,103000000.0,90.1256708852794,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12

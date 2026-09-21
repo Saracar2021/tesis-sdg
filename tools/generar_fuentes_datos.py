@@ -999,6 +999,30 @@ def construir_seccion_rotacion(bog: dict) -> str:
     return "\n".join(L) + "\n"
 
 
+def texto_fex_enph() -> str:
+    """Estado de la verificación de FEX_C (ENPH) a partir de outputs/fex_enph_verificacion.json."""
+    ruta = ROOT / "outputs" / "fex_enph_verificacion.json"
+    if not ruta.exists():
+        return ("\n**`FEX_C` (ENPH): NO VERIFICADO.** Este documento solo confirma que la columna existe en cada tabla. "
+                "Ejecutar `tools/verificar_fex_enph.py`.\n")
+    v = json.loads(ruta.read_text(encoding="utf-8"))
+    ok = all(r["directorios_con_fex_no_constante"] == 0 and r["fex_nulos"] == 0
+             and r["filas_fex_igual_a_hogares"] == r["filas"] for r in v.values())
+    filas = [[f"`{k}`", fn(r["filas"]), fn(r["directorios"]), fn(r["directorios_con_fex_no_constante"]),
+              fn(r["pct_filas_fex_igual_a_hogares"], 2) + " %"] for k, r in v.items()]
+    return (
+        "\n**`FEX_C` (ENPH): " + ("VERIFICADO como factor del hogar/vivienda" if ok else "REVISAR: NO es uniforme por hogar") + ".** "
+        "Fuente documental: `Metodologia_ENPH.pdf`, §2.2.4.1 (Procedimiento de estimación): la calibración se hace «a nivel de vivienda» y "
+        "«a la vivienda corresponde un único factor de expansión». Contraste empírico (`tools/verificar_fex_enph.py`, "
+        "`outputs/fex_enph_verificacion.json`): en cada tabla `FEX_C` debe ser constante dentro de `DIRECTORIO` e igual al de "
+        "`viviendas_hogares`. Se verificaron las tablas de hogares, personas y urbano (**rural fuera de alcance, no verificado**).\n\n"
+        + tabla(["Archivo", "Filas", "DIRECTORIO distintos", "DIRECTORIO con FEX_C no constante", "% filas con FEX_C = el de hogares"], filas)
+        + "\n\n**Alcance del resultado.** `FEX_C` es un factor de hogar: sirve para estimar por hogar (una fila por hogar) y para personas "
+        "(el factor del hogar se aplica a cada miembro). En tablas de registros de gasto, cada fila lleva el factor de su hogar: para "
+        "cifras por hogar hay que agregar primero a hogar; ponderar filas de gasto sueltas no da un total de gasto sin ese paso. "
+        "No se verificó contra un total poblacional externo.\n")
+
+
 def construir_md(geih, enph, prov, p75, ctrl, dic, ddig, ddie, meta, bog) -> str:
     L: list[str] = []
     A = L.append
@@ -1113,8 +1137,8 @@ def construir_md(geih, enph, prov, p75, ctrl, dic, ddig, ddie, meta, bog) -> str
     A("\n**Factor de expansión ENPH.** " + (
         "Los 16 archivos traen `FEX_C`." if all(r.get("columnas_fex") == ["FEX_C"] for r in enph if r["existe"])
         else "Columnas FEX por archivo: " + "; ".join(f"{r['ruta']}: {r.get('columnas_fex')}" for r in enph if r["existe"]))
-      + " CLAUDE.md exige documentar cuál factor se usa en cada análisis: este documento solo confirma que la columna existe en cada tabla; "
-      "no verifica que `FEX_C` sea el factor correcto para cada unidad de registro.\n")
+      + " CLAUDE.md exige documentar cuál factor se usa en cada análisis.\n")
+    A(texto_fex_enph())
     A(tabla(["Archivo", "Zip origen", "Filas", "Cols", "SHA-256", "Encoding detectado", "Carga", "Sep"], [
         [f"`{r['ruta']}`", f"`{r.get('zip')}`", fn(r.get("filas")), r.get("columnas", "—"), f"`{r['sha256']}`" if r["existe"] else "—",
          r.get("encoding", "—"), f"`{nd.LECTURA[r['lectura']]['encoding']}`", "tab" if r.get("sep") == "\t" else "`;`"] for r in enph]))

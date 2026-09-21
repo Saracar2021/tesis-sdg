@@ -216,7 +216,25 @@ Unidad: `persona` = una fila por (`DIRECTORIO`, `SECUENCIA_P`, `HOGAR`, `ORDEN`)
 | `ENPH_2017/rural/gastos_semanales_mercados.csv` | registro de valor total de mercado no desagregado (rural) | 754 | 672 | 1,12 | sí | DIRECTORIO+ORDEN | 100,00 % | CONSISTENTE | `NC2_CC_P4S1` = «Valor total del Mercado» |
 | `ENPH_2017/rural/gastos_semanales.csv` | registro de gasto semanal rural: artículo o servicio | 241.067 | 5.763 | 41,83 | sí | DIRECTORIO+SECUENCIA_ENCUESTA+SECUENCIA_P | 100,00 % | CONSISTENTE | `NC2R_CA_P3` = «Nombre de artículo o servicio» |
 
-**Factor de expansión ENPH.** Los 16 archivos traen `FEX_C`. CLAUDE.md exige documentar cuál factor se usa en cada análisis: este documento solo confirma que la columna existe en cada tabla; no verifica que `FEX_C` sea el factor correcto para cada unidad de registro.
+**Factor de expansión ENPH.** Los 16 archivos traen `FEX_C`. CLAUDE.md exige documentar cuál factor se usa en cada análisis.
+
+
+**`FEX_C` (ENPH): VERIFICADO como factor del hogar/vivienda.** Fuente documental: `Metodologia_ENPH.pdf`, §2.2.4.1 (Procedimiento de estimación): la calibración se hace «a nivel de vivienda» y «a la vivienda corresponde un único factor de expansión». Contraste empírico (`tools/verificar_fex_enph.py`, `outputs/fex_enph_verificacion.json`): en cada tabla `FEX_C` debe ser constante dentro de `DIRECTORIO` e igual al de `viviendas_hogares`. Se verificaron las tablas de hogares, personas y urbano (**rural fuera de alcance, no verificado**).
+
+| Archivo | Filas | DIRECTORIO distintos | DIRECTORIO con FEX_C no constante | % filas con FEX_C = el de hogares |
+|---|---|---|---|---|
+| `hogares/viviendas_hogares.csv` | 87.201 | 87.201 | 0 | 100,00 % |
+| `hogares/gastos_menos_frecuentes_medio_pago.csv` | 87.201 | 87.201 | 0 | 100,00 % |
+| `hogares/gastos_menos_frecuentes_articulos.txt` | 2.111.331 | 87.193 | 0 | 100,00 % |
+| `personas/caracteristicas_generales_personas.csv` | 291.590 | 87.201 | 0 | 100,00 % |
+| `urbano/gastos_diarios_hogar_comidas_fuera.csv` | 504.031 | 61.774 | 0 | 100,00 % |
+| `urbano/gastos_diarios_personales.csv` | 524.948 | 58.528 | 0 | 100,00 % |
+| `urbano/gastos_diarios_capitulo_c.txt` | 2.035.950 | 81.438 | 0 | 100,00 % |
+| `urbano/gastos_diarios_mercados.csv` | 7.569 | 6.807 | 0 | 100,00 % |
+| `urbano/gastos_diarios_hogar.txt` | 3.393.520 | 79.794 | 0 | 100,00 % |
+| `urbano/gastos_personales_comidas_fuera.csv` | 475.963 | 53.641 | 0 | 100,00 % |
+
+**Alcance del resultado.** `FEX_C` es un factor de hogar: sirve para estimar por hogar (una fila por hogar) y para personas (el factor del hogar se aplica a cada miembro). En tablas de registros de gasto, cada fila lleva el factor de su hogar: para cifras por hogar hay que agregar primero a hogar; ponderar filas de gasto sueltas no da un total de gasto sin ese paso. No se verificó contra un total poblacional externo.
 
 | Archivo | Zip origen | Filas | Cols | SHA-256 | Encoding detectado | Carga | Sep |
 |---|---|---|---|---|---|---|---|

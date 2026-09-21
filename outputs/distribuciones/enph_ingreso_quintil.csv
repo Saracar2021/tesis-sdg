@@ -1,0 +1,6 @@
+quintil,n,expandido,pct_hogares,icgu_min,icgu_max,hogares_icgu_cero,fuente,dominio,unidad,peso
+Q1,860,511952.0125505461,20.03152814253645,0.0,1127000.0,31,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+Q2,820,510425.31442743307,19.971791886659783,1127265.0,1810250.0,0,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+Q3,801,512212.2944145821,20.041712385115076,1811000.0,2766666.66666667,0,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+Q4,759,510416.73831860523,19.971456322854724,2766766.66666667,4506283.33333333,0,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+Q5,678,510724.8301795771,19.983511262833957,4511083.33333333,88300000.0,0,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"

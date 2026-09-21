@@ -1,0 +1,9 @@
+codigo,categoria,n (sin ponderar),expandido,% base con respuesta,% del total,fuente,dominio,unidad,peso
+1,Obrero o empleado de empresa particular,7901,2537778.385944742,58.87274292246505,58.87274292246505,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+2,Obrero o empleado del gobierno,573,186650.8299175,4.330025973448808,4.330025973448808,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+3,Empleado doméstico,400,115666.92047538333,2.683303203894781,2.683303203894781,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+4,Trabajador por cuenta propia,4205,1316826.1580185583,30.548438864469066,30.548438864469066,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+5,Patrón o empleador,363,119283.28013060833,2.7671974530839107,2.7671974530839107,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+6,Trabajador familiar sin remuneración,105,32953.477299574995,0.7644724252535303,0.7644724252535303,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+7,Jornalero o peón,1,200.57782096666665,0.004653111774897081,0.004653111774897081,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+8,Otro,4,1257.2364812333333,0.029166045609944072,0.029166045609944072,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12

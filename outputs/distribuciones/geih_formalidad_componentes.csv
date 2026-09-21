@@ -1,0 +1,12 @@
+variable,codigo,categoria,tipo,n,expandido,pct_con_respuesta,pct_total,fuente,dominio,unidad,peso
+P6440,1,Sí,respuesta,9869,3159615.545802667,73.29845458220197,73.29845458220197,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+P6440,2,No,respuesta,3683,1151001.3202859,26.701545417798012,26.701545417798012,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+P6450,1,Verbal,respuesta,2008,622776.9448877167,19.710529203941704,14.447513296462867,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+P6450,2,Escrito,respuesta,7861,2536838.6009149496,80.28947079605828,58.8509412857391,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+P6450,,sin dato (vacío),sin_dato,3683,1151001.3202859,,26.701545417798012,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+P6920,1,Sí,respuesta,8541,2762180.493930584,64.07854327441011,64.07854327441011,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+P6920,2,No,respuesta,4630,1439647.06172145,33.397704004897534,33.397704004897534,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+P6920,3,Ya es pensionado,respuesta,381,108789.31043653333,2.5237527206923454,2.5237527206923454,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+P6990,1,Sí,respuesta,8357,2696865.756323367,62.59184266176483,62.56333699103464,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+P6990,2,No,respuesta,5189,1611787.9621759416,37.40815733823517,37.39112085919318,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+P6990,9,"sin dato: No sabe, no informa",sin_dato,6,1963.1475892583335,,0.045542149772166696,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12

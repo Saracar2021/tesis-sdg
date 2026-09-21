@@ -1,0 +1,172 @@
+{
+ "script": "tools/distribuciones_priors.py",
+ "commit_base": "c4b1f0e",
+ "pandas": "3.0.6",
+ "numpy": "2.4.6",
+ "python": "3.11.9",
+ "semilla": "no aplica (sin aleatoriedad)",
+ "min_n_celda_marca": 30,
+ "umbral_sensibilidad_pp": 1.0,
+ "salidas": [
+  {
+   "archivo": "enph_estrato_agrupado.csv",
+   "titulo": "ENPH · estrato agrupado (1-2 / 3-4 / 5-6)",
+   "filas": 5,
+   "fuente": "ENPH 2016-2017, hogares/viviendas_hogares.csv",
+   "dominio": "Bogotá (DOMINIO = 'BOGOTÁ'), hogares",
+   "unidad": "hogar",
+   "peso": "FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+  },
+  {
+   "archivo": "enph_estrato_detalle.csv",
+   "titulo": "ENPH · estrato para tarifa, sin agrupar",
+   "filas": 8,
+   "fuente": "ENPH 2016-2017, hogares/viviendas_hogares.csv",
+   "dominio": "Bogotá (DOMINIO = 'BOGOTÁ'), hogares",
+   "unidad": "hogar",
+   "peso": "FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+  },
+  {
+   "archivo": "enph_ingreso_quintil.csv",
+   "titulo": "ENPH · quintiles de ICGU (ingreso corriente de la unidad de gasto), calculados dentro de Bogotá",
+   "filas": 5,
+   "fuente": "ENPH 2016-2017, hogares/viviendas_hogares.csv",
+   "dominio": "Bogotá (DOMINIO = 'BOGOTÁ'), hogares",
+   "unidad": "hogar",
+   "peso": "FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+  },
+  {
+   "archivo": "enph_estrato_x_quintil.csv",
+   "titulo": "ENPH · estrato agrupado × quintil de ICGU (soporte por celda)",
+   "filas": 15,
+   "fuente": "ENPH 2016-2017, hogares/viviendas_hogares.csv",
+   "dominio": "Bogotá (DOMINIO = 'BOGOTÁ'), hogares",
+   "unidad": "hogar",
+   "peso": "FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+  },
+  {
+   "archivo": "enph_forma_pago_nc2r.csv",
+   "titulo": "ENPH · forma de pago principal declarada por el hogar (NC2R_CC_P6)",
+   "filas": 7,
+   "fuente": "ENPH 2016-2017, hogares/viviendas_hogares.csv",
+   "dominio": "Bogotá (DOMINIO = 'BOGOTÁ'), hogares",
+   "unidad": "hogar",
+   "peso": "FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+  },
+  {
+   "archivo": "enph_p438_medio_pago_por_subcapitulo.csv",
+   "titulo": "ENPH · medio de pago principal por subcapítulo de gasto (P438*), formato largo",
+   "filas": 174,
+   "fuente": "ENPH 2016-2017, hogares/gastos_menos_frecuentes_medio_pago.csv",
+   "dominio": "Bogotá (DOMINIO = 'BOGOTÁ'), hogares",
+   "unidad": "hogar",
+   "peso": "FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+  },
+  {
+   "archivo": "enph_p438_cobertura.csv",
+   "titulo": "ENPH · cobertura de cada columna P438* (hogares con respuesta)",
+   "filas": 29,
+   "fuente": "ENPH 2016-2017, hogares/gastos_menos_frecuentes_medio_pago.csv",
+   "dominio": "Bogotá (DOMINIO = 'BOGOTÁ'), hogares",
+   "unidad": "hogar",
+   "peso": "FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+  },
+  {
+   "archivo": "enph_p438_matriz_categoria_x_medio.csv",
+   "titulo": "ENPH · matriz subcapítulo × medio de pago (% de hogares con respuesta)",
+   "filas": 29,
+   "fuente": "ENPH 2016-2017, hogares/gastos_menos_frecuentes_medio_pago.csv",
+   "dominio": "Bogotá (DOMINIO = 'BOGOTÁ'), hogares",
+   "unidad": "hogar",
+   "peso": "FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+  },
+  {
+   "archivo": "enph_p438_vacios.csv",
+   "titulo": "ENPH · vacíos de P438*: no respuesta vs no aplica (cruce con registros de artículos)",
+   "filas": 58,
+   "fuente": "ENPH 2016-2017, gastos_menos_frecuentes_medio_pago.csv × gastos_menos_frecuentes_articulos.txt (llave DIRECTORIO + CAP = subcapítulo)",
+   "dominio": "Bogotá (DOMINIO = 'BOGOTÁ'), hogares",
+   "unidad": "hogar",
+   "peso": "FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+  },
+  {
+   "archivo": "enph_p438_gaps.csv",
+   "titulo": "ENPH · COBERTURA FALTANTE de la matriz categoría × medio de pago: subcapítulos J14 y K11",
+   "filas": 2,
+   "fuente": "ENPH 2016-2017, hogares/gastos_menos_frecuentes_medio_pago.csv",
+   "dominio": "Bogotá (DOMINIO = 'BOGOTÁ'), hogares",
+   "unidad": "hogar",
+   "peso": "FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+  },
+  {
+   "archivo": "geih_estrato_agrupado.csv",
+   "titulo": "GEIH · estrato agrupado del hogar (1-2 / 3-4 / 5-6)",
+   "filas": 4,
+   "fuente": "GEIH 2025, datos_hogar.csv",
+   "dominio": "Bogotá urbano (AREA = 11), 12 meses apilados",
+   "unidad": "hogar (promedio anual)",
+   "peso": "FEX = FEX_C18 / 12"
+  },
+  {
+   "archivo": "geih_estrato_detalle.csv",
+   "titulo": "GEIH · estrato para tarifa, sin agrupar",
+   "filas": 7,
+   "fuente": "GEIH 2025, datos_hogar.csv",
+   "dominio": "Bogotá urbano (AREA = 11), 12 meses apilados",
+   "unidad": "hogar (promedio anual)",
+   "peso": "FEX = FEX_C18 / 12"
+  },
+  {
+   "archivo": "geih_posicion_ocupacional.csv",
+   "titulo": "GEIH · posición ocupacional de los ocupados (P6430)",
+   "filas": 8,
+   "fuente": "GEIH 2025, ocupados.csv",
+   "dominio": "Bogotá urbano (AREA = 11), 12 meses apilados",
+   "unidad": "persona ocupada",
+   "peso": "FEX = FEX_C18 / 12"
+  },
+  {
+   "archivo": "geih_formalidad_componentes.csv",
+   "titulo": "GEIH · componentes de formalidad laboral (contrato, pensión, ARL)",
+   "filas": 11,
+   "fuente": "GEIH 2025, ocupados.csv",
+   "dominio": "Bogotá urbano (AREA = 11), 12 meses apilados",
+   "unidad": "persona ocupada",
+   "peso": "FEX = FEX_C18 / 12"
+  },
+  {
+   "archivo": "geih_posicion_x_pension.csv",
+   "titulo": "GEIH · posición ocupacional × cotiza a pensión (% dentro de cada posición)",
+   "filas": 20,
+   "fuente": "GEIH 2025, ocupados.csv",
+   "dominio": "Bogotá urbano (AREA = 11), 12 meses apilados",
+   "unidad": "persona ocupada",
+   "peso": "FEX = FEX_C18 / 12"
+  },
+  {
+   "archivo": "geih_ingreso_laboral_individual.csv",
+   "titulo": "GEIH · ingreso laboral individual del ocupado (INGLABO), grupos del 20 % de los ocupados con ingreso",
+   "filas": 5,
+   "fuente": "GEIH 2025, ocupados.csv",
+   "dominio": "Bogotá urbano (AREA = 11), 12 meses apilados",
+   "unidad": "persona ocupada",
+   "peso": "FEX = FEX_C18 / 12"
+  }
+ ],
+ "uniones": [
+  {
+   "nombre": "hogares/gastos_menos_frecuentes_medio_pago.csv -> viviendas_hogares",
+   "llave": "DIRECTORIO",
+   "filas_izq": 87201,
+   "pct_enlazado": 100.0,
+   "umbral": 100.0
+  },
+  {
+   "nombre": "hogares/gastos_menos_frecuentes_articulos.txt -> viviendas_hogares",
+   "llave": "DIRECTORIO",
+   "filas_izq": 2111331,
+   "pct_enlazado": 100.0,
+   "umbral": 100.0
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+P6430,posicion,P6920,cotiza_pension,n,expandido,pct_dentro_de_posicion,fuente,dominio,unidad,peso
+1,Obrero o empleado de empresa particular,1,Sí,6418,2074660.9031650666,81.75106678563385,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+1,Obrero o empleado de empresa particular,2,No,1388,436078.5964663833,17.18347822968174,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+1,Obrero o empleado de empresa particular,3,Ya es pensionado,95,27038.886313291667,1.0654549846844041,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+2,Obrero o empleado del gobierno,1,Sí,558,182538.22216195,97.79663034053061,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+2,Obrero o empleado del gobierno,3,Ya es pensionado,15,4112.60775555,2.2033696594693843,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+3,Empleado doméstico,1,Sí,160,47261.40932079167,40.859918398925494,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+3,Empleado doméstico,2,No,211,60834.3716252,52.594442192439104,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+3,Empleado doméstico,3,Ya es pensionado,29,7571.139529391667,6.545639408635406,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+4,Trabajador por cuenta propia,1,Sí,1245,403503.894359925,30.642153628469945,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+4,Trabajador por cuenta propia,2,No,2751,853459.40677365,64.81185094757375,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+4,Trabajador por cuenta propia,3,Ya es pensionado,209,59862.85688498333,4.545995423956309,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+5,Patrón o empleador,1,Sí,149,50728.091412141664,42.527411517018415,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+5,Patrón o empleador,2,No,187,60156.04293993334,50.43124474282224,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+5,Patrón o empleador,3,Ya es pensionado,27,8399.145778533333,7.041343740159352,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+6,Trabajador familiar sin remuneración,1,Sí,10,3154.7346348833335,9.573298156683512,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+6,Trabajador familiar sin remuneración,2,No,89,27994.06848990833,84.95027166759536,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+6,Trabajador familiar sin remuneración,3,Ya es pensionado,6,1804.6741747833335,5.4764301757211165,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+7,Jornalero o peón,2,No,1,200.57782096666665,100.0,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+8,Otro,1,Sí,1,333.238875825,26.505663874635328,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12
+8,Otro,2,No,3,923.9976054083334,73.49433612536467,"GEIH 2025, ocupados.csv","Bogotá urbano (AREA = 11), 12 meses apilados",persona ocupada,FEX = FEX_C18 / 12

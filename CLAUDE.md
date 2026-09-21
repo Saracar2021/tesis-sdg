@@ -1,7 +1,8 @@
 # CLAUDE.md — Tesis SDG Colombia (Sara Cárdenas, Maestría en IA, U. Javeriana)
 
-> v3 — 20 sep 2026. Incorpora los hallazgos de `docs/fuentes_datos.md` (llave ENPH,
-> unidad de análisis, diciembre, comparabilidad semántica) y la decisión de dominio.
+> v4 — 20 sep 2026. Incorpora los hallazgos de `docs/fuentes_datos.md` (llave ENPH,
+> unidad de análisis, diciembre, comparabilidad semántica), la decisión de dominio y las
+> verificaciones del Chat 02 (`FEX_C` ENPH, códigos de `P438*`/`NC2R_CC_P6`/estrato/`P6450`, julio).
 
 ## Proyecto
 Diseño y validación preliminar de un protocolo de generación de datos sintéticos de
@@ -84,10 +85,16 @@ data/interim/  data/processed/  data/reales_anon/   outputs/   docs/   src/sdg/ 
 - **Todo cálculo sobre microdatos DANE usa factores de expansión.**
 - GEIH 2025: `FEX_C18`. Al apilar meses, `FEX_C18 / n_meses` con el `n_meses` **realmente
   cargado** (12 normalmente, 11 en la corrida sin diciembre). Nunca dividir por una constante.
-- ENPH 2016-2017: la columna `FEX_C` existe en los 16 archivos, pero **NO está verificado que
-  sea el factor correcto para cada unidad de registro**. Antes de ponderar cualquier cifra de
-  ENPH hay que confirmarlo contra la metodología y dejarlo escrito en `docs/fuentes_datos.md`.
-  Ponderar registros de gasto con el factor del hogar produce cifras mal calculadas.
+- ENPH 2016-2017: **`FEX_C` VERIFICADO (20 sep 2026) como factor del hogar/vivienda.** Fuente:
+  `Metodologia_ENPH.pdf` §2.2.4.1 («a la vivienda corresponde un único factor de expansión»);
+  contraste empírico (`tools/verificar_fex_enph.py`, `outputs/fex_enph_verificacion.json`,
+  `docs/fuentes_datos.md` §4): constante por `DIRECTORIO` e igual al de `viviendas_hogares` en
+  10 tablas (hogares, personas y urbano). **No cubre rural** (fuera de alcance) ni se contrastó
+  contra un total poblacional externo. Consecuencia: `FEX_C` sirve para cifras **por hogar** y por
+  persona; en tablas de registros de gasto cada fila lleva el factor de su hogar, así que hay que
+  **agregar primero a hogar**: ponderar filas de gasto sueltas produce cifras mal calculadas.
+- Cargador único: `src/sdg/carga.py` (`cargar_geih`, `cargar_enph`, `unir`, `estrato_agrupado`);
+  añade `FEX` (GEIH: `FEX_C18 / n_meses`; ENPH: `FEX_C`). No leer los CSV por fuera de él.
 
 ### Llaves y uniones — GEIH y ENPH NO comparten regla
 - **GEIH:** mismo módulo entre meses → apilar. Módulos distintos → unir por
@@ -145,15 +152,54 @@ Todo lo de esta sección va **declarado en la tesis**, no escondido.
   no prueba. Pendiente: control de cambios de las etapas 2501–2512 (consulta al DANE).
 - **Dominio:** cerrado en Bogotá urbano (ver arriba). El respaldo jerárquico hacia urbano
   nacional para celdas ralas es un supuesto declarado, con su umbral documentado.
-- **`NC2R_CC_P6` — CORREGIDO (20 sep).** El prefijo `NC2R_` NO implica rural: la variable vive
-  en `hogares/viviendas_hogares.csv`, su etiqueta coincide con la redacción del cuadernillo
-  urbano y está diligenciada en 61.930 hogares urbanos (3.517 de 3.918 en Bogotá, 89,8 %).
-  **Pero su unidad es otra cosa:** la etiqueta es «La principal forma de pago usada para comprar
-  los bienes mencionados en este cuadernillo fue:» → es la forma de pago **principal declarada
-  por hogar**, acotada a **un cuadernillo**, no una participación de transacciones.
-  Un 73,1 % así NO significa «73,1 % de las transacciones son en efectivo». Antes de reusar esa
-  cifra hay que (a) precisar a qué cuadernillo se refiere «este cuadernillo» y (b) corregir su
-  enunciado en el informe. Decidir además cómo se trata el 10,2 % sin dato.
+- **`NC2R_CC_P6` — RESUELTO (20 sep).** El prefijo `NC2R_` NO implica rural: la variable vive
+  en `hogares/viviendas_hogares.csv`, está diligenciada en hogares urbanos (3.517 de 3.918 en
+  Bogotá) y su redacción coincide con el **Cuadernillo 2 urbano, sección D2 (gastos diarios del
+  hogar, registro de 14 días)**, pregunta 2 (el rural dice «comprar o adquirir»). Su unidad es la
+  forma de pago **principal declarada por hogar**, acotada a ese cuadernillo (compras frecuentes),
+  no una participación de transacciones ni de gasto: se enuncia siempre como «% de HOGARES cuya
+  forma de pago principal declarada es X».
+  **Códigos (según el cuadernillo, no el DDI):** 1 débito, 2 crédito, 3 efectivo, **4 «Fiado»**
+  (el DDI dice «fiador»: es un error de rotulado), 5 bonos, 6 otra. Sin dato: fila explícita,
+  % sobre base con respuesta y sobre el total, sin imputar (decisión de Sara).
+  **Cifra retirada:** «73,1 %» (efectivo) — cifra del informe de avance, sin dominio declarado,
+  **DESCARTADA**. Se retiró por no declarar dominio y por enunciarse como % de transacciones cuando
+  es una respuesta por hogar acotada a un cuadernillo. Se conserva aquí solo como registro; no reusarla.
+- **`P438*` (`gastos_menos_frecuentes_medio_pago.csv`, hogar) — VERIFICADO (20 sep).** Son **29
+  columnas, una por subcapítulo** del Cuadernillo 3 (gastos MENOS frecuentes); cada subcapítulo es
+  **categoría × periodo de referencia** (mes pasado / 3 meses / 12 meses). Es el medio de pago
+  principal **por categoría**, no un % global de efectivo: la salida es la matriz subcapítulo ×
+  medio de pago. **Códigos (Cuadernillo 3): 1 débito, 2 crédito, 3 efectivo, 4 bonos, 5 cheques,
+  6 otro.** ⚠️ Difieren de `NC2R_CC_P6` en 4 y 5: **nunca mapear uno con el diccionario del otro.**
+  Vacíos: se cruzan con `gastos_menos_frecuentes_articulos.txt` por `DIRECTORIO + CAP` y se
+  separan **no respuesta** (hay compra sin medio) de **no aplica** (sin compra) en
+  `outputs/distribuciones/enph_p438_vacios.csv`. `FORMA = 1` = compra es **inferido** (el cuadernillo
+  lista las formas por letra); por eso se reporta también con «cualquier registro».
+  **Gaps abiertos:** no existen `P438J14` ni `P438K11` (los artículos sí traen esos `CAP`), y la
+  correspondencia de `P438J13` con un bloque del cuadernillo no está verificada.
+- **Estratos (verificado 20 sep).** ENPH `P8520S1A1`: Manual ENPH, Pregunta 4: **1-6 estrato,
+  0 = conexión pirata, 9 = no establecible / planta eléctrica** (el Cuadernillo 1 y el DDI no traen
+  códigos). GEIH `P4030S1A1`: Diccionario GEIH 2025 fila 32, «Rango entre 0 y 6 ó 9», **sin
+  etiquetas para 0 ni 9**. Los códigos 0, 9 y vacío **no son estratos**: no se agrupan, se reportan
+  como sin dato.
+- **Contrato GEIH:** `P6440` (¿tiene contrato?: 1 sí, 2 no) y `P6450` (1 Verbal, 2 Escrito,
+  **9 No sabe, no informa — NO 3**), Diccionario GEIH filas 680-684.
+- **Formalidad laboral — SIN variable compuesta (decisión de Sara, 20 sep).** Los componentes
+  (contrato, pensión `P6920`, ARL `P6990`) se reportan por separado. No se construye un indicador
+  propio formal/informal; si hace falta una sola variable se usa la **definición oficial del DANE,
+  citándola**.
+- **Fronteras de grupos de ingreso amontonadas — LIMITACIÓN DECLARADA (20 sep).** `INGLABO` se
+  reporta en valores redondos: la frontera de un grupo del 20 % cae dentro de un montón de valores
+  iguales y salta ante cualquier perturbación de la muestra (`outputs/distribuciones/fronteras_amontonamiento.csv`).
+  En `ICGU` (ENPH) las fronteras no están amontonadas. No se cambió a cortes fijos; se declara.
+- **JULIO 2025 EN GEIH — PENDIENTE DE EXPLICAR.** En `datos_hogar` el estrato se desvía en julio
+  (baja el estrato 3, suben 1 y 2; no es «sin dato»; se repite, más fuerte, en las 23 ciudades y
+  atenuado a nivel nacional; otras variables del módulo no se mueven). Ver
+  `outputs/julio/julio_estrato.md`. Se produjo la sensibilidad sin julio y queda registrado como
+  **evidencia a favor de pedir al DANE el control de cambios 2501-2512** (evidencia para consultar,
+  no prueba de cambio de instrumento). También: en `ocupados` de Bogotá el mes más extremo es
+  **marzo** (sensibilidad sin marzo producida); las variables no son independientes, no leerlo como
+  118 hallazgos.
 - **Rotación de hogares en GEIH — PENDIENTE CRÍTICO.** GEIH tiene panel rotativo. Si los hogares
   se repiten entre meses, apilar 12 meses NO da 12 muestras independientes: los errores estándar
   saldrían subestimados y los 9.733 hogares de Bogotá serían muchos menos hogares únicos.

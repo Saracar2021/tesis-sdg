@@ -1,0 +1,8 @@
+codigo,categoria,n (sin ponderar),expandido,% base con respuesta,% del total,fuente,dominio,unidad,peso
+1,Tarjeta débito,67,44703.55601219762,1.9747504748973759,1.7491493702085577,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+2,Tarjeta de crédito,17,10763.122934965531,0.47545394646910444,0.4211367368187751,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+3,Efectivo,3413,2196556.3356975424,97.03144568351584,85.94629765391892,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+4,Fiado,4,1992.873410846813,0.08803388512104704,0.0779766439729527,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+5,Bonos,1,420.595116179013,0.018579515356393503,0.016456938736072367,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+6,Otra,15,9320.714532994956,0.4117364946402129,0.3646985477135963,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"
+,sin dato (vacío),401,291973.9921860172,,11.424284108631118,"ENPH 2016-2017, hogares/viviendas_hogares.csv","Bogotá (DOMINIO = 'BOGOTÁ'), hogares",hogar,"FEX = FEX_C (factor del hogar; verificado, docs/fuentes_datos.md §4)"

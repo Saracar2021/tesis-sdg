@@ -1,0 +1,8 @@
+codigo,categoria,n (sin ponderar),expandido,% base con respuesta,% del total,fuente,dominio,unidad,peso
+1,Estrato 1,836,255538.2695785,8.15450818858104,8.13649614745021,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+2,Estrato 2,3835,1225601.7246467834,39.11030358018873,39.02391499850675,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+3,Estrato 3,3333,1068018.2098771834,34.0816397182409,34.00635867342317,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+4,Estrato 4,1111,372171.1580920417,11.876392374500861,11.85015926969695,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+5,Estrato 5,357,122319.29821295,3.9033437948227734,3.89472191507795,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+6,Estrato 6,244,90056.814759475,2.8738123436656937,2.8674645388760824,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+0,sin dato: 0 (sin etiqueta en el diccionario GEIH),17,6937.1914996000005,,0.22088445696890155,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
