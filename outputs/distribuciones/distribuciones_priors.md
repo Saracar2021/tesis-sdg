@@ -475,6 +475,8 @@ Archivo: `outputs/distribuciones/geih_formalidad_componentes.csv`
 | 8 | Otro | 1 | Sí | 1 | 333,24 | 26,51 |
 | 8 | Otro | 2 | No | 3 | 924,00 | 73,49 |
 
+**Celdas pequeñas e inestables (declarado; no requiere acción).** 8 de 20 celdas tienen menos de 30 ocupados (sin ponderar) y varias posiciones (familiar sin remuneración, jornalero, otro, y en parte patrón y empleado doméstico) tienen pocos casos: sus % dentro de la posición se mueven más de 1 p.p. al quitar un solo mes (ver las sensibilidades sin julio y sin marzo). No se usan como insumo de calibración; se reportan de forma descriptiva.
+
 Archivo: `outputs/distribuciones/geih_posicion_x_pension.csv`
 
 

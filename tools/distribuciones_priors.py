@@ -434,7 +434,10 @@ def main() -> int:
            md_df=f2)
     x = t12["geih_posicion_x_pension"]
     emitir("geih_posicion_x_pension", x, titulo="GEIH · posición ocupacional × cotiza a pensión (% dentro de cada posición)",
-           meta={**base_oc, "variable": "P6430 × P6920", "denominador": "ocupados con P6920 válido, dentro de cada posición"})
+           meta={**base_oc, "variable": "P6430 × P6920", "denominador": "ocupados con P6920 válido, dentro de cada posición"},
+           nota=(f"**Celdas pequeñas e inestables (declarado; no requiere acción).** {es(int((x['n'] < MIN_N_CELDA).sum()), 0)} de {es(len(x), 0)} celdas tienen menos de {MIN_N_CELDA} "
+                 f"ocupados (sin ponderar) y varias posiciones (familiar sin remuneración, jornalero, otro, y en parte patrón y empleado doméstico) tienen pocos casos: sus % dentro de la posición "
+                 "se mueven más de 1 p.p. al quitar un solo mes (ver las sensibilidades sin julio y sin marzo). No se usan como insumo de calibración; se reportan de forma descriptiva."))
     ig = t12["geih_ingreso_laboral_individual"]
     cz, sin = t12["_cortes_inglabo"], t12["_sin_inglabo"].iloc[0]
     emitir("geih_ingreso_laboral_individual", ig, titulo="GEIH · ingreso laboral individual del ocupado (INGLABO), grupos del 20 % de los ocupados con ingreso",

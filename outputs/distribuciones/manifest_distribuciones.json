@@ -1,6 +1,6 @@
 {
  "script": "tools/distribuciones_priors.py",
- "commit_base": "c4b1f0e",
+ "commit_base": "d221c5d",
  "pandas": "3.0.6",
  "numpy": "2.4.6",
  "python": "3.11.9",

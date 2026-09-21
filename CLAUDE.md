@@ -2,7 +2,7 @@
 
 > v4 — 20 sep 2026. Incorpora los hallazgos de `docs/fuentes_datos.md` (llave ENPH,
 > unidad de análisis, diciembre, comparabilidad semántica), la decisión de dominio y las
-> verificaciones del Chat 02 (`FEX_C` ENPH, códigos de `P438*`/`NC2R_CC_P6`/estrato/`P6450`, julio).
+> verificaciones del Chat 01 (`FEX_C` ENPH, códigos de `P438*`/`NC2R_CC_P6`/estrato/`P6450`, julio).
 
 ## Proyecto
 Diseño y validación preliminar de un protocolo de generación de datos sintéticos de
@@ -200,6 +200,20 @@ Todo lo de esta sección va **declarado en la tesis**, no escondido.
   no prueba de cambio de instrumento). También: en `ocupados` de Bogotá el mes más extremo es
   **marzo** (sensibilidad sin marzo producida); las variables no son independientes, no leerlo como
   118 hallazgos.
+  **DECISIÓN (Sara, 20 sep 2026, CERRADA): se usan los 12 meses.** Razón: (a) estrato agrupado
+  (máx. 0,73 p.p. sin julio; 0,31 sin marzo) y formalidad (0,29 y 0,52 p.p.) quedan bajo el umbral
+  de 1 p.p. en ambas versiones; (b) las familias de ENPH (quintil de `ICGU`, forma de pago) no dependen
+  de los meses de GEIH; (c) lo único que supera 1 p.p. es `INGLABO`, con causa identificada: el
+  corte pasa de 1.300.000 a 1.200.000 por el amontonamiento ya declarado (efecto de frontera, no
+  cambio de composición). Marzo y julio quedan como **anomalías declaradas en la tesis**, con sus
+  sensibilidades en `outputs/distribuciones/` como respaldo. No se investigan más las causas: sin
+  el control de cambios del DANE (2501-2512) no hay forma de cerrarlas.
+- **División de fuentes (regla).** ENPH aporta ingreso (`ICGU`) y gasto. GEIH aporta estructura
+  demográfica y laboral (estrato, formalidad, posición ocupacional). `INGLABO` NO se usa como insumo
+  de calibración: se reporta solo de forma descriptiva, y sus grupos tienen fronteras inestables por
+  amontonamiento.
+- **Celdas de posición ocupacional × cotiza pensión (GEIH):** pequeñas e inestables; se declaran
+  así en `outputs/distribuciones/distribuciones_priors.md`. No requieren acción.
 - **Rotación de hogares en GEIH — PENDIENTE CRÍTICO.** GEIH tiene panel rotativo. Si los hogares
   se repiten entre meses, apilar 12 meses NO da 12 muestras independientes: los errores estándar
   saldrían subestimados y los 9.733 hogares de Bogotá serían muchos menos hogares únicos.
