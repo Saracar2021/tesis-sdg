@@ -30,17 +30,19 @@ commits y documentos anteriores que todavía la citan.
 - `src/sdg/carga.py` (+ `pesos.py`, `codigos.py`, `medio_pago.py`): cargador GEIH/ENPH con validación de filas contra `outputs/fuentes_datos.json`, `FEX_C18/len(meses)`, dominio Bogotá, rural bloqueado, uniones que reportan % enlazado y `estrato_agrupado()`.
 - `FEX_C` de ENPH verificado (Metodología §2.2.4.1 + constante por `DIRECTORIO` e igual al de `viviendas_hogares` en 10 tablas; rural no cubierto). Códigos verificados contra su fuente: estrato ENPH (Manual, 0 = pirata, 9 = no establecible), estrato GEIH (dicc. fila 32), `P438*` (Cuadernillo 3: 4 = bonos, 5 = cheques; 29 columnas = subcapítulo = categoría × periodo) y `NC2R_CC_P6` (Cuadernillo 2 urbano: 4 = fiado, 5 = bonos). `P6450`: 9 = No sabe.
 - Cómo se verificó: 29 pruebas automatizadas en `tests/` (`python -m unittest discover -s tests`), en verde.
+- Cierre de este bloque de trabajo: `CLAUDE.md` v4, `requirements.txt` con versiones fijas. Pendientes dejados abiertos en ese momento: umbral de soporte y método de encogimiento (WP3); definición oficial DANE de formalidad, solo si hace falta una sola variable; fijar `torch`, `ctgan` y `jupyter` en `requirements.txt` cuando se instalen.
 - Archivo / commit: `src/sdg/`, `tests/`; commits hasta `2aebb9e` (ver `docs/plan_maestro.md` §3).
 
 ### 2026-09-20 — WP3: distribuciones para priors
 - `tools/distribuciones_priors.py` → `outputs/distribuciones/` (16 tablas + informe + manifest): Bogotá urbano con FEX. Vacíos de `P438*` cruzados con artículos: con `FORMA=1` como compra la no respuesta es 0 en los 29 subcapítulos (todo vacío es «no aplica»); con «cualquier registro» aparece no respuesta solo en hogares con registros no comprados. Gaps abiertos: no existen `P438J14` ni `P438K11`; `P438J13` sin verificar contra el cuadernillo.
 - Fronteras de grupos de ingreso: el amontonamiento en valores redondos afecta a `INGLABO` (hasta ~6 % del peso en un valor) y no a `ICGU` (< 0,1 %). Declarado como limitación; sin cortes fijos. Sensibilidades (> 1 p.p.): sin diciembre, sin julio y sin marzo, todas en `outputs/distribuciones/`.
+- Celdas de posición ocupacional × cotiza pensión: declaradas como pequeñas e inestables en `distribuciones_priors.md`. No requieren acción adicional en este bloque.
 - Cómo se verificó: cifras regeneradas por `tools/distribuciones_priors.py`, sin aleatoriedad; manifest en `outputs/distribuciones/manifest_distribuciones.json`.
 - Archivo / commit: `outputs/distribuciones/`; commits hasta `2aebb9e`.
 
 ### 2026-09-20 — WP1: investigación de julio y marzo, decisión sobre los 12 meses
 - Julio 2025 (GEIH `datos_hogar`, estrato) sin explicar: `tools/investigar_julio.py`, `outputs/julio/julio_estrato.md`. No es «sin dato»; es un desplazamiento 3 → 1-2; se repite, más fuerte, en las 23 ciudades y atenuado a nivel nacional; otras variables del módulo no se mueven. Registrado como evidencia para pedir al DANE el control de cambios 2501-2512 (evidencia para consultar, no prueba de cambio de instrumento). Hallazgo colateral: en `ocupados` de Bogotá el mes más extremo es marzo.
-- Decisión (cerrada): se usan los 12 meses. Razón: estrato agrupado (máx. 0,73 p.p. sin julio; 0,31 sin marzo) y formalidad (0,29 y 0,52 p.p.) quedan bajo el umbral de 1 p.p. en ambas versiones; las familias de ENPH (quintil de `ICGU`, forma de pago) no dependen de los meses de GEIH; lo único que supera 1 p.p. es `INGLABO`, con causa identificada (el corte pasa de 1.300.000 a 1.200.000 por el amontonamiento ya declarado, efecto de frontera y no de composición).
+- Decisión (cerrada): se usan los 12 meses. Razón: estrato agrupado (máx. 0,73 p.p. sin julio; 0,31 sin marzo) y formalidad (0,29 y 0,52 p.p.) quedan bajo el umbral de 1 p.p. en ambas versiones; las familias de ENPH (quintil de `ICGU`, forma de pago) no dependen de los meses de GEIH; lo único que supera 1 p.p. es `INGLABO` (grupos G1/G2 sin julio), con causa identificada (el corte pasa de 1.300.000 a 1.200.000 por el amontonamiento ya declarado, efecto de frontera y no de composición).
 - Marzo y julio quedan como anomalías declaradas en la tesis, con sus sensibilidades en `outputs/distribuciones/` como respaldo. No se investigan más las causas sin el control de cambios del DANE (2501-2512).
 - Cómo se verificó: `outputs/julio/julio_estrato.md`, `geih_sensibilidad_{julio,marzo,diciembre}.csv`.
 - Archivo / commit: `tools/investigar_julio.py`, `outputs/julio/`; `CLAUDE.md` (regla de fuentes: ENPH aporta ingreso y gasto, GEIH estructura demográfica y laboral; `INGLABO` solo descriptivo).
@@ -79,7 +81,7 @@ commits y documentos anteriores que todavía la citan.
 - H-P1 reformulada: el paper de Pancholi sí calibra el gasto por ingreso (con el ACS 2015-2019 de D.C.); la hipótesis es que esa calibración no reproduce la relación ingreso–gasto colombiana. «Insensibilidad al ingreso» se retira de todos los documentos.
 - Los 5 quintiles se justifican por la hipótesis de la tesis (proporciones de gasto por quintil observadas en Colombia), no por una falla de Pancholi. Corregidos `CLAUDE.md` y `docs/protocolo_tecnico.md` (D6 y §1.4).
 - Corregida la redacción de D15: una versión anterior afirmaba que el paper «lista como limitación que no genera efectivo» y que el pipeline «asume que todo pasa por tarjeta de crédito». Ninguna de las dos está en el paper ni sale de una ejecución; queda como hipótesis H-P3.
-- Informe de avance y presentación: versiones `_v1.1_revision` con control de cambios en el informe; los originales no se tocaron.
+- Informe de avance y presentación: versiones `_v1.1_revision` en la carpeta de OneDrive, con control de cambios en el informe; los originales no se tocaron.
 - Cómo se verificó: relectura del paper y de los documentos citados, frase por frase.
 - Archivo / commit: `CLAUDE.md`, `docs/protocolo_tecnico.md`.
 
