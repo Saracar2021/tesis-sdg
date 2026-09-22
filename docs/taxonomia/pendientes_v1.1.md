@@ -32,3 +32,7 @@ Congelar antes de (2) es congelar a ciegas: el esquema existe para anotar transa
   frente a lo que dice ENPH. Declararlo en la nota metodológica.
 - **Regla de soporte ≥ 10** para F1 macro: revisar el umbral cuando se sepa el tamaño real
   del corpus anotado.
+
+## T5 — Afirmaciones sobre el pipeline de Pancholi (22 sep 2026)
+
+El §7 de la taxonomía v1 decía que las categorías de ocio de Washington D.C. «dominaban espuriamente el output del generador original» y que las diferencias responden a «tres fallas empíricas documentadas». El pipeline no se ha ejecutado: son hipótesis. Ya corregido en el `.md` v1 del repo; la v1.1 debe mantener esa redacción y no citar salidas de Pancholi hasta que el Chat 01B las produzca.

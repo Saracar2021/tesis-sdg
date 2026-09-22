@@ -15,3 +15,9 @@
 - Marzo y julio quedan como **anomalías declaradas en la tesis**, con sensibilidades en `outputs/distribuciones/` como respaldo; causa sin investigar más hasta contar con el control de cambios DANE 2501-2512.
 - Regla de fuentes en CLAUDE.md: ENPH aporta ingreso (`ICGU`) y gasto; GEIH, estructura demográfica y laboral. `INGLABO` solo descriptivo, no es insumo de calibración.
 - Celdas posición ocupacional × cotiza pensión: declaradas como pequeñas e inestables en `distribuciones_priors.md`. Cobertura faltante de P438\* (J14, K11) declarada como limitación del instrumento.
+
+### Chat 00 — regla de evidencia sobre Pancholi (22 sep 2026)
+
+- **Decisión (Sara):** el pipeline de Pancholi no se ha ejecutado; ninguna de sus salidas (USD 12, 5 perfiles, 149 tx, categorías de ocio, 100 % `credit_card`) es un resultado. Pasan a ser hipótesis H-P1 a H-P3 del Chat 01B.
+- Se puede citar el diseño documentado en el paper (ACS 2015-2019 de D.C., Yelp y comercios de D.C., reglas calibradas por ingreso, CTGAN; Tabla 5 como ejemplo, no proporción).
+- Corregidos: `CLAUDE.md`, `docs/protocolo_tecnico.md` §1.4 y D6, `docs/taxonomia/taxonomia_gastos_colombia_v1.md` §7, `docs/taxonomia/pendientes_v1.1.md` (T5), `docs/plan_maestro.md`. Sin tocar: informe de avance y presentación (documentos de la autora).

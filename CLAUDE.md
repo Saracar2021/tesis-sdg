@@ -43,8 +43,9 @@ Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega fi
 - **Cortes de calibración — DECISIÓN:** el cruce estrato (6) × quintil (5) deja 12 de 30 celdas
   con menos de 30 observaciones en ENPH Bogotá, concentradas en estratos 4–6.
   Se agrupa **estrato en 3 (1–2 bajo, 3–4 medio, 5–6 alto)** y se **conservan los 5 quintiles
-  de ingreso**: la sensibilidad al ingreso es la contribución central de la tesis (limitación 1
-  de Pancholi), así que esa dimensión no se sacrifica. Estrato e ingreso están muy
+  de ingreso**: la sensibilidad al ingreso es la contribución central de la tesis (la hipótesis es que
+  el pipeline de referencia no la tiene; sin verificar, ver regla de Pancholi), así que esa
+  dimensión no se sacrifica. Estrato e ingreso están muy
   correlacionados en Colombia, de modo que agrupar estrato pierde poca información.
   Revalidar el conteo de celdas tras agrupar; lo que siga ralo va a encogimiento jerárquico
   hacia urbano nacional, con el umbral declarado.
@@ -53,6 +54,21 @@ Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega fi
   Declarar en cada tabla cuál se usa y qué calibra. Los quintiles se calculan **dentro de
   Bogotá**, no sobre el total nacional.
 
+
+## Pipeline de referencia (Pancholi et al.) — regla de evidencia (Sara, 22 sep)
+- **El pipeline de Pancholi no se ha ejecutado.** Ninguna salida suya es un resultado hasta que el
+  Chat 01B lo ejecute de forma reproducible. **No se citan** como hallazgos: la diferencia de
+  USD 12 entre perfiles, los 5 perfiles, las 149 transacciones, el dominio de categorías de ocio
+  (Athletic Exhibition, Skating Rink, etc.) ni el 100 % de `credit_card`. Aparecen en el informe
+  de avance y en la presentación sin respaldo de ejecución.
+- **Sí se puede citar, con referencia al paper, lo que el paper documenta de su diseño:**
+  demografía del ACS 2015-2019 de Washington D.C. por código postal (ZIP 20001), nombres de
+  comercio de Yelp y de D.C., simulación por reglas con gasto calibrado por ingreso y hogar,
+  refinamiento con CTGAN. Su Tabla 5 muestra 4 transacciones de ejemplo, todas con tarjeta de
+  crédito: es un ejemplo, no una proporción.
+- Las «tres limitaciones» (ingreso, categorías, medio de pago) son **hipótesis a verificar**.
+  Nota: el paper afirma calibrar el gasto por ingreso, así que la insensibilidad al ingreso
+  contradice lo que el paper declara y solo una ejecución puede establecerla.
 
 ## Estructura de datos (canónica — no improvisar otra)
 ```
