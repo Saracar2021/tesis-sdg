@@ -98,4 +98,18 @@ commits y documentos anteriores que todavía la citan.
 - `docs/datos_reales/01_consentimiento_informado_v1.1.md`: la nota interna «para Sara» se extrajo a `docs/datos_reales/pendientes_antes_de_circular.md` como checklist.
 - README.md nuevo en la raíz con objetivo, hipótesis, estado, estructura y reproducción.
 - Cómo se verificó: `python -m unittest discover -s tests` en verde; `git diff` de los dos generadores (`tools/generar_fuentes_datos.py`, `tools/distribuciones_priors.py`) limitado a cadenas de texto, sin cifras; comparación de AST (sin docstrings) idéntica en `src/sdg/*.py`, `tools/normalizar_datos.py` y `tools/investigar_julio.py`.
-- Archivo / commit: en curso.
+- Archivo / commit: commit `a349c0c` (autoría corregida sobre el commit original de esta preparación).
+
+### 2026-09-22 — WP0: recupera evidencia perdida en la reescritura de la bitácora
+- Al comparar `docs/bitacora.md` reescrita contra `git show HEAD~1:docs/bitacora.md` se encontraron 4 datos concretos perdidos: el cierre "CLAUDE.md v4 / `requirements.txt`" y sus pendientes (torch/ctgan/jupyter, umbral de soporte, definición DANE de formalidad); la nota de celdas de posición ocupacional × cotiza pensión; los grupos G1/G2 afectados por el corte de `INGLABO` en julio; y la ubicación (carpeta de OneDrive) de las revisiones del informe de avance.
+- Cómo se verificó: `diff` línea por línea contra la versión anterior; 29 tests en verde; sin cambios de cifras.
+- Archivo / commit: `docs/bitacora.md`; commit `f75aea4`.
+
+### 2026-09-22 — WP4: justificación de parámetros de diseño
+- `docs/justificacion_parametros.md`: tabla de los parámetros y decisiones sin justificación escrita identificados el 22 sep (archivo:línea, parámetro, justificación, tipo convención/cálculo/pendiente).
+- Unificado `docs/protocolo_tecnico.md:170` y `:351`: ambos decían "≥ 50 descripciones reales" y "~50 descripciones reales"; queda "≥ 50" en los dos.
+- `tools/calculos_diseno_muestral.py` (SEED = 42) → `outputs/diseno_muestral/`: (a) participación mínima por categoría para soporte ≥ 10 con N ∈ {360, 450, 600}; (b) cruce con la prevalencia ENPH por categoría de la taxonomía v1 (proxy declarado: prevalencia de hogares con compra en P438, no participación de transacciones ni de gasto; 8 de 16 categorías sin fuente ENPH, declaradas sin dato, no rellenadas); (c) ancho aproximado del IC 95 % de kappa de Cohen para n ∈ {100, 150, 200, 300} y acuerdo observado ∈ {0,80; 0,90}, con pe calculado sobre las 8 categorías con dato ENPH.
+- Pendiente crítico sin resolver en esta entrada: las filas de tipo "convención" de `justificacion_parametros.md` (umbral n≈30, umbral 1 p.p., `SEED=42`, ≥5.000 transacciones, ≥50 descripciones, 20 voluntarios, 3 meses, 15 días de borrado, 12-15 personas, 2 anotadores) quedaron marcadas `[PENDIENTE: falta "grupo A"]`: el encargo original citaba una base a pegar («grupo A») que no llegó a esta sesión. La cita de la Ley 1581 de 2012 para el borrado a 15 días también queda como `[VERIFICAR ARTÍCULO]`.
+- Marcados PENDIENTE (a resolver por la autora, no por falta de insumo): posición ocupacional × cotiza pensión, L6 (cortes fijos de `INGLABO`), elección de los tres clasificadores.
+- Cómo se verificó: `python -m unittest discover -s tests` en verde (29); `tools/calculos_diseno_muestral.py` ejecutado de punta a punta, sin aleatoriedad real pese a `SEED=42`.
+- Archivo / commit: `docs/justificacion_parametros.md`, `tools/calculos_diseno_muestral.py`, `outputs/diseno_muestral/`, `docs/protocolo_tecnico.md`; commit en este mismo cierre.

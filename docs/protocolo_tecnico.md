@@ -348,7 +348,7 @@ No hay métricas de fidelidad decididas. Los documentos fuente no las fijan. Se 
 - **Aval del comité de ética:** no está confirmado si el programa lo exige (P2 del plan maestro). Bloquea toda la recolección.
 - **Paquete de consentimiento y anonimización** (WP4) por ajustar al alcance actual.
 - **Confirmación de los 2 anotadores** (P4).
-- **Congelar la taxonomía v1.1** tras revisar ~50 descripciones reales.
+- **Congelar la taxonomía v1.1** tras revisar ≥ 50 descripciones reales.
 - **Si se recogerá el estrato y el ingreso de los voluntarios**, para poder contrastar la calibración por celda contra lo real: no está decidido.
 
 ### 7.5 Reproducibilidad (criterio transversal)

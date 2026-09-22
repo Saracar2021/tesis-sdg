@@ -1,0 +1,31 @@
+{
+  "seed": 42,
+  "z_95": 1.959963984540054,
+  "n_values_a": [
+    360,
+    450,
+    600
+  ],
+  "n_anotado_values_c": [
+    100,
+    150,
+    200,
+    300
+  ],
+  "soporte_minimo": 10,
+  "k_categorias_con_dato_enph": 8,
+  "categorias_sin_dato_enph": [
+    "alimentos_mercado",
+    "comidas_fuera",
+    "telecom_conectividad",
+    "obligaciones_financieras",
+    "transferencias_p2p",
+    "retiro_efectivo",
+    "movimiento_propio",
+    "ingreso"
+  ],
+  "fuentes": [
+    "outputs\\distribuciones\\enph_p438_cobertura.csv"
+  ],
+  "advertencia": "pandas/numpy determinan el orden de agregación; sin aleatoriedad real en estos cálculos (SEED fijado por convención del proyecto, no porque el cálculo lo requiera)."
+}

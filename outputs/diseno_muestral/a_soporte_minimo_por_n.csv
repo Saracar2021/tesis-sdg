@@ -1,0 +1,4 @@
+N,soporte_minimo,participacion_minima_pct,nota
+360,10,2.7777777777777777,"soporte >= 10 requiere participación >= soporte/N (regla F1 macro, protocolo_tecnico.md §3.4)"
+450,10,2.2222222222222223,"soporte >= 10 requiere participación >= soporte/N (regla F1 macro, protocolo_tecnico.md §3.4)"
+600,10,1.6666666666666667,"soporte >= 10 requiere participación >= soporte/N (regla F1 macro, protocolo_tecnico.md §3.4)"
