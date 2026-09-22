@@ -1,5 +1,8 @@
 # CLAUDE.md — Tesis SDG Colombia (Sara Cárdenas, Maestría en IA, U. Javeriana)
 
+> v5 — 22 sep 2026. Añade D15 (universo del generador: extractos de hogares bancarizados) y la
+> regla de evidencia sobre el pipeline de Pancholi.
+>
 > v4 — 20 sep 2026. Incorpora los hallazgos de `docs/fuentes_datos.md` (llave ENPH,
 > unidad de análisis, diciembre, comparabilidad semántica), la decisión de dominio y las
 > verificaciones del Chat 01 (`FEX_C` ENPH, códigos de `P438*`/`NC2R_CC_P6`/estrato/`P6450`, julio).
@@ -69,6 +72,32 @@ Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega fi
 - Las «tres limitaciones» (ingreso, categorías, medio de pago) son **hipótesis a verificar**.
   Nota: el paper afirma calibrar el gasto por ingreso, así que la insensibilidad al ingreso
   contradice lo que el paper declara y solo una ejecución puede establecerla.
+
+## Universo del generador (D15, Sara, 22 sep)
+- **El universo del generador son extractos de hogares bancarizados (D15).** El generador simula
+  internamente el gasto completo del hogar, calibrado con ENPH (categoría, monto, medio de pago),
+  pero solo **emite** lo que un banco o billetera vería: compras con tarjeta, PSE, transferencias,
+  billeteras, ingresos y retiros en cajero. El efectivo se acumula en la capa interna y sale como
+  retiros periódicos en la capa de emisión.
+  Razón: la pregunta de investigación es clasificar transacciones reales de usuarios (filas de
+  extracto); un generador que emitiera el gasto total incluiría registros que no existen en ningún
+  sistema real, y el TSTR mediría un desajuste de universo, no la calidad del sintético.
+  Reformula la limitación 3 de Pancholi: no es «no genera efectivo», es que el pipeline de
+  referencia asume que todo el gasto pasa por tarjeta de crédito, cuando en Bogotá el gasto
+  dominante en efectivo aparece en los extractos reales como retiros en cajero, transferencias a
+  personas y billeteras (H-P3, a contrastar en el Chat 01B).
+  Supuestos declarados (sin resolver, Chat 06): cadencia y tamaño de los retiros, participación de
+  medios digitales (Banrep 2024, ausentes en ENPH) y cuenta principal del voluntario.
+  Detalle completo: `docs/protocolo_tecnico.md` §5, D15.
+- **Consecuencia para los priors:** la población que calibra el generador es la de hogares
+  BANCARIZADOS, no todos los hogares de Bogotá. Tenencia de productos financieros verificada con
+  la batería `P5222S*` de GEIH `datos_hogar` (Diccionario GEIH 2025, filas 93-104): 93,47 % de los
+  hogares de Bogotá tiene al menos un producto; el % sin ninguno baja con el estrato (9,37 % bajo,
+  4,54 % medio, 0,27 % alto). El perfil estrato × quintil de ENPH se repondera con
+  `P(bancarizado | estrato agrupado)` de GEIH bajo un **supuesto de independencia condicional**
+  declarado (no verificable: ENPH no tiene `P5222S*` y GEIH no tiene `ICGU`).
+  Salidas: `outputs/distribuciones/geih_bancarizacion_total.csv`, `geih_bancarizacion_x_estrato.csv`,
+  `enph_estrato_x_quintil_bancarizado.csv`.
 
 ## Estructura de datos (canónica — no improvisar otra)
 ```

@@ -1,0 +1,5 @@
+codigo,categoria,n (sin ponderar),expandido,% base con respuesta,% del total,fuente,dominio,unidad,peso
+con_producto,Al menos un producto financiero (bancarizado),9074,2934739.0031896085,93.47187021506957,93.44390033090042,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+sin_producto,Ninguno (P5222S9),656,204963.879011275,6.52812978493043,6.5261763519510145,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+,sin dato (vacío),2,639.0072749083333,,0.020346385842951478,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+no_sabe,sin dato: No sabe (P5222S10),1,300.77719074166663,,0.009576931305620656,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12

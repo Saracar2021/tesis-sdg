@@ -1,6 +1,6 @@
 {
  "script": "tools/distribuciones_priors.py",
- "commit_base": "5d5c13b",
+ "commit_base": "1dde8ee",
  "pandas": "3.0.6",
  "numpy": "2.4.6",
  "python": "3.11.9",
@@ -160,6 +160,33 @@
    "dominio": "Bogotá urbano (AREA = 11), 12 meses apilados",
    "unidad": "persona ocupada",
    "peso": "FEX = FEX_C18 / 12"
+  },
+  {
+   "archivo": "geih_bancarizacion_total.csv",
+   "titulo": "GEIH · tenencia de productos financieros del hogar (P5222*), Bogotá",
+   "filas": 4,
+   "fuente": "GEIH 2025, datos_hogar.csv",
+   "dominio": "Bogotá urbano (AREA = 11), 12 meses apilados",
+   "unidad": "hogar (promedio anual)",
+   "peso": "FEX = FEX_C18 / 12"
+  },
+  {
+   "archivo": "geih_bancarizacion_x_estrato.csv",
+   "titulo": "GEIH · tenencia de productos financieros × estrato agrupado (% dentro del estrato)",
+   "filas": 6,
+   "fuente": "GEIH 2025, datos_hogar.csv",
+   "dominio": "Bogotá urbano (AREA = 11), 12 meses apilados",
+   "unidad": "hogar (promedio anual)",
+   "peso": "FEX = FEX_C18 / 12"
+  },
+  {
+   "archivo": "enph_estrato_x_quintil_bancarizado.csv",
+   "titulo": "ENPH · estrato agrupado × quintil de ICGU, reponderado a hogares bancarizados (D15)",
+   "filas": 15,
+   "fuente": "outputs/distribuciones/enph_estrato_x_quintil.csv reponderado con outputs/distribuciones/geih_bancarizacion_x_estrato.csv",
+   "dominio": "Bogotá (ENPH hogares × GEIH hogares, AREA = 11 / DOMINIO = 'BOGOTÁ')",
+   "unidad": "hogar",
+   "peso": "expandido (FEX_C, ENPH) × P(bancarizado | estrato agrupado) (FEX_C18/12, GEIH)"
   }
  ],
  "uniones": [

@@ -409,6 +409,53 @@ def estabilidad_mensual() -> pd.DataFrame:
     return e
 
 
+def tablas_bancarizacion() -> dict:
+    """D15 (CLAUDE.md, 22 sep): el universo del generador son hogares BANCARIZADOS.
+
+    Tenencia de productos financieros (P5222*, datos_hogar, GEIH 2025, Bogotá, 12 meses) por
+    estrato agrupado, y P(bancarizado | estrato agrupado) para reponderar el perfil ENPH.
+    """
+    cols_prod = list(cod.COLUMNAS_PRODUCTO_P5222)
+    dh = carga.cargar_geih("datos_hogar", meses=range(1, 13), columnas=["P4030S1A1", *cols_prod, "P5222S9", "P5222S10"])
+    dh["estrato_g"] = estrato_col(dh["P4030S1A1"])
+    tiene_producto = np.column_stack([dh[c] == "1" for c in cols_prod]).any(axis=1)
+    dh["tenencia"] = np.select([tiene_producto, dh["P5222S9"] == "1", dh["P5222S10"] == "1"],
+                               ["con_producto", "sin_producto", "no_sabe"], default="")
+
+    base = {"fuente": "GEIH 2025, datos_hogar.csv", "dominio": "Bogotá urbano (AREA = 11), 12 meses apilados", "unidad": "hogar (promedio anual)",
+            "peso": "FEX = FEX_C18 / 12"}
+
+    t_total = distribucion(dh, "tenencia", etiquetas={"con_producto": "Al menos un producto financiero (bancarizado)", "sin_producto": "Ninguno (P5222S9)"},
+                           motivos_sin_dato={"no_sabe": "No sabe (P5222S10)"}, validos=["con_producto", "sin_producto"])
+
+    valido = dh[dh["tenencia"].isin(["con_producto", "sin_producto"]) & dh["estrato_g"].isin(carga.ESTRATO_GRUPOS)]
+    x = cruce(valido, "estrato_g", "tenencia").rename(columns={"estrato_g": "estrato_agrupado"})
+    x["pct_dentro_de_estrato"] = 100 * x["expandido"] / x.groupby("estrato_agrupado")["expandido"].transform("sum")
+    completo = pd.MultiIndex.from_product([list(carga.ESTRATO_GRUPOS), ["con_producto", "sin_producto"]], names=["estrato_agrupado", "tenencia"])
+    x = x.set_index(["estrato_agrupado", "tenencia"]).reindex(completo).reset_index()
+    x["n"] = x["n"].fillna(0).astype(int)
+    x["expandido"] = x["expandido"].fillna(0.0)
+    x["tenencia_categoria"] = x["tenencia"].map({"con_producto": "Al menos un producto financiero (bancarizado)", "sin_producto": "Ninguno (P5222S9)"})
+    p_banc = x.loc[x["tenencia"] == "con_producto"].set_index("estrato_agrupado")["pct_dentro_de_estrato"] / 100
+
+    return {"total": t_total, "x_estrato": x, "p_bancarizado_estrato": p_banc, "base_meta": base, "n_hogares": len(dh)}
+
+
+def reponderar_bancarizado(cruce_eq: pd.DataFrame, p_banc: pd.Series) -> pd.DataFrame:
+    """Reponderación del perfil ENPH estrato × quintil a hogares bancarizados con P(bancarizado | estrato agrupado) de GEIH.
+
+    SUPUESTO DE INDEPENDENCIA CONDICIONAL (declarado, no verificable con estas fuentes: ENPH no
+    tiene `P5222S*` y GEIH no tiene `ICGU`): dentro de cada estrato agrupado, el quintil de ICGU es
+    independiente de la tenencia de productos financieros. Es la única variable común entre ambas
+    fuentes con la que se puede reponderar.
+    """
+    r = cruce_eq.copy()
+    r["p_bancarizado_estrato"] = r["estrato_agrupado"].map(p_banc)
+    r["expandido_bancarizado"] = r["expandido"] * r["p_bancarizado_estrato"]
+    r["pct_del_cruce_bancarizado"] = 100 * r["expandido_bancarizado"] / r["expandido_bancarizado"].sum()
+    return r[["estrato_agrupado", "quintil", "n", "expandido", "p_bancarizado_estrato", "expandido_bancarizado", "pct_del_cruce_bancarizado"]]
+
+
 # ------------------------------------------------------------------------------------------------
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
@@ -508,9 +555,48 @@ def main() -> int:
                      "- **Qué es:** distribución por mes (FEX_C18 dentro del mes) frente a la de los 12 meses, Bogotá (AREA = 11). Contraste empírico exigido por CLAUDE.md "
                      "(comparabilidad semántica GEIH 2025).\n- **Alcance:** detecta saltos grandes; con ~1.000 ocupados por mes hay ruido muestral de varios p.p. "
                      "`z_binomial` = desviación / error binomial simple SIN efecto de diseño (subestima el error real: el diseño es por conglomerados). "
-                     "Es evidencia corroborante, NO prueba de que el formulario 2025 sea el de 2024. No incluye P6500 ni P5222S*/medio de pago de GEIH (no se usan en este entregable).\n"
+                     "Es evidencia corroborante, NO prueba de que el formulario 2025 sea el de 2024. No incluye P6500 (medio de pago de GEIH); "
+                     "P5222S* se cubre aparte en la sección de bancarización (D15), más abajo.\n"
                      "- **Mayor desviación por variable:**\n\n" + md_tabla(peor, {"n_mes": 0, "n_base_mes": 0}) +
                      "\nArchivo: `outputs/distribuciones/geih_estabilidad_mensual.csv` (todas las categorías × meses).\n")
+
+    # D15 (CLAUDE.md, 22 sep): universo del generador = hogares bancarizados. Tenencia de productos
+    # financieros (P5222*) por estrato y reponderación del perfil ENPH estrato × quintil.
+    banc = tablas_bancarizacion()
+    emitir("geih_bancarizacion_total", cols_dist(banc["total"]), titulo="GEIH · tenencia de productos financieros del hogar (P5222*), Bogotá",
+           meta={**banc["base_meta"], "variable": "P5222S1-S11 «¿Cuáles de los siguientes productos financieros utiliza usted o algún miembro del hogar actualmente?»",
+                 "codigos": cod.PRODUCTOS_FINANCIEROS_P5222_FUENTE,
+                 "denominador": "«% base con respuesta» = hogares con P5222S9=1 (Ninguno) o al menos un producto marcado; «% del total» = todos los hogares de Bogotá"},
+           nota="**D15 (CLAUDE.md, 22 sep):** el universo del generador son hogares bancarizados. «Bancarizado» = marcó al menos un producto de P5222S1-S8 o P5222S11; "
+                "«Ninguno» = marcó solo P5222S9. «No sabe» (P5222S10) y los hogares sin ninguna marca en P5222S1-S11 se reportan como sin dato, no se imputan. "
+                "El diccionario no permite verificar el filtro de la pregunta (cita `P5002`, ausente en `datos_hogar.csv` publicado).")
+    xb = banc["x_estrato"]
+    xb_md = xb[["estrato_agrupado", "tenencia", "tenencia_categoria", "n", "expandido", "pct_dentro_de_estrato"]].drop(columns="tenencia").rename(columns={"tenencia_categoria": "tenencia"})
+    emitir("geih_bancarizacion_x_estrato", xb[["estrato_agrupado", "tenencia", "tenencia_categoria", "n", "expandido", "pct_dentro_de_estrato"]],
+           titulo="GEIH · tenencia de productos financieros × estrato agrupado (% dentro del estrato)",
+           meta={**banc["base_meta"], "variable": "P5222* × P4030S1A1 agrupado", "denominador": "hogares con estrato 1-6 y respuesta válida (con_producto/sin_producto) dentro de cada estrato"},
+           md_df=xb_md, fmt={"pct_dentro_de_estrato": 2},
+           nota="`P(bancarizado | estrato agrupado)` = `pct_dentro_de_estrato` de la fila «Al menos un producto financiero (bancarizado)»; es la única variable común con ENPH "
+                "que permite reponderar el perfil estrato × quintil a hogares bancarizados (ver la tabla siguiente).")
+    cruce_banc_out = reponderar_bancarizado(e["cruce"], banc["p_bancarizado_estrato"])
+    emitir("enph_estrato_x_quintil_bancarizado", cruce_banc_out,
+           titulo="ENPH · estrato agrupado × quintil de ICGU, reponderado a hogares bancarizados (D15)",
+           meta={"fuente": "outputs/distribuciones/enph_estrato_x_quintil.csv reponderado con outputs/distribuciones/geih_bancarizacion_x_estrato.csv",
+                 "dominio": "Bogotá (ENPH hogares × GEIH hogares, AREA = 11 / DOMINIO = 'BOGOTÁ')", "unidad": "hogar",
+                 "peso": "expandido (FEX_C, ENPH) × P(bancarizado | estrato agrupado) (FEX_C18/12, GEIH)",
+                 "denominador": "hogares con estrato 1-6 e ICGU válido, reponderados"},
+           fmt={"p_bancarizado_estrato": 4},
+           nota="**SUPUESTO DE INDEPENDENCIA CONDICIONAL (declarado, no verificable con estas fuentes):** dentro de cada estrato agrupado, el quintil de ICGU es "
+                "independiente de la tenencia de productos financieros. ENPH no tiene `P5222S*` y GEIH no tiene `ICGU`, así que el cruce real no se puede calcular; "
+                "se reponderan las celdas de `enph_estrato_x_quintil.csv` por `P(bancarizado | estrato agrupado)` de GEIH, que es la única variable común entre las dos "
+                "fuentes. `expandido` es la cifra original (todos los hogares); `expandido_bancarizado` y `pct_del_cruce_bancarizado` son la cifra reponderada. "
+                "Esta es la población que calibra el generador (D15, `docs/protocolo_tecnico.md` §5).")
+    sin_prod_md = xb[xb["tenencia"] == "sin_producto"][["estrato_agrupado", "n", "expandido", "pct_dentro_de_estrato"]].rename(
+        columns={"pct_dentro_de_estrato": "pct_sin_producto_dentro_de_estrato"})
+    SECCIONES.append(f"### D15 · % de hogares de Bogotá sin ningún producto financiero, por estrato agrupado (resumen)\n\n"
+                     + md_tabla(sin_prod_md, {"pct_sin_producto_dentro_de_estrato": 2})
+                     + f"\n`P(bancarizado | estrato agrupado)`: " + "; ".join(f"{k}: {es(100 * v)} %" for k, v in banc["p_bancarizado_estrato"].items())
+                     + ".\n\nArchivos: `outputs/distribuciones/geih_bancarizacion_total.csv`, `geih_bancarizacion_x_estrato.csv`, `enph_estrato_x_quintil_bancarizado.csv`.\n")
 
     # informe
     cab = ("# Distribuciones para los priors — Bogotá urbano\n\n"

@@ -1,0 +1,7 @@
+estrato_agrupado,tenencia,tenencia_categoria,n,expandido,pct_dentro_de_estrato,fuente,dominio,unidad,peso
+bajo (1-2),con_producto,Al menos un producto financiero (bancarizado),4228,1341445.6342313334,90.62595893356671,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+bajo (1-2),sin_producto,Ninguno (P5222S9),440,138754.5755283,9.374041066433309,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+medio (3-4),con_producto,Al menos un producto financiero (bancarizado),4231,1374858.23865085,95.46371256645946,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+medio (3-4),sin_producto,Ninguno (P5222S9),213,65331.129318375,4.536287433540549,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+alto (5-6),con_producto,Al menos un producto financiero (bancarizado),599,211799.46515555,99.72847802476267,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12
+alto (5-6),sin_producto,Ninguno (P5222S9),2,576.647816875,0.2715219752373339,"GEIH 2025, datos_hogar.csv","Bogotá urbano (AREA = 11), 12 meses apilados",hogar (promedio anual),FEX = FEX_C18 / 12

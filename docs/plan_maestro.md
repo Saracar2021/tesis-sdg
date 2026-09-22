@@ -13,8 +13,8 @@
 
 1. **La base empírica se reconstruyó desde cero.** Las cifras del análisis descriptivo del informe de avance estaban escritas a mano, sin factores de expansión y sobre un solo mes. Se re-descargaron los microdatos del DANE y se construyó una base verificable: 112 archivos con hash SHA-256 contra el original, cargador único con 29 pruebas automatizadas y distribuciones ponderadas para Bogotá.
 2. **El dominio quedó definido: Bogotá urbano.** Los 20 voluntarios de la validación son de Bogotá; calibrar contra otro dominio rompería la comparación del TSTR.
-3. **Hay resultados nuevos que refuerzan la tesis.** El efectivo domina en Bogotá (97 % de los hogares lo declara como forma de pago principal en gastos frecuentes), y el medio de pago **varía por categoría de gasto** (hasta 28 % de tarjeta de crédito en electrodomésticos y muebles). El informe de avance reporta que el pipeline de Pancholi genera 100 % tarjeta de crédito; **esa cifra no está verificada** hasta ejecutar la reevaluación del Chat 01B.
-4. **Cuatro afirmaciones del informe de avance quedan retiradas** (§6) y **ocho limitaciones quedan declaradas** (§7).
+3. **Hay resultados nuevos que refuerzan la tesis.** El efectivo domina en Bogotá (97 % de los hogares lo declara como forma de pago principal en gastos frecuentes), y el medio de pago **varía por categoría de gasto** (hasta 28 % de tarjeta de crédito en electrodomésticos y muebles). **El pipeline de Pancholi no se ha ejecutado**: las tres «fallas» que el informe de avance le atribuye (USD 12 entre perfiles, dominio de categorías de ocio, 100 % tarjeta de crédito) son **hipótesis sin respaldo** hasta el Chat 01B (§6).
+4. **Cuatro afirmaciones del análisis descriptivo quedan retiradas y las tres sobre Pancholi pasan a hipótesis** (§6) y **ocho limitaciones quedan declaradas** (§7).
 5. **Lo que falta es casi todo el pipeline de generación y la validación empírica**, en 25 días. El punto de control del 25 de septiembre define si el alcance completo cabe.
 
 ---
@@ -31,7 +31,7 @@
 | 5 | Recolección de transacciones reales | ❌ | 🟡 **20 voluntarios de Bogotá con acceso**; paquete v1.1 listo (consentimiento, anonimización, diseño de muestra: dic 2025, abr y ago 2026). **Bloqueado por la consulta de ética** | `docs/datos_reales/` |
 | 6 | Etiquetado manual (2 anotadores) + Kappa | ❌ | 🟡 Guía v1.0 y muestra definida (600 movimientos, 30 por persona); guía por actualizar a la taxonomía v1.1; anotadores por confirmar | `docs/datos_reales/` |
 | 7 | Entrenamiento de 3 clasificadores + TSTR | ❌ | ❌ No empezado | — |
-| 01B | Reevaluación del pipeline de Pancholi | ❌ | 🟡 Notebook diseñado (Chat 01B); **no ejecutado** contra el pipeline real | Chat 01B de claude.ai; `external/` vacío |
+| 01B | Reevaluación del pipeline de Pancholi | ❌ | 🔴 Notebook diseñado (Chat 01B); **el pipeline nunca se ha ejecutado**. Sostiene la motivación empírica y la comparación de la hipótesis | Chat 01B de claude.ai; `external/` vacío |
 | — | Redacción de la tesis | ❌ | ❌ No empezada (el capítulo de datos ya tiene insumos) | — |
 
 ---
@@ -83,6 +83,7 @@ Todos quedan resueltos por **reconstrucción**, no por parche: el análisis viej
 | Celdas ralas → encogimiento jerárquico hacia urbano nacional | Quedan 4 de 15 celdas ralas en Bogotá (estrato 5-6 en Q1–Q4); urbano nacional no tiene ninguna | `CLAUDE.md`; umbral a fijar en Chat 05 |
 | **Se usan los 12 meses de GEIH 2025** | Sin marzo o sin julio, estrato y formalidad se mueven < 1 p.p.; lo que supera 1 p.p. es un efecto de frontera de `INGLABO` | `docs/bitacora.md` |
 | Formalidad: componentes separados, sin índice propio | Un indicador compuesto inventado no es defendible; si hace falta uno, se usa la definición oficial del DANE | `CLAUDE.md` |
+| **D15 — el generador emite extractos sintéticos, con capa interna de gasto del hogar** (Sara, 22 sep) | La pregunta de investigación es clasificar transacciones reales de usuarios, que son filas de extracto. La capa interna simula el gasto completo calibrado con ENPH; se emiten solo los registros que vería un banco o billetera, y el efectivo sale como retiros periódicos. Implica: (1) población = hogares bancarizados, reponderando priors con `P5222S*` de GEIH por estrato (93,47 % de hogares bancarizados en Bogotá); (2) la hipótesis H-P3 sobre Pancholi se formula en términos de registros de extracto, y se verifica al ejecutarlo; (3) supuestos declarados de cadencia de retiros y participación de medios digitales (Banrep 2024) | `docs/protocolo_tecnico.md` §5 |
 | **Los datos reales solo evalúan; nunca calibran el generador** | Si los mismos extractos calibran y evalúan, el TSTR queda contaminado. El generador se calibra solo con ENPH y GEIH | `docs/datos_reales/04_diseno_muestra_y_recoleccion_v1.1.md` |
 | Proporciones descriptivas sobre quienes responden; no respuesta declarada aparte, sin imputar | Evita el error del 73,1 % (§6) | `CLAUDE.md` |
 | No se reportan intervalos de confianza sobre cifras DANE | Los archivos públicos no traen segmento ni UPM | `CLAUDE.md` |
@@ -131,6 +132,16 @@ Esta matriz es el insumo con el que el generador condiciona el medio de pago a l
 | «El 25,5 % sin dato es probablemente efectivo no declarado» | Supuesto sin sustento; la no respuesta no se imputa |
 | «Análisis de todos los meses de la GEIH» | Cubría solo enero |
 
+**Afirmaciones sobre el pipeline de Pancholi: sin respaldo de ejecución (pasan a hipótesis del Chat 01B)**
+
+| Afirmación del informe | Estado |
+|---|---|
+| Entre perfiles de USD 15.000 y USD 85.000 anuales el monto promedio varía apenas USD 12 (5 perfiles) | **Hipótesis H-P1.** Además contradice lo que el paper declara: que el gasto se calibra por ingreso |
+| Dominio de categorías de ocio (Athletic Exhibition, Special Events, Inn and Motel, Skating Rink) | **Hipótesis H-P2** |
+| El 100 % de las transacciones tiene `payment_type: credit_card` | **Hipótesis H-P3.** La Tabla 5 del paper trae 4 ejemplos con tarjeta de crédito; es un ejemplo, no una proporción |
+
+Sí se puede citar, con referencia al paper, su diseño: demografía del ACS 2015-2019 de Washington D.C., comercios de Yelp y de D.C., reglas calibradas por ingreso, CTGAN. Estas afirmaciones también están en la presentación (diapositivas 2 y 3) y en la introducción del informe.
+
 Además, **todas** las cifras numéricas de la sección de análisis descriptivo del informe (estrato, ingresos por quintil y por estrato, brecha de 4,7 veces, formalidad, posición ocupacional) quedan sin validez y se reemplazan por las de §5, calculadas en otro dominio y con otra metodología.
 
 ---
@@ -161,7 +172,7 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 | P5 | **Documento técnico del protocolo** (Chat 04) | Actividad 1 del cronograma | Code + revisión de Sara | Esta semana |
 | P6 | **Módulo de priors** (Chat 05): umbral de soporte y método de encogimiento | Generador | Code | Mar 22 – mié 23 |
 | P7 | **Generador por reglas** (Chat 06) | CTGAN | Code | Jue 24 – vie 25 |
-| P8 | **Reevaluación de Pancholi** (Chat 01B): clonar el repo en `external/` y ejecutar | Justificación empírica de la tesis | Sara + Code | Esta semana |
+| P8 | **Ejecutar por primera vez el pipeline de Pancholi** (Chat 01B): conseguir el código, clonarlo en `external/`, ejecutar y contrastar H-P1 a H-P3 | **Motivación empírica y comparación de la hipótesis** | Sara + Code | **Adelantado: esta semana, antes del 25** |
 | P9 | Consulta al DANE: control de cambios 2501–2512 | L3 | Sara | Esta semana (bajo costo) |
 | P10 | Congelar taxonomía v1.1 tras ver ~50 descripciones reales | Anotación | Chat 03 | Cuando lleguen extractos |
 | P11 | Pasar los entregables del Chat 02 y 01B al repo (`docs/`) | Trazabilidad | Sara | Lun 21 |
@@ -181,7 +192,8 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 | **R7 — Calendario (nuevo)** | **Alto**: 25 días para priors, generador, CTGAN, clasificadores, TSTR y redacción | Punto de control 25 sep; redacción del capítulo de datos desde ya |
 | **R8 — Comité de ética (nuevo)** | Desconocido | Preguntar el lunes; si aplica, iniciar el trámite de inmediato |
 | **R9 — Instrumento DANE 2025 (nuevo)** | Declarado | L2 y L3 |
-| **R10 — Universo del generador vs. universo del real (nuevo)** | **Alto, sin decidir** | Los priors describen el gasto del hogar (97 % efectivo); los extractos solo ven lo bancarizado. Decisión de diseño pendiente antes del Chat 06; se lleva al punto de control del 25 |
+| **R12 — Motivación empírica sin respaldo (nuevo)** | **Alto** | Las tres fallas de Pancholi nunca se midieron. Si al ejecutarlo no aparecen, la motivación descansa en la ausencia de datos colombianos y en el diseño estadounidense del paper, y la hipótesis de la tesis se reformula. **Primer riesgo: que el código no esté disponible o no corra** |
+| **R10 — Universo del generador vs. universo del real** | ✅ **Resuelto (D15, 22 sep)** | Extracto sintético con capa interna de gasto del hogar. Queda como riesgo residual la validez de los supuestos de retiros y medios digitales |
 | **R11 — Unidad de los priors de medio de pago (nuevo)** | Declarado | ENPH da forma de pago principal **por hogar**; el generador emite transacciones. Usarla como probabilidad por transacción es un supuesto a declarar |
 
 ---
@@ -199,7 +211,7 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 | Mié 23 | Priors: pruebas de que reproducen las marginales | Primeros extractos; anonimización |
 | Jue 24 | Generador por reglas (Chat 06) | Recolección |
 | **Vie 25** | Muestra sintética por reglas · **punto de control con la directora** | Recolección |
-| Sáb 26 – dom 27 | Reevaluación de Pancholi (Chat 01B) | Revisar ~50 descripciones reales para la taxonomía |
+| Sáb 26 – dom 27 | Pancholi (Chat 01B), si no se alcanzó antes | Revisar ~50 descripciones reales para la taxonomía |
 
 **Criterio del punto de control:** si el 25 no hay muestra sintética por reglas funcionando, se revisa el alcance con la directora en vez de comprimir el trabajo.
 

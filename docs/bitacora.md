@@ -21,3 +21,11 @@
 - **Decisión (Sara):** el pipeline de Pancholi no se ha ejecutado; ninguna de sus salidas (USD 12, 5 perfiles, 149 tx, categorías de ocio, 100 % `credit_card`) es un resultado. Pasan a ser hipótesis H-P1 a H-P3 del Chat 01B.
 - Se puede citar el diseño documentado en el paper (ACS 2015-2019 de D.C., Yelp y comercios de D.C., reglas calibradas por ingreso, CTGAN; Tabla 5 como ejemplo, no proporción).
 - Corregidos: `CLAUDE.md`, `docs/protocolo_tecnico.md` §1.4 y D6, `docs/taxonomia/taxonomia_gastos_colombia_v1.md` §7, `docs/taxonomia/pendientes_v1.1.md` (T5), `docs/plan_maestro.md`. Sin tocar: informe de avance y presentación (documentos de la autora).
+
+### Chat 00/05 — D15: universo del generador = extractos de hogares bancarizados (22 sep 2026)
+
+- **Decisión (Sara), cerrada:** el generador emite extractos sintéticos (capa interna de gasto del hogar calibrada con ENPH + capa de emisión bancarizada); reemplaza la decisión abierta DP1. Registrada en `CLAUDE.md` v5 y `docs/protocolo_tecnico.md` §5 (D15), con supuestos declarados (cadencia/monto de retiros, medios digitales vía Banrep 2024, cuenta principal del voluntario) y reformulación de la limitación 3 de Pancholi (H-P3).
+- Consecuencia para Chat 05: la población que calibra el generador es la de hogares bancarizados. `tools/distribuciones_priors.py` (+ `sdg.codigos.PRODUCTOS_FINANCIEROS_P5222`, filas 93-104 del Diccionario GEIH 2025) calcula tenencia de `P5222S*` en Bogotá (12 meses): 93,47 % de los hogares tiene al menos un producto; sin ninguno: 9,37 % (estrato bajo), 4,54 % (medio), 0,27 % (alto).
+- El perfil `enph_estrato_x_quintil.csv` se repondera por `P(bancarizado | estrato agrupado)` de GEIH → `enph_estrato_x_quintil_bancarizado.csv`, bajo un supuesto de independencia condicional declarado (no verificable: ENPH no tiene `P5222S*`, GEIH no tiene `ICGU`). Nueva limitación L16 en `protocolo_tecnico.md`.
+- Salidas nuevas en `outputs/distribuciones/`: `geih_bancarizacion_total.csv`, `geih_bancarizacion_x_estrato.csv`, `enph_estrato_x_quintil_bancarizado.csv` (20 tablas en total, script re-ejecutado de punta a punta).
+- Pendientes abiertos por esta decisión (Chat 06): cadencia/tamaño de retiros (PD8), cifras concretas de medios digitales de Banrep (PD7).

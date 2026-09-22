@@ -644,7 +644,7 @@ Archivo: `outputs/distribuciones/fronteras_amontonamiento.csv`
 ### GEIH · estabilidad mes a mes de las variables que alimentan los priors
 
 - **Qué es:** distribución por mes (FEX_C18 dentro del mes) frente a la de los 12 meses, Bogotá (AREA = 11). Contraste empírico exigido por CLAUDE.md (comparabilidad semántica GEIH 2025).
-- **Alcance:** detecta saltos grandes; con ~1.000 ocupados por mes hay ruido muestral de varios p.p. `z_binomial` = desviación / error binomial simple SIN efecto de diseño (subestima el error real: el diseño es por conglomerados). Es evidencia corroborante, NO prueba de que el formulario 2025 sea el de 2024. No incluye P6500 ni P5222S*/medio de pago de GEIH (no se usan en este entregable).
+- **Alcance:** detecta saltos grandes; con ~1.000 ocupados por mes hay ruido muestral de varios p.p. `z_binomial` = desviación / error binomial simple SIN efecto de diseño (subestima el error real: el diseño es por conglomerados). Es evidencia corroborante, NO prueba de que el formulario 2025 sea el de 2024. No incluye P6500 (medio de pago de GEIH); P5222S* se cubre aparte en la sección de bancarización (D15), más abajo.
 - **Mayor desviación por variable:**
 
 | variable | codigo | mes | n_mes | n_base_mes | pct_mes | pct_12_meses | desv_pp | z_binomial |
@@ -657,3 +657,92 @@ Archivo: `outputs/distribuciones/fronteras_amontonamiento.csv`
 | P6990 | 1 | 3 | 636 | 1.117 | 56,87 | 62,59 | -5,72 | -3,95 |
 
 Archivo: `outputs/distribuciones/geih_estabilidad_mensual.csv` (todas las categorías × meses).
+
+
+### GEIH · tenencia de productos financieros del hogar (P5222*), Bogotá
+
+- **fuente:** GEIH 2025, datos_hogar.csv
+- **dominio:** Bogotá urbano (AREA = 11), 12 meses apilados
+- **unidad:** hogar (promedio anual)
+- **peso:** FEX = FEX_C18 / 12
+- **variable:** P5222S1-S11 «¿Cuáles de los siguientes productos financieros utiliza usted o algún miembro del hogar actualmente?»
+- **codigos:** Diccionario GEIH 2025, filas 93-104 (P5222S1-S11; selección múltiple, «1» = marcado, vacío = no marcado)
+- **denominador:** «% base con respuesta» = hogares con P5222S9=1 (Ninguno) o al menos un producto marcado; «% del total» = todos los hogares de Bogotá
+
+| codigo | categoria | n (sin ponderar) | expandido | % base con respuesta | % del total |
+|---|---|---|---|---|---|
+| con_producto | Al menos un producto financiero (bancarizado) | 9.074 | 2.934.739,00 | 93,47 | 93,44 |
+| sin_producto | Ninguno (P5222S9) | 656 | 204.963,88 | 6,53 | 6,53 |
+|  | sin dato (vacío) | 2 | 639,01 | — | 0,02 |
+| no_sabe | sin dato: No sabe (P5222S10) | 1 | 300,78 | — | 0,01 |
+
+**D15 (CLAUDE.md, 22 sep):** el universo del generador son hogares bancarizados. «Bancarizado» = marcó al menos un producto de P5222S1-S8 o P5222S11; «Ninguno» = marcó solo P5222S9. «No sabe» (P5222S10) y los hogares sin ninguna marca en P5222S1-S11 se reportan como sin dato, no se imputan. El diccionario no permite verificar el filtro de la pregunta (cita `P5002`, ausente en `datos_hogar.csv` publicado).
+
+Archivo: `outputs/distribuciones/geih_bancarizacion_total.csv`
+
+
+### GEIH · tenencia de productos financieros × estrato agrupado (% dentro del estrato)
+
+- **fuente:** GEIH 2025, datos_hogar.csv
+- **dominio:** Bogotá urbano (AREA = 11), 12 meses apilados
+- **unidad:** hogar (promedio anual)
+- **peso:** FEX = FEX_C18 / 12
+- **variable:** P5222* × P4030S1A1 agrupado
+- **denominador:** hogares con estrato 1-6 y respuesta válida (con_producto/sin_producto) dentro de cada estrato
+
+| estrato_agrupado | tenencia | n | expandido | pct_dentro_de_estrato |
+|---|---|---|---|---|
+| bajo (1-2) | Al menos un producto financiero (bancarizado) | 4.228 | 1.341.445,63 | 90,63 |
+| bajo (1-2) | Ninguno (P5222S9) | 440 | 138.754,58 | 9,37 |
+| medio (3-4) | Al menos un producto financiero (bancarizado) | 4.231 | 1.374.858,24 | 95,46 |
+| medio (3-4) | Ninguno (P5222S9) | 213 | 65.331,13 | 4,54 |
+| alto (5-6) | Al menos un producto financiero (bancarizado) | 599 | 211.799,47 | 99,73 |
+| alto (5-6) | Ninguno (P5222S9) | 2 | 576,65 | 0,27 |
+
+`P(bancarizado | estrato agrupado)` = `pct_dentro_de_estrato` de la fila «Al menos un producto financiero (bancarizado)»; es la única variable común con ENPH que permite reponderar el perfil estrato × quintil a hogares bancarizados (ver la tabla siguiente).
+
+Archivo: `outputs/distribuciones/geih_bancarizacion_x_estrato.csv`
+
+
+### ENPH · estrato agrupado × quintil de ICGU, reponderado a hogares bancarizados (D15)
+
+- **fuente:** outputs/distribuciones/enph_estrato_x_quintil.csv reponderado con outputs/distribuciones/geih_bancarizacion_x_estrato.csv
+- **dominio:** Bogotá (ENPH hogares × GEIH hogares, AREA = 11 / DOMINIO = 'BOGOTÁ')
+- **unidad:** hogar
+- **peso:** expandido (FEX_C, ENPH) × P(bancarizado | estrato agrupado) (FEX_C18/12, GEIH)
+- **denominador:** hogares con estrato 1-6 e ICGU válido, reponderados
+
+| estrato_agrupado | quintil | n | expandido | p_bancarizado_estrato | expandido_bancarizado | pct_del_cruce_bancarizado |
+|---|---|---|---|---|---|---|
+| bajo (1-2) | Q1 | 653 | 327.100,76 | 0,9063 | 296.438,20 | 12,45 |
+| bajo (1-2) | Q2 | 572 | 291.245,82 | 0,9063 | 263.944,32 | 11,08 |
+| bajo (1-2) | Q3 | 520 | 263.634,80 | 0,9063 | 238.921,57 | 10,03 |
+| bajo (1-2) | Q4 | 382 | 188.119,51 | 0,9063 | 170.485,11 | 7,16 |
+| bajo (1-2) | Q5 | 129 | 66.825,14 | 0,9063 | 60.560,92 | 2,54 |
+| medio (3-4) | Q1 | 188 | 174.436,25 | 0,9546 | 166.523,32 | 6,99 |
+| medio (3-4) | Q2 | 236 | 210.953,84 | 0,9546 | 201.384,37 | 8,46 |
+| medio (3-4) | Q3 | 267 | 238.567,70 | 0,9546 | 227.745,58 | 9,56 |
+| medio (3-4) | Q4 | 356 | 308.616,34 | 0,9546 | 294.616,62 | 12,37 |
+| medio (3-4) | Q5 | 380 | 326.567,93 | 0,9546 | 311.753,87 | 13,09 |
+| alto (5-6) | Q1 | 9 | 6.673,81 | 0,9973 | 6.655,69 | 0,28 |
+| alto (5-6) | Q2 | 5 | 3.128,45 | 0,9973 | 3.119,96 | 0,13 |
+| alto (5-6) | Q3 | 13 | 9.518,94 | 0,9973 | 9.493,09 | 0,40 |
+| alto (5-6) | Q4 | 21 | 13.680,89 | 0,9973 | 13.643,74 | 0,57 |
+| alto (5-6) | Q5 | 168 | 116.292,55 | 0,9973 | 115.976,79 | 4,87 |
+
+**SUPUESTO DE INDEPENDENCIA CONDICIONAL (declarado, no verificable con estas fuentes):** dentro de cada estrato agrupado, el quintil de ICGU es independiente de la tenencia de productos financieros. ENPH no tiene `P5222S*` y GEIH no tiene `ICGU`, así que el cruce real no se puede calcular; se reponderan las celdas de `enph_estrato_x_quintil.csv` por `P(bancarizado | estrato agrupado)` de GEIH, que es la única variable común entre las dos fuentes. `expandido` es la cifra original (todos los hogares); `expandido_bancarizado` y `pct_del_cruce_bancarizado` son la cifra reponderada. Esta es la población que calibra el generador (D15, `docs/protocolo_tecnico.md` §5).
+
+Archivo: `outputs/distribuciones/enph_estrato_x_quintil_bancarizado.csv`
+
+
+### D15 · % de hogares de Bogotá sin ningún producto financiero, por estrato agrupado (resumen)
+
+| estrato_agrupado | n | expandido | pct_sin_producto_dentro_de_estrato |
+|---|---|---|---|
+| bajo (1-2) | 440 | 138.754,58 | 9,37 |
+| medio (3-4) | 213 | 65.331,13 | 4,54 |
+| alto (5-6) | 2 | 576,65 | 0,27 |
+
+`P(bancarizado | estrato agrupado)`: bajo (1-2): 90,63 %; medio (3-4): 95,46 %; alto (5-6): 99,73 %.
+
+Archivos: `outputs/distribuciones/geih_bancarizacion_total.csv`, `geih_bancarizacion_x_estrato.csv`, `enph_estrato_x_quintil_bancarizado.csv`.

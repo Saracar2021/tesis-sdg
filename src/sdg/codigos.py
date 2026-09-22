@@ -94,6 +94,25 @@ NOTA_P438_J = ("GAP ABIERTO: la base de artículos (CAP) tiene los subcapítulos
                "de P438J13 con un bloque concreto del Cuadernillo 3 (3.J131 / 3.J13 / 3.J132) no está verificada.")
 
 
+# --- GEIH: tenencia de productos financieros del hogar (datos_hogar.P5222S*) ---------------------
+# Fuente: Diccionario GEIH 2025, filas 93-104: «¿Cuáles de los siguientes productos financieros
+# utiliza usted o algún miembro del hogar actualmente?» (selección múltiple; una columna binaria
+# por producto: "1" = marcado, vacío = no marcado). El diccionario no dice a qué población se
+# restringe la pregunta (la condición de la regla de validación cita `P5002`, que NO está en
+# `datos_hogar.csv` publicado): no se puede verificar el filtro, se declara como no verificado.
+PRODUCTOS_FINANCIEROS_P5222 = {
+    "P5222S1": "Cuenta corriente", "P5222S2": "Cuenta de ahorros", "P5222S3": "CDT (certificado de depósito a término)",
+    "P5222S4": "Préstamo para compra de vivienda", "P5222S5": "Préstamo para compra de vehículo",
+    "P5222S6": "Préstamo de libre inversión", "P5222S7": "Tarjeta de crédito", "P5222S8": "Otro",
+    "P5222S9": "Ninguno", "P5222S10": "No sabe",
+    "P5222S11": "Plataforma móvil (Daviplata, Bancolombia a la mano, Nequi, Movii, entre otros)",
+}
+PRODUCTOS_FINANCIEROS_P5222_FUENTE = "Diccionario GEIH 2025, filas 93-104 (P5222S1-S11; selección múltiple, «1» = marcado, vacío = no marcado)"
+# D15 (CLAUDE.md, 22 sep): el universo del generador son hogares bancarizados. «Bancarizado» =
+# marcó al menos un producto de la lista (S1-S8, S11); «Ninguno» (S9) = no bancarizado; «No sabe»
+# (S10) y sin ninguna marca en S1-S11 se reportan como sin dato (no se imputan).
+COLUMNAS_PRODUCTO_P5222 = tuple(c for c in PRODUCTOS_FINANCIEROS_P5222 if c not in ("P5222S9", "P5222S10"))
+
 # --- ENPH: forma de adquisición (articulos.FORMA) -------------------------------------------------
 # INFERIDO, no verificado: el Cuadernillo 3 (instrucciones generales) lista las formas por letra en este orden:
 # a) compra, b) pago por trabajo, c) regalo o donación, d) intercambio, e) producido por el hogar (autoconsumo),
