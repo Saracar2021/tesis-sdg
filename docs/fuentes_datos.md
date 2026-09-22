@@ -488,7 +488,7 @@ Sensibilidad a la variable de ingreso (celdas < 30): `ICGU` 12 de 30; `IT` 12 de
 **Respuesta corta: no está confirmado que `NC2R_` signifique «cuadernillo 2 rural», y para `NC2R_CC_P6` los datos lo contradicen.**
 
 - **Dónde vive:** `ENPH_2017/hogares/viviendas_hogares.csv` (tabla DDI «Viviendas y hogares»), **no** en un archivo rural de gasto. Un hogar por fila.
-- **Etiqueta exacta (DDI):** «La principal forma de pago usada para comprar los bienes mencionados en este cuadernillo fue:». Categorías: 1 Tarjeta Débito; 2 Tarjeta de Crédito; 3 Efectivo; 4 Fiador; 5 Bonos; 6 Otro.
+- **Etiqueta exacta (DDI):** «La principal forma de pago usada para comprar los bienes mencionados en este cuadernillo fue:». Categorías: 1 Tarjeta Débito; 2 Tarjeta de Crédito; 3 Efectivo; 4 Fiado (DDI: «Fiador»); 5 Bonos; 6 Otro. El código 4 se muestra como «Fiado» (DDI: «Fiador»): el Cuadernillo 2 urbano —el instrumento, fuente autoritativa— dice «Fiado» (crédito informal del comercio); el DDI lo rotula «fiador», un error de rotulado.
 - **Pregunta en los cuadernillos:** Cuadernillo 2 rural: «La principal forma de pago usada para comprar o adquirir los bienes mencionados en este cuadernillo fue:» | Cuadernillo 2 urbano: «La principal forma de pago usada para comprar los bienes mencionados en este cuadernillo fue:». La etiqueta del DDI coincide con la redacción del cuadernillo **urbano** («comprar los bienes…»), no con la del rural («comprar o adquirir los bienes…»).
 - **A quién se le aplicó (datos):** viene rellena en 61.930 de 81.438 hogares urbanos (`P3`=1) y en 3.517 de 3.918 hogares de Bogotá; por clase: `P3`=1: 61.930/81.438; `P3`=2: 1.327/3.005; `P3`=3: 1.736/2.758. Es decir, **no es exclusiva de hogares rurales**.
 - **Documentación del prefijo:** 65 menciones de «NC2R» en 10 PDFs de ENPH (listado de variables), pero 0 definiciones del prefijo. No está documentado.
@@ -526,7 +526,7 @@ Enunciado correcto: **«% de hogares cuya forma de pago principal es X»**. No e
 | 1 | Tarjeta Débito | 67 | 1,97 % |
 | 2 | Tarjeta de Crédito | 17 | 0,48 % |
 | 3 | Efectivo | 3.413 | 97,03 % |
-| 4 | Fiador | 4 | 0,09 % |
+| 4 | Fiado (DDI: «Fiador») | 4 | 0,09 % |
 | 5 | Bonos | 1 | 0,02 % |
 | 6 | Otro | 15 | 0,41 % |
 |  | **Total con respuesta** | **3.517** | **100,00 %** |

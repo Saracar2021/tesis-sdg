@@ -4846,7 +4846,7 @@
     "1 Tarjeta Débito",
     "2 Tarjeta de Crédito",
     "3 Efectivo",
-    "4 Fiador",
+    "4 Fiado (DDI: «Fiador»)",
     "5 Bonos",
     "6 Otro"
    ],
@@ -5174,7 +5174,7 @@
     },
     {
      "codigo": "4",
-     "categoria": "Fiador",
+     "categoria": "Fiado (DDI: «Fiador»)",
      "hogares_muestra": 4,
      "pct_hogares_expandido": 0.09
     },

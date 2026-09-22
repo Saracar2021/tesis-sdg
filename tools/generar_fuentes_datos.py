@@ -616,6 +616,10 @@ def nc2r(enph: list[dict]) -> dict:
                for a, b in re.findall(r'<fileDscr ID="(F\d+)"[^>]*>(.*?)</fileDscr>', ddi_t, re.S)}
     res = {"ddi_tabla": ddi_ids[m.group(1)], "ddi_etiqueta": limpio(re.search(r"<labl[^>]*>(.*?)</labl>", m.group(2), re.S).group(1)),
            "ddi_categorias": [limpio(re.sub(r"<[^>]+>", " ", c)) for c in re.findall(r"<catgry>(.*?)</catgry>", m.group(2), re.S)]}
+    # El DDI rotula el código 4 como «Fiador»; el Cuadernillo 2 urbano —fuente autoritativa del
+    # instrumento, ver sdg.codigos.FORMA_PAGO_NC2R_FUENTE— dice «Fiado» (crédito informal del
+    # comercio). Se corrige aquí, citando el rótulo del DDI, para que §10.4 y §10.6 no repitan el error.
+    res["ddi_categorias"] = [re.sub(r"(?i)\bfiador\b", "Fiado (DDI: «Fiador»)", c) for c in res["ddi_categorias"]]
     files, sin_r = {}, []
     for r in enph:
         if not r["existe"]:
@@ -886,7 +890,8 @@ def construir_seccion_bogota(bog: dict) -> str:
     urb, bog_ = r6["por_P3"].get("1", {}), r6["bogota"]
     A(f"**Respuesta corta: no está confirmado que `NC2R_` signifique «cuadernillo 2 rural», y para `NC2R_CC_P6` los datos lo contradicen.**\n")
     A(f"- **Dónde vive:** `{', '.join(n['archivo_de_NC2R_CC_P6'])}` (tabla DDI «{n['ddi_tabla']}»), **no** en un archivo rural de gasto. Un hogar por fila.")
-    A(f"- **Etiqueta exacta (DDI):** «{n['ddi_etiqueta']}». Categorías: " + "; ".join(n["ddi_categorias"]) + ".")
+    A(f"- **Etiqueta exacta (DDI):** «{n['ddi_etiqueta']}». Categorías: " + "; ".join(n["ddi_categorias"]) + ". "
+      "El código 4 se muestra como «Fiado» (DDI: «Fiador»): el Cuadernillo 2 urbano —el instrumento, fuente autoritativa— dice «Fiado» (crédito informal del comercio); el DDI lo rotula «fiador», un error de rotulado.")
     A("- **Pregunta en los cuadernillos:** " + " | ".join(f"{k}: «{v}»" for k, v in n["pregunta_en_cuadernillo"].items())
       + ". La etiqueta del DDI coincide con la redacción del cuadernillo **urbano** («comprar los bienes…»), no con la del rural («comprar o adquirir los bienes…»).")
     A(f"- **A quién se le aplicó (datos):** viene rellena en {fn(urb.get('llenos'))} de {fn(urb.get('hogares'))} hogares urbanos (`P3`=1) y en {fn(bog_['llenos'])} de {fn(bog_['hogares'])} hogares de Bogotá; "
