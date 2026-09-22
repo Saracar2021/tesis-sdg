@@ -46,9 +46,10 @@ Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega fi
 - **Cortes de calibración — DECISIÓN:** el cruce estrato (6) × quintil (5) deja 12 de 30 celdas
   con menos de 30 observaciones en ENPH Bogotá, concentradas en estratos 4–6.
   Se agrupa **estrato en 3 (1–2 bajo, 3–4 medio, 5–6 alto)** y se **conservan los 5 quintiles
-  de ingreso**: la sensibilidad al ingreso es la contribución central de la tesis (la hipótesis es que
-  el pipeline de referencia no la tiene; sin verificar, ver regla de Pancholi), así que esa
-  dimensión no se sacrifica. Estrato e ingreso están muy
+  de ingreso**: la hipótesis de la tesis incorpora las «proporciones de gasto por quintil de ingreso
+  observadas en Colombia» (informe de avance, §IV.B), así que la calibración por quintil con datos
+  colombianos es parte central del protocolo y esa dimensión no se sacrifica. No se justifica con
+  una supuesta falla de Pancholi (ver regla de evidencia). Estrato e ingreso están muy
   correlacionados en Colombia, de modo que agrupar estrato pierde poca información.
   Revalidar el conteo de celdas tras agrupar; lo que siga ralo va a encogimiento jerárquico
   hacia urbano nacional, con el umbral declarado.
@@ -70,8 +71,10 @@ Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega fi
   refinamiento con CTGAN. Su Tabla 5 muestra 4 transacciones de ejemplo, todas con tarjeta de
   crédito: es un ejemplo, no una proporción.
 - Las «tres limitaciones» (ingreso, categorías, medio de pago) son **hipótesis a verificar**.
-  Nota: el paper afirma calibrar el gasto por ingreso, así que la insensibilidad al ingreso
-  contradice lo que el paper declara y solo una ejecución puede establecerla.
+  H-P1 (ingreso): el paper **sí** calibra el gasto por ingreso y características del hogar, pero con la
+  distribución de Estados Unidos (ACS 2015-2019 de D.C.). La hipótesis NO es «insensibilidad al
+  ingreso»: es que la relación ingreso–gasto que produce no corresponde a la de los hogares
+  colombianos. «Insensibilidad al ingreso» no se usa en ningún documento.
 
 ## Universo del generador (D15, Sara, 22 sep)
 - **El universo del generador son extractos de hogares bancarizados (D15).** El generador simula
@@ -82,10 +85,11 @@ Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega fi
   Razón: la pregunta de investigación es clasificar transacciones reales de usuarios (filas de
   extracto); un generador que emitiera el gasto total incluiría registros que no existen en ningún
   sistema real, y el TSTR mediría un desajuste de universo, no la calidad del sintético.
-  Reformula la limitación 3 de Pancholi: no es «no genera efectivo», es que el pipeline de
-  referencia asume que todo el gasto pasa por tarjeta de crédito, cuando en Bogotá el gasto
-  dominante en efectivo aparece en los extractos reales como retiros en cajero, transferencias a
-  personas y billeteras (H-P3, a contrastar en el Chat 01B).
+  Con D15, la hipótesis H-P3 sobre Pancholi se formula en términos de registros de extracto: en
+  Bogotá el gasto en efectivo aparece en los extractos como retiros en cajero, transferencias a
+  personas y billeteras; la hipótesis es que el pipeline de referencia no produce esa estructura.
+  Es una hipótesis del Chat 01B, no un resultado: no se afirma que el pipeline «asuma» nada sobre
+  el medio de pago más allá de lo que muestra el paper (Tabla 5, 4 ejemplos con tarjeta de crédito).
   Supuestos declarados (sin resolver, Chat 06): cadencia y tamaño de los retiros, participación de
   medios digitales (Banrep 2024, ausentes en ENPH) y cuenta principal del voluntario.
   Detalle completo: `docs/protocolo_tecnico.md` §5, D15.

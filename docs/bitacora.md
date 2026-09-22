@@ -29,3 +29,16 @@
 - El perfil `enph_estrato_x_quintil.csv` se repondera por `P(bancarizado | estrato agrupado)` de GEIH → `enph_estrato_x_quintil_bancarizado.csv`, bajo un supuesto de independencia condicional declarado (no verificable: ENPH no tiene `P5222S*`, GEIH no tiene `ICGU`). Nueva limitación L16 en `protocolo_tecnico.md`.
 - Salidas nuevas en `outputs/distribuciones/`: `geih_bancarizacion_total.csv`, `geih_bancarizacion_x_estrato.csv`, `enph_estrato_x_quintil_bancarizado.csv` (20 tablas en total, script re-ejecutado de punta a punta).
 - Pendientes abiertos por esta decisión (Chat 06): cadencia/tamaño de retiros (PD8), cifras concretas de medios digitales de Banrep (PD7).
+
+### Chat 00 — sensibilidad al ingreso y corrección de D15 (22 sep 2026)
+
+- H-P1 reformulada: el paper de Pancholi **sí** calibra el gasto por ingreso (con el ACS 2015-2019 de D.C.); la hipótesis es que esa calibración no reproduce la relación ingreso–gasto colombiana. «Insensibilidad al ingreso» se retira de todos los documentos.
+- Los 5 quintiles se justifican por la hipótesis de la tesis (proporciones de gasto por quintil observadas en Colombia), no por una falla de Pancholi. Corregidos `CLAUDE.md` y `protocolo_tecnico.md` D6 y §1.4.
+- Corregida la redacción de D15 (sesión anterior de Code): afirmaba que el paper «lista como limitación que no genera efectivo» y que el pipeline «asume que todo pasa por tarjeta de crédito». Ninguna está en el paper ni sale de una ejecución; queda como hipótesis H-P3.
+- Informe de avance y presentación: versiones `_v1.1_revision` en la carpeta de OneDrive, con control de cambios en el informe; los originales no se tocaron.
+
+### Chat 00 — verificación y commit de la corrección de H-P1/H-P3 y D15 (22 sep 2026)
+
+- Verifiqué la corrección hecha en disco (sesión previa): «insensibilidad al ingreso» y las frases no respaldadas sobre Pancholi («no genera efectivo», «asume tarjeta de crédito») solo quedan como referencias meta a la retractación, no como afirmaciones.
+- Encontré y corregí una inconsistencia: `docs/plan_maestro.md` había vuelto a rotular la decisión como «DP1» (fila de la tabla de decisiones y estado de R10); ahora dice «D15» en ambos, consistente con `CLAUDE.md` y `protocolo_tecnico.md`.
+- 29 tests en verde (`python -m unittest discover -s tests`); sin cambios de código en esta corrección, solo documentación.

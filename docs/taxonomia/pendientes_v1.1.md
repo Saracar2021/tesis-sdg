@@ -36,3 +36,9 @@ Congelar antes de (2) es congelar a ciegas: el esquema existe para anotar transa
 ## T5 — Afirmaciones sobre el pipeline de Pancholi (22 sep 2026)
 
 El §7 de la taxonomía v1 decía que las categorías de ocio de Washington D.C. «dominaban espuriamente el output del generador original» y que las diferencias responden a «tres fallas empíricas documentadas». El pipeline no se ha ejecutado: son hipótesis. Ya corregido en el `.md` v1 del repo; la v1.1 debe mantener esa redacción y no citar salidas de Pancholi hasta que el Chat 01B las produzca.
+
+## T6 — Implicaciones de D15 (extractos sintéticos) para la taxonomía (22 sep 2026)
+
+- **Medios de pago observables.** En un extracto, una compra nunca aparece pagada en efectivo ni fiada: el efectivo solo se ve como la categoría `retiro_efectivo`. `medio_pago = efectivo` y `fiado_credito_tienda` existen en la capa interna del generador, pero no en los registros emitidos ni en los reales. La v1.1 debe marcar qué valores de `medio_pago` son observables en extractos y cuáles solo internos.
+- **Categorías operativas obligatorias.** `ingreso`, `movimiento_propio`, `transferencias_p2p` y `retiro_efectivo` pasan a ser salidas que el generador **debe** emitir, no casos marginales. Cada una necesita fuente o supuesto declarado (ver plan maestro, P13).
+- **`cuenta_tipo`.** El protocolo de anonimización registra `banco` / `billetera` / `tarjeta_credito`. La taxonomía debe decidir si el generador emite ese campo y si el clasificador lo usa como entrada.
