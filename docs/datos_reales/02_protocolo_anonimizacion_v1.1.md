@@ -1,6 +1,6 @@
 # Protocolo de anonimización de extractos
 
-**Proyecto:** Datos sintéticos de transacciones financieras — Bogotá · **Chat 02 (Track B)**
+**Proyecto:** Datos sintéticos de transacciones financieras — Bogotá · **WP4 (Track B)**
 **Versión:** 1.1 · **Fecha:** 21 sep 2026 · reemplaza la v1.0 del 15 de septiembre
 
 **Qué cambia frente a la v1.0:** el formato principal pasa a ser el **PDF del banco** (la v1.0 lo trataba como alternativa), con capturas y Excel/CSV también admitidos; son **tres meses fijos por persona**; y la reducción la hace **la investigadora en su computador con un script local**, con revisión manual obligatoria. Las rutas se alinean con `CLAUDE.md`.
@@ -13,14 +13,14 @@ Objetivo: reducir cada extracto a **tres campos por movimiento** —descripción
 
 | Etapa | Dónde vive | Quién lo toca |
 |---|---|---|
-| Original (PDF, captura, Excel) | `data/reales_crudos/originales/` | Solo Sara. Claude Code tiene la lectura **bloqueada** por permisos |
+| Original (PDF, captura, Excel) | `data/reales_crudos/originales/` | Solo Sara. Ninguna herramienta automatizada tiene acceso: la lectura está **bloqueada** por permisos |
 | Mapa seudónimo → persona | `data/reales_crudos/_mapa_seudonimos` (cifrado) | Solo Sara. Se destruye el 4 oct |
 | Extracción sin depurar | `data/reales_crudos/extraido/` | Solo Sara |
-| **Versión anonimizada** (3 campos) | `data/reales_anon/<seudonimo>.csv` | Sara, anotadores y Claude Code |
+| **Versión anonimizada** (3 campos) | `data/reales_anon/<seudonimo>.csv` | Sara y anotadores; única versión accesible a herramientas automatizadas |
 
 `data/` está en `.gitignore`: **nada de esto se sube a GitHub**.
 
-Es el mismo patrón que con los microdatos del DANE: **Claude Code escribe el script, Sara lo ejecuta** sobre los originales, y Claude solo ve el resultado anonimizado.
+Es el mismo patrón que con los microdatos del DANE: el script se escribe para ejecutarse manualmente sobre los originales, y ninguna herramienta automatizada ve el resultado sin anonimizar.
 
 ## 2. Qué se conserva y qué se elimina
 

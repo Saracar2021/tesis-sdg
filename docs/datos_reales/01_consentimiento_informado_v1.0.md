@@ -1,5 +1,7 @@
 # Consentimiento informado — Aporte de extractos de transacciones financieras
 
+> **Versión reemplazada por v1.1; se conserva por trazabilidad.**
+
 **Proyecto:** *Diseño y validación preliminar de un protocolo de generación de datos sintéticos de transacciones financieras para el contexto colombiano* (Trabajo de Grado, Maestría en Inteligencia Artificial).
 **Investigadora responsable:** Sara J. Cárdenas — [correo institucional] — [universidad / programa].
 **Directora de tesis:** [nombre] — [correo].
@@ -36,8 +38,6 @@ Los datos se usan **únicamente** para un fin **académico y no comercial**: con
 ## 4. Marco legal
 
 El tratamiento se realiza conforme a la **Ley 1581 de 2012** (protección de datos personales / Habeas Data) y sus decretos reglamentarios. Al aceptar, otorgas tu **autorización previa, expresa e informada** para el tratamiento descrito. Como titular tienes derecho a **conocer, actualizar, rectificar y suprimir** tus datos y a **revocar** esta autorización en cualquier momento (ver §6). La autoridad de control es la **Superintendencia de Industria y Comercio (SIC)**.
-
-> *Nota para Sara (borrar antes de circular): confirmar con el **comité de ética / oficina de protección de datos de la universidad** si este estudio requiere aval formal y si hay un formato institucional obligatorio. Este documento es una base, no sustituye ese trámite.*
 
 ## 5. Riesgos, beneficios y voluntariedad
 

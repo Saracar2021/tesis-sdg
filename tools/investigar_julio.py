@@ -1,6 +1,6 @@
-"""Investigación de julio 2025 en GEIH: estrato (P4030S1A1) de datos_hogar se desvía en Bogotá (chat 02).
+"""Investigación de julio 2025 en GEIH: estrato (P4030S1A1) de datos_hogar se desvía en Bogotá (WP1).
 
-Preguntas (criterio de Sara, 20 sep 2026):
+Preguntas (definidas el 20 sep 2026):
   1. Serie mensual completa de estrato (6 categorías + 0, 9, vacío) y tasa de sin dato: ¿se mueve «sin dato» (artefacto de codificación)
      o se mueve entre categorías vecinas (3 vs 4 / 1-2)?
   2. ¿Se repite a nivel nacional y en las 23 ciudades (AREA no vacío)? Si sí, no es un problema de la submuestra de Bogotá.

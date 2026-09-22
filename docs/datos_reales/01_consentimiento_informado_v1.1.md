@@ -7,8 +7,6 @@
 
 > Léelo antes de aceptar. Si algo no queda claro, escríbeme antes de firmar. Participar es voluntario y puedes retirarte (§7).
 
-> *Nota para Sara (borrar antes de circular): no enviar a los participantes hasta resolver con la directora si el estudio requiere aval del comité de ética y si la universidad tiene un formato institucional obligatorio. Si lo tiene, este texto se adapta a ese formato.*
-
 ---
 
 ## 1. Qué te pido

@@ -5,7 +5,7 @@
 **Versión:** 2 · **Corte:** domingo 20 de septiembre de 2026 · reemplaza la v1 del 15 de septiembre
 **Hitos:** avance a directora (previsto 18 sep, **no enviado**; se envía el lun 21 sep) · punto de control **vie 25 sep** · tesis final **jue 15 oct 2026** (25 días desde este corte)
 
-> Documento vivo del Chat 00. La fuente de verdad técnica es el repositorio `C:\tesis-sdg` (respaldo privado en GitHub). Este documento resume el estado; las cifras y su derivación viven en el repo.
+> Documento vivo de seguimiento del proyecto (WP0). La fuente de verdad técnica es el repositorio `C:\tesis-sdg` (respaldo privado en GitHub). Este documento resume el estado; las cifras y su derivación viven en el repo.
 
 ---
 
@@ -13,7 +13,7 @@
 
 1. **La base empírica se reconstruyó desde cero.** Las cifras del análisis descriptivo del informe de avance estaban escritas a mano, sin factores de expansión y sobre un solo mes. Se re-descargaron los microdatos del DANE y se construyó una base verificable: 112 archivos con hash SHA-256 contra el original, cargador único con 29 pruebas automatizadas y distribuciones ponderadas para Bogotá.
 2. **El dominio quedó definido: Bogotá urbano.** Los 20 voluntarios de la validación son de Bogotá; calibrar contra otro dominio rompería la comparación del TSTR.
-3. **Hay resultados nuevos que refuerzan la tesis.** El efectivo domina en Bogotá (97 % de los hogares lo declara como forma de pago principal en gastos frecuentes), y el medio de pago **varía por categoría de gasto** (hasta 28 % de tarjeta de crédito en electrodomésticos y muebles). **El pipeline de Pancholi no se ha ejecutado**: las tres «fallas» que el informe de avance le atribuye (USD 12 entre perfiles, dominio de categorías de ocio, 100 % tarjeta de crédito) son **hipótesis sin respaldo** hasta el Chat 01B (§6).
+3. **Hay resultados nuevos que refuerzan la tesis.** El efectivo domina en Bogotá (97 % de los hogares lo declara como forma de pago principal en gastos frecuentes), y el medio de pago **varía por categoría de gasto** (hasta 28 % de tarjeta de crédito en electrodomésticos y muebles). **El pipeline de Pancholi no se ha ejecutado**: las tres «fallas» que el informe de avance le atribuye (USD 12 entre perfiles, dominio de categorías de ocio, 100 % tarjeta de crédito) son **hipótesis sin respaldo** hasta WP5 (§6).
 4. **Cuatro afirmaciones del análisis descriptivo quedan retiradas y las tres sobre Pancholi pasan a hipótesis** (§6) y **ocho limitaciones quedan declaradas** (§7).
 5. **Lo que falta es casi todo el pipeline de generación y la validación empírica**, en 25 días. El punto de control del 25 de septiembre define si el alcance completo cabe.
 
@@ -23,7 +23,7 @@
 
 | # | Actividad (cronograma 2026-2) | Estado 15 sep | Estado 20 sep | Evidencia |
 |---|---|---|---|---|
-| — | Análisis descriptivo / validación de datos DANE | ⚠️ Con errores | ✅ **Reconstruido y cerrado** (Chat 01) | `docs/fuentes_datos.md`, `outputs/distribuciones/`, `src/sdg/carga.py`, `tests/` |
+| — | Análisis descriptivo / validación de datos DANE | ⚠️ Con errores | ✅ **Reconstruido y cerrado** (WP1) | `docs/fuentes_datos.md`, `outputs/distribuciones/`, `src/sdg/carga.py`, `tests/` |
 | 1 | Diseño formal del protocolo (documento técnico) | ❌ | 🟡 **Decisiones tomadas, documento sin redactar** | Decisiones en `CLAUDE.md` (v4) y en §4 de este plan |
 | 2 | Módulo de priors bayesianos | ❌ | 🟡 **Insumos listos** (distribuciones Bogotá con FEX); módulo sin escribir | `outputs/distribuciones/distribuciones_priors.md` |
 | 3 | CTGAN + dataset sintético v1 (≥ 5.000 tx) | ❌ | ❌ No empezado | — |
@@ -31,7 +31,7 @@
 | 5 | Recolección de transacciones reales | ❌ | 🟡 **20 voluntarios de Bogotá con acceso**; paquete v1.1 listo (consentimiento, anonimización, diseño de muestra: dic 2025, abr y ago 2026). **Bloqueado por la consulta de ética** | `docs/datos_reales/` |
 | 6 | Etiquetado manual (2 anotadores) + Kappa | ❌ | 🟡 Guía v1.0 y muestra definida (600 movimientos, 30 por persona); guía por actualizar a la taxonomía v1.1; anotadores por confirmar | `docs/datos_reales/` |
 | 7 | Entrenamiento de 3 clasificadores + TSTR | ❌ | ❌ No empezado | — |
-| 01B | Reevaluación del pipeline de Pancholi | ❌ | 🔴 Notebook diseñado (Chat 01B); **el pipeline nunca se ha ejecutado**. Sostiene la motivación empírica y la comparación de la hipótesis | Chat 01B de claude.ai; `external/` vacío |
+| 01B | Reevaluación del pipeline de Pancholi | ❌ | 🔴 Notebook diseñado (WP5); **el pipeline nunca se ha ejecutado**. Sostiene la motivación empírica y la comparación de la hipótesis | WP5; `external/` vacío |
 | — | Redacción de la tesis | ❌ | ❌ No empezada (el capítulo de datos ya tiene insumos) | — |
 
 ---
@@ -64,7 +64,7 @@ Todos quedan resueltos por **reconstrucción**, no por parche: el análisis viej
 | Distribuciones para priors | 16 tablas de Bogotá urbano con FEX, con informe y manifiesto | `outputs/distribuciones/` |
 | Investigación de anomalías | Serie mensual de estrato, escaneo de julio y marzo, sensibilidades | `outputs/julio/`, `geih_sensibilidad_*.csv` |
 | Contrato de trabajo | Reglas metodológicas permanentes del proyecto | `CLAUDE.md` (v4) |
-| Bitácora | Registro de lo hecho por sesión | `docs/bitacora.md` |
+| Bitácora | Registro fechado de lo hecho, por paquete de trabajo | `docs/bitacora.md` |
 | Historial | Commits `081bf43` → `d221c5d` → `2aebb9e` en `main` | GitHub privado |
 
 ---
@@ -80,10 +80,10 @@ Todos quedan resueltos por **reconstrucción**, no por parche: el análisis viej
 | Llave de hogar en ENPH = `DIRECTORIO` | La llave de GEIH enlaza solo el 8,72 % de los registros de gasto urbano | `docs/fuentes_datos.md` §4 |
 | **ENPH aporta ingreso (`ICGU`) y gasto; GEIH aporta estructura demográfica y laboral** | `INGLABO` es ingreso laboral individual y sus fronteras son inestables por amontonamiento | `CLAUDE.md` |
 | Estrato agrupado en 3 (1-2, 3-4, 5-6), **quintiles de ingreso completos** | 6 × 5 dejaba 12 de 30 celdas con < 30 hogares; la hipótesis de la tesis incorpora las proporciones de gasto por quintil observadas en Colombia, así que la calibración por quintil es central | `CLAUDE.md` |
-| Celdas ralas → encogimiento jerárquico hacia urbano nacional | Quedan 4 de 15 celdas ralas en Bogotá (estrato 5-6 en Q1–Q4); urbano nacional no tiene ninguna | `CLAUDE.md`; umbral a fijar en Chat 05 |
+| Celdas ralas → encogimiento jerárquico hacia urbano nacional | Quedan 4 de 15 celdas ralas en Bogotá (estrato 5-6 en Q1–Q4); urbano nacional no tiene ninguna | `CLAUDE.md`; umbral a fijar en WP3 |
 | **Se usan los 12 meses de GEIH 2025** | Sin marzo o sin julio, estrato y formalidad se mueven < 1 p.p.; lo que supera 1 p.p. es un efecto de frontera de `INGLABO` | `docs/bitacora.md` |
 | Formalidad: componentes separados, sin índice propio | Un indicador compuesto inventado no es defendible; si hace falta uno, se usa la definición oficial del DANE | `CLAUDE.md` |
-| **D15 — el generador emite extractos sintéticos, con capa interna de gasto del hogar** (Sara, 22 sep) | La pregunta de investigación es clasificar transacciones reales de usuarios, que son filas de extracto. La capa interna simula el gasto completo calibrado con ENPH; se emiten solo los registros que vería un banco o billetera, y el efectivo sale como retiros periódicos. Implica: (1) población = hogares bancarizados, reponderando priors con `P5222S*` de GEIH por estrato; (2) la hipótesis H-P3 sobre Pancholi se formula en términos de registros de extracto, y se verifica al ejecutarlo; (2b) tenencia de productos financieros calculada: 93,47 % de hogares de Bogotá con al menos uno (9,37 % sin ninguno en estrato bajo, 4,54 % medio, 0,27 % alto), `outputs/distribuciones/geih_bancarizacion_x_estrato.csv`. Tener un producto no implica usarlo para gastar: un hogar con cuenta de ahorros sin movimientos produce un extracto casi vacío (supuesto a declarar); (3) supuestos declarados de cadencia de retiros y participación de medios digitales (Banrep 2024) | `docs/protocolo_tecnico.md` §5 |
+| **D15 — el generador emite extractos sintéticos, con capa interna de gasto del hogar** (22 sep) | La pregunta de investigación es clasificar transacciones reales de usuarios, que son filas de extracto. La capa interna simula el gasto completo calibrado con ENPH; se emiten solo los registros que vería un banco o billetera, y el efectivo sale como retiros periódicos. Implica: (1) población = hogares bancarizados, reponderando priors con `P5222S*` de GEIH por estrato; (2) la hipótesis H-P3 sobre Pancholi se formula en términos de registros de extracto, y se verifica al ejecutarlo; (2b) tenencia de productos financieros calculada: 93,47 % de hogares de Bogotá con al menos uno (9,37 % sin ninguno en estrato bajo, 4,54 % medio, 0,27 % alto), `outputs/distribuciones/geih_bancarizacion_x_estrato.csv`. Tener un producto no implica usarlo para gastar: un hogar con cuenta de ahorros sin movimientos produce un extracto casi vacío (supuesto a declarar); (3) supuestos declarados de cadencia de retiros y participación de medios digitales (Banrep 2024) | `docs/protocolo_tecnico.md` §5 |
 | **Los datos reales solo evalúan; nunca calibran el generador** | Si los mismos extractos calibran y evalúan, el TSTR queda contaminado. El generador se calibra solo con ENPH y GEIH | `docs/datos_reales/04_diseno_muestra_y_recoleccion_v1.1.md` |
 | Proporciones descriptivas sobre quienes responden; no respuesta declarada aparte, sin imputar | Evita el error del 73,1 % (§6) | `CLAUDE.md` |
 | No se reportan intervalos de confianza sobre cifras DANE | Los archivos públicos no traen segmento ni UPM | `CLAUDE.md` |
@@ -132,7 +132,7 @@ Esta matriz es el insumo con el que el generador condiciona el medio de pago a l
 | «El 25,5 % sin dato es probablemente efectivo no declarado» | Supuesto sin sustento; la no respuesta no se imputa |
 | «Análisis de todos los meses de la GEIH» | Cubría solo enero |
 
-**Afirmaciones sobre el pipeline de Pancholi: sin respaldo de ejecución (pasan a hipótesis del Chat 01B)**
+**Afirmaciones sobre el pipeline de Pancholi: sin respaldo de ejecución (pasan a hipótesis de WP5)**
 
 | Afirmación del informe | Estado |
 |---|---|
@@ -165,22 +165,22 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 
 | # | Pendiente | Bloquea | Responsable | Cuándo |
 |---|---|---|---|---|
-| P1 | **Enviar el correo a la directora** (avance + consulta de ética + punto de control 25 sep) | Relación con la directora; ética | Sara | Lun 21 sep |
-| P2 | **Confirmar si el programa exige aval de comité de ética** | Toda la recolección | Sara / directora | Esta semana |
-| P3 | ~~Ajustar el paquete del Chat 02~~ ✅ v1.1 en `docs/datos_reales/` (20 sep). Falta: contactos, canal seguro de envío, script de anonimización | Pedir el primer extracto | Sara + Code | Mar 22 – mié 23 |
-| P4 | Confirmar los **2 anotadores** | Kappa | Sara | Esta semana |
-| P5 | **Documento técnico del protocolo** (Chat 04) | Actividad 1 del cronograma | Code + revisión de Sara | Esta semana |
-| P6 | **Módulo de priors** (Chat 05): umbral de soporte y método de encogimiento | Generador | Code | Mar 22 – mié 23 |
-| P7 | **Generador por reglas** (Chat 06) | CTGAN | Code | Jue 24 – vie 25 |
-| P8 | **Ejecutar por primera vez el pipeline de Pancholi** (Chat 01B): conseguir el código, clonarlo en `external/`, ejecutar y contrastar H-P1 a H-P3 | **Motivación empírica y comparación de la hipótesis** | Sara + Code | **Adelantado: esta semana, antes del 25** |
-| P9 | Consulta al DANE: control de cambios 2501–2512 | L3 | Sara | Esta semana (bajo costo) |
-| P12 | **D15 — medios observables:** marcar en la taxonomía v1.1 qué valores de `medio_pago` aparecen en extractos (efectivo y fiado solo existen en la capa interna) | Taxonomía, generador | Chat 03 | Antes del 28 sep |
-| P13 | **D15 — categorías operativas a emitir, con fuente o supuesto:** `ingreso` (monto desde `ICGU`; cadencia por supuesto), `transferencias_p2p` (prevalencia de dinero recibido de otros hogares: familia `P7510*` de ENPH, por verificar), `movimiento_propio` (sin fuente: supuesto), `retiro_efectivo` (desde el gasto en efectivo de la capa interna; PD8) | Chat 06 | Code | Jue 24 |
-| P14 | **D15 — qué entrena el CTGAN:** los registros emitidos (extracto), no la capa interna. Registrar en el protocolo | Chat 07 | Code | Con el Chat 06 |
-| P15 | **D15 — cuenta principal vs. consentimiento:** el consentimiento admite dos cuentas (banco + billetera) y el generador supone una. Decidir si el generador emite ambas o si el TSTR se evalúa por cuenta | Chat 06 y TSTR | Sara | Antes del 24 |
-| P16 | **D15 — redacción de la hipótesis:** dice «la distribución real de medios de pago según la ENPH». Con D15, ENPH actúa en la capa interna y la mezcla observable en extractos requiere Banrep 2024. Ajustar la redacción con la directora | Tesis (Chat 09) | Sara + directora | Punto de control del 25 |
-| P10 | Congelar taxonomía v1.1 tras ver ~50 descripciones reales | Anotación | Chat 03 | Cuando lleguen extractos |
-| P11 | Pasar los entregables del Chat 02 y 01B al repo (`docs/`) | Trazabilidad | Sara | Lun 21 |
+| P1 | **Enviar el correo a la directora** (avance + consulta de ética + punto de control 25 sep) | Relación con la directora; ética | Autora | Lun 21 sep |
+| P2 | **Confirmar si el programa exige aval de comité de ética** | Toda la recolección | Autora / directora | Esta semana |
+| P3 | ~~Ajustar el paquete de WP4~~ ✅ v1.1 en `docs/datos_reales/` (20 sep). Falta: contactos, canal seguro de envío, script de anonimización | Pedir el primer extracto | Autora | Mar 22 – mié 23 |
+| P4 | Confirmar los **2 anotadores** | Kappa | Autora | Esta semana |
+| P5 | **Documento técnico del protocolo** (WP0) | Actividad 1 del cronograma | Autora | Esta semana |
+| P6 | **Módulo de priors** (WP3): umbral de soporte y método de encogimiento | Generador | Autora | Mar 22 – mié 23 |
+| P7 | **Generador por reglas** (WP6) | CTGAN | Autora | Jue 24 – vie 25 |
+| P8 | **Ejecutar por primera vez el pipeline de Pancholi** (WP5): conseguir el código, clonarlo en `external/`, ejecutar y contrastar H-P1 a H-P3 | **Motivación empírica y comparación de la hipótesis** | Autora | **Adelantado: esta semana, antes del 25** |
+| P9 | Consulta al DANE: control de cambios 2501–2512 | L3 | Autora | Esta semana (bajo costo) |
+| P12 | **D15 — medios observables:** marcar en la taxonomía v1.1 qué valores de `medio_pago` aparecen en extractos (efectivo y fiado solo existen en la capa interna) | Taxonomía, generador | WP2 | Antes del 28 sep |
+| P13 | **D15 — categorías operativas a emitir, con fuente o supuesto:** `ingreso` (monto desde `ICGU`; cadencia por supuesto), `transferencias_p2p` (prevalencia de dinero recibido de otros hogares: familia `P7510*` de ENPH, por verificar), `movimiento_propio` (sin fuente: supuesto), `retiro_efectivo` (desde el gasto en efectivo de la capa interna; PD8) | WP6 | Autora | Jue 24 |
+| P14 | **D15 — qué entrena el CTGAN:** los registros emitidos (extracto), no la capa interna. Registrar en el protocolo | WP7 | Autora | Con WP6 |
+| P15 | **D15 — cuenta principal vs. consentimiento:** el consentimiento admite dos cuentas (banco + billetera) y el generador supone una. Decidir si el generador emite ambas o si el TSTR se evalúa por cuenta | WP6 y TSTR | Autora | Antes del 24 |
+| P16 | **D15 — redacción de la hipótesis:** dice «la distribución real de medios de pago según la ENPH». Con D15, ENPH actúa en la capa interna y la mezcla observable en extractos requiere Banrep 2024. Ajustar la redacción con la directora | Tesis | Autora + directora | Punto de control del 25 |
+| P10 | Congelar taxonomía v1.1 tras ver ~50 descripciones reales | Anotación | WP2 | Cuando lleguen extractos |
+| P11 | Pasar los entregables de WP4 y WP5 al repo (`docs/`) | Trazabilidad | Autora | Lun 21 |
 
 ---
 
@@ -188,7 +188,7 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 
 | Riesgo | Estado | Mitigación |
 |---|---|---|
-| R1 — Datos reales (ruta crítica humana) | **Baja parcialmente**: hay 20 voluntarios. Sube el riesgo legal y de volumen | Paquete del Chat 02 ajustado antes de recibir el primer extracto; anotar una muestra, no todo |
+| R1 — Datos reales (ruta crítica humana) | **Baja parcialmente**: hay 20 voluntarios. Sube el riesgo legal y de volumen | Paquete de WP4 ajustado antes de recibir el primer extracto; anotar una muestra, no todo |
 | R2 — Base de datos inválida | ✅ **Cerrado** | Reconstrucción verificada |
 | R3 — Cómputo (GPU para BETO, API de Groq) | Sin cambios | Colab para BETO con `requirements.txt` y semillas; API de Groq por confirmar |
 | R4 — Sobrepromesa a la directora | **Activo**: el avance del 18 no se envió | Correo del lunes con evidencia y punto de control del 25 |
@@ -205,24 +205,24 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 
 ## 10. Plan ajustado 21 sep → 15 oct
 
-**Principio:** dos tracks en paralelo. El Track A (software) lo ejecuta Code sobre el repo; el Track B (datos reales) depende de personas y no se puede acelerar.
+**Principio:** dos tracks en paralelo. El Track A (software) se ejecuta sobre el repo; el Track B (datos reales) depende de personas y no se puede acelerar.
 
 ### Semana 1 — lun 21 a dom 27 sep · *pipeline sintético hasta reglas*
 
 | Día | Track A (software) | Track B (datos reales) |
 |---|---|---|
-| Lun 21 | Documento técnico del protocolo (Chat 04) | **Enviar correo a la directora.** Ajustar paquete Chat 02. Consulta al DANE |
-| Mar 22 | Módulo de priors (Chat 05) | Consentimiento final; contactar a los 20 voluntarios |
+| Lun 21 | Documento técnico del protocolo (WP0) | **Enviar correo a la directora.** Ajustar paquete WP4. Consulta al DANE |
+| Mar 22 | Módulo de priors (WP3) | Consentimiento final; contactar a los 20 voluntarios |
 | Mié 23 | Priors: pruebas de que reproducen las marginales | Primeros extractos; anonimización |
-| Jue 24 | Generador por reglas (Chat 06) | Recolección |
+| Jue 24 | Generador por reglas (WP6) | Recolección |
 | **Vie 25** | Muestra sintética por reglas · **punto de control con la directora** | Recolección |
-| Sáb 26 – dom 27 | Pancholi (Chat 01B), si no se alcanzó antes | Revisar ~50 descripciones reales para la taxonomía |
+| Sáb 26 – dom 27 | Pancholi (WP5), si no se alcanzó antes | Revisar ~50 descripciones reales para la taxonomía |
 
 **Criterio del punto de control:** si el 25 no hay muestra sintética por reglas funcionando, se revisa el alcance con la directora en vez de comprimir el trabajo.
 
 ### Semana 2 — lun 28 sep a dom 4 oct · *CTGAN y datos reales*
-- **A:** CTGAN (Chat 07) → dataset sintético v1 ≥ 5.000 transacciones → métricas de fidelidad.
-- **B:** congelar taxonomía v1.1 (Chat 03) → cerrar recolección → muestra a anotar → **doble anotación** → Kappa.
+- **A:** CTGAN (WP7) → dataset sintético v1 ≥ 5.000 transacciones → métricas de fidelidad.
+- **B:** congelar taxonomía v1.1 (WP2) → cerrar recolección → muestra a anotar → **doble anotación** → Kappa.
 - **Redacción:** capítulo de datos y metodología, con §4, §5 y §7 de este plan como base.
 
 ### Semana 3 — lun 5 a dom 11 oct · *clasificadores y TSTR*
@@ -238,11 +238,11 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 
 | Opción | Esfuerzo | Valor para la directora | Requisito |
 |---|---|---|---|
-| **A. Documento técnico del protocolo** (Chat 04), borrador | 1–2 h de Code | Alto: es la actividad 1 del cronograma y el mejor anexo del correo | Ninguno: todas las decisiones están en `CLAUDE.md` |
-| **B. Ajustar el paquete del Chat 02** | 1 h conmigo | Alto: demuestra que la recolección está lista para arrancar | Recuperar los 4 documentos del Chat 02 de claude.ai y responder formato y periodo de los extractos |
-| C. Módulo de priors (Chat 05) | 2–3 h de Code | Medio-alto | Fijar umbral de soporte |
+| **A. Documento técnico del protocolo** (WP0), borrador | 1–2 h | Alto: es la actividad 1 del cronograma y el mejor anexo del correo | Ninguno: todas las decisiones están en `CLAUDE.md` |
+| **B. Ajustar el paquete de WP4** | 1 h | Alto: demuestra que la recolección está lista para arrancar | Recuperar los 4 documentos de WP4 y responder formato y periodo de los extractos |
+| C. Módulo de priors (WP3) | 2–3 h | Medio-alto | Fijar umbral de soporte |
 
-**Recomendación:** A y B en paralelo esta noche (A corre en Code mientras B se trabaja en el chat). C mañana.
+**Recomendación:** A y B en paralelo esta noche. C al día siguiente.
 
 ---
 
@@ -261,7 +261,7 @@ Todo se corre desde Git Bash en `C:\tesis-sdg`, con el entorno activado (`source
 
 **Cómo leer los resultados sin correr nada:** `outputs/distribuciones/distribuciones_priors.md` (todas las tablas de §5, con fuente, dominio, unidad y peso en cada una) y `docs/fuentes_datos.md` §1 (tabla de riesgos y pendientes de los datos).
 
-**Verificación independiente (recomendada antes de entregar cifras a la tesis):** abrir una sesión nueva de Claude Code y pedirle que recalcule desde cero, sin leer `tools/` ni `outputs/`, tres cifras de §5 (por ejemplo, el 97,0 % de efectivo, la frontera de Q1 y el % de estrato bajo en GEIH). Si coinciden, la cifra está verificada por un camino independiente.
+**Verificación independiente (recomendada antes de entregar cifras a la tesis):** recalcular desde cero, en un entorno limpio y sin leer `tools/` ni `outputs/`, tres cifras de §5 (por ejemplo, el 97,0 % de efectivo, la frontera de Q1 y el % de estrato bajo en GEIH). Si coinciden, la cifra está verificada por un camino independiente.
 
 ---
 
@@ -276,7 +276,7 @@ Todo se corre desde Git Bash en `C:\tesis-sdg`, con el entorno activado (`source
 - [ ] Correo a la directora enviado
 - [ ] Consulta de comité de ética resuelta
 - [ ] Documento técnico del protocolo
-- [x] Paquete Chat 02 ajustado (consentimiento, anonimización, muestra) — v1.1
+- [x] Paquete de WP4 ajustado (consentimiento, anonimización, muestra) — v1.1
 - [ ] Guía de anotación actualizada a la taxonomía v1.1
 - [ ] Taxonomía v1.1 congelada
 - [ ] Módulo de priors (Etapa 1)
@@ -290,21 +290,20 @@ Todo se corre desde Git Bash en `C:\tesis-sdg`, con el entorno activado (`source
 
 ---
 
-## Anexo — Organización del trabajo (uso interno)
+## Anexo — Estado por paquete de trabajo (WP)
 
-| Superficie | Rol |
+El trabajo se organiza en paquetes WP0–WP8 (entorno y datos, perfilado DANE, taxonomía, priors,
+datos reales, pipeline de referencia, generador, CTGAN, evaluación TSTR). El repositorio de
+código y documentos se respalda en GitHub privado; los datos no se suben.
+
+| WP | Estado |
 |---|---|
-| **Claude Code en VSCode** sobre `C:\tesis-sdg` | Todo lo que produce código o cifras. Lee `CLAUDE.md` en cada sesión. Una tarea por sesión; commit y push al cerrar |
-| **Este proyecto de claude.ai** | Seguimiento (Chat 00), decisiones metodológicas, protocolo de datos reales (Chat 02), taxonomía (Chat 03), redacción (Chat 09), correos |
-| **GitHub privado** | Respaldo del código y los documentos; los datos no se suben |
+| WP0 — Entorno y seguimiento | Este documento (v2) |
+| WP1 — Perfilado DANE | ✅ Cerrado (`2aebb9e`) |
+| WP2 — Taxonomía | Pendientes en `docs/taxonomia/pendientes_v1.1.md` |
+| WP3 — Priors | Insumos listos; módulo sin escribir |
+| WP4 — Datos reales | Paquete redactado el 15 sep; por ajustar |
+| WP5 — Pipeline de referencia (Pancholi) | Notebook diseñado, sin ejecutar |
+| WP6 — Generador · WP7 — CTGAN · WP8 — Evaluación TSTR | Por hacer |
 
-| Chat | Estado | Superficie |
-|---|---|---|
-| 00 Plan maestro | Este documento (v2) | claude.ai |
-| 01 Validación DANE | ✅ Cerrado (`2aebb9e`) | Code |
-| 01B Pancholi | Notebook diseñado, sin ejecutar | Code |
-| 02 Datos reales | Paquete redactado el 15 sep; por ajustar | claude.ai |
-| 03 Taxonomía | Pendientes en `docs/taxonomia/pendientes_v1.1.md` | claude.ai → Code |
-| 04 Protocolo | Por redactar | Code |
-| 05 Priors · 06 Reglas · 07 CTGAN · 08 TSTR | Por hacer | Code |
-| 09 Redacción | Por empezar | claude.ai |
+La equivalencia completa entre los chats de trabajo originales y estos WP queda en `docs/bitacora.md`.

@@ -824,7 +824,7 @@ def construir_seccion_bogota(bog: dict) -> str:
         ["ENPH 2016-2017", "`REGION` (idéntico a `DOMINIO` para Bogotá)", "texto `" + "`, `".join(e["region_valores"]) + "`",
          "El DDI lista las regiones en el texto de la pregunta («" + ("…BOGOTÁ…" if e["ddi_region_qstn_menciona_bogota"] else "sin Bogotá") + "»). "
          + ("`REGION` y `DOMINIO` seleccionan exactamente los mismos hogares." if e["region_igual_dominio"] else "`REGION` y `DOMINIO` NO coinciden."), "TEXTO, sin código"]]))
-    A(f"\n**Lo que NO pude confirmar.** Los {n['n_cuadernillos']} cuadernillos de ENPH mencionan «Bogotá» {n['bogota_en_cuadernillos']} veces (son formularios en blanco, sin listas de códigos de dominio), así que no sirven de respaldo para ese valor. "
+    A(f"\n**Lo que no se pudo confirmar.** Los {n['n_cuadernillos']} cuadernillos de ENPH mencionan «Bogotá» {n['bogota_en_cuadernillos']} veces (son formularios en blanco, sin listas de códigos de dominio), así que no sirven de respaldo para ese valor. "
       f"Los `.SAV` de enero de GEIH traen {cod['sav_etiquetas_valor']['AREA']} etiquetas de valor para `AREA`, {cod['sav_etiquetas_valor']['DPTO']} para `DPTO` y {cod['sav_etiquetas_valor']['CLASE']} para `CLASE`; "
       "la fuente de los códigos de GEIH es el diccionario (y el DDI), no el SAV.\n")
     A("**Precisión en GEIH: `AREA` y `DPTO` no son lo mismo.**\n")
@@ -866,7 +866,7 @@ def construir_seccion_bogota(bog: dict) -> str:
     A(_tabla_cruce(cg, est))
     A(f"\n**Celdas con menos de 30 observaciones: {fmt_c(cg)}** (vacías: {cg['celdas_vacias']}; mínimo: {cg['minimo']}). "
       f"Si se usara **un solo mes** (cruce mensual): entre {g['cruce_un_mes']['celdas_menos_30_min']} y {g['cruce_un_mes']['max']} de {g['cruce_un_mes']['celdas']} celdas con menos de 30 (mediana {fn(g['cruce_un_mes']['mediana'])}).\n")
-    A("**Decisiones mías que conviene que confirmes:** (1) quintiles calculados dentro de Bogotá, no sobre el total nacional; (2) ingreso del hogar completo (`ICGU`) en ENPH pero solo ingreso laboral individual en GEIH, porque en los 8 módulos GEIH no construí un ingreso del hogar; "
+    A("**Decisiones que conviene confirmar:** (1) quintiles calculados dentro de Bogotá, no sobre el total nacional; (2) ingreso del hogar completo (`ICGU`) en ENPH pero solo ingreso laboral individual en GEIH, porque en los 8 módulos GEIH no se construyó un ingreso del hogar; "
       "(3) estratos válidos = 1 a 6 (se excluyen `0`, `9` y vacío, que no son estratos). **Códigos de estrato VERIFICADOS (20 sep 2026):** ENPH `P8520S1A1` según " + cod_sdg.ESTRATO_ENPH_FUENTE
       + " (el DDI trae " + str(e["ddi_estrato_categorias"]) + " categorías y el Cuadernillo 1 solo dice «Estrato para tarifa»: no son fuente de códigos); GEIH `P4030S1A1` según " + cod_sdg.ESTRATO_GEIH_FUENTE
       + ". Cada esquema se mapea solo con su fuente.\n")
@@ -995,12 +995,12 @@ def construir_seccion_rotacion(bog: dict) -> str:
     fx = bog["fex_personas_M"]
     A("- **Apilar los 12 meses:** no hay duplicados que eliminar y no corresponde deduplicar por `DIRECTORIO` (los extra son hogares de la misma vivienda). "
       "No se detectó nada que lo contradiga: cada fila-hogar puede tratarse como un hogar distinto, con las salvedades de más abajo.")
-    A(f"- **`FEX_C18 / 12`:** la suma mensual de `FEX_C18` (personas) va de {fn(fx[0], 3)} a {fn(fx[1], 3)} millones: es casi constante y crece de mes a mes, coherente con la calibración mensual que menciona la Metodología (no verifiqué cómo se construye `FEX_C18`). "
+    A(f"- **`FEX_C18 / 12`:** la suma mensual de `FEX_C18` (personas) va de {fn(fx[0], 3)} a {fn(fx[1], 3)} millones: es casi constante y crece de mes a mes, coherente con la calibración mensual que menciona la Metodología (no se verificó cómo se construye `FEX_C18`). "
       "Dividir entre 12 da el promedio anual de 12 cortes mensuales, y esa aritmética no depende de que haya rotación. En principio, si hubiera hogares repetidos lo afectado sería la varianza, no el peso.")
     A(f"- **Lo que sí importa (conglomerados):** la metodología define segmentos de ~10 viviendas donde se encuestan todos los hogares, lo que induce correlación dentro del segmento. "
       f"Los archivos **no traen identificador de segmento ni de UPM** (columnas buscadas: {', '.join(rot['columnas_de_segmento']) or 'ninguna'}), así que no se pueden calcular errores estándar de diseño y los ingenuos subestiman la incertidumbre.")
     A("- **Para la partición train/test (CTGAN, TSTR):** no se detectaron hogares repetidos, así que no se espera filtración por repetición; pero las viviendas vecinas comparten características (hipótesis, no verificada). "
-      "Como sensibilidad se podría particionar por bloques de `DIRECTORIO` o por mes; la decisión es tuya.")
+      "Como sensibilidad se podría particionar por bloques de `DIRECTORIO` o por mes; queda pendiente de decidir.")
     A("- **CLAUDE.md:** la regla `FEX_C18 / 12` sigue vigente. Conviene añadir la nota «GEIH 2025 público: sin panel detectable ni identificador de segmento».\n")
     return "\n".join(L) + "\n"
 
@@ -1151,7 +1151,7 @@ def construir_md(geih, enph, prov, p75, ctrl, dic, ddig, ddie, meta, bog) -> str
     A("\n")
 
     A("## 5. Procedencia de `urbano/gastos_diarios_hogar.txt`\n")
-    A("- **Declarado por Sara Cárdenas (2026-09-20):** es una descarga fresca del DANE del 20 sep 2026 y reemplaza la copia anterior, "
+    A("- **Declarado (2026-09-20):** es una descarga fresca del DANE del 20 sep 2026 y reemplaza la copia anterior, "
       "sobre la que existía una sospecha de truncamiento. Esa declaración no se puede verificar desde los archivos; lo que sí se midió:\n")
     A(tabla(["Evidencia", "Valor"], [
         ["Zip origen", f"`{prov['zip']}` ({fn(prov['zip_bytes'])} B)"],
@@ -1226,8 +1226,8 @@ def construir_md(geih, enph, prov, p75, ctrl, dic, ddig, ddie, meta, bog) -> str
         A(f"- Diseño (Metodología general §2.2.11): «en promedio se espera encuestar mensualmente {fn(dh['capitales'])} hogares en las 32 ciudades capitales … y {fn(dh['resto'])} en el resto» "
           f"= {fn(dh['total'])} (la frase está cortada en el propio PDF). Observado: {fn(min(hs))}–{fn(max(hs))} hogares por mes, **todos los meses** por debajo de esa media.")
     A("\n**Conclusión: PENDIENTE — no se puede calificar ni de «esperado por diseño» ni de anomalía.**\n")
-    A("- Búsqueda manual con `pdftotext` (no automatizada en este script): en la Metodología general busqué diciembre, festivos, vacaciones, temporada, rotación y muestra mensual/trimestral; "
-      "en la Ficha metodológica y el Manual de Recolección 2025, diciembre, festivos, vacaciones y temporada. No encontré ninguna referencia a un tamaño de muestra distinto para diciembre "
+    A("- Búsqueda manual con `pdftotext` (no automatizada en este script): en la Metodología general se buscó diciembre, festivos, vacaciones, temporada, rotación y muestra mensual/trimestral; "
+      "en la Ficha metodológica y el Manual de Recolección 2025, diciembre, festivos, vacaciones y temporada. No se encontró ninguna referencia a un tamaño de muestra distinto para diciembre "
       "(las menciones a diciembre son históricas o de encabezado). El texto disponible da una media mensual, sin decir si varía por mes; y la frase clave está cortada en el PDF, así que la ausencia de una regla mensual no está demostrada.")
     A(f"- Lo observado es pequeño ({fn((d_p / mo['personas'] - 1) * 100, 1)} % en personas, {fn((d_h / mo['hogares'] - 1) * 100, 1)} % en hogares), más marcado en cabeceras (CLASE 1) y con menor tamaño de hogar; no falta ninguna semana ni un departamento. "
       "Podría ser variación de cobertura o de respuesta en época de fin de año, pero **eso es una hipótesis, no algo que los datos o la documentación confirmen**.")

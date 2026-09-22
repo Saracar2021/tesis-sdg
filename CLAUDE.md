@@ -5,7 +5,7 @@
 >
 > v4 — 20 sep 2026. Incorpora los hallazgos de `docs/fuentes_datos.md` (llave ENPH,
 > unidad de análisis, diciembre, comparabilidad semántica), la decisión de dominio y las
-> verificaciones del Chat 01 (`FEX_C` ENPH, códigos de `P438*`/`NC2R_CC_P6`/estrato/`P6450`, julio).
+> verificaciones de WP1 (`FEX_C` ENPH, códigos de `P438*`/`NC2R_CC_P6`/estrato/`P6450`, julio).
 
 ## Proyecto
 Diseño y validación preliminar de un protocolo de generación de datos sintéticos de
@@ -30,7 +30,7 @@ Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega fi
 - **Respaldo para celdas ralas (jerárquico).** Bogotá reduce el n. Cuando una celda
   (estrato × ingreso × categoría) no tenga soporte suficiente en Bogotá, el prior se encoge
   hacia la distribución **urbana nacional** en vez de inventar la celda. Umbral de soporte,
-  método de encogimiento y lista de celdas afectadas se declaran en el Chat 05 y quedan en
+  método de encogimiento y lista de celdas afectadas se declaran en WP3 y quedan en
   `outputs/`. Esto es una ventaja del enfoque bayesiano, no un parche: se documenta como tal.
 - Toda cifra declara su dominio explícitamente. Nunca presentar una cifra de Bogotá como
   nacional, una urbana como nacional, ni una rural como urbana.
@@ -59,9 +59,9 @@ Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega fi
   Bogotá**, no sobre el total nacional.
 
 
-## Pipeline de referencia (Pancholi et al.) — regla de evidencia (Sara, 22 sep)
-- **El pipeline de Pancholi no se ha ejecutado.** Ninguna salida suya es un resultado hasta que el
-  Chat 01B lo ejecute de forma reproducible. **No se citan** como hallazgos: la diferencia de
+## Pipeline de referencia (Pancholi et al.) — regla de evidencia (22 sep)
+- **El pipeline de Pancholi no se ha ejecutado.** Ninguna salida suya es un resultado hasta que
+  WP5 lo ejecute de forma reproducible. **No se citan** como hallazgos: la diferencia de
   USD 12 entre perfiles, los 5 perfiles, las 149 transacciones, el dominio de categorías de ocio
   (Athletic Exhibition, Skating Rink, etc.) ni el 100 % de `credit_card`. Aparecen en el informe
   de avance y en la presentación sin respaldo de ejecución.
@@ -76,7 +76,7 @@ Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega fi
   ingreso»: es que la relación ingreso–gasto que produce no corresponde a la de los hogares
   colombianos. «Insensibilidad al ingreso» no se usa en ningún documento.
 
-## Universo del generador (D15, Sara, 22 sep)
+## Universo del generador (D15, 22 sep)
 - **El universo del generador son extractos de hogares bancarizados (D15).** El generador simula
   internamente el gasto completo del hogar, calibrado con ENPH (categoría, monto, medio de pago),
   pero solo **emite** lo que un banco o billetera vería: compras con tarjeta, PSE, transferencias,
@@ -88,9 +88,9 @@ Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega fi
   Con D15, la hipótesis H-P3 sobre Pancholi se formula en términos de registros de extracto: en
   Bogotá el gasto en efectivo aparece en los extractos como retiros en cajero, transferencias a
   personas y billeteras; la hipótesis es que el pipeline de referencia no produce esa estructura.
-  Es una hipótesis del Chat 01B, no un resultado: no se afirma que el pipeline «asuma» nada sobre
+  Es una hipótesis de WP5, no un resultado: no se afirma que el pipeline «asuma» nada sobre
   el medio de pago más allá de lo que muestra el paper (Tabla 5, 4 ejemplos con tarjeta de crédito).
-  Supuestos declarados (sin resolver, Chat 06): cadencia y tamaño de los retiros, participación de
+  Supuestos declarados (sin resolver, WP6): cadencia y tamaño de los retiros, participación de
   medios digitales (Banrep 2024, ausentes en ENPH) y cuenta principal del voluntario.
   Detalle completo: `docs/protocolo_tecnico.md` §5, D15.
 - **Consecuencia para los priors:** la población que calibra el generador es la de hogares
@@ -210,7 +210,7 @@ Todo lo de esta sección va **declarado en la tesis**, no escondido.
   forma de pago principal declarada es X».
   **Códigos (según el cuadernillo, no el DDI):** 1 débito, 2 crédito, 3 efectivo, **4 «Fiado»**
   (el DDI dice «fiador»: es un error de rotulado), 5 bonos, 6 otra. Sin dato: fila explícita,
-  % sobre base con respuesta y sobre el total, sin imputar (decisión de Sara).
+  % sobre base con respuesta y sobre el total, sin imputar (decisión declarada).
   **Cifra retirada:** «73,1 %» (efectivo) — cifra del informe de avance, sin dominio declarado,
   **DESCARTADA**. Se retiró por no declarar dominio y por enunciarse como % de transacciones cuando
   es una respuesta por hogar acotada a un cuadernillo. Se conserva aquí solo como registro; no reusarla.
@@ -233,7 +233,7 @@ Todo lo de esta sección va **declarado en la tesis**, no escondido.
   como sin dato.
 - **Contrato GEIH:** `P6440` (¿tiene contrato?: 1 sí, 2 no) y `P6450` (1 Verbal, 2 Escrito,
   **9 No sabe, no informa — NO 3**), Diccionario GEIH filas 680-684.
-- **Formalidad laboral — SIN variable compuesta (decisión de Sara, 20 sep).** Los componentes
+- **Formalidad laboral — SIN variable compuesta (decisión declarada, 20 sep).** Los componentes
   (contrato, pensión `P6920`, ARL `P6990`) se reportan por separado. No se construye un indicador
   propio formal/informal; si hace falta una sola variable se usa la **definición oficial del DANE,
   citándola**.
@@ -249,7 +249,7 @@ Todo lo de esta sección va **declarado en la tesis**, no escondido.
   no prueba de cambio de instrumento). También: en `ocupados` de Bogotá el mes más extremo es
   **marzo** (sensibilidad sin marzo producida); las variables no son independientes, no leerlo como
   118 hallazgos.
-  **DECISIÓN (Sara, 20 sep 2026, CERRADA): se usan los 12 meses.** Razón: (a) estrato agrupado
+  **DECISIÓN (20 sep 2026, CERRADA): se usan los 12 meses.** Razón: (a) estrato agrupado
   (máx. 0,73 p.p. sin julio; 0,31 sin marzo) y formalidad (0,29 y 0,52 p.p.) quedan bajo el umbral
   de 1 p.p. en ambas versiones; (b) las familias de ENPH (quintil de `ICGU`, forma de pago) no dependen
   de los meses de GEIH; (c) lo único que supera 1 p.p. es `INGLABO`, con causa identificada: el
@@ -281,13 +281,14 @@ Todo lo de esta sección va **declarado en la tesis**, no escondido.
 
 ## Forma de trabajo
 - Antes de tocar datos o código: plan breve y esperar aprobación.
-- Una tarea por sesión. Al terminar: verificar los criterios de aceptación con evidencia
-  (asserts, conteos, tablas) y escribir un resumen de 5 líneas en `docs/bitacora.md`.
+- Una tarea por turno de trabajo con la herramienta. Al terminar: verificar los criterios de
+  aceptación con evidencia (asserts, conteos, tablas) y escribir un resumen de 5 líneas en
+  `docs/bitacora.md`.
 - No marcar nada como validado sin haberlo ejecutado.
 - Si un supuesto no se puede verificar con los datos a la mano, **decirlo**; no rellenar.
   Distinguir siempre «verificado» de «inferido» y de «supuesto».
-- Commits pequeños, mensaje en español: `[chat-NN] qué cambió`.
+- Commits pequeños, mensaje en español: `[WPn] qué cambió`.
 - `docs/historico/` es archivo de referencia, solo lectura. Nunca parchear ni reutilizar su
   código: el análisis se reconstruye desde cero sobre `data/raw` normalizado.
-- Los permisos bloquean la escritura en `data/raw/` de forma intencional. Escribe los scripts;
-  Sara los ejecuta. No intentes evadir el bloqueo.
+- Los permisos bloquean la escritura en `data/raw/` de forma intencional: los scripts se escriben
+  para que se ejecuten manualmente fuera de esta herramienta. No evadir el bloqueo.

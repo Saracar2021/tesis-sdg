@@ -45,12 +45,12 @@ El protocolo se organiza en cuatro etapas encadenadas:
 
 ### 1.4 Motivación empírica y el pipeline de referencia
 
-**El pipeline de Pancholi et al. no se ha ejecutado** (regla de evidencia en `CLAUDE.md`, decisión de Sara del 22 sep). En consecuencia:
+**El pipeline de Pancholi et al. no se ha ejecutado** (regla de evidencia en `CLAUDE.md`, 22 sep). En consecuencia:
 
 - **Sin respaldo, no se citan como resultado:** la diferencia de USD 12 entre perfiles de ingreso, los 5 perfiles y las 149 transacciones, el dominio de categorías de ocio (Athletic Exhibition, Special Events, Inn and Motel, Skating Rink) y el 100 % de `payment_type: credit_card`. Aparecen en el informe de avance (secciones I y III) y en la presentación (diapositivas 2 y 3) sin una ejecución que los sostenga.
 - **Citables con referencia al paper**, porque describen su diseño y no sus salidas: demografía del American Community Survey 2015-2019 de Washington D.C. por código postal; nombres de comercio de Yelp y de D.C.; simulación por reglas con gasto calibrado por ingreso y características del hogar; refinamiento con CTGAN. La Tabla 5 del paper muestra 4 transacciones de ejemplo, todas con tarjeta de crédito: es un ejemplo, no una proporción.
-- **Las tres limitaciones son hipótesis** (H-P1 ingreso, H-P2 categorías, H-P3 medio de pago) que el Chat 01B debe contrastar con un experimento reproducible. **H-P1 no es «insensibilidad al ingreso»**: el paper declara que calibra el gasto por ingreso y características del hogar, con la distribución de Estados Unidos (ACS 2015-2019 de D.C.). La hipótesis es que la relación ingreso–gasto que produce no corresponde a la de los hogares colombianos, cuya distribución del ingreso y del gasto por quintil es distinta.
-- **Qué sostiene la motivación mientras tanto:** la ausencia de conjuntos públicos de transacciones colombianas etiquetadas, y que el pipeline de referencia fue diseñado con fuentes de Estados Unidos (hecho documentado en el paper). Sobre esa base el protocolo es necesario; si además el pipeline falla en ingreso, categorías o medio de pago, lo dirá el Chat 01B.
+- **Las tres limitaciones son hipótesis** (H-P1 ingreso, H-P2 categorías, H-P3 medio de pago) que WP5 debe contrastar con un experimento reproducible. **H-P1 no es «insensibilidad al ingreso»**: el paper declara que calibra el gasto por ingreso y características del hogar, con la distribución de Estados Unidos (ACS 2015-2019 de D.C.). La hipótesis es que la relación ingreso–gasto que produce no corresponde a la de los hogares colombianos, cuya distribución del ingreso y del gasto por quintil es distinta.
+- **Qué sostiene la motivación mientras tanto:** la ausencia de conjuntos públicos de transacciones colombianas etiquetadas, y que el pipeline de referencia fue diseñado con fuentes de Estados Unidos (hecho documentado en el paper). Sobre esa base el protocolo es necesario; si además el pipeline falla en ingreso, categorías o medio de pago, lo dirá WP5.
 - La comparación del TSTR contra Pancholi (hipótesis de la tesis) **exige** ejecutarlo en cualquier caso.
 ---
 
@@ -114,7 +114,7 @@ Los 112 archivos (96 GEIH + 16 ENPH) tienen SHA-256 idéntico al del zip origina
 
 **Salidas.**
 - Distribuciones ponderadas de Bogotá urbano [`outputs/distribuciones/*.csv`, 16 tablas con informe y `manifest_distribuciones.json`] — **ya generadas**.
-- Módulo de priors (Chat 05) que las convierte en priors condicionados por celda — **PENDIENTE, sin escribir**.
+- Módulo de priors (WP3) que las convierte en priors condicionados por celda — **PENDIENTE, sin escribir**.
 
 **Variables y cifras vigentes (Bogotá urbano).**
 
@@ -144,8 +144,8 @@ Los 112 archivos (96 GEIH + 16 ENPH) tienen SHA-256 idéntico al del zip origina
 3. `P438*` y `NC2R_CC_P6` cubren categorías distintas (menos frecuentes / frecuentes); ninguno cubre todo el gasto.
 
 **PENDIENTE en esta etapa.**
-- **Umbral de soporte.** El valor «30 hogares» de `n_menor_30` es solo una marca informativa (`min_n_celda_marca` en `manifest_distribuciones.json`), **no** el umbral. Se fija en el Chat 05.
-- **Método de encogimiento** (forma funcional, hiperparámetros del prior) y lista de celdas afectadas: Chat 05; irán a `outputs/`.
+- **Umbral de soporte.** El valor «30 hogares» de `n_menor_30` es solo una marca informativa (`min_n_celda_marca` en `manifest_distribuciones.json`), **no** el umbral. Se fija en WP3.
+- **Método de encogimiento** (forma funcional, hiperparámetros del prior) y lista de celdas afectadas: WP3; irán a `outputs/`.
 - **Priors por celda para el medio de pago.** Las tablas de `P438*` y `NC2R_CC_P6` en `outputs/` son **marginales de Bogotá**; ninguna está condicionada por estrato × quintil. Falta calcularlas por celda y su respaldo urbano nacional (mismos subcapítulos son ralos: p. ej. J13 tiene 201 hogares con respuesta en todo Bogotá [`enph_p438_matriz_categoria_x_medio.csv`]).
 - **Papel de GEIH en la generación.** GEIH y ENPH no comparten unidades, así que no puede cruzarse `INGLABO`/formalidad con `ICGU`. Cómo entran concretamente estrato, posición ocupacional y formalidad de GEIH al generador (y si se usan para ajustar la composición ENPH 2016-2017 a 2025) no está decidido.
 - **Distribución de montos y frecuencias de transacción.** No hay decisión ni salida en `outputs/`.
@@ -165,15 +165,15 @@ Los 112 archivos (96 GEIH + 16 ENPH) tienen SHA-256 idéntico al del zip origina
 - El generador **condiciona el medio de pago a la categoría de gasto** usando la matriz `P438*` [`enph_p438_matriz_categoria_x_medio.csv`]. Motivo: el medio de pago varía por categoría (crédito de 0,00 % en L11 a 28,01 % en G14).
 - Para los gastos frecuentes, la única evidencia ENPH es `NC2R_CC_P6`, que es **una respuesta por hogar**, no por categoría.
 - Para las categorías sin medio de pago observado **no se toma prestado de otro subcapítulo sin declararlo**: J14 (24,16 % de los hogares con registros) y K11 (13,80 %) no tienen columna `P438` [`enph_p438_gaps.csv`; 31,92 % de los hogares tiene al menos un registro en uno de los dos, `distribuciones_priors.md`].
-- **D15 (Sara, 22 sep 2026, cerrada): el generador emite extractos sintéticos.** Internamente simula el gasto completo del hogar, calibrado con ENPH (categoría, monto, medio de pago); solo **emite** lo que registraría un banco o billetera (compras con tarjeta, PSE, transferencias, billeteras, ingresos y retiros en cajero). Las compras en efectivo se acumulan en la capa interna y salen como retiros periódicos. Detalle, justificación y supuestos declarados en §5, D15.
+- **D15 (22 sep 2026, cerrada): el generador emite extractos sintéticos.** Internamente simula el gasto completo del hogar, calibrado con ENPH (categoría, monto, medio de pago); solo **emite** lo que registraría un banco o billetera (compras con tarjeta, PSE, transferencias, billeteras, ingresos y retiros en cajero). Las compras en efectivo se acumulan en la capa interna y salen como retiros periódicos. Detalle, justificación y supuestos declarados en §5, D15.
 
 **Taxonomía.** Existe la v1 (`docs/taxonomia/taxonomia_gastos_colombia_v1.md/.json`), generada con ayuda de IA y con correcciones factuales identificadas (`docs/taxonomia/pendientes_v1.1.md`). Se congela v1.1 solo cuando (1) esté cerrada la verificación de `P438*` y (2) se hayan revisado ≥ 50 descripciones reales de extractos. Ver §8 sobre el estado de esas correcciones.
 
 **PENDIENTE en esta etapa.**
 - **Esquema de la transacción** (campos, tipos, granularidad temporal). Los documentos fuente solo fijan que existen categoría, medio de pago y nombre de comercio.
 - **Fuente de los nombres de comercio** y su mapeo a categorías.
-- **Fuente para medios digitales** (billeteras, transferencias): ENPH 2016-2017 no los trae (L4). **Supuesto declarado (D15, §5):** se usará el Banco de la República (Banrep 2024) como fuente de participación de medios digitales. Las cifras concretas y su incorporación al generador quedan **PENDIENTES** (Chat 06).
-- **Reglas de generación** (estructura, jerarquía de condicionamiento): las define el Chat 06. Con D15 cerrada, deben implementar la capa interna de gasto del hogar (calibrada con ENPH) y la capa de emisión de extracto (bancarizada); ver §5, D15.
+- **Fuente para medios digitales** (billeteras, transferencias): ENPH 2016-2017 no los trae (L4). **Supuesto declarado (D15, §5):** se usará el Banco de la República (Banrep 2024) como fuente de participación de medios digitales. Las cifras concretas y su incorporación al generador quedan **PENDIENTES** (WP6).
+- **Reglas de generación** (estructura, jerarquía de condicionamiento): las define WP6. Con D15 cerrada, deben implementar la capa interna de gasto del hogar (calibrada con ENPH) y la capa de emisión de extracto (bancarizada); ver §5, D15.
 
 ---
 
@@ -264,7 +264,7 @@ Cada tabla declara unidad y dominio. GEIH: 7 módulos son persona y `datos_hogar
 | D4 | **ENPH aporta ingreso y gasto; GEIH, estructura demográfica y laboral; `INGLABO` solo descriptivo** | `INGLABO` es ingreso laboral individual, no del hogar; sus fronteras son inestables por amontonamiento en valores redondos (hasta 5,92 % del peso en un solo valor; `ICGU` máx. 0,09 %) | `outputs/distribuciones/fronteras_amontonamiento.csv` |
 | D5 | **Estrato agrupado en 3 (1-2, 3-4, 5-6)** | 6 × 5 dejaba 12 de 30 celdas con < 30 hogares en ENPH Bogotá; estrato e ingreso están muy correlacionados, por lo que agrupar pierde poca información | `docs/fuentes_datos.md` §10.3 A y C; `enph_estrato_x_quintil.csv` |
 | D6 | **Se conservan los 5 quintiles de `ICGU`** | La hipótesis de la tesis incorpora las proporciones de gasto por quintil de ingreso observadas en Colombia (informe de avance, §IV.B): calibrar por quintil con datos colombianos es parte central del protocolo. No se justifica con una falla atribuida a Pancholi (§1.4) | `CLAUDE.md` |
-| D7 | **Celdas ralas → encogimiento hacia urbano nacional** | Bogotá reduce el n; el respaldo evita inventar celdas | `CLAUDE.md`; umbral y método **PENDIENTES** (Chat 05) |
+| D7 | **Celdas ralas → encogimiento hacia urbano nacional** | Bogotá reduce el n; el respaldo evita inventar celdas | `CLAUDE.md`; umbral y método **PENDIENTES** (WP3) |
 | D8 | **12 meses de GEIH (incluye diciembre, marzo y julio)** con sensibilidades | Ver detalle abajo | `outputs/distribuciones/geih_sensibilidad_{diciembre,julio,marzo}.csv`; `docs/bitacora.md` |
 | D9 | **Medio de pago por categoría, no un % global** | El medio varía por categoría; un porcentaje global de efectivo esconde esa estructura | `enph_p438_matriz_categoria_x_medio.csv` |
 | D10 | **Formalidad: componentes por separado, sin indicador propio** | Un compuesto inventado no es defendible; si hace falta una sola variable se usa la definición oficial del DANE, citándola | `CLAUDE.md` (decisión del 20 sep) |
@@ -272,27 +272,27 @@ Cada tabla declara unidad y dominio. GEIH: 7 módulos son persona y `datos_hogar
 | D12 | **Sin intervalos de confianza sobre cifras DANE** | No hay segmento ni UPM en los archivos públicos | L1 |
 | D13 | **Reconstrucción desde cero de la base empírica** | El análisis anterior tenía cifras a mano, sin factores de expansión y con un solo mes; queda en `docs/historico/` como referencia de solo lectura | `docs/plan_maestro.md` §2 |
 | D14 | **Los datos reales solo evalúan; nunca calibran el generador** | Si los mismos extractos calibran y evalúan, el TSTR queda contaminado; el generador se calibra solo con ENPH y GEIH | `docs/plan_maestro.md` §4; `docs/datos_reales/04_diseno_muestra_y_recoleccion_v1.1.md` |
-| D15 | **Universo del generador: extractos sintéticos con capa interna de gasto del hogar** (Sara, 22 sep 2026, cerrada) | La pregunta de investigación es clasificar transacciones reales de usuarios, que son filas de extracto; un generador que emitiera el gasto total incluiría registros que no existen en ningún sistema real | `docs/plan_maestro.md` R10; detalle abajo |
+| D15 | **Universo del generador: extractos sintéticos con capa interna de gasto del hogar** (22 sep 2026, cerrada) | La pregunta de investigación es clasificar transacciones reales de usuarios, que son filas de extracto; un generador que emitiera el gasto total incluiría registros que no existen en ningún sistema real | `docs/plan_maestro.md` R10; detalle abajo |
 
-**Detalle de D8 (12 meses).** Decisión de Sara del 20 sep 2026, cerrada.
+**Detalle de D8 (12 meses).** Decisión del 20 sep 2026, cerrada.
 - **Diciembre** tiene −2,5 % de personas y −1,0 % de hogares frente a la mediana de los otros meses, sin explicación documental; los `FEX_C18` compensan y los totales expandidos no caen [`docs/fuentes_datos.md` §8]. Sensibilidad sin diciembre: 86 comparaciones, 4 con diferencia > 1,0 p.p., todas en grupos de `INGLABO`; el corte c1 pasa de 1.300.000 a 1.200.000 (8,33 % relativo) [`geih_sensibilidad_diciembre.csv`].
 - **Julio:** 86 comparaciones, 7 con diferencia > 1,0 p.p. [`geih_sensibilidad_julio.csv`]: 4 en `INGLABO` (mismo efecto de frontera) y 3 en la celda posición ocupacional × cotiza pensión (empleado doméstico y patrón), que son celdas pequeñas e inestables ya declaradas. **Estrato agrupado: máx. 0,73 p.p.; componentes de formalidad: máx. 0,29 p.p.** El estrato 3 de Bogotá cae a 26,04 % en julio [`outputs/julio/julio_estrato.md`]; la anomalía se repite, más fuerte, en las 23 ciudades y no es «sin dato»: es un desplazamiento 3 → 1-2.
 - **Marzo:** 2 comparaciones > 1,0 p.p., ambas en posición × pensión de «patrón» (−2,64 y +3,05 p.p.) [`geih_sensibilidad_marzo.csv`]. Estrato agrupado: máx. 0,31 p.p. La cifra de formalidad sin marzo (0,52 p.p.) proviene de `docs/bitacora.md`, no se re-verificó al redactar este documento.
 - **Por qué no se detiene el análisis:** lo único que supera 1 p.p. en los insumos de calibración es `INGLABO`, que no calibra nada (D4); las familias de ENPH (`ICGU`, forma de pago) no dependen de los meses de GEIH. Marzo y julio quedan como **anomalías declaradas**. No se investigan más las causas sin el control de cambios 2501–2512 del DANE. Las variables no son independientes: los hallazgos no se leen como 118 hallazgos.
 
-**Detalle de D15 (universo del generador).** Decisión de Sara del 22 sep 2026, cerrada. Reemplaza la antigua decisión abierta DP1 (dos opciones sin elegir); resuelve R10 (`docs/plan_maestro.md`).
+**Detalle de D15 (universo del generador).** Decisión del 22 sep 2026, cerrada. Reemplaza la antigua decisión abierta DP1 (dos opciones sin elegir); resuelve R10 (`docs/plan_maestro.md`).
 
 - **Arquitectura de dos capas.** (1) Una capa interna simula el gasto **completo** del hogar, calibrada con ENPH (categoría, monto, medio de pago; §2-§3.1). (2) Una capa de emisión filtra esa simulación y **solo saca lo que un banco o billetera registraría**: compras con tarjeta débito/crédito, PSE, transferencias, movimientos de billetera, ingresos y retiros en cajero. El gasto que la capa interna asignó a efectivo no desaparece: se acumula y sale como **retiros periódicos** en la capa de emisión.
-- **Justificación.** La pregunta de investigación del Chat 04 (Etapa 4) es clasificar **transacciones reales de usuarios**, que son filas de un extracto bancario o de billetera. La opción alternativa (emitir el gasto total del hogar, incluido el efectivo como filas de compra) entrenaría los clasificadores con registros que **no existen en ningún sistema real** (nadie ve "compró pan por $3.000 en efectivo" como una fila de extracto): el TSTR mediría un desajuste de universo, no la calidad del sintético. La capa interna evita perder la calibración de ENPH; la capa de emisión evita ese desajuste.
-- **Supuestos declarados (nuevos, sin resolver aún — Chat 06):**
+- **Justificación.** La pregunta de investigación de la Etapa 4 es clasificar **transacciones reales de usuarios**, que son filas de un extracto bancario o de billetera. La opción alternativa (emitir el gasto total del hogar, incluido el efectivo como filas de compra) entrenaría los clasificadores con registros que **no existen en ningún sistema real** (nadie ve "compró pan por $3.000 en efectivo" como una fila de extracto): el TSTR mediría un desajuste de universo, no la calidad del sintético. La capa interna evita perder la calibración de ENPH; la capa de emisión evita ese desajuste.
+- **Supuestos declarados (nuevos, sin resolver aún — WP6):**
   - **Cadencia y tamaño de los retiros** que representan el efectivo acumulado (cuántos retiros al mes, de qué monto): no hay fuente DANE para esto; se definirá como regla propia y se declarará como supuesto, no como cifra oficial.
-  - **Participación de medios digitales** (billeteras, transferencias): ENPH 2016-2017 no las mide (L4). Se usará el Banco de la República (Banrep 2024) como fuente; cifras exactas y su incorporación al generador, **PENDIENTES** (Chat 06).
+  - **Participación de medios digitales** (billeteras, transferencias): ENPH 2016-2017 no las mide (L4). Se usará el Banco de la República (Banrep 2024) como fuente; cifras exactas y su incorporación al generador, **PENDIENTES** (WP6).
   - **Cuenta principal del voluntario:** se asume que cada hogar/voluntario opera desde una sola cuenta o billetera principal a efectos de generar el extracto (simplificación declarada; no hay evidencia de cuántas cuentas usa un hogar bogotano típico).
-- **Formulación de la hipótesis H-P3 sobre Pancholi con D15.** *(Corregido el 22 sep: una versión anterior afirmaba que el paper «lista como limitación que su generador no genera efectivo» y que el pipeline «asume que todo el gasto pasa por tarjeta de crédito»; ninguna de las dos está en el paper ni sale de una ejecución.)* Con D15, la hipótesis se formula en términos de registros de extracto: en Bogotá el gasto dominante en efectivo (L7; 97,03 % de hogares lo declara como forma de pago principal en gastos frecuentes, `enph_forma_pago_nc2r.csv`) **sí aparece** en los extractos reales, pero como retiros en cajero, transferencias a personas y movimientos de billetera — no como filas de compra. Es una hipótesis sobre Pancholi (H-P3, `docs/plan_maestro.md` §6) que el Chat 01B debe contrastar en esos mismos términos: no basta con que el pipeline de referencia no tenga una categoría "efectivo"; hay que ver si su salida refleja la estructura real de retiros y transferencias. Lo único documentado es que la Tabla 5 del paper muestra 4 transacciones de ejemplo con tarjeta de crédito.
-- **Consecuencia para los priors (Chat 05, población bancarizada).** El generador ya no calibra sobre "todos los hogares de Bogotá" sino sobre **hogares bancarizados**: solo esos producen extractos. Se calculó la tenencia de productos financieros con la batería `P5222S*` de GEIH `datos_hogar` (Bogotá, 12 meses, `FEX_C18/12`; códigos verificados contra el Diccionario GEIH 2025, filas 93-104): **93,47 % de los hogares de Bogotá tiene al menos un producto financiero; 6,53 % declara «Ninguno» (P5222S9)** [`geih_bancarizacion_total.csv`]. Por estrato agrupado, el % **sin** ningún producto es 9,37 % (bajo 1-2), 4,54 % (medio 3-4) y 0,27 % (alto 5-6) [`geih_bancarizacion_x_estrato.csv`]: la bancarización sube con el estrato, como es esperable. El perfil estrato × quintil de ENPH (`enph_estrato_x_quintil.csv`) se reponderó por `P(bancarizado | estrato agrupado)` de GEIH, la única variable común entre las dos fuentes, dando `enph_estrato_x_quintil_bancarizado.csv`. **Supuesto de independencia condicional (declarado, no verificable con estas fuentes):** dentro de cada estrato agrupado, el quintil de `ICGU` es independiente de la tenencia de productos financieros — ENPH no tiene `P5222S*` y GEIH no tiene `ICGU`, así que el cruce real no se puede calcular directamente.
-- **Riesgo residual** (`docs/plan_maestro.md` R10): la validez de los supuestos de retiros y de medios digitales queda sin verificar hasta que el Chat 06 los implemente y, si llegan extractos reales, se puedan contrastar contra ellos.
+- **Formulación de la hipótesis H-P3 sobre Pancholi con D15.** *(Corregido el 22 sep: una versión anterior afirmaba que el paper «lista como limitación que su generador no genera efectivo» y que el pipeline «asume que todo el gasto pasa por tarjeta de crédito»; ninguna de las dos está en el paper ni sale de una ejecución.)* Con D15, la hipótesis se formula en términos de registros de extracto: en Bogotá el gasto dominante en efectivo (L7; 97,03 % de hogares lo declara como forma de pago principal en gastos frecuentes, `enph_forma_pago_nc2r.csv`) **sí aparece** en los extractos reales, pero como retiros en cajero, transferencias a personas y movimientos de billetera — no como filas de compra. Es una hipótesis sobre Pancholi (H-P3, `docs/plan_maestro.md` §6) que WP5 debe contrastar en esos mismos términos: no basta con que el pipeline de referencia no tenga una categoría "efectivo"; hay que ver si su salida refleja la estructura real de retiros y transferencias. Lo único documentado es que la Tabla 5 del paper muestra 4 transacciones de ejemplo con tarjeta de crédito.
+- **Consecuencia para los priors (WP3, población bancarizada).** El generador ya no calibra sobre "todos los hogares de Bogotá" sino sobre **hogares bancarizados**: solo esos producen extractos. Se calculó la tenencia de productos financieros con la batería `P5222S*` de GEIH `datos_hogar` (Bogotá, 12 meses, `FEX_C18/12`; códigos verificados contra el Diccionario GEIH 2025, filas 93-104): **93,47 % de los hogares de Bogotá tiene al menos un producto financiero; 6,53 % declara «Ninguno» (P5222S9)** [`geih_bancarizacion_total.csv`]. Por estrato agrupado, el % **sin** ningún producto es 9,37 % (bajo 1-2), 4,54 % (medio 3-4) y 0,27 % (alto 5-6) [`geih_bancarizacion_x_estrato.csv`]: la bancarización sube con el estrato, como es esperable. El perfil estrato × quintil de ENPH (`enph_estrato_x_quintil.csv`) se reponderó por `P(bancarizado | estrato agrupado)` de GEIH, la única variable común entre las dos fuentes, dando `enph_estrato_x_quintil_bancarizado.csv`. **Supuesto de independencia condicional (declarado, no verificable con estas fuentes):** dentro de cada estrato agrupado, el quintil de `ICGU` es independiente de la tenencia de productos financieros — ENPH no tiene `P5222S*` y GEIH no tiene `ICGU`, así que el cruce real no se puede calcular directamente.
+- **Riesgo residual** (`docs/plan_maestro.md` R10): la validez de los supuestos de retiros y de medios digitales queda sin verificar hasta que WP6 los implemente y, si llegan extractos reales, se puedan contrastar contra ellos.
 
-**Riesgo asociado a D9 (declarado de frente).** El prior de medio de pago es una respuesta **por hogar** («¿cuál fue el medio principal en este subcapítulo?»), y el generador emite **transacciones**. La equivalencia entre «medio principal del hogar» y «participación del medio entre transacciones» **no está demostrada** y no se asume; el generador usará la matriz como condicionante, no como frecuencia de transacciones. Cómo se traduce formalmente es PENDIENTE (Chat 05/06).
+**Riesgo asociado a D9 (declarado de frente).** El prior de medio de pago es una respuesta **por hogar** («¿cuál fue el medio principal en este subcapítulo?»), y el generador emite **transacciones**. La equivalencia entre «medio principal del hogar» y «participación del medio entre transacciones» **no está demostrada** y no se asume; el generador usará la matriz como condicionante, no como frecuencia de transacciones. Cómo se traduce formalmente es PENDIENTE (WP3/WP6).
 
 ---
 
@@ -326,7 +326,7 @@ Cada tabla declara unidad y dominio. GEIH: 7 módulos son persona y `datos_hogar
 | Etapa | Qué se evalúa | Criterio | Estado |
 |---|---|---|---|
 | **1 Priors** | Que el módulo reproduce las marginales de las distribuciones de Bogotá (§3.1) | Comparación contra `outputs/distribuciones/*.csv`; pruebas automatizadas | Tolerancia **PENDIENTE**; previsto 23 sep |
-| **1 Priors** | Encogimiento en celdas ralas | Lista de celdas afectadas y umbral declarados en `outputs/` | **PENDIENTE** (Chat 05) |
+| **1 Priors** | Encogimiento en celdas ralas | Lista de celdas afectadas y umbral declarados en `outputs/` | **PENDIENTE** (WP3) |
 | **2 Reglas** | Consistencia interna: respeta el medio de pago por categoría y la taxonomía | Muestra sintética funcionando; punto de control con la directora | Previsto 25 sep; métricas **PENDIENTES** |
 | **3 CTGAN** | Fidelidad del dataset sintético v1 (≥ 5.000 transacciones) frente a su fuente (Etapa 2) | **Métricas de fidelidad PENDIENTES**: no hay decisión de cuáles ni con qué umbral | **PENDIENTE** |
 | **4 TSTR** | Desempeño de los 3 clasificadores entrenados en sintético y evaluados en real anotado | F1 macro (con regla de soporte ≥ 10, a revisar); otras métricas **PENDIENTES** | **PENDIENTE** (semana del 5 oct) |
@@ -346,7 +346,7 @@ No hay métricas de fidelidad decididas. Los documentos fuente no las fijan. Se 
 ### 7.4 Condiciones previas de la evaluación con datos reales — PENDIENTES
 
 - **Aval del comité de ética:** no está confirmado si el programa lo exige (P2 del plan maestro). Bloquea toda la recolección.
-- **Paquete de consentimiento y anonimización** (Chat 02) por ajustar al alcance actual.
+- **Paquete de consentimiento y anonimización** (WP4) por ajustar al alcance actual.
 - **Confirmación de los 2 anotadores** (P4).
 - **Congelar la taxonomía v1.1** tras revisar ~50 descripciones reales.
 - **Si se recogerá el estrato y el ingreso de los voluntarios**, para poder contrastar la calibración por celda contra lo real: no está decidido.
@@ -357,7 +357,7 @@ No hay métricas de fidelidad decididas. Los documentos fuente no las fijan. Se 
 - `outputs/manifest.json` en cada corrida de modelo (versiones, semillas, commit, parámetros, entorno).
 - Notebooks que corran de punta a punta con «Restart & Run All».
 - Las distribuciones de Bogotá se regeneran con `tools/distribuciones_priors.py`; sin aleatoriedad [`outputs/distribuciones/manifest_distribuciones.json`].
-- Una recomendación del plan maestro §12: recalcular desde cero, en una sesión limpia y sin leer `outputs/`, tres cifras clave antes de usarlas en la tesis.
+- Una recomendación del plan maestro §12: recalcular desde cero, en un entorno limpio y sin leer `outputs/`, tres cifras clave antes de usarlas en la tesis.
 
 ### 7.6 Calendario (plan maestro §10)
 
@@ -387,7 +387,7 @@ Criterio del punto de control: si el 25 no hay muestra sintética por reglas fun
 | PD5 | Montos y frecuencias de transacción | 1–2 | Generador |
 | PD6 | Esquema de la transacción | 2 | Generador |
 | PD7 | Fuente de nombres de comercio y de medios digitales | 2 | Generador |
-| PD8 | Cadencia y tamaño de los retiros que representan el efectivo acumulado en la capa de emisión (D15, §5) | 2 | Chat 06 |
+| PD8 | Cadencia y tamaño de los retiros que representan el efectivo acumulado en la capa de emisión (D15, §5) | 2 | WP6 |
 | PD9 | Traducción de prior de hogar a probabilidad de transacción | 1–2 | Generador |
 | PD10 | Arquitectura y parámetros del CTGAN; variables de entrada | 3 | CTGAN |
 | PD11 | **Métricas de fidelidad y umbrales** | 3 | Evaluación de Etapa 3 |

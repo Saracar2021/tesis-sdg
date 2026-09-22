@@ -1,7 +1,7 @@
 # Taxonomía — correcciones pendientes para v1.1
 
 > No regenerar la taxonomía todavía. Este archivo acumula lo que hay que corregir cuando
-> se abra el Chat 03. Fecha de apertura: 20 sep 2026.
+> se aborde WP2. Fecha de apertura: 20 sep 2026.
 
 ## Condiciones para congelar v1.1
 1. ~~Cerrada la verificación de `P438*` (¿es medio de pago por subcapítulo de gasto?).~~ **Cumplida (20 sep 2026):** son 29 columnas, una por subcapítulo del Cuadernillo 3, con sus códigos verificados (T2). Gaps abiertos que **no** bloquean el congelamiento pero deben declararse: no existen `P438J14` ni `P438K11`, y la correspondencia de `P438J13` con un bloque del Cuadernillo 3 no está verificada (`outputs/distribuciones/enph_p438_gaps.csv`).
@@ -35,7 +35,7 @@ Congelar antes de (2) es congelar a ciegas: el esquema existe para anotar transa
 
 ## T5 — Afirmaciones sobre el pipeline de Pancholi (22 sep 2026)
 
-El §7 de la taxonomía v1 decía que las categorías de ocio de Washington D.C. «dominaban espuriamente el output del generador original» y que las diferencias responden a «tres fallas empíricas documentadas». El pipeline no se ha ejecutado: son hipótesis. Ya corregido en el `.md` v1 del repo; la v1.1 debe mantener esa redacción y no citar salidas de Pancholi hasta que el Chat 01B las produzca.
+El §7 de la taxonomía v1 decía que las categorías de ocio de Washington D.C. «dominaban espuriamente el output del generador original» y que las diferencias responden a «tres fallas empíricas documentadas». El pipeline no se ha ejecutado: son hipótesis. Ya corregido en el `.md` v1 del repo; la v1.1 debe mantener esa redacción y no citar salidas de Pancholi hasta que WP5 las produzca.
 
 ## T6 — Implicaciones de D15 (extractos sintéticos) para la taxonomía (22 sep 2026)
 

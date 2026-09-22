@@ -1,6 +1,8 @@
 # Protocolo de anonimización de extractos (Nequi / Daviplata / banco)
 
-**Proyecto:** Datos sintéticos de transacciones financieras — Colombia · **Chat 02 (Track B)**
+> **Versión reemplazada por v1.1; se conserva por trazabilidad.**
+
+**Proyecto:** Datos sintéticos de transacciones financieras — Colombia · **WP4 (Track B)**
 **Versión:** 1.0 · **Fecha:** 15 sep 2026
 
 Objetivo: reducir cada extracto a **tres campos por transacción** —descripción, monto, fecha— eliminando en origen todo dato personal, **antes** de que el archivo llegue a la investigadora. La regla rectora es **minimización**: si un dato no es necesario para clasificar el gasto, no se recoge.
@@ -46,7 +48,7 @@ La descripción es útil (dice *qué* se compró) pero es el campo con más ries
 
 > **Nunca** se pide acceso a la app, credenciales, ni conexión vía agregadores/API bancaria. Solo el extracto que el propio voluntario decide compartir.
 
-## 4. Esquema de salida (feeds a la anotación y al Chat 08)
+## 4. Esquema de salida (insumo para la anotación y para WP8)
 
 Un archivo por voluntario: `data/reales/crudos/<seudonimo>.csv` (p. ej. `V07.csv`), UTF-8, columnas:
 

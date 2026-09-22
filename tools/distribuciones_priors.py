@@ -1,4 +1,4 @@
-"""Distribuciones para los priors: SOLO Bogotá urbano, con factor de expansión (chat 02).
+"""Distribuciones para los priors: SOLO Bogotá urbano, con factor de expansión (WP3).
 
 Salida en outputs/distribuciones/ (CSV + distribuciones_priors.md + manifest). Toda cifra sale de código.
 Ejecutar desde la raíz:  .venv\\Scripts\\python.exe tools\\distribuciones_priors.py
@@ -27,7 +27,7 @@ from sdg.medio_pago import ESTADOS, estado_p438  # noqa: E402
 from sdg.pesos import cortes_ponderados, cruce, distribucion, fronteras, grupo_por_cortes  # noqa: E402
 
 OUT = RAIZ / "outputs" / "distribuciones"
-MIN_N_CELDA = 30          # solo para MARCAR celdas ralas; el umbral de soporte definitivo se declara en el Chat 05
+MIN_N_CELDA = 30          # solo para MARCAR celdas ralas; el umbral de soporte definitivo se declara en WP3
 UMBRAL_DIF_PP = 1.0       # sensibilidad de diciembre (CLAUDE.md)
 UMBRAL_EFECTIVO_PCT = 85.0  # umbral del resumen «efectivo > 85 %» por subcapítulo P438*
 SECCIONES: list[str] = []
@@ -156,7 +156,7 @@ def tablas_enph() -> dict:
     x["n_menor_30"] = x["n"] < MIN_N_CELDA
     emitir("enph_estrato_x_quintil", x, titulo="ENPH · estrato agrupado × quintil de ICGU (soporte por celda)",
            meta={**base, "variable": "P8520S1A1 agrupado × quintil ICGU", "denominador": "hogares con estrato 1-6 e ICGU válido"},
-           nota=f"`n_menor_30` marca celdas con menos de {MIN_N_CELDA} hogares (sin ponderar): informativo; el umbral de soporte y el encogimiento jerárquico se fijan en el Chat 05.")
+           nota=f"`n_menor_30` marca celdas con menos de {MIN_N_CELDA} hogares (sin ponderar): informativo; el umbral de soporte y el encogimiento jerárquico se fijan en WP3.")
     res["cruce"] = x
 
     # 4) forma de pago principal NC2R_CC_P6
@@ -544,7 +544,7 @@ def main() -> int:
                      "el percentil objetivo se alcanza en medio de un valor que reúne varios puntos porcentuales de la población, y quién queda en el grupo inferior o superior "
                      "depende de la regla de desempate (aquí: los iguales al corte van al grupo inferior). Con cualquier perturbación de la muestra o de los pesos, "
                      "la frontera puede saltar de un valor redondo al siguiente. Los % por grupo no son exactamente 20 y las fronteras no son estables ante cambios de meses. "
-                     "**No se cambió a cortes fijos** (decisión de Sara, 20 sep 2026); se declara como limitación de la calibración por quintil de ingreso.\n\n"
+                     "**No se cambió a cortes fijos** (decisión declarada el 20 sep 2026); se declara como limitación de la calibración por quintil de ingreso.\n\n"
                      + md_tabla(fr, {"valor": 0, "n_en_el_valor": 0, "fraccion_del_monton_bajo_objetivo": 2})
                      + "\nArchivo: `outputs/distribuciones/fronteras_amontonamiento.csv`\n")
 

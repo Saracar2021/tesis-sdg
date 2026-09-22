@@ -1,8 +1,8 @@
 # Guía de anotación de transacciones reales
 
-**Basada en:** `taxonomia_gastos_colombia_v1` (a **congelar** como v1.1 en el Chat 03 **antes** de anotar).
-**Proyecto:** Datos sintéticos de transacciones — Colombia · **Chat 02 (Track B)** · **Versión:** 1.0 · 15 sep 2026
-**Para:** 2 anotadores. Fin: producir etiquetas "gold" y medir acuerdo (**Cohen's Kappa**) para la evaluación TSTR (Chat 08).
+**Basada en:** `taxonomia_gastos_colombia_v1` (a **congelar** como v1.1 en WP2 **antes** de anotar).
+**Proyecto:** Datos sintéticos de transacciones — Colombia · **WP4 (Track B)** · **Versión:** 1.0 · 15 sep 2026
+**Para:** 2 anotadores. Fin: producir etiquetas "gold" y medir acuerdo (**Cohen's Kappa**) para la evaluación TSTR (WP8).
 
 > ⚠️ **La taxonomía debe estar congelada y citada antes de empezar.** Si durante la anotación aparece una ambigüedad del esquema, **no se cambia la taxonomía**: se documenta como insumo de la v2 (taxonomía §8) y se resuelve con las reglas de abajo.
 
@@ -81,7 +81,7 @@ anotador,notas
 5. **Conciliación (adjudicación).** Donde A1 ≠ A2, resolver por discusión o con un tercer adjudicador → producir la **etiqueta gold** (`categoria_n1_gold`, etc.). Registrar cada desacuerdo con su causa.
 6. **Congelar** `transacciones_reales_etiquetadas.csv` (gold) + reporte de Kappa. Los desacuerdos que revelen fallas del esquema → **lista de cambios para v2**, no se toca la taxonomía en curso.
 
-Snippet de referencia (determinista, ruta relativa; Chat 08 lo reusa):
+Snippet de referencia (determinista, ruta relativa; WP8 lo reusa):
 
 ```python
 import pandas as pd
@@ -98,7 +98,7 @@ for dim in ["categoria_n1", "medio_pago", "formalidad_comercio"]:
 
 ## 7. Regla de soporte para el reporte TSTR (recordatorio)
 
-El F1 macro (Chat 08) se calcula sobre categorías nivel 1 con **soporte ≥ 10** en el conjunto real; las de soporte menor se **colapsan en `otros`** para el cómputo y se describen aparte. Con 200–300 tx y 16 categorías, varias caerán bajo el umbral: es esperable y está previsto en la taxonomía.
+El F1 macro (WP8) se calcula sobre categorías nivel 1 con **soporte ≥ 10** en el conjunto real; las de soporte menor se **colapsan en `otros`** para el cómputo y se describen aparte. Con 200–300 tx y 16 categorías, varias caerán bajo el umbral: es esperable y está previsto en la taxonomía.
 
 ## 8. Riesgos metodológicos (de frente)
 
