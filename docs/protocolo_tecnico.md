@@ -288,7 +288,8 @@ Cada tabla declara unidad y dominio. GEIH: 7 módulos son persona y `datos_hogar
   - **Cadencia y tamaño de los retiros** que representan el efectivo acumulado (cuántos retiros al mes, de qué monto): no hay fuente DANE para esto; se definirá como regla propia y se declarará como supuesto, no como cifra oficial.
   - **Participación de medios digitales** (billeteras, transferencias): ENPH 2016-2017 no las mide (L4). Se usará el Banco de la República (Banrep 2024) como fuente; cifras exactas y su incorporación al generador, **PENDIENTES** (WP6).
   - **Cuenta principal del voluntario:** se asume que cada hogar/voluntario opera desde una sola cuenta o billetera principal a efectos de generar el extracto (simplificación declarada; no hay evidencia de cuántas cuentas usa un hogar bogotano típico).
-- **Formulación de la hipótesis H-P3 sobre Pancholi con D15.** *(Corregido el 22 sep: una versión anterior afirmaba que el paper «lista como limitación que su generador no genera efectivo» y que el pipeline «asume que todo el gasto pasa por tarjeta de crédito»; ninguna de las dos está en el paper ni sale de una ejecución.)* Con D15, la hipótesis se formula en términos de registros de extracto: en Bogotá el gasto dominante en efectivo (L7; 97,03 % de hogares lo declara como forma de pago principal en gastos frecuentes, `enph_forma_pago_nc2r.csv`) **sí aparece** en los extractos reales, pero como retiros en cajero, transferencias a personas y movimientos de billetera — no como filas de compra. Es una hipótesis sobre Pancholi (H-P3, `docs/plan_maestro.md` §6) que WP5 debe contrastar en esos mismos términos: no basta con que el pipeline de referencia no tenga una categoría "efectivo"; hay que ver si su salida refleja la estructura real de retiros y transferencias. Lo único documentado es que la Tabla 5 del paper muestra 4 transacciones de ejemplo con tarjeta de crédito.
+  - **Medio de pago no observable para categorías dentro de subcapítulos mezclados (L17):** para `telecom_conectividad` y las porciones de `transporte`, `educacion`, `obligaciones_financieras`, `entretenimiento` y `comidas_fuera` que caen en un subcapítulo P438 compartido con otra categoría (H11, H12, E11, I12, J11 confirmados; ver L17), la capa de emisión no puede tomar de ENPH un medio de pago específico de esa categoría — solo el del subcapítulo completo. Se necesitará un supuesto propio para esas categorías, no un dato de ENPH.
+- **Formulación de la hipótesis H-P3 sobre Pancholi con D15.** *(Corregido el 22 sep: una versión anterior afirmaba que el paper «lista como limitación que su generador no genera efectivo» y que el pipeline «asume que todo el gasto pasa por tarjeta de crédito»; ninguna de las dos está en el paper ni sale de una ejecución.)* Con D15, la hipótesis se formula en términos de registros de extracto: en Bogotá el gasto dominante en efectivo (L7; 97,03 % de hogares lo declara como forma de pago principal en gastos frecuentes, `enph_forma_pago_nc2r.csv`) **sí aparece** en los extractos reales, pero como retiros en cajero, transferencias a personas y movimientos de billetera — no como filas de compra. Es una hipótesis sobre Pancholi (H-P3, `docs/plan_maestro.md` §6) que WP5 debe contrastar en esos mismos términos: no basta con que el pipeline de referencia no tenga una categoría "efectivo"; hay que ver si su salida refleja la estructura real de retiros y transferencias. Lo único documentado es que la Tabla 5 del paper muestra 4 transacciones de ejemplo con tarjeta de crédito. **Límite adicional (L17):** para las categorías cuyo subcapítulo ENPH mezcla con otra (arriba), la comparación de H-P3 en términos de medio de pago no tiene con qué contrastarse desde ENPH; se sostiene solo para las categorías cuyo subcapítulo no mezcla.
 - **Consecuencia para los priors (WP3, población bancarizada).** El generador ya no calibra sobre "todos los hogares de Bogotá" sino sobre **hogares bancarizados**: solo esos producen extractos. Se calculó la tenencia de productos financieros con la batería `P5222S*` de GEIH `datos_hogar` (Bogotá, 12 meses, `FEX_C18/12`; códigos verificados contra el Diccionario GEIH 2025, filas 93-104): **93,47 % de los hogares de Bogotá tiene al menos un producto financiero; 6,53 % declara «Ninguno» (P5222S9)** [`geih_bancarizacion_total.csv`]. Por estrato agrupado, el % **sin** ningún producto es 9,37 % (bajo 1-2), 4,54 % (medio 3-4) y 0,27 % (alto 5-6) [`geih_bancarizacion_x_estrato.csv`]: la bancarización sube con el estrato, como es esperable. El perfil estrato × quintil de ENPH (`enph_estrato_x_quintil.csv`) se reponderó por `P(bancarizado | estrato agrupado)` de GEIH, la única variable común entre las dos fuentes, dando `enph_estrato_x_quintil_bancarizado.csv`. **Supuesto de independencia condicional (declarado, no verificable con estas fuentes):** dentro de cada estrato agrupado, el quintil de `ICGU` es independiente de la tenencia de productos financieros — ENPH no tiene `P5222S*` y GEIH no tiene `ICGU`, así que el cruce real no se puede calcular directamente.
 - **Riesgo residual** (`docs/plan_maestro.md` R10): la validez de los supuestos de retiros y de medios digitales queda sin verificar hasta que WP6 los implemente y, si llegan extractos reales, se puedan contrastar contra ellos.
 
@@ -316,6 +317,56 @@ Cada tabla declara unidad y dominio. GEIH: 7 módulos son persona y `datos_hogar
 | L14 | **Diciembre con menos filas, sin explicación** | Sensibilidad realizada (D8) | `docs/fuentes_datos.md` §8 |
 | L15 | **Respaldo documental débil del dominio ENPH** | `DOMINIO = 'BOGOTÁ'` sin código numérico | §4.4 |
 | L16 | **Repeso a hogares bancarizados (D15) asume independencia condicional** entre quintil de `ICGU` y tenencia de productos financieros, dentro de cada estrato agrupado | No verificable con estas fuentes: ENPH no tiene `P5222S*` y GEIH no tiene `ICGU` | §5, D15; `enph_estrato_x_quintil_bancarizado.csv` |
+| L17 | **El medio de pago de `P438` se pregunta por subcapítulo, no por artículo; en los subcapítulos que mezclan categorías de la taxonomía, el medio de pago de cada categoría por separado no es observable** | Afecta la calibración de medios de pago de la capa de emisión (D15) y la comparación contra Pancholi en esos mismos términos (H-P3). Detalle abajo | Cuadernillo 3 (pregunta 6, impresa en cada subcapítulo); `tools/calculos_diseno_muestral.py` |
+
+**Detalle de L17 (medio de pago por subcapítulo, no por artículo).** Verificado el 22 sep 2026
+contra el texto impreso del Cuadernillo 3 (`data/raw/ENPH_2017/_metadatos/CUADERNILLOS/Cuadernillo 3.pdf`).
+
+La pregunta que genera `P438` está impresa igual, una vez por subcapítulo, en las ~29 páginas del
+cuadernillo:
+
+> **(6) El medio de pago usado principalmente para comprar los artículos y servicios enunciados en
+> este subcapítulo fue: [...]**
+
+No es una pregunta por artículo: es **una sola respuesta que cubre todos los artículos listados en
+el subcapítulo**. Consecuencias:
+
+a. **Todo prior de medio de pago derivado de ENPH está a nivel de subcapítulo** y describe el
+   medio **principal declarado** para ese subcapítulo, no la distribución de transacciones por
+   medio de pago (esto ya estaba declarado para `P438` y `NC2R_CC_P6` en general, §3.1; L17 lo
+   hace más específico).
+b. **Cuando un subcapítulo mezcla artículos de categorías distintas de la taxonomía, el medio de
+   pago de cada categoría por separado no es observable en ENPH**, con ningún nivel de
+   agregación: el problema es del cuestionario (una sola respuesta para el subcapítulo completo),
+   no de cómo se procesan los datos después.
+c. **Afecta a D15** en la calibración de medios de pago de la capa de emisión (el generador no
+   puede tomar de ENPH un medio de pago específico de `telecom_conectividad` ni de las porciones
+   mezcladas de `transporte`, `educacion`, `obligaciones_financieras`, `entretenimiento` y
+   `comidas_fuera` listadas abajo) y **a H-P3** (la comparación contra Pancholi en términos de
+   medio de pago por categoría solo puede sostenerse con las categorías cuyo subcapítulo ENPH no
+   mezcla; para las mezcladas, la hipótesis no tiene con qué contrastarse desde ENPH).
+
+**Subcapítulos con mezcla confirmada contra el texto impreso** (no es una lista completa: ver
+`outputs/diseno_muestral/e_mezcla_categorias_p438_preliminar.csv` para los candidatos detectados
+por código pero sin confirmar, PD19):
+
+| Subcapítulo | Título impreso | Categorías que mezcla | Ejemplos de artículos |
+|---|---|---|---|
+| H11 | Servicio telefónico, internet y pasajes | `transporte` + `telecom_conectividad` | Parqueadero, peajes, pasaje en bus/tren/avión (transporte); recargas de celular, internet fijo, llamadas de larga distancia, suscripciones web (telecom) |
+| H12 | Teléfonos y otros artículos relacionados con las comunicaciones y transporte | `telecom_conectividad` + `transporte` | Teléfonos (telecom); artículos de transporte del mismo subcapítulo |
+| E11 | Pensiones, transporte y artículos escolares | `educacion` + `transporte` | Pensiones, artículos escolares (educación); transporte escolar (transporte) |
+| I12 | Gastos relacionados con servicios para vehículo, seguros e impuestos | `transporte` + `obligaciones_financieras` | Mantenimiento y servicios para el vehículo (transporte); seguros e impuestos del vehículo (obligaciones financieras) |
+| J11 | Bebidas alcohólicas, entradas a cine, teatro, museos, bibliotecas y otros, alojamiento, libros y CD | `entretenimiento` + `comidas_fuera` | Cine, teatro, museos, libros, CD (entretenimiento); alojamiento (mismo grupo COICOP que hoteles y restaurantes, 11, que es la fuente de `comidas_fuera`) |
+
+**Cómo se hizo esta verificación:** lectura del texto impreso de cada subcapítulo (`pdftotext`)
+contra su título y lista de artículos; no se infirió de los códigos. Un intento de detectar
+automáticamente el resto de los subcapítulos mezclados, por prefijo COICOP de `P10270`
+(`tools/calculos_diseno_muestral.py`, función `mezcla_categorias_p438`), **no es confiable para
+todos los casos**: el subcapítulo E12 (título 100 % educación) clasifica por código como 43 %
+"entretenimiento" / 28 % "vestuario" / 22 % "educación", lo que prueba que el mapeo de 2 dígitos
+de COICOP no basta para las divisiones 02, 09 y 12. Esa detección queda en
+`outputs/diseno_muestral/e_mezcla_categorias_p438_preliminar.csv`, marcada como preliminar, y no
+se usa aquí como hallazgo.
 
 ---
 
@@ -398,6 +449,8 @@ Criterio del punto de control: si el 25 no hay muestra sintética por reglas fun
 | PD16 | Verificar bloque de `P438J13` en el Cuadernillo 3; ubicar `P438J14` y `P438K11` | 1 | Cobertura de la matriz |
 | PD17 | Definición oficial DANE de formalidad, solo si hace falta una sola variable | 1 | — |
 | PD18 | Aval de ética, anotadores y paquete de datos reales | 4 | Toda la recolección |
+| PD19 | Confirmar o descartar, contra el texto impreso del Cuadernillo 3, los subcapítulos que `outputs/diseno_muestral/e_mezcla_categorias_p438_preliminar.csv` detecta como posible mezcla de categorías por código pero sin confirmar (L17) | 1 | Alcance real de L17 sobre la calibración de medio de pago |
+| PD20 | Ejecutar `rareza_subcapitulo_k_financiero()` (`tools/calculos_diseno_muestral.py`) para saber la prevalencia real, con FEX, de `obligaciones_financieras` (Cuadernillo 3, grupo K) | 1 | `docs/justificacion_parametros.md` |
 
 ### 8.2 Discrepancias entre documentos fuente (detectadas al redactar la v0.1) y su estado
 

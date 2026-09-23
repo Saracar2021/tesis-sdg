@@ -172,7 +172,15 @@ data/interim/  data/processed/  data/reales_anon/   outputs/   docs/   src/sdg/ 
   El DDI de GEIH está desactualizado («aplica para el 2023», `caseQnty` = 0): no usarlo como
   fuente de conteos ni de etiquetas 2025.
 - Cifras ponderadas (FEX) son las oficiales. **Cero cifras hardcodeadas**: toda cifra sale de
-  código y queda escrita en `outputs/`.
+  código, con `FEX`, agregada a la unidad que corresponda, y queda escrita en `outputs/`. Nunca
+  a mano ni por fuera de un script en `tools/` (verificado 22 sep: una cifra sin `FEX_C` y de una
+  lectura truncada de microdatos llegó a quedar escrita en tres documentos y un script).
+- **Códigos de variable compartidos entre encuestas.** GEIH y ENPH pueden usar el mismo nombre de
+  variable (ej. `P7510`/`P7513`, "otros ingresos") para preguntas distintas, con sub-ítems y
+  periodo de referencia distintos en cada encuesta. Toda mención de una variable debe decir de
+  qué encuesta y de qué archivo sale (ej. «`P7510` de ENPH, `personas/caracteristicas_generales_personas.csv`»,
+  no solo «`P7510`»); nunca mezclar el `P7510` de una encuesta con el de la otra sin declarar la
+  diferencia de unidad y periodo de referencia.
 - Los archivos se extraen con bytes intactos (SHA-256 trazable al zip original).
   Regla fija de lectura: GEIH → `cp1252`; ENPH `.csv` → `utf-8-sig`; ENPH `.txt` → `utf-8`
   con separador tab. Los `.txt` conservan su extensión: **no son CSV**.

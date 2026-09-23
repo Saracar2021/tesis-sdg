@@ -1,17 +1,27 @@
 #!/usr/bin/env python
 """Cálculos de diseño muestral para la anotación TSTR (WP4).
 
-Tres cálculos, cada uno con sus supuestos declarados en el CSV de salida (columna `nota`):
+Cálculos en `main()`, cada uno con sus supuestos declarados en el CSV de salida (columna `nota`):
   (a) participación mínima por categoría para soporte >= 10 con N en {360, 450, 600};
   (b) cruce de (a) con la participación de cada categoría de la taxonomía v1 en ENPH Bogotá
       (proxy declarado: prevalencia de hogares con al menos una compra en P438, gastos menos
       frecuentes; no es participación de transacciones ni de gasto, y no hay supuesto de
       conversión entre una y otra: se declara la diferencia y se usa la prevalencia tal cual);
   (c) ancho del IC 95 % del kappa de Cohen para n en {100, 150, 200, 300}, con acuerdo esperado
-      calculado a partir de las participaciones de (b).
+      calculado a partir de las participaciones de (b);
+  (e) detección PRELIMINAR (sin confirmar contra el texto impreso del cuadernillo) de qué
+      subcapítulos de P438 mezclan artículos de más de una categoría de la taxonomía, por
+      prefijo COICOP de `P10270`. No se ejecuta con FEX porque es una pregunta estructural
+      (¿qué categorías aparecen?), no una estimación poblacional.
+
+Aparte de `main()`, `rareza_subcapitulo_k_financiero()` calcula la prevalencia real (agregada a
+hogar, con FEX_C, dominio Bogotá, archivo completo) del gasto en obligaciones financieras
+(Cuadernillo 3, grupo K). No se invoca desde `main()` a propósito: se ejecuta aparte,
+explícitamente, ver la sección `if __name__` al final del archivo.
 
 Uso (desde la raíz del repo):
-    .venv\\Scripts\\python.exe tools\\calculos_diseno_muestral.py
+    .venv\\Scripts\\python.exe tools\\calculos_diseno_muestral.py                 # (a),(b),(c),(e)
+    .venv\\Scripts\\python.exe -c "from tools.calculos_diseno_muestral import rareza_subcapitulo_k_financiero as f; print(f().to_string())"
 
 No escribe nada en data/raw/. Toda cifra sale de este código y queda en outputs/diseno_muestral/.
 """
@@ -19,6 +29,7 @@ from __future__ import annotations
 
 import json
 import random
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -27,6 +38,9 @@ import pandas as pd
 RAIZ = Path(__file__).resolve().parent.parent
 DISTRIB = RAIZ / "outputs" / "distribuciones"
 OUT = RAIZ / "outputs" / "diseno_muestral"
+ARTICULOS_P438 = RAIZ / "data" / "raw" / "ENPH_2017" / "hogares" / "gastos_menos_frecuentes_articulos.txt"
+
+sys.path.insert(0, str(RAIZ / "src"))
 
 SEED = 42
 random.seed(SEED)
@@ -84,20 +98,24 @@ CATEGORIAS_ENPH_SIN_CALCULAR = {
         "monetarias'), subcapítulos K11 ('Gastos en instituciones financieras') y K12 ('Servicios "
         "financieros'); confirmado en el texto del propio cuadernillo. El monto está en "
         "gastos_menos_frecuentes_articulos.txt (CAP = K11/K12), pero el medio de pago (P438K) NO "
-        "existe en la base publicada (gap ya documentado en sdg.codigos.NOTA_P438_J). En una "
-        "muestra de 200.000 filas de articulos.txt solo aparecieron 8 registros con CAP=K11 y "
-        "ninguno con K12: probablemente una celda muy rala incluso si se calcula. Sin calcular.",
-    "transferencias_p2p": "Existe parcialmente, en otra forma. Familia P7510 (a, b) en "
+        "existe en la base publicada (gap ya documentado en sdg.codigos.NOTA_P438_J). Qué tan rala "
+        "es la celda (agregado a hogar, con FEX_C, dominio Bogotá, archivo completo) se calcula en "
+        "rareza_subcapitulo_k_financiero() -- no invocada desde main(), ejecutar aparte. Sin calcular.",
+    "transferencias_p2p": "Existe parcialmente, en otra forma. Familia P7510 (a, b) DE ENPH, en "
         "ENPH_2017/personas/caracteristicas_generales_personas.csv: '¿Recibió, en los últimos doce "
         "meses, dinero de otros hogares o personas residentes en el país / fuera del país?'. Es "
         "incidencia ANUAL de la persona, no participación de transacciones; ya señalado como 'por "
-        "verificar' en docs/plan_maestro.md P13. No mide transferencias P2P bancarias en general.",
+        "verificar' en docs/plan_maestro.md P13. No mide transferencias P2P bancarias en general. "
+        "ADVERTENCIA: GEIH también tiene una variable P7510 (otros_ingresos.csv), con otros "
+        "sub-ítems y su propio periodo de referencia -- NO es la misma; no mezclar sin declararlo "
+        "(ver CLAUDE.md, 'Códigos de variable compartidos entre encuestas').",
     "ingreso": "Existe parcialmente, en otra forma. `ICGU` (nivel de ingreso del hogar, "
         "viviendas_hogares.csv) ya se usa para los quintiles de calibración, pero es un NIVEL, no "
-        "una participación de registros de tipo ingreso. La familia P7510 (e-h) y P7513 (personas) "
-        "da incidencia ANUAL de intereses, dividendos, rendimientos y ventas ocasionales -- tampoco "
-        "es participación de transacciones. Ninguna de las dos fuentes da lo que hace falta aquí "
-        "sin transformarla primero.",
+        "una participación de registros de tipo ingreso. La familia P7510 (e-h) y P7513 DE ENPH "
+        "(personas) da incidencia ANUAL de intereses, dividendos, rendimientos y ventas ocasionales "
+        "-- tampoco es participación de transacciones. Ninguna de las dos fuentes da lo que hace "
+        "falta aquí sin transformarla primero. Mismo cuidado que arriba: GEIH tiene su propio "
+        "P7510/P7513 en otros_ingresos.csv, distinto de este.",
 }
 CATEGORIAS_SIN_FUENTE_ENPH = {
     "retiro_efectivo": "No existe en ENPH. Es mecánica bancaria (retiro en cajero del efectivo "
@@ -225,6 +243,106 @@ def kappa_ic95_ancho(part_b: pd.DataFrame, po_values: list[float], n_values: lis
     return pd.DataFrame(filas)
 
 
+# --- Mapeo de división COICOP (2 dígitos de P10270) a categoría de la taxonomía --------------------
+# Confianza ALTA: la división corresponde a una sola categoría de la taxonomía sin ambigüedad
+# conocida en estos datos. Confianza BAJA: divisiones 02, 09 y 12 mezclan, dentro de la propia
+# división, conceptos que la taxonomía separa (ej. división 09 incluye tanto bienes durables como
+# cámaras/computadores/equipos de sonido, no solo "entretenimiento" en sentido de ocio; división 12
+# mezcla cuidado personal, seguros y "otros bienes y servicios"). PROBADO NO CONFIABLE: el
+# subcapítulo E12 ("Matrículas, uniformes, útiles y textos escolares...", título 100 % educación)
+# clasifica con este mapeo como 43 % entretenimiento / 28 % vestuario / 22 % educación -- el mapeo
+# de 2 dígitos por sí solo NO basta para las divisiones de baja confianza. No usar esta función
+# como fuente de verdad para esas divisiones sin confirmar contra el texto impreso del cuadernillo.
+DIVISION_A_CATEGORIA_ALTA = {
+    "01": "alimentos_mercado", "03": "vestuario_cuidado_personal", "04": "vivienda_servicios",
+    "05": "hogar_articulos", "06": "salud", "07": "transporte", "08": "telecom_conectividad",
+    "10": "educacion", "11": "comidas_fuera",
+}
+DIVISIONES_BAJA_CONFIANZA = {"02", "09", "12"}
+
+# Subcapítulos con mezcla CONFIRMADA contra el texto impreso del Cuadernillo 3 (verificado 22 sep
+# 2026, pdftotext contra data/raw/ENPH_2017/_metadatos/CUADERNILLOS/Cuadernillo 3.pdf). Cada uno
+# mezcla, en la MISMA pregunta (6) de medio de pago, artículos de más de una categoría de la
+# taxonomía. Ver docs/protocolo_tecnico.md, L17.
+SUBCAPITULOS_MEZCLA_CONFIRMADA = {
+    "H11": ("transporte", "telecom_conectividad"),   # título: "Servicio telefónico, internet y pasajes"
+    "H12": ("transporte", "telecom_conectividad"),   # título: "Teléfonos y otros artículos relacionados con las comunicaciones y transporte"
+    "E11": ("educacion", "transporte"),              # título: "Pensiones, transporte y artículos escolares"
+    "I12": ("transporte", "obligaciones_financieras"),  # título: "Gastos relacionados con servicios para vehículo, seguros e impuestos"
+    "J11": ("entretenimiento", "comidas_fuera"),     # título incluye "alojamiento" (COICOP 11, igual que comidas_fuera)
+}
+
+
+def mezcla_categorias_p438() -> pd.DataFrame:
+    """(e, PRELIMINAR) Detección estructural, por código COICOP de P10270, de qué subcapítulos de
+    P438 mezclan categorías de la taxonomía. NO usa FEX (es una pregunta de composición de
+    códigos, no una estimación poblacional) y NO reemplaza la verificación contra el texto impreso:
+    ver SUBCAPITULOS_MEZCLA_CONFIRMADA para los únicos 5 confirmados así. El resto de esta tabla es
+    evidencia preliminar para investigar, no un hallazgo."""
+    df = pd.read_csv(ARTICULOS_P438, sep="\t", encoding="utf-8", dtype=str, usecols=["CAP", "P10270"])
+
+    def categoria(codigo: str) -> str | None:
+        div = codigo[:2]
+        if div == "12":
+            d3 = codigo[:3]
+            if d3 == "121":
+                return "vestuario_cuidado_personal"
+            if d3 in ("124", "125", "126"):
+                return "obligaciones_financieras"
+            return "otros"
+        return DIVISION_A_CATEGORIA_ALTA.get(div)
+
+    df["categoria"] = df["P10270"].map(categoria)
+    df["confianza"] = np.where(df["P10270"].str[:2].isin(DIVISIONES_BAJA_CONFIANZA), "baja", "alta")
+    filas = []
+    for cap, g in df.groupby("CAP"):
+        vc = g["categoria"].value_counts(normalize=True) * 100
+        confirmado = cap in SUBCAPITULOS_MEZCLA_CONFIRMADA
+        filas.append({
+            "subcapitulo": cap,
+            "n_articulos": len(g),
+            "categorias_detectadas_pct": "; ".join(f"{k}={v:.1f}%" for k, v in vc.items()),
+            "posible_mezcla_por_codigo": bool(len(vc) > 1 and vc.iloc[1] >= 5),
+            "confirmado_contra_texto_cuadernillo": confirmado,
+            "categorias_confirmadas": " + ".join(SUBCAPITULOS_MEZCLA_CONFIRMADA.get(cap, ())) or None,
+            "nota": ("Confirmado contra el título impreso del cuadernillo." if confirmado else
+                     "NO confirmado: puede ser mezcla real o artefacto del mapeo de 2 dígitos "
+                     "(ver DIVISIONES_BAJA_CONFIANZA). Requiere leer el texto del cuadernillo."),
+        })
+    return pd.DataFrame(filas).sort_values("subcapitulo").reset_index(drop=True)
+
+
+def rareza_subcapitulo_k_financiero() -> pd.DataFrame:
+    """Prevalencia de hogares de Bogotá con al menos un registro en K11 o K12 (Cuadernillo 3,
+    grupo K, 'Gastos financieros y erogaciones monetarias'). Agregado a hogar, ponderado con
+    FEX_C, dominio Bogotá (regla del cargador único), archivo completo (sin nrows). No se invoca
+    desde main(): se ejecuta aparte, ver el docstring del módulo."""
+    from sdg import carga
+
+    df = carga.cargar_enph("gastos_menos_frecuentes_articulos.txt", columnas=["CAP"])
+    hogares_bogota = df.drop_duplicates("DIRECTORIO")
+    total_hogares = len(hogares_bogota)
+    total_fex = hogares_bogota["FEX"].sum()
+
+    filas = []
+    for cap in ("K11", "K12"):
+        con_cap = df[df["CAP"] == cap]
+        hogares_con = con_cap.drop_duplicates("DIRECTORIO")
+        fex_con = hogares_con["FEX"].sum()
+        filas.append({
+            "subcapitulo": cap,
+            "n_registros_brutos": len(con_cap),
+            "n_hogares_bogota_con_registro": len(hogares_con),
+            "n_hogares_bogota_total": total_hogares,
+            "hogares_expandidos_con_registro": fex_con,
+            "hogares_bogota_expandidos_total": total_fex,
+            "pct_hogares_bogota_con_registro": 100 * fex_con / total_fex,
+            "fuente": "ENPH 2016-2017, hogares/gastos_menos_frecuentes_articulos.txt, Bogotá, FEX_C",
+            "nota": "Agregado a hogar antes de ponderar (CLAUDE.md); archivo completo, no muestra truncada.",
+        })
+    return pd.DataFrame(filas)
+
+
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
 
@@ -240,6 +358,9 @@ def main() -> int:
     c = kappa_ic95_ancho(b, po_values=[0.80, 0.90], n_values=N_ANOTADO_VALUES)
     c.to_csv(OUT / "c_kappa_ic95_ancho.csv", index=False, encoding="utf-8")
 
+    e = mezcla_categorias_p438()
+    e.to_csv(OUT / "e_mezcla_categorias_p438_preliminar.csv", index=False, encoding="utf-8")
+
     manifest = {
         "seed": SEED,
         "z_95": Z_95,
@@ -249,11 +370,13 @@ def main() -> int:
         "k_categorias_calculadas": int(b["con_dato_enph"].sum()),
         "categorias_existe_falta_calcular": CATEGORIAS_ENPH_SIN_CALCULAR,
         "categorias_sin_fuente_enph": CATEGORIAS_SIN_FUENTE_ENPH,
-        "fuentes": [str((DISTRIB / "enph_p438_cobertura.csv").relative_to(RAIZ))],
+        "fuentes": [str((DISTRIB / "enph_p438_cobertura.csv").relative_to(RAIZ)),
+                    str(ARTICULOS_P438.relative_to(RAIZ))],
         "verificacion_22_sep_2026": "Estado de las 8 categorías sin cálculo verificado contra los "
             "metadatos de ENPH (cuadernillos y DDI en data/raw/ENPH_2017/_metadatos/), no contra "
             "los microdatos: 6 de 8 existen en ENPH y faltan por calcular (pendiente en "
             "docs/plan_maestro.md); solo 2 (retiro_efectivo, movimiento_propio) no tienen fuente.",
+        "subcapitulos_mezcla_confirmada": SUBCAPITULOS_MEZCLA_CONFIRMADA,
         "advertencia": "pandas/numpy determinan el orden de agregación; sin aleatoriedad real en estos cálculos (SEED fijado por convención del proyecto, no porque el cálculo lo requiera).",
     }
     (OUT / "manifest_diseno_muestral.json").write_text(
@@ -263,6 +386,7 @@ def main() -> int:
     print(a.to_string(index=False))
     print(b[["categoria", "prevalencia_hogares_pct", "participacion_relativa_pct", "estado"]].to_string(index=False))
     print(c.to_string(index=False))
+    print(e[["subcapitulo", "posible_mezcla_por_codigo", "confirmado_contra_texto_cuadernillo"]].to_string(index=False))
     return 0
 
 
