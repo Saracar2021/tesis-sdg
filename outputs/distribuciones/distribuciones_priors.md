@@ -107,7 +107,7 @@ Archivo: `outputs/distribuciones/enph_ingreso_quintil.csv`
 | alto (5-6) | Q4 | 21 | 13.680,89 | 0,54 | True |
 | alto (5-6) | Q5 | 168 | 116.292,55 | 4,57 | False |
 
-`n_menor_30` marca celdas con menos de 30 hogares (sin ponderar): informativo; el umbral de soporte y el encogimiento jerárquico se fijan en el Chat 05.
+`n_menor_30` marca celdas con menos de 30 hogares (sin ponderar): informativo; el umbral de soporte y el encogimiento jerárquico se fijan en WP3.
 
 Archivo: `outputs/distribuciones/enph_estrato_x_quintil.csv`
 
@@ -613,7 +613,7 @@ Archivo: `outputs/distribuciones/geih_sensibilidad_marzo.csv`
 
 - **Qué se mide:** para cada frontera de los grupos del 20 % (4 por variable), el % del peso que cae EXACTAMENTE en el valor de la frontera (`masa_en_el_valor_pct`) y en qué punto de ese montón cae el percentil objetivo (`fraccion_del_monton_bajo_objetivo`: 0 = al inicio, 1 = al final).
 - **Máximo % de masa en un solo valor:** ICGU (ENPH, hogares, Bogotá): 0,09 %; INGLABO (GEIH, ocupados, Bogotá): 5,92 %.
-- **Limitación declarada (aplica a INGLABO, NO a ICGU: en ICGU ninguna frontera concentra más del 0,1 % del peso):** el ingreso laboral individual se reporta en valores redondos, por lo que la frontera de un grupo del 20 % cae DENTRO de un montón: el percentil objetivo se alcanza en medio de un valor que reúne varios puntos porcentuales de la población, y quién queda en el grupo inferior o superior depende de la regla de desempate (aquí: los iguales al corte van al grupo inferior). Con cualquier perturbación de la muestra o de los pesos, la frontera puede saltar de un valor redondo al siguiente. Los % por grupo no son exactamente 20 y las fronteras no son estables ante cambios de meses. **No se cambió a cortes fijos** (decisión de Sara, 20 sep 2026); se declara como limitación de la calibración por quintil de ingreso.
+- **Limitación declarada (aplica a INGLABO, NO a ICGU: en ICGU ninguna frontera concentra más del 0,1 % del peso):** el ingreso laboral individual se reporta en valores redondos, por lo que la frontera de un grupo del 20 % cae DENTRO de un montón: el percentil objetivo se alcanza en medio de un valor que reúne varios puntos porcentuales de la población, y quién queda en el grupo inferior o superior depende de la regla de desempate (aquí: los iguales al corte van al grupo inferior). Con cualquier perturbación de la muestra o de los pesos, la frontera puede saltar de un valor redondo al siguiente. Los % por grupo no son exactamente 20 y las fronteras no son estables ante cambios de meses. **No se cambió a cortes fijos** (decisión declarada el 20 sep 2026); se declara como limitación de la calibración por quintil de ingreso.
 
 | variable | escenario | corte | valor | objetivo_pct | masa_bajo_el_valor_pct | masa_en_el_valor_pct | cdf_hasta_el_valor_pct | sobrepaso_pp | n_en_el_valor | fraccion_del_monton_bajo_objetivo |
 |---|---|---|---|---|---|---|---|---|---|---|

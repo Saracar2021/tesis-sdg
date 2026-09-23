@@ -258,7 +258,7 @@ Unidad: `persona` = una fila por (`DIRECTORIO`, `SECUENCIA_P`, `HOGAR`, `ORDEN`)
 
 ## 5. Procedencia de `urbano/gastos_diarios_hogar.txt`
 
-- **Declarado por Sara Cárdenas (2026-09-20):** es una descarga fresca del DANE del 20 sep 2026 y reemplaza la copia anterior, sobre la que existía una sospecha de truncamiento. Esa declaración no se puede verificar desde los archivos; lo que sí se midió:
+- **Declarado (2026-09-20):** es una descarga fresca del DANE del 20 sep 2026 y reemplaza la copia anterior, sobre la que existía una sospecha de truncamiento. Esa declaración no se puede verificar desde los archivos; lo que sí se midió:
 
 | Evidencia | Valor |
 |---|---|
@@ -336,7 +336,7 @@ Es decir, **«proporcional en todos los módulos» no se sostiene del todo**: di
 
 **Conclusión: PENDIENTE — no se puede calificar ni de «esperado por diseño» ni de anomalía.**
 
-- Búsqueda manual con `pdftotext` (no automatizada en este script): en la Metodología general busqué diciembre, festivos, vacaciones, temporada, rotación y muestra mensual/trimestral; en la Ficha metodológica y el Manual de Recolección 2025, diciembre, festivos, vacaciones y temporada. No encontré ninguna referencia a un tamaño de muestra distinto para diciembre (las menciones a diciembre son históricas o de encabezado). El texto disponible da una media mensual, sin decir si varía por mes; y la frase clave está cortada en el PDF, así que la ausencia de una regla mensual no está demostrada.
+- Búsqueda manual con `pdftotext` (no automatizada en este script): en la Metodología general se buscó diciembre, festivos, vacaciones, temporada, rotación y muestra mensual/trimestral; en la Ficha metodológica y el Manual de Recolección 2025, diciembre, festivos, vacaciones y temporada. No se encontró ninguna referencia a un tamaño de muestra distinto para diciembre (las menciones a diciembre son históricas o de encabezado). El texto disponible da una media mensual, sin decir si varía por mes; y la frase clave está cortada en el PDF, así que la ausencia de una regla mensual no está demostrada.
 - Lo observado es pequeño (-2,5 % en personas, -1,0 % en hogares), más marcado en cabeceras (CLASE 1) y con menor tamaño de hogar; no falta ninguna semana ni un departamento. Podría ser variación de cobertura o de respuesta en época de fin de año, pero **eso es una hipótesis, no algo que los datos o la documentación confirmen**.
 - Para cerrarlo: la tasa de respuesta/cobertura de diciembre 2025 en el boletín técnico del DANE, o una consulta al DANE. Impacto práctico: con `FEX_C18 / 12` los totales no se distorsionan; se recomienda una prueba de sensibilidad excluyendo diciembre antes de fijar priors definitivos.
 
@@ -389,7 +389,7 @@ Las tres se hicieron antes de escribir código de análisis. Los códigos se lee
 | ENPH 2016-2017 | `DOMINIO` (en `viviendas_hogares.csv`) | texto `BOGOTÁ` | No existe código numérico: en el CSV y en el `.sav` el valor es texto y el DDI no lista categorías. Respaldo: la lista de «dominios de estudio: 32 ciudades de departamento» del DDI menciona Bogotá. | TEXTO, sin código |
 | ENPH 2016-2017 | `REGION` (idéntico a `DOMINIO` para Bogotá) | texto `BOGOTÁ` | El DDI lista las regiones en el texto de la pregunta («…BOGOTÁ…»). `REGION` y `DOMINIO` seleccionan exactamente los mismos hogares. | TEXTO, sin código |
 
-**Lo que NO pude confirmar.** Los 5 cuadernillos de ENPH mencionan «Bogotá» 0 veces (son formularios en blanco, sin listas de códigos de dominio), así que no sirven de respaldo para ese valor. Los `.SAV` de enero de GEIH traen 0 etiquetas de valor para `AREA`, 0 para `DPTO` y 0 para `CLASE`; la fuente de los códigos de GEIH es el diccionario (y el DDI), no el SAV.
+**Lo que no se pudo confirmar.** Los 5 cuadernillos de ENPH mencionan «Bogotá» 0 veces (son formularios en blanco, sin listas de códigos de dominio), así que no sirven de respaldo para ese valor. Los `.SAV` de enero de GEIH traen 0 etiquetas de valor para `AREA`, 0 para `DPTO` y 0 para `CLASE`; la fuente de los códigos de GEIH es el diccionario (y el DDI), no el SAV.
 
 **Precisión en GEIH: `AREA` y `DPTO` no son lo mismo.**
 
@@ -457,7 +457,7 @@ Sensibilidad a la variable de ingreso (celdas < 30): `ICGU` 12 de 30; `IT` 12 de
 
 **Celdas con menos de 30 observaciones: 8 de 30** (vacías: 0; mínimo: 6). Si se usara **un solo mes** (cruce mensual): entre 16 y 20 de 30 celdas con menos de 30 (mediana 18).
 
-**Decisiones mías que conviene que confirmes:** (1) quintiles calculados dentro de Bogotá, no sobre el total nacional; (2) ingreso del hogar completo (`ICGU`) en ENPH pero solo ingreso laboral individual en GEIH, porque en los 8 módulos GEIH no construí un ingreso del hogar; (3) estratos válidos = 1 a 6 (se excluyen `0`, `9` y vacío, que no son estratos). **Códigos de estrato VERIFICADOS (20 sep 2026):** ENPH `P8520S1A1` según MANUAL_ENPH.pdf, Pregunta 4, «Estrato para tarifa» (códigos 1-6; 0 = conexión pirata; 9 = no establecible o planta eléctrica) (el DDI trae 0 categorías y el Cuadernillo 1 solo dice «Estrato para tarifa»: no son fuente de códigos); GEIH `P4030S1A1` según Diccionario GEIH 2025, fila 32 (P4030S1A1; rango 0-6 ó 9; sin etiquetas para 0 y 9). Cada esquema se mapea solo con su fuente.
+**Decisiones que conviene confirmar:** (1) quintiles calculados dentro de Bogotá, no sobre el total nacional; (2) ingreso del hogar completo (`ICGU`) en ENPH pero solo ingreso laboral individual en GEIH, porque en los 8 módulos GEIH no se construyó un ingreso del hogar; (3) estratos válidos = 1 a 6 (se excluyen `0`, `9` y vacío, que no son estratos). **Códigos de estrato VERIFICADOS (20 sep 2026):** ENPH `P8520S1A1` según MANUAL_ENPH.pdf, Pregunta 4, «Estrato para tarifa» (códigos 1-6; 0 = conexión pirata; 9 = no establecible o planta eléctrica) (el DDI trae 0 categorías y el Cuadernillo 1 solo dice «Estrato para tarifa»: no son fuente de códigos); GEIH `P4030S1A1` según Diccionario GEIH 2025, fila 32 (P4030S1A1; rango 0-6 ó 9; sin etiquetas para 0 y 9). Cada esquema se mapea solo con su fuente.
 
 **Cortes de quintil:** se calculan sobre TODOS los hogares (u ocupados) con ingreso, con la misma función y regla que `tools/distribuciones_priors.py` (`sdg.pesos.cortes_ponderados`: menor valor con F ponderada ≥ j/5); después se cruza con el estrato válido. Los conteos de celda de este apartado coinciden con `outputs/distribuciones/enph_estrato_x_quintil.csv` (ENPH, estrato agrupado).
 
@@ -600,9 +600,9 @@ Una razón cercana a 1 significa que no hay exceso de coincidencias entre meses.
 - **Verificado en los archivos:** hogares únicos = filas apiladas (292.942 en el país; 9.733 en Bogotá); ningún hogar en más de un mes; la prueba por composición no muestra exceso de coincidencias entre meses.
 - **No verificado:** que el diseño no vuelva a visitar hogares dentro del año. El DANE solo documenta rotación anual de segmentos y el identificador no es persistente; la frecuencia de revisita no está escrita en ningún documento del repositorio.
 - **Apilar los 12 meses:** no hay duplicados que eliminar y no corresponde deduplicar por `DIRECTORIO` (los extra son hogares de la misma vivienda). No se detectó nada que lo contradiga: cada fila-hogar puede tratarse como un hogar distinto, con las salvedades de más abajo.
-- **`FEX_C18 / 12`:** la suma mensual de `FEX_C18` (personas) va de 51,831 a 52,296 millones: es casi constante y crece de mes a mes, coherente con la calibración mensual que menciona la Metodología (no verifiqué cómo se construye `FEX_C18`). Dividir entre 12 da el promedio anual de 12 cortes mensuales, y esa aritmética no depende de que haya rotación. En principio, si hubiera hogares repetidos lo afectado sería la varianza, no el peso.
+- **`FEX_C18 / 12`:** la suma mensual de `FEX_C18` (personas) va de 51,831 a 52,296 millones: es casi constante y crece de mes a mes, coherente con la calibración mensual que menciona la Metodología (no se verificó cómo se construye `FEX_C18`). Dividir entre 12 da el promedio anual de 12 cortes mensuales, y esa aritmética no depende de que haya rotación. En principio, si hubiera hogares repetidos lo afectado sería la varianza, no el peso.
 - **Lo que sí importa (conglomerados):** la metodología define segmentos de ~10 viviendas donde se encuestan todos los hogares, lo que induce correlación dentro del segmento. Los archivos **no traen identificador de segmento ni de UPM** (columnas buscadas: ninguna), así que no se pueden calcular errores estándar de diseño y los ingenuos subestiman la incertidumbre.
-- **Para la partición train/test (CTGAN, TSTR):** no se detectaron hogares repetidos, así que no se espera filtración por repetición; pero las viviendas vecinas comparten características (hipótesis, no verificada). Como sensibilidad se podría particionar por bloques de `DIRECTORIO` o por mes; la decisión es tuya.
+- **Para la partición train/test (CTGAN, TSTR):** no se detectaron hogares repetidos, así que no se espera filtración por repetición; pero las viviendas vecinas comparten características (hipótesis, no verificada). Como sensibilidad se podría particionar por bloques de `DIRECTORIO` o por mes; queda pendiente de decidir.
 - **CLAUDE.md:** la regla `FEX_C18 / 12` sigue vigente. Conviene añadir la nota «GEIH 2025 público: sin panel detectable ni identificador de segmento».
 
 
