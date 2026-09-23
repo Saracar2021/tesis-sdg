@@ -450,7 +450,7 @@ Criterio del punto de control: si el 25 no hay muestra sintética por reglas fun
 | PD17 | Definición oficial DANE de formalidad, solo si hace falta una sola variable | 1 | — |
 | PD18 | Aval de ética, anotadores y paquete de datos reales | 4 | Toda la recolección |
 | PD19 | Confirmar o descartar, contra el texto impreso del Cuadernillo 3, los subcapítulos que `outputs/diseno_muestral/e_mezcla_categorias_p438_preliminar.csv` detecta como posible mezcla de categorías por código pero sin confirmar (L17) | 1 | Alcance real de L17 sobre la calibración de medio de pago |
-| PD20 | Ejecutar `rareza_subcapitulo_k_financiero()` (`tools/calculos_diseno_muestral.py`) para saber la prevalencia real, con FEX, de `obligaciones_financieras` (Cuadernillo 3, grupo K) | 1 | `docs/justificacion_parametros.md` |
+| PD20 | ~~Ejecutar `rareza_subcapitulo_k_financiero()` para saber la prevalencia real de `obligaciones_financieras`~~ ✅ **Resuelto 22 sep:** K11 no es ralo (13,80 % de hogares expandidos en Bogotá, 8,39 % a nivel nacional); K12 da 0 en ambos dominios por una razón estructural de la pregunta, no de prevalencia — ver `docs/justificacion_parametros.md` y `outputs/diseno_muestral/f_rareza_obligaciones_financieras.csv` | 1 | — |
 
 ### 8.2 Discrepancias entre documentos fuente (detectadas al redactar la v0.1) y su estado
 

@@ -15,9 +15,11 @@ Cálculos en `main()`, cada uno con sus supuestos declarados en el CSV de salida
       (¿qué categorías aparecen?), no una estimación poblacional.
 
 Aparte de `main()`, `rareza_subcapitulo_k_financiero()` calcula la prevalencia real (agregada a
-hogar, con FEX_C, dominio Bogotá, archivo completo) del gasto en obligaciones financieras
-(Cuadernillo 3, grupo K). No se invoca desde `main()` a propósito: se ejecuta aparte,
-explícitamente, ver la sección `if __name__` al final del archivo.
+hogar, con FEX_C, Bogotá y Nacional, archivo completo) del gasto en obligaciones financieras
+(Cuadernillo 3, grupo K). No se invoca desde `main()` a propósito. Ejecutada y confirmada el
+22 sep 2026: K11 no es rala (13,80 % de los hogares expandidos de Bogotá); K12 da 0 en los dos
+dominios por una razón estructural, no de prevalencia (ver `NOTA_K12` en el código). Escribe
+`outputs/diseno_muestral/f_rareza_obligaciones_financieras.csv`.
 
 Uso (desde la raíz del repo):
     .venv\\Scripts\\python.exe tools\\calculos_diseno_muestral.py                 # (a),(b),(c),(e)
@@ -313,34 +315,56 @@ def mezcla_categorias_p438() -> pd.DataFrame:
 
 
 def rareza_subcapitulo_k_financiero() -> pd.DataFrame:
-    """Prevalencia de hogares de Bogotá con al menos un registro en K11 o K12 (Cuadernillo 3,
-    grupo K, 'Gastos financieros y erogaciones monetarias'). Agregado a hogar, ponderado con
-    FEX_C, dominio Bogotá (regla del cargador único), archivo completo (sin nrows). No se invoca
-    desde main(): se ejecuta aparte, ver el docstring del módulo."""
+    """Prevalencia de hogares con al menos un registro en K11 o K12 (Cuadernillo 3, grupo K,
+    'Gastos financieros y erogaciones monetarias'), en Bogotá y a nivel nacional. Agregado a
+    hogar, ponderado con FEX_C, archivo completo (sin nrows). Ejecutada y confirmada por la
+    autora el 22 sep 2026: K11 no es rala (13,8 % de los hogares expandidos de Bogotá); K12 da
+    0 en Bogotá y también a nivel nacional -- ver NOTA_K12 (razón estructural, no de prevalencia).
+    Escribe outputs/diseno_muestral/f_rareza_obligaciones_financieras.csv."""
     from sdg import carga
 
-    df = carga.cargar_enph("gastos_menos_frecuentes_articulos.txt", columnas=["CAP"])
-    hogares_bogota = df.drop_duplicates("DIRECTORIO")
-    total_hogares = len(hogares_bogota)
-    total_fex = hogares_bogota["FEX"].sum()
-
     filas = []
-    for cap in ("K11", "K12"):
-        con_cap = df[df["CAP"] == cap]
-        hogares_con = con_cap.drop_duplicates("DIRECTORIO")
-        fex_con = hogares_con["FEX"].sum()
-        filas.append({
-            "subcapitulo": cap,
-            "n_registros_brutos": len(con_cap),
-            "n_hogares_bogota_con_registro": len(hogares_con),
-            "n_hogares_bogota_total": total_hogares,
-            "hogares_expandidos_con_registro": fex_con,
-            "hogares_bogota_expandidos_total": total_fex,
-            "pct_hogares_bogota_con_registro": 100 * fex_con / total_fex,
-            "fuente": "ENPH 2016-2017, hogares/gastos_menos_frecuentes_articulos.txt, Bogotá, FEX_C",
-            "nota": "Agregado a hogar antes de ponderar (CLAUDE.md); archivo completo, no muestra truncada.",
-        })
-    return pd.DataFrame(filas)
+    for dominio, etiqueta in (("bogota", "Bogotá"), ("todo", "Nacional")):
+        df = carga.cargar_enph("gastos_menos_frecuentes_articulos.txt", dominio=dominio,
+                                columnas=["CAP"])
+        hogares_dominio = df.drop_duplicates("DIRECTORIO")
+        total_hogares = len(hogares_dominio)
+        total_fex = hogares_dominio["FEX"].sum()
+        for cap in ("K11", "K12"):
+            con_cap = df[df["CAP"] == cap]
+            hogares_con = con_cap.drop_duplicates("DIRECTORIO")
+            fex_con = hogares_con["FEX"].sum()
+            filas.append({
+                "dominio": etiqueta,
+                "subcapitulo": cap,
+                "n_registros_brutos": len(con_cap),
+                "n_hogares_con_registro": len(hogares_con),
+                "n_hogares_dominio_total": total_hogares,
+                "hogares_expandidos_con_registro": fex_con,
+                "hogares_dominio_expandidos_total": total_fex,
+                "pct_hogares_con_registro": 100 * fex_con / total_fex if total_fex else 0.0,
+                "fuente": f"ENPH 2016-2017, hogares/gastos_menos_frecuentes_articulos.txt, {etiqueta}, FEX_C",
+                "nota": NOTA_K12 if cap == "K12" else
+                    "Agregado a hogar antes de ponderar (CLAUDE.md); archivo completo, no muestra truncada. "
+                    "No es un gasto ralo: se mantiene en la taxonomía con prioridad alta.",
+            })
+    resultado = pd.DataFrame(filas)
+    OUT.mkdir(parents=True, exist_ok=True)
+    resultado.to_csv(OUT / "f_rareza_obligaciones_financieras.csv", index=False, encoding="utf-8")
+    return resultado
+
+
+NOTA_K12 = ("K12 da 0 registros en Bogotá Y a nivel nacional (archivo completo, sin filtrar "
+    "dominio): no es baja prevalencia, es una razón estructural. El Cuadernillo 3 SÍ imprime "
+    "'3.K12. SERVICIOS FINANCIEROS' (verificado en el PDF), pero a diferencia de las demás "
+    "subcapítulos, la pregunta no es una lista de artículos con código y valor: es un filtro "
+    "Sí/No ('¿pagó cuota por préstamo para gastos del hogar... excluye vivienda?') seguido de "
+    "características del préstamo (entidad, tipo, tasa, plazo). Esa estructura no genera filas "
+    "en gastos_menos_frecuentes_articulos.txt (que solo tiene registros artículo+valor con "
+    "código P10270) sin importar cuántos hogares respondan que sí. No se encontró en el DDI de "
+    "ENPH una variable cuya etiqueta coincida con esta pregunta: no se pudo determinar si la "
+    "respuesta se publicó en otro archivo o si no se publicó en absoluto. PENDIENTE (no resuelto "
+    "aquí): ubicar dónde vive esa respuesta, si es que se publicó.")
 
 
 def main() -> int:
