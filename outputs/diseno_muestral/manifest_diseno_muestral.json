@@ -13,19 +13,22 @@
     300
   ],
   "soporte_minimo": 10,
-  "k_categorias_con_dato_enph": 8,
-  "categorias_sin_dato_enph": [
-    "alimentos_mercado",
-    "comidas_fuera",
-    "telecom_conectividad",
-    "obligaciones_financieras",
-    "transferencias_p2p",
-    "retiro_efectivo",
-    "movimiento_propio",
-    "ingreso"
-  ],
+  "k_categorias_calculadas": 8,
+  "categorias_existe_falta_calcular": {
+    "alimentos_mercado": "Existe. Cuadernillo 2, Capítulo C ('Características del gasto en alimentos de los hogares') -> ENPH_2017/urbano/gastos_diarios_capitulo_c.txt (tabla DDI F20) y gastos_diarios_mercados.csv (F10, valor de mercado no desagregado). Sin calcular.",
+    "comidas_fuera": "Existe. Cuadernillo 2, capítulo D1 ('Comidas preparadas fuera del hogar') -> gastos_diarios_hogar_comidas_fuera.csv (F5, hogar) y gastos_personales_comidas_fuera.csv (F8, personal; Cuadernillo 4 para la versión personal, F6/F14). Sin calcular.",
+    "telecom_conectividad": "Existe, mezclado con transporte en la pregunta de medio de pago. Cuadernillo 3, subcapítulo H11 ('Servicio telefónico, internet y pasajes') y H12: el propio cuadernillo imprime ítems de comunicaciones (ej. '08300501 Internet fijo', '08300506 Recargas para telefonía celular') dentro de H. En gastos_menos_frecuentes_medio_pago.csv (P438) no es separable de transporte. SÍ sería separable por monto/prevalencia en gastos_menos_frecuentes_articulos.txt (columna P10270, códigos de 8 dígitos con prefijo '083' para comunicaciones frente a '07' para transporte; P10270 se etiqueta en el DDI como 'nombre del artículo o servicio' pero sus valores son estos códigos, no texto -- verificado contra los códigos impresos en el propio Cuadernillo 3, no contra una fuente COICOP oficial). El medio de pago específico de telecomunicaciones seguiría sin poder separarse aun si se calcula el monto. Sin calcular.",
+    "obligaciones_financieras": "Existe. Cuadernillo 3, grupo K ('Gastos financieros y erogaciones monetarias'), subcapítulos K11 ('Gastos en instituciones financieras') y K12 ('Servicios financieros'); confirmado en el texto del propio cuadernillo. El monto está en gastos_menos_frecuentes_articulos.txt (CAP = K11/K12), pero el medio de pago (P438K) NO existe en la base publicada (gap ya documentado en sdg.codigos.NOTA_P438_J). En una muestra de 200.000 filas de articulos.txt solo aparecieron 8 registros con CAP=K11 y ninguno con K12: probablemente una celda muy rala incluso si se calcula. Sin calcular.",
+    "transferencias_p2p": "Existe parcialmente, en otra forma. Familia P7510 (a, b) en ENPH_2017/personas/caracteristicas_generales_personas.csv: '¿Recibió, en los últimos doce meses, dinero de otros hogares o personas residentes en el país / fuera del país?'. Es incidencia ANUAL de la persona, no participación de transacciones; ya señalado como 'por verificar' en docs/plan_maestro.md P13. No mide transferencias P2P bancarias en general.",
+    "ingreso": "Existe parcialmente, en otra forma. `ICGU` (nivel de ingreso del hogar, viviendas_hogares.csv) ya se usa para los quintiles de calibración, pero es un NIVEL, no una participación de registros de tipo ingreso. La familia P7510 (e-h) y P7513 (personas) da incidencia ANUAL de intereses, dividendos, rendimientos y ventas ocasionales -- tampoco es participación de transacciones. Ninguna de las dos fuentes da lo que hace falta aquí sin transformarla primero."
+  },
+  "categorias_sin_fuente_enph": {
+    "retiro_efectivo": "No existe en ENPH. Es mecánica bancaria (retiro en cajero del efectivo acumulado en la capa interna del generador, D15), no una categoría de gasto en bienes o servicios: ENPH mide en qué se gasta y con qué medio de pago, no la manera en que el efectivo se retira de una cuenta.",
+    "movimiento_propio": "No existe en ENPH, por la misma razón que retiro_efectivo: es una transferencia entre cuentas propias del mismo titular, un concepto bancario que una encuesta de gasto de los hogares no captura."
+  },
   "fuentes": [
     "outputs\\distribuciones\\enph_p438_cobertura.csv"
   ],
+  "verificacion_22_sep_2026": "Estado de las 8 categorías sin cálculo verificado contra los metadatos de ENPH (cuadernillos y DDI en data/raw/ENPH_2017/_metadatos/), no contra los microdatos: 6 de 8 existen en ENPH y faltan por calcular (pendiente en docs/plan_maestro.md); solo 2 (retiro_efectivo, movimiento_propio) no tienen fuente.",
   "advertencia": "pandas/numpy determinan el orden de agregación; sin aleatoriedad real en estos cálculos (SEED fijado por convención del proyecto, no porque el cálculo lo requiera)."
 }
