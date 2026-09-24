@@ -65,6 +65,8 @@ Todos quedan resueltos por **reconstrucción**, no por parche: el análisis viej
 | Investigación de anomalías | Serie mensual de estrato, escaneo de julio y marzo, sensibilidades | `outputs/julio/`, `geih_sensibilidad_*.csv` |
 | Contrato de trabajo | Reglas metodológicas permanentes del proyecto | `CLAUDE.md` (v4) |
 | Bitácora | Registro fechado de lo hecho, por paquete de trabajo | `docs/bitacora.md` |
+| Justificación de parámetros | Tabla de parámetros y decisiones con su justificación (convención / cálculo / pendiente) | `docs/justificacion_parametros.md` |
+| Cálculos de diseño muestral | Soporte por categoría, precisión del kappa, rareza del subcapítulo K | `tools/calculos_diseno_muestral.py`, `outputs/diseno_muestral/` |
 | Historial | Commits `081bf43` → `d221c5d` → `2aebb9e` en `main` | GitHub privado |
 
 ---
@@ -158,6 +160,8 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 | L6 | **Amontonamiento** en valores redondos de `INGLABO` | Fronteras de grupo inestables; por eso `INGLABO` no calibra nada |
 | L7 | **Los extractos bancarios no ven el efectivo** (un retiro en cajero es una fila, no quince compras) | El TSTR se evalúa sobre el universo bancarizado, sin extrapolar al gasto total |
 | L8 | 20 voluntarios por conveniencia | Diversidad, no representatividad; conjunto de validación, no estimación poblacional |
+| L16 | El repeso a hogares bancarizados (D15) asume independencia condicional entre quintil de `ICGU` y tenencia de productos financieros, dentro de cada estrato agrupado | No verificable con estas fuentes (ENPH no tiene `P5222S*`, GEIH no tiene `ICGU`); declarado |
+| L17 | El medio de pago de `P438` se pregunta **por subcapítulo, no por artículo**; en los subcapítulos que mezclan categorías (H11, H12, E11, I12, J11 confirmados), el medio de pago de cada categoría por separado no es observable en ENPH | Afecta la calibración de medios de pago (D15) y la comparación con Pancholi (H-P3) en esas categorías; detalle en `docs/protocolo_tecnico.md` L17 |
 
 ---
 
@@ -166,7 +170,7 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 | # | Pendiente | Bloquea | Responsable | Cuándo |
 |---|---|---|---|---|
 | P1 | **Enviar el correo a la directora** (avance + consulta de ética + punto de control 25 sep) | Relación con la directora; ética | Autora | Lun 21 sep |
-| P2 | **Confirmar si el programa exige aval de comité de ética** | Toda la recolección | Autora / directora | Esta semana |
+| P2 | **Confirmar si el programa exige aval de comité de ética** (pregunta abierta a la directora en el correo del 24 sep) | **Bloquea toda la recolección de datos reales** | Autora / directora | **Respuesta esperada esta semana; si aplica, iniciar el trámite de inmediato** |
 | P3 | ~~Ajustar el paquete de WP4~~ ✅ v1.1 en `docs/datos_reales/` (20 sep). Falta: contactos, canal seguro de envío, script de anonimización | Pedir el primer extracto | Autora | Mar 22 – mié 23 |
 | P4 | Confirmar los **2 anotadores** | Kappa | Autora | Esta semana |
 | P5 | **Documento técnico del protocolo** (WP0) | Actividad 1 del cronograma | Autora | Esta semana |
@@ -177,12 +181,19 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 | P12 | **D15 — medios observables:** marcar en la taxonomía v1.1 qué valores de `medio_pago` aparecen en extractos (efectivo y fiado solo existen en la capa interna) | Taxonomía, generador | WP2 | Antes del 28 sep |
 | P13 | **D15 — categorías operativas a emitir, con fuente o supuesto:** `ingreso` (monto desde `ICGU`; cadencia por supuesto), `transferencias_p2p` (prevalencia de dinero recibido de otros hogares: familia `P7510*`/`P7513*` **de ENPH**, en `personas/caracteristicas_generales_personas.csv` — no confundir con el `P7510*` de GEIH, en `otros_ingresos.csv`, que tiene otros sub-ítems y su propio periodo de referencia; por verificar), `movimiento_propio` (sin fuente: supuesto), `retiro_efectivo` (desde el gasto en efectivo de la capa interna; PD8) | WP6 | Autora | Jue 24 |
 | P14 | **D15 — qué entrena el CTGAN:** los registros emitidos (extracto), no la capa interna. Registrar en el protocolo | WP7 | Autora | Con WP6 |
-| P15 | **D15 — cuenta principal vs. consentimiento:** el consentimiento admite dos cuentas (banco + billetera) y el generador supone una. Decidir si el generador emite ambas o si el TSTR se evalúa por cuenta | WP6 y TSTR | Autora | Antes del 24 |
+| P15 | **Número de cuentas por hogar sintético:** una / dos / un flujo con `cuenta_tipo`. El consentimiento admite dos cuentas (banco + billetera) y el generador supone una. Decidir si emite ambas o si el TSTR se evalúa por cuenta | WP6 y TSTR | **Autora** | Antes de WP6 |
 | P16 | **D15 — redacción de la hipótesis:** dice «la distribución real de medios de pago según la ENPH». Con D15, ENPH actúa en la capa interna y la mezcla observable en extractos requiere Banrep 2024. Ajustar la redacción con la directora | Tesis | Autora + directora | Punto de control del 25 |
 | P10 | Congelar taxonomía v1.1 tras ver ≥ 50 descripciones reales | Anotación | WP2 | Cuando lleguen extractos |
 | P11 | Pasar al repo los entregables pendientes de datos reales (los de la reevaluación del pipeline de referencia ya están integrados) | Trazabilidad | Autora | En curso |
 | P19 | **Calcular en `outputs/distribuciones/` la participación ENPH de 6 categorías de la taxonomía que existen en ENPH pero no se han calculado:** `alimentos_mercado` (Cuadernillo 2, Capítulo C: `gastos_diarios_capitulo_c.txt`, `gastos_diarios_mercados.csv`); `comidas_fuera` (Cuadernillo 2, D1: `gastos_diarios_hogar_comidas_fuera.csv`); `telecom_conectividad` (Cuadernillo 3, H11/H12, separable de transporte a nivel de artículo por prefijo COICOP "083" en `gastos_menos_frecuentes_articulos.txt`, columna `P10270`); `obligaciones_financieras` (Cuadernillo 3, grupo K, `CAP`=K11/K12 en `gastos_menos_frecuentes_articulos.txt`; probablemente muy ralo); `transferencias_p2p` e `ingreso` (familia `P7510`/`P7513` **de ENPH**, en `personas/caracteristicas_generales_personas.csv` — distinta del `P7510`/`P7513` de GEIH en `otros_ingresos.csv`; incidencia anual, requiere transformar a participación de transacciones) | Cruce de soporte de `tools/calculos_diseno_muestral.py`; `docs/justificacion_parametros.md` | WP1/WP3 | Antes de fijar el módulo de priors |
 | P20 | Confirmar si `retiro_efectivo` y `movimiento_propio` (sin fuente ENPH, son mecánica bancaria) necesitan una fuente externa distinta para su participación esperada, o si basta con el supuesto de cadencia de retiros ya declarado (PD8) | Anotación, F1 macro por categoría | WP6 | Con WP6 |
+| P21 | **Clasificadores:** LLaMA 3 *few-shot* no se entrena con datos sintéticos, así que el paradigma TSTR no le aplica igual. Decidir si es una **referencia sin entrenamiento** o una **variante declarada de TSTR** | Diseño de la evaluación (Etapa 4) | **Autora** | Antes de WP8 |
+| P22 | **Posición ocupacional × cotiza pensión:** decidir si esas variables de GEIH entran al generador (hoy declaradas como celdas pequeñas e inestables) | Generador | **Autora** | Con WP6 |
+| P23 | **L6 — cortes fijos de `INGLABO`:** decidir si se declara solo como limitación (actual) o se cambia a cortes fijos | Reporte descriptivo | **Autora** | Redacción |
+| P24 | **PD19 — mezcla de subcapítulos:** revisar a mano, contra el Cuadernillo 3, qué subcapítulos de ENPH mezclan categorías de la taxonomía (los candidatos por código están en `e_mezcla_categorias_p438_preliminar.csv`) | Alcance real de L17 | Autora | Antes de calibrar medio de pago |
+| P25 | **K12 = 0 registros:** verificado que es estructural (la pregunta es un filtro Sí/No, no una lista de artículos). Queda abierto solo si la respuesta se publicó en otro archivo de ENPH | Cobertura de `obligaciones_financieras` | Autora | Baja prioridad |
+| P26 | **Parámetros sin justificación escrita** (`docs/justificacion_parametros.md`, tipo *pendiente*): umbral de celda rala n≈30, umbral de diferencia material de 1 p.p., meta de ≥5.000 transacciones sintéticas, y el enunciado «12–15 personas sigue siendo útil» | Priors, sensibilidades, dataset v1, datos reales | **Autora** | Antes de fijar cada uno |
+| P27 | **Referente ENPH para cerrar H-P1 (P19):** participación de alimentos por quintil de `ICGU` (ENPH Bogotá, `FEX_C`, a hogar) → correr `tools/analisis_pancholi.py --enph`. **Hallazgo firme ya disponible:** la salida final del pipeline no varía con el ingreso | Cierre de H-P1 | Autora + Claude | En curso |
 
 ---
 
