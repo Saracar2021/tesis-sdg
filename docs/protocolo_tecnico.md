@@ -45,7 +45,7 @@ El protocolo se organiza en cuatro etapas encadenadas:
 
 ### 1.4 Motivación empírica y el pipeline de referencia
 
-**El pipeline de Pancholi et al. no se ha ejecutado** (regla de evidencia en `CLAUDE.md`, 22 sep). En consecuencia:
+**El pipeline de Pancholi et al. se ejecutó de forma reproducible** (etapas 1–3; criterios prerregistrados; detalle en `docs/reevaluacion_pancholi.md`, resultados en `outputs/pancholi/`). Los veredictos por hipótesis (H-P1 no concluyente respecto a Colombia, con la salida final del CTGAN sin relación ingreso–monto; H-P2 refutada con la definición prerregistrada / confirmada si el hospedaje cuenta como ocio; H-P3 confirmada para las etapas 1–3, `payment_type` de la etapa 4 no concluyente) están en ese documento. Notas de contexto que siguen vigentes:
 
 - **Sin respaldo, no se citan como resultado:** la diferencia de USD 12 entre perfiles de ingreso, los 5 perfiles y las 149 transacciones, el dominio de categorías de ocio (Athletic Exhibition, Special Events, Inn and Motel, Skating Rink) y el 100 % de `payment_type: credit_card`. Aparecen en el informe de avance (secciones I y III) y en la presentación (diapositivas 2 y 3) sin una ejecución que los sostenga.
 - **Citables con referencia al paper**, porque describen su diseño y no sus salidas: demografía del American Community Survey 2015-2019 de Washington D.C. por código postal; nombres de comercio de Yelp y de D.C.; simulación por reglas con gasto calibrado por ingreso y características del hogar; refinamiento con CTGAN. La Tabla 5 del paper muestra 4 transacciones de ejemplo, todas con tarjeta de crédito: es un ejemplo, no una proporción.

@@ -1,0 +1,153 @@
+{
+ "fuente": "Documento del proyecto claude.ai 'taxonomia_gastos_colombia_v1.json' (v1.0.0, 2026-07-19); extracto de ids, subtipos y COICOP",
+ "categorias_nivel_1": {
+  "alimentos_mercado": {
+   "coicop": "01",
+   "subtipos": [
+    "supermercado_cadena",
+    "tienda_barrio",
+    "plaza_fruver",
+    "domicilio_mercado"
+   ]
+  },
+  "comidas_fuera": {
+   "coicop": "11.1",
+   "subtipos": [
+    "restaurante_local",
+    "domicilios_app",
+    "comida_callejera"
+   ]
+  },
+  "transporte": {
+   "coicop": "07",
+   "subtipos": [
+    "publico_masivo",
+    "apps_taxi",
+    "combustible",
+    "informal_mototaxi",
+    "vehiculo_propio_mantenimiento"
+   ]
+  },
+  "vivienda_servicios": {
+   "coicop": "04",
+   "subtipos": [
+    "arriendo",
+    "servicios_publicos",
+    "administracion",
+    "gas_combustible_hogar"
+   ]
+  },
+  "telecom_conectividad": {
+   "coicop": "08",
+   "subtipos": [
+    "recarga_prepago",
+    "plan_pospago",
+    "internet_hogar_tv"
+   ]
+  },
+  "salud": {
+   "coicop": "06",
+   "subtipos": [
+    "farmacia",
+    "consultas_examenes",
+    "otros_salud"
+   ]
+  },
+  "educacion": {
+   "coicop": "10",
+   "subtipos": [
+    "matricula_pension",
+    "cursos",
+    "utiles_textos"
+   ]
+  },
+  "entretenimiento": {
+   "coicop": "09 (+02 alcohol/tabaco)",
+   "subtipos": [
+    "streaming_suscripciones",
+    "apuestas_azar",
+    "bares_licor_tabaco",
+    "eventos_recreacion",
+    "mascotas"
+   ]
+  },
+  "vestuario_cuidado_personal": {
+   "coicop": "03 + 12.1",
+   "subtipos": [
+    "ropa_calzado",
+    "peluqueria_estetica",
+    "aseo_cosmeticos"
+   ]
+  },
+  "hogar_articulos": {
+   "coicop": "05",
+   "subtipos": [
+    "muebles_electrodomesticos",
+    "aseo_hogar",
+    "servicio_domestico"
+   ]
+  },
+  "obligaciones_financieras": {
+   "coicop": "12.4-12.6",
+   "subtipos": [
+    "pago_tarjeta_credito",
+    "credito_formal",
+    "credito_informal",
+    "seguros",
+    "seguridad_social",
+    "comisiones_gmf"
+   ]
+  },
+  "transferencias_p2p": {
+   "coicop": null,
+   "subtipos": [
+    "enviada_persona",
+    "recibida_persona",
+    "remesa",
+    "indeterminada"
+   ]
+  },
+  "retiro_efectivo": {
+   "coicop": null,
+   "subtipos": [
+    "cajero_atm",
+    "corresponsal"
+   ]
+  },
+  "movimiento_propio": {
+   "coicop": null,
+   "subtipos": [
+    "recarga_billetera",
+    "traslado_cuentas",
+    "ahorro_bolsillos"
+   ]
+  },
+  "ingreso": {
+   "coicop": null,
+   "subtipos": [
+    "salario_nomina",
+    "honorarios_ventas",
+    "subsidio_estatal",
+    "rendimientos"
+   ]
+  },
+  "otros": {
+   "coicop": "12 (residual)",
+   "subtipos": [
+    "impuestos_tramites",
+    "donaciones",
+    "ininteligible"
+   ]
+  }
+ },
+ "medio_pago": [
+  "efectivo",
+  "billetera_digital",
+  "tarjeta_debito",
+  "tarjeta_credito",
+  "transferencia_bancaria",
+  "fiado_credito_tienda",
+  "bono_subsidio",
+  "otro_nd"
+ ]
+}

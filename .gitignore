@@ -1,6 +1,7 @@
 data/
 outputs/*.png
 outputs/*.csv
+outputs/pancholi/crudo/
 external/
 .venv/
 __pycache__/

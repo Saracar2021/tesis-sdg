@@ -1,0 +1,8 @@
+--- a/src/component/transaction.py
++++ b/src/component/transaction.py
+@@ -7,5 +7,5 @@
+ 
+ # SDV imports
+-from sdv.single_table import SingleTableMetadata
++from sdv.metadata.single_table import SingleTableMetadata
+ from sdv.single_table import CTGANSynthesizer

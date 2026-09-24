@@ -1,0 +1,8 @@
+etiqueta_pancholi,origen,licencias_dc_que_la_alimentan,nivel_1_v1,nivel_2_v1,confianza,justificacion
+groceries,category (TransactionSimulator) y mapped_category,Grocery Store; Delicatessen; Bakery; Food Products,alimentos_mercado,,alta,"Compra de alimentos para el hogar (COICOP 01). Delicatessen y Bakery pueden ser consumo inmediato (comidas_fuera); el pipeline no lo distingue, se asigna por la etiqueta"
+dining,category y mapped_category,Restaurant; Caterers,comidas_fuera,restaurante_local,alta,"Comida preparada (COICOP 11.1)"
+transportation,category y mapped_category,Gasoline Dealer; Auto Rental; Auto Wash,transporte,combustible,media,"Solo combustible, alquiler y lavado de vehículo. Sin transporte público, apps ni taxi: el subtipo publico_masivo no tiene contraparte"
+housing,category y mapped_category,Hotel; Inn And Motel; Vacation Rental,otros,,media,"DECISIÓN DECLARADA. Pese al nombre, los comercios son hospedaje (COICOP 11.2), no arriendo ni servicios. v1 no tiene categoría de hospedaje/turismo: va a otros. NO se mapea a vivienda_servicios. Sensibilidad: se reporta también como entretenimiento"
+entertainment,category y mapped_category,Motion Picture Theatre; Public Hall; Theater (Live); Bowling Alley,entretenimiento,eventos_recreacion,alta,"Ocio y recreación (COICOP 09)"
+personal_care,category y mapped_category,Beauty Shop; Health Spa; Massage Establishment,vestuario_cuidado_personal,peluqueria_estetica,alta,"Cuidado personal (COICOP 12.1)"
+other,category (sin comercios: fallback 'DC Other Service'),,otros,ininteligible,media,"Residual sin descriptor: equivale a otros; no hay comercio real detrás"

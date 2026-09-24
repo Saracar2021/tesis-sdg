@@ -1,0 +1,203 @@
+{
+ "H-P1": {
+  "A_etapa2": {
+   "elasticidad": 1.0079120958511352,
+   "ic95": [
+    1.0067596278686481,
+    1.0090631232225922
+   ],
+   "n_semillas": 10,
+   "sensible_al_ingreso": true
+  },
+  "A_etapa3": {
+   "elasticidad": 0.0004892366528865897,
+   "ic95": [
+    -0.0033327881779158255,
+    0.003947943972897015
+   ],
+   "n_semillas": 10,
+   "sensible_al_ingreso": false
+  },
+  "B_etapa2": {
+   "elasticidad": 1.0292673541821347,
+   "ic95": [
+    1.018814968527097,
+    1.040143400664838
+   ],
+   "n_semillas": 10,
+   "sensible_al_ingreso": true
+  },
+  "B_etapa3": {
+   "elasticidad": -0.0029120214065192405,
+   "ic95": [
+    -0.00839681663797463,
+    0.0023071319286800916
+   ],
+   "n_semillas": 10,
+   "sensible_al_ingreso": false
+  },
+  "C_etapa3": {
+   "elasticidad": 0.014157384574923498,
+   "ic95": null,
+   "n_semillas": 1,
+   "sensible_al_ingreso": null
+  },
+  "veredicto": "no concluyente (sin referente colombiano en este entorno)"
+ },
+ "H-P2": {
+  "A_etapa2": {
+   "ocio=entretenimiento": {
+    "part_ocio": 0.14280938123752496,
+    "ic95": [
+     0.14192724928528763,
+     0.14369607780814456
+    ],
+    "part_alimentos": 0.1427228875582169,
+    "categoria_mayor_otra": "otros",
+    "part_mayor_otra": 0.2846057884231537,
+    "veredicto": "no concluyente"
+   },
+   "ocio=entretenimiento+hospedaje (sensibilidad)": {
+    "part_ocio": 0.2847654690618763,
+    "ic95": [
+     0.28362605504389204,
+     0.2859076336098152
+    ],
+    "veredicto": "confirmada"
+   },
+   "categorias_v1_con_participacion": 6,
+   "categorias_v1_total": 16
+  },
+  "A_etapa3": {
+   "ocio=entretenimiento": {
+    "part_ocio": 0.146425,
+    "ic95": [
+     0.14553272133431783,
+     0.1473218061160373
+    ],
+    "part_alimentos": 0.177405,
+    "categoria_mayor_otra": "otros",
+    "part_mayor_otra": 0.2587716666666667,
+    "veredicto": "refutada"
+   },
+   "ocio=entretenimiento+hospedaje (sensibilidad)": {
+    "part_ocio": 0.2905,
+    "ic95": [
+     0.2893526042207325,
+     0.29165007838083545
+    ],
+    "veredicto": "confirmada"
+   },
+   "categorias_v1_con_participacion": 6,
+   "categorias_v1_total": 16
+  },
+  "B_etapa2": {
+   "ocio=entretenimiento": {
+    "part_ocio": 0.14544086021505376,
+    "ic95": [
+     0.1422658270391029,
+     0.1486744702436799
+    ],
+    "part_alimentos": 0.14380645161290323,
+    "categoria_mayor_otra": "otros",
+    "part_mayor_otra": 0.2840860215053763,
+    "veredicto": "no concluyente"
+   },
+   "ocio=entretenimiento+hospedaje (sensibilidad)": {
+    "part_ocio": 0.288,
+    "ic95": [
+     0.2839018109959656,
+     0.29213321360606465
+    ],
+    "veredicto": "confirmada"
+   },
+   "categorias_v1_con_participacion": 6,
+   "categorias_v1_total": 16
+  },
+  "B_etapa3": {
+   "ocio=entretenimiento": {
+    "part_ocio": 0.13017,
+    "ic95": [
+     0.12987534271696766,
+     0.13046522555728202
+    ],
+    "part_alimentos": 0.1483022,
+    "categoria_mayor_otra": "otros",
+    "part_mayor_otra": 0.2629052,
+    "veredicto": "refutada"
+   },
+   "ocio=entretenimiento+hospedaje (sensibilidad)": {
+    "part_ocio": 0.2547966,
+    "ic95": [
+     0.25441484657665797,
+     0.2551787301985579
+    ],
+    "veredicto": "confirmada"
+   },
+   "categorias_v1_con_participacion": 6,
+   "categorias_v1_total": 16
+  },
+  "C_etapa3": {
+   "ocio=entretenimiento": {
+    "part_ocio": 0.1793,
+    "ic95": [
+     0.17625115140806225,
+     0.18238991115772835
+    ],
+    "part_alimentos": 0.10965,
+    "categoria_mayor_otra": "otros",
+    "part_mayor_otra": 0.25821666666666665,
+    "veredicto": "no concluyente"
+   },
+   "ocio=entretenimiento+hospedaje (sensibilidad)": {
+    "part_ocio": 0.28378333333333333,
+    "ic95": [
+     0.2801899158249362,
+     0.28740443531662924
+    ],
+    "veredicto": "confirmada"
+   },
+   "categorias_v1_con_participacion": 6,
+   "categorias_v1_total": 16
+  },
+  "conjunto_principal": "B_etapa3"
+ },
+ "H-P3": {
+  "A_etapa2": {
+   "columnas_medio_pago": "(ninguna)",
+   "registros_extracto": 0,
+   "N": 601200,
+   "wilson_sup": 6.389611236303529e-06,
+   "veredicto_etapas_ejecutadas": "confirmada"
+  },
+  "A_etapa3": {
+   "columnas_medio_pago": "(ninguna)",
+   "registros_extracto": 0,
+   "N": 600000,
+   "wilson_sup": 6.402390376958565e-06,
+   "veredicto_etapas_ejecutadas": "confirmada"
+  },
+  "B_etapa2": {
+   "columnas_medio_pago": "(ninguna)",
+   "registros_extracto": 0,
+   "N": 46500,
+   "wilson_sup": 8.260519346763534e-05,
+   "veredicto_etapas_ejecutadas": "confirmada"
+  },
+  "B_etapa3": {
+   "columnas_medio_pago": "(ninguna)",
+   "registros_extracto": 0,
+   "N": 5000000,
+   "wilson_sup": 7.682911738670438e-07,
+   "veredicto_etapas_ejecutadas": "confirmada"
+  },
+  "C_etapa3": {
+   "columnas_medio_pago": "(ninguna)",
+   "registros_extracto": 0,
+   "N": 60000,
+   "wilson_sup": 6.402021482791953e-05,
+   "veredicto_etapas_ejecutadas": "confirmada"
+  },
+  "distribucion_payment_type_etapa4": "no concluyente: etapa 4 no ejecutable (API de Groq bloqueada)"
+ }
+}

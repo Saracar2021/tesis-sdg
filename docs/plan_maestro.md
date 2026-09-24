@@ -2,8 +2,8 @@
 
 **Título:** Diseño y validación preliminar de un protocolo de generación de datos sintéticos de transacciones financieras para el contexto colombiano
 **Autora:** Sara J. Cárdenas · Maestría en Inteligencia Artificial, Pontificia Universidad Javeriana
-**Versión:** 2 · **Corte:** domingo 20 de septiembre de 2026 · reemplaza la v1 del 15 de septiembre
-**Hitos:** avance a directora (previsto 18 sep, **no enviado**; se envía el lun 21 sep) · punto de control **vie 25 sep** · tesis final **jue 15 oct 2026** (25 días desde este corte)
+**Versión:** 3 · **Corte:** jueves 24 de septiembre de 2026 · reemplaza la v2 del 20 de septiembre
+**Hitos:** avance a directora **se envía el 24 sep** (tras el silencio de las semanas previas) · punto de control **vie 25 sep** · tesis final **jue 15 oct 2026**
 
 > Documento vivo de seguimiento del proyecto (WP0). La fuente de verdad técnica es el repositorio `C:\tesis-sdg` (respaldo privado en GitHub). Este documento resume el estado; las cifras y su derivación viven en el repo.
 
@@ -13,7 +13,7 @@
 
 1. **La base empírica se reconstruyó desde cero.** Las cifras del análisis descriptivo del informe de avance estaban escritas a mano, sin factores de expansión y sobre un solo mes. Se re-descargaron los microdatos del DANE y se construyó una base verificable: 112 archivos con hash SHA-256 contra el original, cargador único con 29 pruebas automatizadas y distribuciones ponderadas para Bogotá.
 2. **El dominio quedó definido: Bogotá urbano.** Los 20 voluntarios de la validación son de Bogotá; calibrar contra otro dominio rompería la comparación del TSTR.
-3. **Hay resultados nuevos que refuerzan la tesis.** El efectivo domina en Bogotá (97 % de los hogares lo declara como forma de pago principal en gastos frecuentes), y el medio de pago **varía por categoría de gasto** (hasta 28 % de tarjeta de crédito en electrodomésticos y muebles). **El pipeline de Pancholi no se ha ejecutado**: las tres «fallas» que el informe de avance le atribuye (USD 12 entre perfiles, dominio de categorías de ocio, 100 % tarjeta de crédito) son **hipótesis sin respaldo** hasta WP5 (§6).
+3. **Hay resultados nuevos que refuerzan la tesis.** El efectivo domina en Bogotá (97 % de los hogares lo declara como forma de pago principal en gastos frecuentes), y el medio de pago **varía por categoría de gasto** (hasta 28 % de tarjeta de crédito en electrodomésticos y muebles). **El pipeline de referencia (Pancholi et al.) ya se ejecutó** (etapas 1–3, reproducible, con criterios prerregistrados): sus tres «fallas» del informe se reevaluaron (§6) — una refutada, una confirmada solo para las etapas ejecutadas, y la de ingreso no concluyente sin el referente colombiano, que queda pendiente.
 4. **Cuatro afirmaciones del análisis descriptivo quedan retiradas y las tres sobre Pancholi pasan a hipótesis** (§6) y **ocho limitaciones quedan declaradas** (§7).
 5. **Lo que falta es casi todo el pipeline de generación y la validación empírica**, en 25 días. El punto de control del 25 de septiembre define si el alcance completo cabe.
 
@@ -31,7 +31,7 @@
 | 5 | Recolección de transacciones reales | ❌ | 🟡 **20 voluntarios de Bogotá con acceso**; paquete v1.1 listo (consentimiento, anonimización, diseño de muestra: dic 2025, abr y ago 2026). **Bloqueado por la consulta de ética** | `docs/datos_reales/` |
 | 6 | Etiquetado manual (2 anotadores) + Kappa | ❌ | 🟡 Guía v1.0 y muestra definida (600 movimientos, 30 por persona); guía por actualizar a la taxonomía v1.1; anotadores por confirmar | `docs/datos_reales/` |
 | 7 | Entrenamiento de 3 clasificadores + TSTR | ❌ | ❌ No empezado | — |
-| 01B | Reevaluación del pipeline de Pancholi | ❌ | 🔴 Notebook diseñado (WP5); **el pipeline nunca se ha ejecutado**. Sostiene la motivación empírica y la comparación de la hipótesis | WP5; `external/` vacío |
+| 01B | Reevaluación del pipeline de referencia (Pancholi et al.) | ❌ | ✅ **Ejecutado (etapas 1–3)**, reproducible y con criterios prerregistrados; etapas 4–5 no ejecutables (Groq / código). Detalle en `docs/reevaluacion_pancholi.md` | `docs/reevaluacion_pancholi.md`, `outputs/pancholi/` |
 | — | Redacción de la tesis | ❌ | ❌ No empezada (el capítulo de datos ya tiene insumos) | — |
 
 ---
@@ -132,13 +132,13 @@ Esta matriz es el insumo con el que el generador condiciona el medio de pago a l
 | «El 25,5 % sin dato es probablemente efectivo no declarado» | Supuesto sin sustento; la no respuesta no se imputa |
 | «Análisis de todos los meses de la GEIH» | Cubría solo enero |
 
-**Afirmaciones sobre el pipeline de Pancholi: sin respaldo de ejecución (pasan a hipótesis de WP5)**
+**Afirmaciones sobre el pipeline de referencia (Pancholi et al.): reevaluadas con una ejecución reproducible** (etapas 1–3; criterios prerregistrados antes de correr; detalle en `docs/reevaluacion_pancholi.md`)
 
-| Afirmación del informe | Estado |
+| Afirmación del informe | Estado tras la ejecución |
 |---|---|
-| Entre perfiles de USD 15.000 y USD 85.000 anuales el monto promedio varía apenas USD 12 (5 perfiles), es decir, «insensibilidad al ingreso» | **Retirada y reformulada como H-P1.** El paper sí calibra el gasto por ingreso, con la distribución de EE.UU. (ACS 2015-2019 de D.C.). La hipótesis es que esa calibración no reproduce la relación ingreso–gasto de los hogares colombianos |
-| Dominio de categorías de ocio (Athletic Exhibition, Special Events, Inn and Motel, Skating Rink) | **Hipótesis H-P2** |
-| El 100 % de las transacciones tiene `payment_type: credit_card` | **Hipótesis H-P3.** La Tabla 5 del paper trae 4 ejemplos con tarjeta de crédito; es un ejemplo, no una proporción |
+| USD 12 entre perfiles / «insensibilidad al ingreso» → H-P1 | **No concluyente respecto a Colombia** (falta el referente de la ENPH, pendiente). Medido: etapa 2 (reglas) elasticidad monto–ingreso 1,008 [1,007; 1,009]; **salida final (etapa 3, CTGAN) −0,003 [−0,008; 0,002]**: el CTGAN no conserva la relación ingreso–monto. Las cifras del informe salen probablemente de la aplicación web, no del pipeline del paper (inferido por lectura de código) |
+| Dominio de categorías de ocio → H-P2 | **Refutada** con la definición prerregistrada (ocio = entretenimiento, 13,0 % vs. alimentos 14,8 %); **confirmada** si el hospedaje/hoteles cuenta como ocio. Cobertura: solo 6 de 16 categorías de la taxonomía tienen registros; servicios públicos 0 % |
+| 100 % `credit_card` → H-P3 | **Confirmada para las etapas ejecutadas (1–3)**: sin campo de medio de pago; 0 de 5.000.000 de registros son retiros/transferencias/billetera. `payment_type` (etapa 4) **no concluyente**: no ejecutable (API de Groq bloqueada) |
 
 Sí se puede citar, con referencia al paper, su diseño: demografía del ACS 2015-2019 de Washington D.C., comercios de Yelp y de D.C., reglas calibradas por ingreso, CTGAN. Estas afirmaciones también están en la presentación (diapositivas 2 y 3) y en la introducción del informe.
 
@@ -172,7 +172,7 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 | P5 | **Documento técnico del protocolo** (WP0) | Actividad 1 del cronograma | Autora | Esta semana |
 | P6 | **Módulo de priors** (WP3): umbral de soporte y método de encogimiento | Generador | Autora | Mar 22 – mié 23 |
 | P7 | **Generador por reglas** (WP6) | CTGAN | Autora | Jue 24 – vie 25 |
-| P8 | **Ejecutar por primera vez el pipeline de Pancholi** (WP5): conseguir el código, clonarlo en `external/`, ejecutar y contrastar H-P1 a H-P3 | **Motivación empírica y comparación de la hipótesis** | Autora | **Adelantado: esta semana, antes del 25** |
+| P8 | ✅ **Pipeline de referencia ejecutado** (etapas 1–3, reproducible; `docs/reevaluacion_pancholi.md`). Pendiente: (a) referente ENPH para cerrar H-P1 —participación de alimentos por quintil de `ICGU`, ENPH Bogotá, `FEX_C`, a hogar (P19)—; (b) decisión justificada de la categoría de hospedaje para H-P2 (v1.1); (c) etapas 4–5 no ejecutables (Groq / código) | Motivación empírica y comparación | Autora | (a) y (b) esta semana |
 | P9 | Consulta al DANE: control de cambios 2501–2512 | L3 | Autora | Esta semana (bajo costo) |
 | P12 | **D15 — medios observables:** marcar en la taxonomía v1.1 qué valores de `medio_pago` aparecen en extractos (efectivo y fiado solo existen en la capa interna) | Taxonomía, generador | WP2 | Antes del 28 sep |
 | P13 | **D15 — categorías operativas a emitir, con fuente o supuesto:** `ingreso` (monto desde `ICGU`; cadencia por supuesto), `transferencias_p2p` (prevalencia de dinero recibido de otros hogares: familia `P7510*`/`P7513*` **de ENPH**, en `personas/caracteristicas_generales_personas.csv` — no confundir con el `P7510*` de GEIH, en `otros_ingresos.csv`, que tiene otros sub-ítems y su propio periodo de referencia; por verificar), `movimiento_propio` (sin fuente: supuesto), `retiro_efectivo` (desde el gasto en efectivo de la capa interna; PD8) | WP6 | Autora | Jue 24 |
@@ -199,7 +199,7 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 | **R7 — Calendario (nuevo)** | **Alto**: 25 días para priors, generador, CTGAN, clasificadores, TSTR y redacción | Punto de control 25 sep; redacción del capítulo de datos desde ya |
 | **R8 — Comité de ética (nuevo)** | Desconocido | Preguntar el lunes; si aplica, iniciar el trámite de inmediato |
 | **R9 — Instrumento DANE 2025 (nuevo)** | Declarado | L2 y L3 |
-| **R12 — Motivación empírica sin respaldo (nuevo)** | **Alto** | Las tres fallas de Pancholi nunca se midieron. Si al ejecutarlo no aparecen, la motivación descansa en la ausencia de datos colombianos y en el diseño estadounidense del paper, y la hipótesis de la tesis se reformula. **Primer riesgo: que el código no esté disponible o no corra** |
+| **R12 — Motivación empírica** | **Mitigado en parte** | El pipeline ya se ejecutó (etapas 1–3): su salida final no conserva la relación ingreso–monto y no emite estructura de extracto. Queda el referente ENPH para cerrar H-P1 y la decisión de hospedaje para H-P2; las etapas 4–5 no corrieron (Groq / código) |
 | **R10 — Universo del generador vs. universo del real** | ✅ **Resuelto (D15, 22 sep)** | Extracto sintético con capa interna de gasto del hogar. Queda como riesgo residual la validez de los supuestos de retiros y medios digitales |
 | **R11 — Unidad de los priors de medio de pago (nuevo)** | Declarado | ENPH da forma de pago principal **por hogar**; el generador emite transacciones. Usarla como probabilidad por transacción es un supuesto a declarar |
 
@@ -284,7 +284,7 @@ Todo se corre desde Git Bash en `C:\tesis-sdg`, con el entorno activado (`source
 - [ ] Módulo de priors (Etapa 1)
 - [ ] Generador por reglas + nombres de comercio (Etapa 2)
 - [ ] CTGAN + dataset sintético v1 ≥ 5.000 tx + métricas (Etapa 3)
-- [ ] Reevaluación de Pancholi ejecutada
+- [x] Reevaluación del pipeline de referencia ejecutada (etapas 1–3; 4–5 no ejecutables)
 - [ ] Extractos recolectados y anonimizados
 - [ ] Muestra anotada por 2 anotadores + Kappa
 - [ ] 3 clasificadores + TSTR (Etapa 4)
@@ -305,7 +305,7 @@ código y documentos se respalda en GitHub privado; los datos no se suben.
 | WP2 — Taxonomía | Pendientes en `docs/taxonomia/pendientes_v1.1.md` |
 | WP3 — Priors | Insumos listos; módulo sin escribir |
 | WP4 — Datos reales | Paquete redactado el 15 sep; por ajustar |
-| WP5 — Pipeline de referencia (Pancholi) | Notebook diseñado, sin ejecutar |
+| WP5 — Pipeline de referencia (Pancholi) | ✅ Ejecutado (etapas 1–3); `docs/reevaluacion_pancholi.md`, `outputs/pancholi/` |
 | WP6 — Generador · WP7 — CTGAN · WP8 — Evaluación TSTR | Por hacer |
 
 La equivalencia completa entre los chats de trabajo originales y estos WP queda en `docs/bitacora.md`.

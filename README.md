@@ -19,20 +19,21 @@ validación empírica se hacen sobre **Bogotá urbano** como caso de estudio (lo
 componente de datos reales son de Bogotá). Ninguna cifra de este repositorio es nacional salvo que
 se indique explícitamente. Detalle de la decisión de dominio: `CLAUDE.md`.
 
-## Hipótesis sobre el pipeline de referencia (Pancholi et al.)
+## Reevaluación del pipeline de referencia (Pancholi et al.)
 
-El pipeline de referencia (Pancholi et al.) **no se ha ejecutado todavía**. Sus limitaciones frente
-al contexto colombiano se tratan como hipótesis a contrastar con una ejecución reproducible
-(WP5), no como hallazgos:
+El pipeline de referencia (Pancholi et al.) **se ejecutó de forma reproducible** (etapas 1–3, con
+criterios prerregistrados antes de correr; detalle en `docs/reevaluacion_pancholi.md`). Las
+limitaciones frente al contexto colombiano se contrastaron así:
 
-- **H-P1 (ingreso):** el paper sí calibra el gasto por ingreso y características del hogar, pero
-  con la distribución de Estados Unidos (ACS 2015-2019 de Washington D.C.). La hipótesis es que esa
-  calibración no reproduce la relación ingreso–gasto de los hogares colombianos.
-- **H-P2 (categorías):** las categorías de gasto del pipeline de referencia, ancladas en comercios
-  y hábitos de Washington D.C., no corresponden a la estructura de gasto colombiana.
-- **H-P3 (medio de pago):** con D15 (ver más abajo), la hipótesis es que el pipeline de referencia
-  no reproduce, en términos de registros de extracto, la estructura de retiros en cajero y
-  transferencias con la que el efectivo colombiano aparece realmente en un extracto bancario.
+- **H-P1 (ingreso):** *no concluyente respecto a Colombia* (falta el referente de la ENPH, pendiente).
+  Hallazgo firme: la salida final (CTGAN) no conserva la relación ingreso–monto (elasticidad
+  −0,003 [−0,008; 0,002], frente a 1,008 en la etapa de reglas).
+- **H-P2 (categorías):** *refutada* con la definición prerregistrada (ocio = entretenimiento);
+  *confirmada* si el hospedaje se cuenta como ocio. Solo 6 de 16 categorías de la taxonomía tienen
+  registros; servicios públicos 0 %.
+- **H-P3 (medio de pago):** *confirmada para las etapas ejecutadas (1–3)*: sin campo de medio de
+  pago y sin registros de retiro o transferencia. La distribución de `payment_type` (etapa 4) queda
+  no concluyente (no ejecutable).
 
 Detalle y regla de evidencia: `docs/protocolo_tecnico.md` §1.4; `CLAUDE.md`.
 
@@ -43,6 +44,8 @@ Detalle y regla de evidencia: `docs/protocolo_tecnico.md` §1.4; `CLAUDE.md`.
   con factores de expansión, 112 archivos verificados por SHA-256 y cargador único con 29 pruebas
   automatizadas.
 - Distribuciones ponderadas de Bogotá urbano para los priors (16+ tablas en `outputs/distribuciones/`).
+- Reevaluación reproducible del pipeline de referencia (Pancholi et al.), etapas 1–3, con criterios
+  prerregistrados (`docs/reevaluacion_pancholi.md`, `outputs/pancholi/`).
 - Decisión de dominio (Bogotá urbano) y de universo del generador (D15: extractos de hogares
   bancarizados) cerradas y documentadas.
 
@@ -50,8 +53,8 @@ Detalle y regla de evidencia: `docs/protocolo_tecnico.md` §1.4; `CLAUDE.md`.
 - Módulo de priors bayesianos (condicionamiento por celda, umbral de soporte y encogimiento
   jerárquico).
 - Generador por reglas, refinamiento con CTGAN, clasificadores y evaluación TSTR.
-- **El pipeline de referencia (Pancholi et al.) no se ha ejecutado.** Sin esa ejecución, H-P1 a
-  H-P3 siguen siendo hipótesis, no resultados.
+- Referente colombiano de la ENPH para cerrar H-P1 (participación de alimentos por quintil de
+  ingreso) y decisión de la categoría de hospedaje para H-P2.
 - Recolección y anotación de los datos reales de validación (paquete listo, recolección
   pendiente de resolver la consulta de ética).
 

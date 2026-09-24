@@ -1,0 +1,788 @@
+{
+ "descripcion": "WP5 — ejecución del pipeline de referencia (Pancholi et al.), etapas 1-3",
+ "repositorio": {
+  "url": "https://github.com/aman-jaglan/Capstone_Project.git",
+  "commit": "d0a61e783353f52123b1821bc1876824d608d2a1",
+  "arbol_limpio": true
+ },
+ "licencia": "MIT (Copyright (c) 2025 Aman Jaglan)",
+ "parches": {
+  "P1_import_SingleTableMetadata.diff": "7bda331c5674dd5cbad80c4dade6e845b802adf0d613a0873138083afc45a323",
+  "README.md": "a158ad3d72b07bb3cabfdffa40ed09bff7cd6c476d76c47a2b0a5475bd9ffbf8"
+ },
+ "prerregistro": {
+  "archivo": "docs/prerregistro_wp5.md",
+  "sha256": "82dae53ba89e381aacc8e25e4aed77718faf9d1f4efd9f03a53a9072c527c010"
+ },
+ "semillas": [
+  42,
+  43,
+  44,
+  45,
+  46,
+  47,
+  48,
+  49,
+  50,
+  51
+ ],
+ "semilla_muestreo_sdv": "SDV 1.19 fija FIXED_RNG_SEED=73251 al muestrear (comportamiento por defecto, no se altera)",
+ "parametros": {
+  "n_niveles": 12,
+  "niveles_ingreso_usd_anual": [
+   5000.0,
+   7278.446540718051,
+   10595.156809218115,
+   15423.256485283768,
+   22451.469562384205,
+   32682.364194074362,
+   47575.36812216966,
+   69254.95470643867,
+   100813.6971021329,
+   146753.42098600318,
+   213627.38586282323,
+   310975.10152718105
+  ],
+  "clientes_entrena_por_nivel": 13,
+  "clientes_eval_por_nivel": 167,
+  "tx_por_cliente": 30,
+  "epocas_ctgan": 100,
+  "muestras_A": 60000,
+  "muestras_B": 500000,
+  "lote_muestreo_B": 50000,
+  "household_size": 2,
+  "zipcode": 20001.0
+ },
+ "reproducibilidad_semilla_42": {
+  "etapa2_entrenamiento.csv.gz": true,
+  "etapa3_ctgan.csv.gz": true,
+  "etapa2_evaluacion.csv.gz": true
+ },
+ "entorno": {
+  "python": "3.11.15 (main, Mar  3 2026, 09:26:23) [GCC 13.3.0]",
+  "plataforma": "Linux-6.18.44-fc-v37-x86_64-with-glibc2.39",
+  "procesador": "x86_64",
+  "cpu_hilos_torch": 2,
+  "cuda": false,
+  "venv": ".venv-pancholi",
+  "paquetes": [
+   "arviz==0.21.0",
+   "blinker==1.9.0",
+   "boto3==1.37.13",
+   "botocore==1.37.13",
+   "click==8.1.8",
+   "cloudpickle==3.1.1",
+   "contourpy==1.3.1",
+   "copulas==0.12.1",
+   "ctgan==0.11.0",
+   "cycler==0.12.1",
+   "deepecho==0.7.0",
+   "Faker==37.0.0",
+   "filelock==3.18.0",
+   "Flask==3.1.0",
+   "fonttools==4.56.0",
+   "fsspec==2025.3.0",
+   "graphviz==0.20.3",
+   "h5netcdf==1.6.1",
+   "h5py==3.13.0",
+   "iniconfig==2.3.0",
+   "itsdangerous==2.2.0",
+   "Jinja2==3.1.6",
+   "jmespath==1.0.1",
+   "joblib==1.4.2",
+   "kiwisolver==1.4.8",
+   "MarkupSafe==3.0.2",
+   "matplotlib==3.10.1",
+   "mpmath==1.3.0",
+   "narwhals==1.30.0",
+   "networkx==3.4.2",
+   "numpy==2.2.3",
+   "nvidia-cublas-cu12==12.4.5.8",
+   "nvidia-cuda-cupti-cu12==12.4.127",
+   "nvidia-cuda-nvrtc-cu12==12.4.127",
+   "nvidia-cuda-runtime-cu12==12.4.127",
+   "nvidia-cudnn-cu12==9.1.0.70",
+   "nvidia-cufft-cu12==11.2.1.3",
+   "nvidia-curand-cu12==10.3.5.147",
+   "nvidia-cusolver-cu12==11.6.1.9",
+   "nvidia-cusparse-cu12==12.3.1.170",
+   "nvidia-cusparselt-cu12==0.6.2",
+   "nvidia-nccl-cu12==2.21.5",
+   "nvidia-nvjitlink-cu12==12.4.127",
+   "nvidia-nvtx-cu12==12.4.127",
+   "packaging==24.2",
+   "pandas==2.2.3",
+   "pillow==11.1.0",
+   "platformdirs==4.3.6",
+   "plotly==6.0.0",
+   "pluggy==1.6.0",
+   "pyparsing==3.2.1",
+   "pytest==8.3.5",
+   "python-dateutil==2.9.0.post0",
+   "pytz==2025.1",
+   "PyYAML==6.0.2",
+   "rdt==1.15.0",
+   "s3transfer==0.11.4",
+   "scikit-learn==1.6.1",
+   "scipy==1.15.2",
+   "sdmetrics==0.19.0",
+   "sdv==1.19.0",
+   "six==1.17.0",
+   "sympy==1.13.1",
+   "threadpoolctl==3.6.0",
+   "torch==2.6.0",
+   "tqdm==4.67.1",
+   "triton==3.2.0",
+   "typing_extensions==4.12.2",
+   "tzdata==2025.1",
+   "urllib3==2.3.0",
+   "Werkzeug==3.1.3",
+   "xarray==2025.1.2",
+   "xarray-einstats==0.8.0"
+  ]
+ },
+ "corridas": [
+  {
+   "diseno": "A",
+   "semilla": 42,
+   "tiempos_s": {
+    "etapa2": 3.1827406883239746,
+    "ctgan_fit": 431.2995274066925,
+    "ctgan_muestreo": 4.83289909362793,
+    "etapa2_evaluacion": 40.673736333847046
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/A_s42_etapa2_entrenamiento.csv.gz",
+     "filas": 4680,
+     "sha256": "50302f9b16685e62ce8c4ec8f4bf50812a3239619711fbf1d6b8d4f683342a17",
+     "sha256_sin_timestamp": "d52d107a5872c8641070ef47e401605dda73507d965bd51bccd43eb09125a964"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s42_etapa3_ctgan.csv.gz",
+     "filas": 60000,
+     "sha256": "76a9e0fbb0f4d947b90851a56dbb22d8d913cd9160cbd92afba32c5828c26e2d",
+     "sha256_sin_timestamp": "90fe764dd632f2cd7a26852b798b2a1dd01cf135416d5bb221a37454155510ef"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s42_etapa2_evaluacion.csv.gz",
+     "filas": 60120,
+     "sha256": "980c277c8c40db0849856badf2434ee0c117072aa288b8075a32c64a4c26ea94",
+     "sha256_sin_timestamp": "5e504e1db4ed2ca1251cb2eeae010afcf3811dfc56b1aa4aa1f93750115db8c1"
+    }
+   ],
+   "terminado_utc": "2026-09-23T22:21:05Z",
+   "id": "A_s42"
+  },
+  {
+   "diseno": "A",
+   "semilla": 43,
+   "tiempos_s": {
+    "etapa2": 3.1831860542297363,
+    "ctgan_fit": 433.9966368675232,
+    "ctgan_muestreo": 4.715362071990967,
+    "etapa2_evaluacion": 40.201059341430664
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/A_s43_etapa2_entrenamiento.csv.gz",
+     "filas": 4680,
+     "sha256": "bd7f68f276ea99c391c62b081bcb9c0e8ceb7e55a9106417362ce207d10c613a",
+     "sha256_sin_timestamp": "4a111c5806fbcf5e1072602be39376dd283dae348a5aee76c29bb2e4f1cada67"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s43_etapa3_ctgan.csv.gz",
+     "filas": 60000,
+     "sha256": "44f8a61570875138c5888cfe30cfc4f051600654332bb4cb794faf13431884c9",
+     "sha256_sin_timestamp": "9dae4659de7b9b358ca604440f6ae83a8314e4ce27a85a4337441b772e2261c6"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s43_etapa2_evaluacion.csv.gz",
+     "filas": 60120,
+     "sha256": "b5957f02456b2ddd06a0210bc4832b54b4a821537f54ab4a97c3826aa9fc0d45",
+     "sha256_sin_timestamp": "5ad003661ee5379f8e17bf0e38fff381dc2dabd4c1d0b513f1c575c04fa4be66"
+    }
+   ],
+   "terminado_utc": "2026-09-23T22:29:10Z",
+   "id": "A_s43"
+  },
+  {
+   "diseno": "A",
+   "semilla": 44,
+   "tiempos_s": {
+    "etapa2": 3.1144464015960693,
+    "ctgan_fit": 423.62564849853516,
+    "ctgan_muestreo": 4.9877777099609375,
+    "etapa2_evaluacion": 40.81932330131531
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/A_s44_etapa2_entrenamiento.csv.gz",
+     "filas": 4680,
+     "sha256": "eeabc6fbca8b049bd1a2758759f093a96eb4c5e520988d2e81ed2d7ed843445a",
+     "sha256_sin_timestamp": "1822322c00bb05be2f579da72188eeff244a490759423856751484cc08730e87"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s44_etapa3_ctgan.csv.gz",
+     "filas": 60000,
+     "sha256": "c50f64e48e040f890e68e2de611bce0074fc016f1887beed7785e424804c1820",
+     "sha256_sin_timestamp": "fc9743be76b48bb0c66b87d899a7268f2f34e213bd08ab5e7e2ae1de880bc4d7"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s44_etapa2_evaluacion.csv.gz",
+     "filas": 60120,
+     "sha256": "03000d412d16c1a77a776ce71f87e9365d0bc69f2bfeeb6f4e6d4c19af0e27bc",
+     "sha256_sin_timestamp": "b2dfd68d0c8e764f253e7af7081c810241982818da2bab077b3c40d3598a60b3"
+    }
+   ],
+   "terminado_utc": "2026-09-23T22:37:04Z",
+   "id": "A_s44"
+  },
+  {
+   "diseno": "A",
+   "semilla": 45,
+   "tiempos_s": {
+    "etapa2": 3.2857024669647217,
+    "ctgan_fit": 438.91257214546204,
+    "ctgan_muestreo": 4.921458959579468,
+    "etapa2_evaluacion": 40.885650873184204
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/A_s45_etapa2_entrenamiento.csv.gz",
+     "filas": 4680,
+     "sha256": "d00c913954f26431456720b06c5590d4ee9ba50034fd3bd9624ed0d16489bfc9",
+     "sha256_sin_timestamp": "b293f10768e078200c307bbe14b19faf158fbb43db1b73c37f92c1bdb3651fba"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s45_etapa3_ctgan.csv.gz",
+     "filas": 60000,
+     "sha256": "58bd0dd2c7855baf31b0de4fa4a73ca1ad55a138ede85aeef9c8bf66eb73c837",
+     "sha256_sin_timestamp": "c1f8eb3bd683d3c901cf7c270ae942ad195a105d5fc1e59f1bde8dc92e46e9cf"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s45_etapa2_evaluacion.csv.gz",
+     "filas": 60120,
+     "sha256": "47c97bb2d708f01501ada641da6e17a95217bae96426a0da91fcf691d11910a8",
+     "sha256_sin_timestamp": "572fdc8c9be730b2b38d15a058a92c1d816d163824749f86f7eee7788ef198ae"
+    }
+   ],
+   "terminado_utc": "2026-09-23T22:45:14Z",
+   "id": "A_s45"
+  },
+  {
+   "diseno": "A",
+   "semilla": 46,
+   "tiempos_s": {
+    "etapa2": 3.2820823192596436,
+    "ctgan_fit": 433.13448762893677,
+    "ctgan_muestreo": 5.199850797653198,
+    "etapa2_evaluacion": 40.65265917778015
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/A_s46_etapa2_entrenamiento.csv.gz",
+     "filas": 4680,
+     "sha256": "8e778f5b1ed2aab1c00f826eb25e1af45f79f01766b78865288efc1edfa0f51e",
+     "sha256_sin_timestamp": "66294a6272efa4d68f4fa1aeb83c2b933babbf813a809cc7ce586f40c8df3c9a"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s46_etapa3_ctgan.csv.gz",
+     "filas": 60000,
+     "sha256": "fda35a0f58d41a088bfe01ab710a1157b7a99bfab7a7542e4c242574cd357752",
+     "sha256_sin_timestamp": "c9187e27f71522751b7582d58ad0c82c3da0ae8f51700cdd14ce684cbc5eb2ab"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s46_etapa2_evaluacion.csv.gz",
+     "filas": 60120,
+     "sha256": "6c72c0b304b9fab3383caebfe726b7207755a2fdbd52285a098b966acd85545c",
+     "sha256_sin_timestamp": "a1a8456c5fa76fffa251b9a761aa5c194e5b386ab5792a9c7c257019d4753124"
+    }
+   ],
+   "terminado_utc": "2026-09-23T22:53:18Z",
+   "id": "A_s46"
+  },
+  {
+   "diseno": "A",
+   "semilla": 47,
+   "tiempos_s": {
+    "etapa2": 3.1330699920654297,
+    "ctgan_fit": 442.0037205219269,
+    "ctgan_muestreo": 5.152359485626221,
+    "etapa2_evaluacion": 41.40449857711792
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/A_s47_etapa2_entrenamiento.csv.gz",
+     "filas": 4680,
+     "sha256": "f1ea8a8fa5f05b1c033f059aff22aae6ae79214d033fee19ab0e28a0543ca8fe",
+     "sha256_sin_timestamp": "009b25d6f5ec5c4ccc4c35a21e2f7c9f84035d06449d0793c58519a730caa449"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s47_etapa3_ctgan.csv.gz",
+     "filas": 60000,
+     "sha256": "87ea40a993bf501d6d3297658235100718132506f3e20c7392595162b864aa6a",
+     "sha256_sin_timestamp": "81c493f3060de2af53c936273aac1e9cc7f9114ac30ef071afa78e7d39a456ee"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s47_etapa2_evaluacion.csv.gz",
+     "filas": 60120,
+     "sha256": "62a1b939583c0cc3c6a86b45f7fc5c1734a284b64cb2c7fe2b236ac777548236",
+     "sha256_sin_timestamp": "bc98b6f84c2a109536877a1dc62d45dd4b7067137d1db202125199bf399a9dae"
+    }
+   ],
+   "terminado_utc": "2026-09-23T23:01:32Z",
+   "id": "A_s47"
+  },
+  {
+   "diseno": "A",
+   "semilla": 48,
+   "tiempos_s": {
+    "etapa2": 3.1633992195129395,
+    "ctgan_fit": 428.2933464050293,
+    "ctgan_muestreo": 5.0637946128845215,
+    "etapa2_evaluacion": 41.809924364089966
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/A_s48_etapa2_entrenamiento.csv.gz",
+     "filas": 4680,
+     "sha256": "48c4215b10042ee5a48bf9e436995944cac826aacc4f7051bd0437470cd2b611",
+     "sha256_sin_timestamp": "86f33c285fdb76ccbb6b8e15319d2d98aa3bc29a7fdd88e0e50b7e5a3380ecc2"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s48_etapa3_ctgan.csv.gz",
+     "filas": 60000,
+     "sha256": "642948aa4ebf7e1171f4d07b7c8e06af38ba491fe81d12a24367961190d5f920",
+     "sha256_sin_timestamp": "189d42dfded43658859f800e76ffdebe7cf647c2e88d570c1f7624211cac24e0"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s48_etapa2_evaluacion.csv.gz",
+     "filas": 60120,
+     "sha256": "b85ea199caf76d7b56b8ac7ecfd8dc1b135910a276760c78a8e75e8da4e7f830",
+     "sha256_sin_timestamp": "e7a0f87df121f8bcb1d8322877ab5561f1667864afdcea37928fba74d1e4d6b9"
+    }
+   ],
+   "terminado_utc": "2026-09-23T23:09:32Z",
+   "id": "A_s48"
+  },
+  {
+   "diseno": "A",
+   "semilla": 49,
+   "tiempos_s": {
+    "etapa2": 3.201848268508911,
+    "ctgan_fit": 441.142050743103,
+    "ctgan_muestreo": 4.898263454437256,
+    "etapa2_evaluacion": 41.46573758125305
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/A_s49_etapa2_entrenamiento.csv.gz",
+     "filas": 4680,
+     "sha256": "18b8d351f52cbaa44faa6ab8abd38648ffcbe2875b9bb23664e83b60010efd7f",
+     "sha256_sin_timestamp": "7ff7f64a59c41c0db35149d83ff3551a4a6c42005b7c0ddfac312a6afecd3284"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s49_etapa3_ctgan.csv.gz",
+     "filas": 60000,
+     "sha256": "b08822b4a1952d7b5c396a15ba8512036c34f9502a567be13524d7470513d294",
+     "sha256_sin_timestamp": "ed9ae42dba055179aa1e7566b3243b684f03951ca54f94169ff95004679e4d29"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s49_etapa2_evaluacion.csv.gz",
+     "filas": 60120,
+     "sha256": "ad83b915fa7e0eac4ae586ad868e370b90c83ee8f0a32971bf665ded02beb76f",
+     "sha256_sin_timestamp": "6d843201e7331cbca0b0226a78388dbbc2a67ddbc1b44d908bba40842ebef2ba"
+    }
+   ],
+   "terminado_utc": "2026-09-23T23:17:45Z",
+   "id": "A_s49"
+  },
+  {
+   "diseno": "A",
+   "semilla": 50,
+   "tiempos_s": {
+    "etapa2": 3.291287660598755,
+    "ctgan_fit": 427.68535351753235,
+    "ctgan_muestreo": 5.068058729171753,
+    "etapa2_evaluacion": 41.06321144104004
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/A_s50_etapa2_entrenamiento.csv.gz",
+     "filas": 4680,
+     "sha256": "53ff25c8236c00fbcbd0b1c8f1229e20f1741f75281f9adde0ffb1a8779cd0e9",
+     "sha256_sin_timestamp": "a59c6feef88b6665a1f3469591059c9aeec3d24d0b55e78273e09e134a2bb942"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s50_etapa3_ctgan.csv.gz",
+     "filas": 60000,
+     "sha256": "7441d25f4373e0076add3428467a278a97a4f5be127f5a6126404e4c695a1540",
+     "sha256_sin_timestamp": "ed0a32e655bff439062b826ecb75b54a07492d33c9fabf212eb390fa38ada75f"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s50_etapa2_evaluacion.csv.gz",
+     "filas": 60120,
+     "sha256": "7a3b7387af2e065c8cf891c30dab3d923256493c3fe45ca7890f2090c085c845",
+     "sha256_sin_timestamp": "acca82c68d929e19c3488e5e911ccdb6020f59b98669d01f9d71b513a1bcab3d"
+    }
+   ],
+   "terminado_utc": "2026-09-23T23:25:44Z",
+   "id": "A_s50"
+  },
+  {
+   "diseno": "A",
+   "semilla": 51,
+   "tiempos_s": {
+    "etapa2": 3.269775867462158,
+    "ctgan_fit": 425.71033453941345,
+    "ctgan_muestreo": 5.014053821563721,
+    "etapa2_evaluacion": 41.07751226425171
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/A_s51_etapa2_entrenamiento.csv.gz",
+     "filas": 4680,
+     "sha256": "bccaba6f71d8a1f47f10593bcc3118df55cfdee72d6ac9b2c10f6afec89eddd3",
+     "sha256_sin_timestamp": "587c75f49a605777148e81601f1d8c9b115027dabc5d0bf7a452991cee75c8f6"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s51_etapa3_ctgan.csv.gz",
+     "filas": 60000,
+     "sha256": "59d51b54bed1f65fe69e037e59d8dc1f2e7d5e071efc4d41f2aed8e73379305e",
+     "sha256_sin_timestamp": "81881175c3d760e89d5083467aaffa1e583277eee03c4ccaeeff48047c5ac634"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/A_s51_etapa2_evaluacion.csv.gz",
+     "filas": 60120,
+     "sha256": "86ac60172aa3a8dabcfaf47d4bcbaf00ecad5c1dc818931b11a184f5936877fb",
+     "sha256_sin_timestamp": "5ebdc4155bf2732caa9d3747cf5f844c1c274459f62b00dc72f8e4ee4042b90e"
+    }
+   ],
+   "terminado_utc": "2026-09-23T23:33:41Z",
+   "id": "A_s51"
+  },
+  {
+   "diseno": "B",
+   "semilla": 42,
+   "tiempos_s": {
+    "etapa2": 3.1796391010284424,
+    "ctgan_fit": 431.67829155921936,
+    "ctgan_muestreo": 41.37763857841492
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/B_s42_etapa2.csv.gz",
+     "filas": 4650,
+     "sha256": "f98d5d1fa2cf21cbbda3c0ab051ca02091de91df0b5983fc349839e931be591c",
+     "sha256_sin_timestamp": "a1810c08451b3f3a239a495665dbb4bd089fd9d5ce8ad514613c01a676b9fe50"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/B_s42_etapa3_ctgan.csv.gz",
+     "filas": 500000,
+     "sha256": "4b99ed1a81f182957355315a9061a314b1520ab8823e929c3c059a9f80b07af2",
+     "sha256_sin_timestamp": "d96c48a138fcc4fb17e4365a1107857dab4099db5dc2ab86b93541d8be55e269"
+    }
+   ],
+   "terminado_utc": "2026-09-24T00:11:49Z",
+   "id": "B_s42"
+  },
+  {
+   "diseno": "B",
+   "semilla": 43,
+   "tiempos_s": {
+    "etapa2": 3.1725645065307617,
+    "ctgan_fit": 451.2540032863617,
+    "ctgan_muestreo": 41.37164330482483
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/B_s43_etapa2.csv.gz",
+     "filas": 4650,
+     "sha256": "a73abfba367d9552befe1a9e9f0b422f903aef4629c6ea1d6ccd3d4b9467eaa6",
+     "sha256_sin_timestamp": "ff3f25da384e4a73eb8f1a4e83a087a92dd62b3d57bd90ea760ad86e01e7e1f1"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/B_s43_etapa3_ctgan.csv.gz",
+     "filas": 500000,
+     "sha256": "769218c0453ddfebc4f476b6f471fba353bd48535f4fe9298fe944efc7e227c5",
+     "sha256_sin_timestamp": "7368d846caddc878c78461dad7f598b78a39de01b3fb45af83bd16d359ef5246"
+    }
+   ],
+   "terminado_utc": "2026-09-24T00:20:13Z",
+   "id": "B_s43"
+  },
+  {
+   "diseno": "B",
+   "semilla": 44,
+   "tiempos_s": {
+    "etapa2": 3.144272804260254,
+    "ctgan_fit": 433.24635887145996,
+    "ctgan_muestreo": 40.56536674499512
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/B_s44_etapa2.csv.gz",
+     "filas": 4650,
+     "sha256": "db9d6ce128d5cbca89b3e6f50961d2ece0bc9db52352a4406684241f93fe6d51",
+     "sha256_sin_timestamp": "0a92ef08d9a7414772483086ec1a45451d457ab82e0087e077f3a93f84b0eea3"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/B_s44_etapa3_ctgan.csv.gz",
+     "filas": 500000,
+     "sha256": "3a59ee0b77d3778745ff39f81af2f2956eac88d5899949dd4b0ccaf5d5857916",
+     "sha256_sin_timestamp": "a25ef3408c6b4a62651e3ea32146d1008d203f3a05a4d374db184b99ef304c66"
+    }
+   ],
+   "terminado_utc": "2026-09-24T00:28:18Z",
+   "id": "B_s44"
+  },
+  {
+   "diseno": "B",
+   "semilla": 45,
+   "tiempos_s": {
+    "etapa2": 3.1695592403411865,
+    "ctgan_fit": 433.37547874450684,
+    "ctgan_muestreo": 43.038235664367676
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/B_s45_etapa2.csv.gz",
+     "filas": 4650,
+     "sha256": "b24147e940ca986b3c9872b60fc7db64bf842c2552f5295533d1384d0a7fcd6a",
+     "sha256_sin_timestamp": "d53a0509a7c66e3e8aad25005810c71d7885272543f37d6fac824d0a94c88164"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/B_s45_etapa3_ctgan.csv.gz",
+     "filas": 500000,
+     "sha256": "c0365fd3601ec92a1be5a7ddafea7bdd8fa13261c7fa0e6e43cf27c30bed6621",
+     "sha256_sin_timestamp": "e85df54d7055c7e296a8a2c0d0c88e9397508c7441588071c4ce38a6836e5782"
+    }
+   ],
+   "terminado_utc": "2026-09-24T00:36:26Z",
+   "id": "B_s45"
+  },
+  {
+   "diseno": "B",
+   "semilla": 46,
+   "tiempos_s": {
+    "etapa2": 3.1602933406829834,
+    "ctgan_fit": 425.7201564311981,
+    "ctgan_muestreo": 40.48474836349487
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/B_s46_etapa2.csv.gz",
+     "filas": 4650,
+     "sha256": "f9788950a9e0501ec034b6dcdf2323d275428716fb68ccfb65b380f1ce396d34",
+     "sha256_sin_timestamp": "9313446f5112fd4b1a9e263acf14287001f9a812e005af5dd878bf84f90daae6"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/B_s46_etapa3_ctgan.csv.gz",
+     "filas": 500000,
+     "sha256": "5c949c8397fb2cad3ce8c60137c4ee7967fb93bfe69503bc66e733c6c41350d9",
+     "sha256_sin_timestamp": "cea2c2261ffb400b4fd901fe9650081113238a91e34b4c1d2d7d2908a4e83291"
+    }
+   ],
+   "terminado_utc": "2026-09-24T00:44:23Z",
+   "id": "B_s46"
+  },
+  {
+   "diseno": "B",
+   "semilla": 47,
+   "tiempos_s": {
+    "etapa2": 3.0261824131011963,
+    "ctgan_fit": 425.8977313041687,
+    "ctgan_muestreo": 41.639657497406006
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/B_s47_etapa2.csv.gz",
+     "filas": 4650,
+     "sha256": "b21862b31b84a21517c4175ac4ce702960e3655031bd0a9e4cbc10472909f8bc",
+     "sha256_sin_timestamp": "36850e526002cbce6e539d2f5267b7d7915a42b97549ade841c8734a3421a3a7"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/B_s47_etapa3_ctgan.csv.gz",
+     "filas": 500000,
+     "sha256": "45820b9210ebef54702d7f862bf09a47fbf5c382a438c4044ff9780f3a3510f3",
+     "sha256_sin_timestamp": "cda5771ce6405a7f5ef4650d3fdcb96b5f472b9db15c40ffe348cf400e7f49ea"
+    }
+   ],
+   "terminado_utc": "2026-09-24T00:52:21Z",
+   "id": "B_s47"
+  },
+  {
+   "diseno": "B",
+   "semilla": 48,
+   "tiempos_s": {
+    "etapa2": 3.0985941886901855,
+    "ctgan_fit": 421.0941219329834,
+    "ctgan_muestreo": 40.34293079376221
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/B_s48_etapa2.csv.gz",
+     "filas": 4650,
+     "sha256": "8a3885bc1110c41d458f11ffb79e18623bd2bd64558d6e109dae5ff4e32dc247",
+     "sha256_sin_timestamp": "aa850e972d6597de4735be19af53b1481d329d079f2138b4925a075653c1e690"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/B_s48_etapa3_ctgan.csv.gz",
+     "filas": 500000,
+     "sha256": "08863b51f19e351f8ce36a2fc3b0acf23469267ef1d8b1f7e5fae9cdc8e76276",
+     "sha256_sin_timestamp": "cd0c3fa387724ffbca89d69d7893bde1c4c9aa828e5c48c9abb151ec177b1d2d"
+    }
+   ],
+   "terminado_utc": "2026-09-24T01:00:14Z",
+   "id": "B_s48"
+  },
+  {
+   "diseno": "B",
+   "semilla": 49,
+   "tiempos_s": {
+    "etapa2": 3.154184341430664,
+    "ctgan_fit": 433.6021935939789,
+    "ctgan_muestreo": 42.2836332321167
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/B_s49_etapa2.csv.gz",
+     "filas": 4650,
+     "sha256": "1245737c780855a0784d1ef0ab40e716a5a75163cabc1ef52130155f02bcabe4",
+     "sha256_sin_timestamp": "dcd3fd0068f693e50be6d03ab942f4118edc06af4a94ead155fa3ecc7a047a1d"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/B_s49_etapa3_ctgan.csv.gz",
+     "filas": 500000,
+     "sha256": "1b47acde1493d8fe2670f3ad106a373773d7490b2c9c46d8b3f04b8bc59e688b",
+     "sha256_sin_timestamp": "c28d9fa4cc39a1bf9e5d4cd9eaefbb9b31ae3d08505aa953ce05123e2d1135e5"
+    }
+   ],
+   "terminado_utc": "2026-09-24T01:08:21Z",
+   "id": "B_s49"
+  },
+  {
+   "diseno": "B",
+   "semilla": 50,
+   "tiempos_s": {
+    "etapa2": 3.158068895339966,
+    "ctgan_fit": 429.30142545700073,
+    "ctgan_muestreo": 41.34832501411438
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/B_s50_etapa2.csv.gz",
+     "filas": 4650,
+     "sha256": "f75918794941ccb0148e86efd12ad89f0a9b0dcbeb199f6f3afa2ab5f1d23f83",
+     "sha256_sin_timestamp": "e89df3a5eb5fc6a4b09eb289c3274bb914a568ee8bf0f98aaa1df629231c8193"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/B_s50_etapa3_ctgan.csv.gz",
+     "filas": 500000,
+     "sha256": "48e6e24efe437d37f9f2165dcf5d69d705db96af94601878170d43969613d3c5",
+     "sha256_sin_timestamp": "536df49161170bfa786356874fcee9baeda609f63c62c441adf946663c52b741"
+    }
+   ],
+   "terminado_utc": "2026-09-24T01:16:22Z",
+   "id": "B_s50"
+  },
+  {
+   "diseno": "B",
+   "semilla": 51,
+   "tiempos_s": {
+    "etapa2": 3.1278960704803467,
+    "ctgan_fit": 431.6016390323639,
+    "ctgan_muestreo": 41.37204623222351
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/B_s51_etapa2.csv.gz",
+     "filas": 4650,
+     "sha256": "872e25a6ac423b4dc7ebbd9006af667e63a19c2a8482fed00ae16c3163d29e88",
+     "sha256_sin_timestamp": "60342393a1cd194d475dc99dc4959d38f4f7842495b030c0eca7a2efce70dd59"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/B_s51_etapa3_ctgan.csv.gz",
+     "filas": 500000,
+     "sha256": "7465f8bd16cefb8ed5f1dc3332d5c2aa635b2890660b2217134776a69f9026b0",
+     "sha256_sin_timestamp": "225b1e16036b052fc3fc3442857460f99e22ea370a3c5eae0a5a8f12d069a247"
+    }
+   ],
+   "terminado_utc": "2026-09-24T01:24:26Z",
+   "id": "B_s51"
+  },
+  {
+   "diseno": "C",
+   "semilla": 42,
+   "tiempos_s": {
+    "etapa2": 3.227827787399292,
+    "ctgan_fit": 412.49232816696167,
+    "ctgan_muestreo": 7.740348815917969,
+    "etapa1_fit": 3108.383036375046,
+    "etapa1_muestreo": 1.3973040580749512
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/C_s42_etapa1_hogares.csv.gz",
+     "filas": 100000,
+     "sha256": "6c83f1fa69f4af6096dcd9728ec82a7991397782243801fca28d50b550a5a839",
+     "sha256_sin_timestamp": "81624ad7e2c334f13aa65604bc4aa9ef992616ffa64f419e717edc0cf56af9d3"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/C_s42_etapa1_clientes155.csv.gz",
+     "filas": 155,
+     "sha256": "231890cee97f4d15e9927a0d69db31d2e460e056e0c3c04de3fb5786f5e29b90",
+     "sha256_sin_timestamp": "9a073d86e05b01b657565080895501d9a03c2fffa04f25913dbe5d22659c1d55"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/C_s42_etapa2.csv.gz",
+     "filas": 4650,
+     "sha256": "ff58433f5f6667ad88410ff846f4fc4a1aef32f7afdb8362d95f500488ce8b8c",
+     "sha256_sin_timestamp": "d114084e1ebfb8da9fd71bdc149a5744e84f46bbc8e681ca5aa98d302a10f44e"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/C_s42_etapa3_ctgan.csv.gz",
+     "filas": 60000,
+     "sha256": "083b07c66dd0b382964f3651b98a33acb99f044cb6c0d348f5fcccd4f6b148cb",
+     "sha256_sin_timestamp": "6a296aa7bb6130cdd213a1bc0c52b58b4afb7b04bc39d6831e12b93b71f2d4f8"
+    }
+   ],
+   "terminado_utc": "2026-09-24T02:23:22Z",
+   "id": "C_s42"
+  },
+  {
+   "diseno": "R",
+   "semilla": 42,
+   "tiempos_s": {
+    "etapa2": 3.1940383911132812,
+    "ctgan_fit": 416.7180290222168,
+    "ctgan_muestreo": 4.803015470504761,
+    "etapa2_evaluacion": 40.309504985809326
+   },
+   "archivos": [
+    {
+     "archivo": "outputs/pancholi/crudo/R_s42_etapa2_entrenamiento.csv.gz",
+     "filas": 4680,
+     "sha256": "f7dcb5a152ed610f94e4e0deb65691c34ee2bcdae8a0d0471f8576a54a0f753a",
+     "sha256_sin_timestamp": "d52d107a5872c8641070ef47e401605dda73507d965bd51bccd43eb09125a964"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/R_s42_etapa3_ctgan.csv.gz",
+     "filas": 60000,
+     "sha256": "b6a3e81f65fc1c6f238d84b32024d5ef5484eedc3e9f31328f0e7c68be0f7809",
+     "sha256_sin_timestamp": "90fe764dd632f2cd7a26852b798b2a1dd01cf135416d5bb221a37454155510ef"
+    },
+    {
+     "archivo": "outputs/pancholi/crudo/R_s42_etapa2_evaluacion.csv.gz",
+     "filas": 60120,
+     "sha256": "b043b1d397ff3d7d62cb8070f8f1ceb4645fdaca141d47bb501caee7442825c3",
+     "sha256_sin_timestamp": "5e504e1db4ed2ca1251cb2eeae010afcf3811dfc56b1aa4aa1f93750115db8c1"
+    }
+   ],
+   "terminado_utc": "2026-09-23T23:41:28Z",
+   "id": "R_s42"
+  }
+ ],
+ "tiempo_total_s": 13578.070722818375
+}
