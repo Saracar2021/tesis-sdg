@@ -180,7 +180,7 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 | P15 | **D15 — cuenta principal vs. consentimiento:** el consentimiento admite dos cuentas (banco + billetera) y el generador supone una. Decidir si el generador emite ambas o si el TSTR se evalúa por cuenta | WP6 y TSTR | Autora | Antes del 24 |
 | P16 | **D15 — redacción de la hipótesis:** dice «la distribución real de medios de pago según la ENPH». Con D15, ENPH actúa en la capa interna y la mezcla observable en extractos requiere Banrep 2024. Ajustar la redacción con la directora | Tesis | Autora + directora | Punto de control del 25 |
 | P10 | Congelar taxonomía v1.1 tras ver ≥ 50 descripciones reales | Anotación | WP2 | Cuando lleguen extractos |
-| P11 | Pasar los entregables de WP4 y WP5 al repo (`docs/`) | Trazabilidad | Autora | Lun 21 |
+| P11 | Pasar al repo los entregables pendientes de datos reales (los de la reevaluación del pipeline de referencia ya están integrados) | Trazabilidad | Autora | En curso |
 | P19 | **Calcular en `outputs/distribuciones/` la participación ENPH de 6 categorías de la taxonomía que existen en ENPH pero no se han calculado:** `alimentos_mercado` (Cuadernillo 2, Capítulo C: `gastos_diarios_capitulo_c.txt`, `gastos_diarios_mercados.csv`); `comidas_fuera` (Cuadernillo 2, D1: `gastos_diarios_hogar_comidas_fuera.csv`); `telecom_conectividad` (Cuadernillo 3, H11/H12, separable de transporte a nivel de artículo por prefijo COICOP "083" en `gastos_menos_frecuentes_articulos.txt`, columna `P10270`); `obligaciones_financieras` (Cuadernillo 3, grupo K, `CAP`=K11/K12 en `gastos_menos_frecuentes_articulos.txt`; probablemente muy ralo); `transferencias_p2p` e `ingreso` (familia `P7510`/`P7513` **de ENPH**, en `personas/caracteristicas_generales_personas.csv` — distinta del `P7510`/`P7513` de GEIH en `otros_ingresos.csv`; incidencia anual, requiere transformar a participación de transacciones) | Cruce de soporte de `tools/calculos_diseno_muestral.py`; `docs/justificacion_parametros.md` | WP1/WP3 | Antes de fijar el módulo de priors |
 | P20 | Confirmar si `retiro_efectivo` y `movimiento_propio` (sin fuente ENPH, son mecánica bancaria) necesitan una fuente externa distinta para su participación esperada, o si basta con el supuesto de cadencia de retiros ya declarado (PD8) | Anotación, F1 macro por categoría | WP6 | Con WP6 |
 
@@ -218,7 +218,7 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 | Mié 23 | Priors: pruebas de que reproducen las marginales | Primeros extractos; anonimización |
 | Jue 24 | Generador por reglas (WP6) | Recolección |
 | **Vie 25** | Muestra sintética por reglas · **punto de control con la directora** | Recolección |
-| Sáb 26 – dom 27 | Pancholi (WP5), si no se alcanzó antes | Revisar ~50 descripciones reales para la taxonomía |
+| Sáb 26 – dom 27 | Reevaluación del pipeline de referencia (Pancholi), si no se alcanzó antes | Revisar ~50 descripciones reales para la taxonomía |
 
 **Criterio del punto de control:** si el 25 no hay muestra sintética por reglas funcionando, se revisa el alcance con la directora en vez de comprimir el trabajo.
 
