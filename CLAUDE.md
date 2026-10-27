@@ -12,7 +12,7 @@ Diseño y validación preliminar de un protocolo de generación de datos sintét
 transacciones financieras para el contexto colombiano.
 Pipeline: (1) priors bayesianos desde DANE → (2) generador por reglas + nombres de
 comercio → (3) CTGAN → (4) clasificadores + evaluación TSTR contra datos reales etiquetados.
-Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega final: 15 oct 2026.
+Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega final: **27 nov 2026** (TG2; reporte en plantilla IEEE Transactions on AI, ≤ 24 pp; el tutor lo envía al programa y propone 3 jurados; sustentación 30 nov–18 dic).
 
 ## Idioma y entregables
 - Responder y documentar en **español**. Sé concisa; señala riesgos metodológicos de frente.

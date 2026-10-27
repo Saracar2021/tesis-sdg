@@ -2,8 +2,8 @@
 
 **Título:** Diseño y validación preliminar de un protocolo de generación de datos sintéticos de transacciones financieras para el contexto colombiano
 **Autora:** Sara J. Cárdenas · Maestría en Inteligencia Artificial, Pontificia Universidad Javeriana
-**Versión:** 3 · **Corte:** jueves 24 de septiembre de 2026 · reemplaza la v2 del 20 de septiembre
-**Hitos:** avance a directora **se envía el 24 sep** (tras el silencio de las semanas previas) · punto de control **vie 25 sep** · tesis final **jue 15 oct 2026**
+**Versión:** 4 · **Corte:** lunes 26 de octubre de 2026 · reemplaza la v3 del 24 de septiembre
+**Hitos (TG2):** entrega del reporte (PDF, plantilla **IEEE Transactions on AI**, ≤ 24 pp) al correo del programa **antes del 27 nov 2026**; el tutor propone 3 jurados · sustentación presencial **30 nov – 18 dic** · reunión de decisión continuar/cancelar con la tutora, **esta semana**
 
 > Documento vivo de seguimiento del proyecto (WP0). La fuente de verdad técnica es el repositorio `C:\tesis-sdg` (respaldo privado en GitHub). Este documento resume el estado; las cifras y su derivación viven en el repo.
 
@@ -15,7 +15,7 @@
 2. **El dominio quedó definido: Bogotá urbano.** Los 20 voluntarios de la validación son de Bogotá; calibrar contra otro dominio rompería la comparación del TSTR.
 3. **Hay resultados nuevos que refuerzan la tesis.** El efectivo domina en Bogotá (97 % de los hogares lo declara como forma de pago principal en gastos frecuentes), y el medio de pago **varía por categoría de gasto** (hasta 28 % de tarjeta de crédito en electrodomésticos y muebles). **El pipeline de referencia (Pancholi et al.) ya se ejecutó** (etapas 1–3, reproducible, con criterios prerregistrados): sus tres «fallas» del informe se reevaluaron (§6) — una refutada, una confirmada solo para las etapas ejecutadas, y la de ingreso no concluyente sin el referente colombiano, que queda pendiente.
 4. **Cuatro afirmaciones del análisis descriptivo quedan retiradas y las tres sobre Pancholi pasan a hipótesis** (§6) y **ocho limitaciones quedan declaradas** (§7).
-5. **Lo que falta es casi todo el pipeline de generación y la validación empírica**, en 25 días. El punto de control del 25 de septiembre define si el alcance completo cabe.
+5. **La entrega quedó confirmada para el 27 de noviembre de 2026** (TG2; reporte en formato IEEE, ≤ 24 pp; el tutor lo envía y propone 3 jurados; sustentación 30 nov – 18 dic). El repositorio **no avanzó entre el 24 sep y el 26 oct**; los **extractos reales ya se recolectaron** (PDF/Excel) pero están sin ingestar ni anonimizar. Falta casi todo el pipeline de generación y la validación TSTR, más el reporte: ~4,5 semanas de trabajo, con las decisiones abiertas por cerrar.
 
 ---
 
@@ -204,58 +204,43 @@ Además, **todas** las cifras numéricas de la sección de análisis descriptivo
 | R1 — Datos reales (ruta crítica humana) | **Baja parcialmente**: hay 20 voluntarios. Sube el riesgo legal y de volumen | Paquete de WP4 ajustado antes de recibir el primer extracto; anotar una muestra, no todo |
 | R2 — Base de datos inválida | ✅ **Cerrado** | Reconstrucción verificada |
 | R3 — Cómputo (GPU para BETO, API de Groq) | Sin cambios | Colab para BETO con `requirements.txt` y semillas; API de Groq por confirmar |
-| R4 — Sobrepromesa a la directora | **Activo**: el avance del 18 no se envió | Correo del lunes con evidencia y punto de control del 25 |
+| R4 — Comunicación con la tutora | **Activo**: correo de avance enviado el 24 sep; **aún no hay reunión** con la profesora Cecile y el repo no avanzó en un mes | Reunión esta semana con estado real + plan a 27 nov; decidir continuar/cancelar |
 | R5 — Reproducibilidad | ✅ **Controlado** | Repo, pruebas, SHA-256, cero cifras hardcodeadas |
-| R6 — TSTR bloqueado | Activo | Recolección desde esta semana; TSTR en la semana del 5 oct |
-| **R7 — Calendario (nuevo)** | **Alto**: 25 días para priors, generador, CTGAN, clasificadores, TSTR y redacción | Punto de control 25 sep; redacción del capítulo de datos desde ya |
-| **R8 — Comité de ética (nuevo)** | Desconocido | Preguntar el lunes; si aplica, iniciar el trámite de inmediato |
+| R6 — TSTR | Datos reales **ya recolectados**, pero sin ingestar, anonimizar ni anotar; el TSTR depende de esa cadena (2 anotadores + Kappa) | Ingestar/anonimizar esta semana; anotar la semana del 2 nov |
+| **R7 — Calendario** | **Alto pero acotado**: ~4,5 semanas (a 27 nov) para priors, generador, CTGAN, clasificadores, TSTR y el reporte IEEE | Arrancar el pipeline ya; redactar en paralelo; recortar el alcance del experimento antes que la calidad si se atrasa |
+| **R8 — Ética / consentimiento** | Los extractos ya se recolectaron; falta confirmar que cada uno tiene **consentimiento firmado** y que el programa no exige aval de comité | Verificar con la tutora; un extracto sin consentimiento no entra al conjunto |
 | **R9 — Instrumento DANE 2025 (nuevo)** | Declarado | L2 y L3 |
 | **R12 — Motivación empírica** | **Mitigado en parte** | El pipeline ya se ejecutó (etapas 1–3): su salida final no conserva la relación ingreso–monto y no emite estructura de extracto. Queda el referente ENPH para cerrar H-P1 y la decisión de hospedaje para H-P2; las etapas 4–5 no corrieron (Groq / código) |
 | **R10 — Universo del generador vs. universo del real** | ✅ **Resuelto (D15, 22 sep)** | Extracto sintético con capa interna de gasto del hogar. Queda como riesgo residual la validez de los supuestos de retiros y medios digitales |
-| **R11 — Unidad de los priors de medio de pago (nuevo)** | Declarado | ENPH da forma de pago principal **por hogar**; el generador emite transacciones. Usarla como probabilidad por transacción es un supuesto a declarar |
+| **R11 — Unidad de los priors de medio de pago** | Declarado | ENPH da forma de pago principal **por hogar**; el generador emite transacciones. Usarla como probabilidad por transacción es un supuesto a declarar |
+| **R13 — Decisión TG2 (cancelar vs. continuar)** | **Abierto**: si la tutora considera que el trabajo no se puede sustentar aún, la nota del curso es ≤ 2,9 y se repite | Llegar a la reunión con avance concreto y el plan a 27 nov; este documento es el insumo de esa decisión |
 
 ---
 
-## 10. Plan ajustado 21 sep → 15 oct
+## 10. Plan 27 oct → 27 nov 2026 (TG2)
 
-**Principio:** dos tracks en paralelo. El Track A (software) se ejecuta sobre el repo; el Track B (datos reales) depende de personas y no se puede acelerar.
+**Entrega:** el tutor envía el PDF (plantilla IEEE Transactions on AI, ≤ 24 pp) al correo del programa **antes de la medianoche del 27 nov 2026**, con 3 jurados propuestos. Sustentación presencial **30 nov – 18 dic**.
 
-### Semana 1 — lun 21 a dom 27 sep · *pipeline sintético hasta reglas*
+**Principio:** dos tracks en paralelo. Track A (software) sobre el repo; Track B (datos reales) ya recolectados pero por **ingestar, anonimizar y anotar**. La redacción del reporte IEEE arranca temprano, no al final.
 
-| Día | Track A (software) | Track B (datos reales) |
-|---|---|---|
-| Lun 21 | Documento técnico del protocolo (WP0) | **Enviar correo a la directora.** Ajustar paquete WP4. Consulta al DANE |
-| Mar 22 | Módulo de priors (WP3) | Consentimiento final; contactar a los 20 voluntarios |
-| Mié 23 | Priors: pruebas de que reproducen las marginales | Primeros extractos; anonimización |
-| Jue 24 | Generador por reglas (WP6) | Recolección |
-| **Vie 25** | Muestra sintética por reglas · **punto de control con la directora** | Recolección |
-| Sáb 26 – dom 27 | Reevaluación del pipeline de referencia (Pancholi), si no se alcanzó antes | Revisar ~50 descripciones reales para la taxonomía |
-
-**Criterio del punto de control:** si el 25 no hay muestra sintética por reglas funcionando, se revisa el alcance con la directora en vez de comprimir el trabajo.
-
-### Semana 2 — lun 28 sep a dom 4 oct · *CTGAN y datos reales*
-- **A:** CTGAN (WP7) → dataset sintético v1 ≥ 5.000 transacciones → métricas de fidelidad.
-- **B:** congelar taxonomía v1.1 (WP2) → cerrar recolección → muestra a anotar → **doble anotación** → Kappa.
-- **Redacción:** capítulo de datos y metodología, con §4, §5 y §7 de este plan como base.
-
-### Semana 3 — lun 5 a dom 11 oct · *clasificadores y TSTR*
-- Tres clasificadores entrenados sobre sintético (logístico TF-IDF, BETO, LLaMA 3 few-shot).
-- Evaluación TSTR sobre el conjunto real anotado; comparación contra Pancholi.
-
-### Semana 4 — lun 12 a jue 15 oct · *cierre*
-- Resultados, discusión, conclusiones; revisión de la directora; **entrega el jueves 15**.
-
----
-
-## 11. Qué se puede avanzar esta noche para enriquecer el correo
-
-| Opción | Esfuerzo | Valor para la directora | Requisito |
+| Semana | Track A (software) | Track B (datos reales) | Reporte IEEE |
 |---|---|---|---|
-| **A. Documento técnico del protocolo** (WP0), borrador | 1–2 h | Alto: es la actividad 1 del cronograma y el mejor anexo del correo | Ninguno: todas las decisiones están en `CLAUDE.md` |
-| **B. Ajustar el paquete de WP4** | 1 h | Alto: demuestra que la recolección está lista para arrancar | Recuperar los 4 documentos de WP4 y responder formato y periodo de los extractos |
-| C. Módulo de priors (WP3) | 2–3 h | Medio-alto | Fijar umbral de soporte |
+| **27 oct – 1 nov** | Módulo de priors (WP3) + cerrar decisiones abiertas (PD1 umbral, PD2 encogimiento, H-P1) | Ingestar y anonimizar los extractos: `data/reales_crudos/` → `data/reales_anon/` | Esqueleto IEEE + sección de datos y metodología (ya hay insumos) |
+| 2 – 8 nov | Generador por reglas (WP6) + congelar taxonomía v1.1 | Anotar con 2 anotadores + Kappa → `transacciones_reales_etiquetadas` | Estado del arte + protocolo |
+| 9 – 15 nov | CTGAN (WP7) → dataset sintético v1 + métricas de fidelidad | (cierre de anotación) | Generación sintética |
+| 16 – 22 nov | Clasificadores (logístico, BETO, LLaMA 3) + **TSTR** + comparación vs. Pancholi | — | Resultados y discusión |
+| 23 – 27 nov | Reserva y ajustes | — | Cerrar el reporte, revisión de la tutora, **entrega 27 nov** |
 
-**Recomendación:** A y B en paralelo esta noche. C al día siguiente.
+**Hito de decisión (esta semana):** reunión con la tutora para decidir continuar vs. cancelar. Si algo se atrasa, se recorta el **alcance del experimento** (p. ej. TSTR como piloto o con menos clasificadores), no la calidad ni la honestidad del reporte. En las semanas 16–17 (17–27 nov) el programa envía las instrucciones para agendar la sustentación.
+
+---
+
+## 11. Reporte final (formato IEEE)
+
+- Plantilla **IEEE Transactions on Artificial Intelligence** (`https://template-selector.ieee.org/`). La **estudiante es la primera autora**; asesores y tutora van como últimos autores.
+- Extensión **máxima 24 páginas**; el promedio de la maestría es 12 (±3).
+- Mucho contenido **ya existe en el repo y se puede portar**: planteamiento, estado del arte, metodología (protocolo §1–§5), reevaluación del pipeline de referencia, limitaciones (§7). Falta lo experimental (generación sintética, TSTR, resultados y discusión).
+- **Jurados:** el tutor propone 3 (al menos 1 profesor de planta de la Facultad de Ingeniería); el programa elige 2. La sustentación es presencial, 30 nov – 18 dic.
 
 ---
 
@@ -296,10 +281,12 @@ Todo se corre desde Git Bash en `C:\tesis-sdg`, con el entorno activado (`source
 - [ ] Generador por reglas + nombres de comercio (Etapa 2)
 - [ ] CTGAN + dataset sintético v1 ≥ 5.000 tx + métricas (Etapa 3)
 - [x] Reevaluación del pipeline de referencia ejecutada (etapas 1–3; 4–5 no ejecutables)
-- [ ] Extractos recolectados y anonimizados
+- [x] Extractos reales recolectados (PDF/Excel, en `data/reales_crudos/`)
+- [ ] Extractos ingestados y anonimizados (`data/reales_anon/`)
 - [ ] Muestra anotada por 2 anotadores + Kappa
 - [ ] 3 clasificadores + TSTR (Etapa 4)
-- [ ] Tesis redactada y revisada · entrega 15 oct
+- [ ] Reporte final en formato IEEE (≤ 24 pp), revisado por la tutora · **entrega 27 nov**
+- [ ] 3 jurados propuestos (los propone la tutora en el correo de entrega)
 
 ---
 
@@ -311,11 +298,11 @@ código y documentos se respalda en GitHub privado; los datos no se suben.
 
 | WP | Estado |
 |---|---|
-| WP0 — Entorno y seguimiento | Este documento (v2) |
+| WP0 — Entorno y seguimiento | Este documento (v4) |
 | WP1 — Perfilado DANE | ✅ Cerrado (`2aebb9e`) |
 | WP2 — Taxonomía | Pendientes en `docs/taxonomia/pendientes_v1.1.md` |
-| WP3 — Priors | Insumos listos; módulo sin escribir |
-| WP4 — Datos reales | Paquete redactado el 15 sep; por ajustar |
+| WP3 — Priors | **En proceso** (chat WP3, desde el 26 oct) |
+| WP4 — Datos reales | Paquete listo; **extractos recolectados**, por ingestar/anonimizar/anotar |
 | WP5 — Pipeline de referencia (Pancholi) | ✅ Ejecutado (etapas 1–3); `docs/reevaluacion_pancholi.md`, `outputs/pancholi/` |
 | WP6 — Generador · WP7 — CTGAN · WP8 — Evaluación TSTR | Por hacer |
 
