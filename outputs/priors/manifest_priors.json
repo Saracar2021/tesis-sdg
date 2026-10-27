@@ -1,0 +1,75 @@
+{
+ "script": "tools/construir_priors.py",
+ "commit_base": "2abf7a0",
+ "pandas": "3.0.6",
+ "numpy": "2.4.6",
+ "python": "3.11.9",
+ "semilla": 42,
+ "sha256_priors_json": "2b8a3fed6ea898d2c05d49bc5b7d0ee6e9520b0680a80bdfbd455a76b6bbc4b3",
+ "kappa": {
+  "formalidad": {
+   "kappa": 25.11886431509581,
+   "en_frontera": false
+  },
+  "nc2r": {
+   "kappa": 199.52623149688807,
+   "en_frontera": false
+  },
+  "p438": {
+   "kappa": 100.0,
+   "en_frontera": false
+  },
+  "pos_enph": {
+   "kappa": 398.1071705534973,
+   "en_frontera": false
+  },
+  "pos_geih": {
+   "kappa": 398.1071705534973,
+   "en_frontera": false
+  },
+  "tipo_contrato": {
+   "kappa": 3.1622776601683795,
+   "en_frontera": false
+  }
+ },
+ "conteos": {
+  "hogares_enph_pais": 87201,
+  "hogares_urbanos_nacional": 81438,
+  "hogares_bogota": 3918,
+  "ocupados_enph_bogota": 6039,
+  "ocupados_geih_bogota": 13552,
+  "ocupados_geih_sin_estrato": 29,
+  "hogares_geih_12_meses": 9733,
+  "hogares_bogota_icgu_cero": 31,
+  "min_hogares_urbano_nacional_por_celda": 118
+ },
+ "cortes_icgu_bogota": [
+  1127000.0,
+  1810250.0,
+  2766666.66666667,
+  4506283.33333333
+ ],
+ "uniones": [
+  {
+   "nombre": "hogares/gastos_menos_frecuentes_medio_pago.csv -> hogares/viviendas_hogares.csv",
+   "llave": "DIRECTORIO",
+   "filas_izq": 87201,
+   "pct_enlazado": 100.0,
+   "umbral": 100.0
+  },
+  {
+   "nombre": "personas/caracteristicas_generales_personas.csv -> hogares/viviendas_hogares.csv",
+   "llave": "DIRECTORIO",
+   "filas_izq": 291590,
+   "pct_enlazado": 100.0,
+   "umbral": 100.0
+  },
+  {
+   "nombre": "GEIH ocupados -> datos_hogar (estrato)",
+   "llave": "DIRECTORIO+SECUENCIA_P+HOGAR+MES",
+   "filas_izq": 13552,
+   "pct_enlazado": 100.0,
+   "umbral": 99.0
+  }
+ ]
+}

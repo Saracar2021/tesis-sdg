@@ -114,7 +114,7 @@ Los 112 archivos (96 GEIH + 16 ENPH) tienen SHA-256 idéntico al del zip origina
 
 **Salidas.**
 - Distribuciones ponderadas de Bogotá urbano [`outputs/distribuciones/*.csv`, 16 tablas con informe y `manifest_distribuciones.json`] — **ya generadas**.
-- Módulo de priors (WP3) que las convierte en priors condicionados por celda — **PENDIENTE, sin escribir**.
+- Módulo de priors (WP3) que las convierte en priors condicionados por celda — **escrito el 27 oct** (`src/sdg/encogimiento.py`, `src/sdg/priors.py`, `tools/construir_priors.py` → `outputs/priors/`; ver «Módulo de priors» abajo).
 
 **Variables y cifras vigentes (Bogotá urbano).**
 
@@ -136,22 +136,39 @@ Los 112 archivos (96 GEIH + 16 ENPH) tienen SHA-256 idéntico al del zip origina
 
 **Esquema de celdas de calibración (decisión cerrada).** Estrato agrupado en 3 × quintil de `ICGU` en 5 = **15 celdas**. El cruce estrato (6) × quintil (5) dejaba 12 de 30 celdas con menos de 30 hogares [`docs/fuentes_datos.md` §10.3 A]. Tras agrupar, quedan **4 de 15** celdas con menos de 30 hogares, todas de estrato alto (5-6) en Q1–Q4 (n = 9, 5, 13 y 21; Q5 tiene 168) [`outputs/distribuciones/enph_estrato_x_quintil.csv`, columna `n_menor_30`]. Las 11 celdas restantes tienen al menos 129 hogares.
 
-**Respaldo jerárquico para celdas ralas.** Cuando una celda no tenga soporte suficiente en Bogotá, su prior se encoge hacia la distribución **urbana nacional** de ENPH en vez de inventar la celda. En el cruce urbano nacional ninguna de las 15 celdas tiene menos de 30 hogares (mínimo 71) [`docs/fuentes_datos.md` §10.3 C; no hay tabla equivalente en `outputs/`, PENDIENTE generarla]. Se documenta como ventaja del enfoque bayesiano, no como parche.
+**Respaldo jerárquico para celdas ralas.** Cuando una celda no tenga soporte suficiente en Bogotá, su prior se encoge hacia la distribución **urbana nacional** de ENPH en vez de inventar la celda. En el cruce urbano nacional con los **cortes de quintil de Bogotá** ninguna de las 15 celdas tiene menos de 118 hogares (la celda mínima es alto Q1) [`outputs/priors/celdas_hogares.csv`]. El «mínimo 71» de `docs/fuentes_datos.md` §10.3 C corresponde a quintiles nacionales propios y ya no aplica. Se documenta como ventaja del enfoque bayesiano, no como parche.
 
 **Supuestos de la etapa.**
 1. Los quintiles se calculan **dentro de Bogotá** con `ICGU` ponderado; los valores iguales a un corte quedan en el quintil inferior (por eso los % por quintil no son exactamente 20) [`enph_ingreso_quintil.csv`]. En `ICGU` ninguna frontera concentra más de 0,09 % del peso en un valor [`fronteras_amontonamiento.csv`].
 2. Los priors de medio de pago describen **hogares**, y el generador los usará para emitir **transacciones** (ver riesgo en D9, §5).
 3. `P438*` y `NC2R_CC_P6` cubren categorías distintas (menos frecuentes / frecuentes); ninguno cubre todo el gasto.
 
+**Módulo de priors (WP3, 27 oct 2026).** Convierte las distribuciones de Bogotá en priors por celda (estrato agrupado × quintil de `ICGU` = 15) y las muestrea: `muestrear_perfiles(priors, n, seed=42)` entrega hogares **bancarizados** (D15) con celda, rango de `ICGU` del quintil, forma de pago `NC2R`, un medio de pago `P438` por subcapítulo (J14 y K11 salen vacíos) y la persona ocupada de referencia (posición y componentes de formalidad). Recalcula desde los microdatos por `carga.py`; no lee `outputs/distribuciones/*.csv`, que son la referencia independiente de los tests.
+
+- **PD1, umbral de soporte — RESUELTO.** Una celda es rala si `n_ef < κ̂`: el tamaño efectivo de Kish es menor que el peso del padre estimado para su familia de variables (NC2R 199,5 · P438 100,0 · posición 398,1 · formalidad 25,1 · tipo de contrato 3,2; ninguno en el borde de la rejilla 1–10.000). Es decir, rala = el padre pesa más que la celda. «30 hogares» queda solo como marca. Justificación y comparación con 30 en `docs/justificacion_parametros.md`.
+- **PD2, método de encogimiento — RESUELTO.** Media posterior de un Dirichlet jerárquico en forma cerrada, `π = (n_ef·p̂ + κ·π_padre)/(n_ef + κ)`, con tres niveles para ENPH (marginal urbana nacional → celda urbana nacional → celda de Bogotá) y `κ̂` por máxima verosimilitud marginal. **El padre nacional se recalibra al marginal de Bogotá**: sin esto el encogimiento desplazaba el nivel de Bogotá (G14: crédito −7,9 p.p., efectivo +8,5 p.p.). Lista de celdas afectadas: `outputs/priors/soporte_celdas.csv` y `celdas_afectadas.csv` (NC2R: 8 de 15 celdas, las cinco de estrato alto, bajo Q5 y medio Q1–Q2; posición ENPH: 9 de 15; P438: 338 de 435 combinaciones celda × subcapítulo, 77,7 %; formalidad: 4 de 21 combinaciones estrato × posición; tipo de contrato: 9 de 21). Sensibilidades en `sensibilidad_priors.csv`.
+- **Cifras que no se cruzan (D4).** ENPH aporta masa de celdas, `ICGU`, `NC2R` y `P438`. GEIH aporta el nivel de posición y formalidad por estrato y P(bancarizado | estrato). `INGLABO` no entra.
+- **Papel de GEIH (PD4) — AVALADO (chat 00, 27 oct), con L18–L20 declaradas.** GEIH fija el **nivel** por estrato de la posición ocupacional y de la formalidad; la **asociación con el quintil** viene de ENPH personas (`caracteristicas_generales_personas`), porque se verificó que existe: ocupación ⟂ quintil | estrato se rechaza en estratos bajo y medio (p < 10⁻⁶ también con `deff = 2`; V de Cramér 0,13 a 0,28; `dependencia_ocupacion_quintil.csv`). Se combinan por IPF: se conservan las razones de momios de ENPH y se imponen los márgenes de GEIH. En estrato alto el contraste no es válido (281 personas, 89 % de la masa en Q5, esperados bajos): ahí no se puede verificar la asociación y manda el padre. La formalidad (P6440, P6920, P6990 juntas, D10) se condiciona a (estrato, posición) con GEIH; P6450 solo si hay contrato.
+- **Medio de pago por celda (PD3) — AVALADO (chat 00, 27 oct), con L22 declarada.** Condicional a que el hogar compre en el subcapítulo; independiente entre subcapítulos dado la celda.
+- **Verificación.** `tests/test_priors.py` (37 pruebas): el muestreador reproduce la esperanza analítica (4–5 errores estándar de Monte Carlo) y esta reproduce los CSV de Bogotá (2 errores estándar de la referencia con `deff = 2`; 180 marginales de NC2R/P438 con |z| ≤ 1,09, y la pirámide bancarizada 43,27 / 50,48 / 6,25 %).
+
+**Supuestos y límites nuevos de WP3** *(numerados por el chat 00, 27 oct — ver §6: punto 1 = nota de operacionalización, no L; 2→L18; 3→L19; 4→L20; 5 amplía L1; 6→L23; 7→L21; 8 amplía L16; 9 amplía L4; y el dominio del padre en `P438` → L22)*:
+1. **`P6430` no comparte esquema de códigos entre fuentes desde el 7** (GEIH: 7 jornalero, 8 otro; ENPH: 7 sin remuneración en empresas de otros hogares, 8 jornalero, 9 otro). Se comparan 1–6 y el resto se agrupa en «otros».
+2. **La asociación ocupación × quintil de ENPH 2016-17 se aplica a los niveles de GEIH 2025** (estabilidad de las razones de momios; no verificable con estas fuentes).
+3. **Formalidad:** queda dependencia residual con el quintil dado estrato y posición (χ² con `deff = 2`: P6440 p = 0,006; P6990 p ≈ 10⁻⁸), no modelada. P6450 se supone independiente de P6920 y P6990 dado el contrato.
+4. **El perfil es un hogar con una persona ocupada de referencia.** No representa hogares sin ocupados. La posición muestreada difiere del marginal de ocupados de GEIH (cuenta propia 32,6 % contra 30,6 %; empleado particular 57,1 % contra 58,9 %, con la mezcla de GEIH ponderada por la misma pirámide) porque se sortea por hogar y no por persona.
+5. **`n_ef` de Kish no corrige por conglomeración** (L1): `κ̂` y la lista de celdas ralas son optimistas; se reporta `deff = 2`.
+6. **El medio de pago no incluye la probabilidad de comprar** en el subcapítulo (PD5, WP6) y la no respuesta de `NC2R` (11,42 %) no se imputa (D11): el prior es condicional a responder.
+7. **Hogares fuera del universo:** 19 hogares de Bogotá (0,5 %) sin estrato 1–6 o sin `ICGU` no entran a ninguna celda; 31 hogares con `ICGU = 0` quedan en Q1.
+8. **Cota de L16** (`cota_sesgo_bancarizacion.csv`): si todos los hogares con tarjeta fueran bancarizados, el % de tarjeta entre bancarizados subiría como máximo +10,3 % relativo (estrato bajo), +4,8 % (medio) y +0,3 % (alto).
+9. **La pirámide de ENPH + D15** (43,27 / 50,48 / 6,25 %) difiere de la de GEIH 2025 entre bancarizados (45,8 / 47,0 / 7,2 %): composición 2016-17 frente a 2025 (L4).
+
 **PENDIENTE en esta etapa.**
-- **Umbral de soporte.** El valor «30 hogares» de `n_menor_30` es solo una marca informativa (`min_n_celda_marca` en `manifest_distribuciones.json`), **no** el umbral. Se fija en WP3.
-- **Método de encogimiento** (forma funcional, hiperparámetros del prior) y lista de celdas afectadas: WP3; irán a `outputs/`.
-- **Priors por celda para el medio de pago.** Las tablas de `P438*` y `NC2R_CC_P6` en `outputs/` son **marginales de Bogotá**; ninguna está condicionada por estrato × quintil. Falta calcularlas por celda y su respaldo urbano nacional (mismos subcapítulos son ralos: p. ej. J13 tiene 201 hogares con respuesta en todo Bogotá [`enph_p438_matriz_categoria_x_medio.csv`]).
-- **Papel de GEIH en la generación.** GEIH y ENPH no comparten unidades, así que no puede cruzarse `INGLABO`/formalidad con `ICGU`. Cómo entran concretamente estrato, posición ocupacional y formalidad de GEIH al generador (y si se usan para ajustar la composición ENPH 2016-2017 a 2025) no está decidido.
-- **Distribución de montos y frecuencias de transacción.** No hay decisión ni salida en `outputs/`.
+- ✅ **Aval dado (chat 00, 27 oct)** a PD3 y PD4, con L18–L23 declaradas en §6.
+- **Distribución de montos y frecuencias de transacción (PD5).** No hay decisión ni salida en `outputs/`; sin esto el generador de la Etapa 2 no puede producir montos. **Dirección recomendada (chat 00, para abrir WP6):** montos desde el gasto por categoría de ENPH (gastos diarios urbanos + menos frecuentes), por celda, **deflactado a 2025 por el IPC del Banco de la República**; frecuencias desde el conteo de registros del diario de ENPH (ventana de 14 días → mes) y los periodos de referencia de los gastos menos frecuentes; encogimiento jerárquico para celdas ralas, igual que en los priors. Abierto para WP6: familia de la distribución de montos (lognormal vs. remuestreo empírico) y el mapeo capa interna→emitida de D15 (el efectivo se agrega en retiros). Es el punto de partida de WP6, no una decisión cerrada.
 - **Correspondencia subcapítulos ENPH ↔ categorías de la taxonomía colombiana.** Depende de la taxonomía v1.1 (§3.2).
 
-**Criterio de aceptación previsto (plan maestro, 23 sep):** pruebas de que los priors reproducen las marginales de §3.1. La tolerancia numérica es **PENDIENTE**.
+**Criterio de aceptación previsto (plan maestro, 23 sep):** pruebas de que los priors reproducen las marginales de §3.1. La tolerancia quedó fijada en WP3 (27 oct): 2 errores estándar de la referencia con `deff = 2` supuesto (**supuesto declarado, no medido**: el diseño muestral no permite estimar conglomeración, L1) y 4–5 errores estándar de Monte Carlo para el muestreador; ver `tests/test_priors.py`.
 
 ---
 
@@ -264,7 +281,7 @@ Cada tabla declara unidad y dominio. GEIH: 7 módulos son persona y `datos_hogar
 | D4 | **ENPH aporta ingreso y gasto; GEIH, estructura demográfica y laboral; `INGLABO` solo descriptivo** | `INGLABO` es ingreso laboral individual, no del hogar; sus fronteras son inestables por amontonamiento en valores redondos (hasta 5,92 % del peso en un solo valor; `ICGU` máx. 0,09 %) | `outputs/distribuciones/fronteras_amontonamiento.csv` |
 | D5 | **Estrato agrupado en 3 (1-2, 3-4, 5-6)** | 6 × 5 dejaba 12 de 30 celdas con < 30 hogares en ENPH Bogotá; estrato e ingreso están muy correlacionados, por lo que agrupar pierde poca información | `docs/fuentes_datos.md` §10.3 A y C; `enph_estrato_x_quintil.csv` |
 | D6 | **Se conservan los 5 quintiles de `ICGU`** | La hipótesis de la tesis incorpora las proporciones de gasto por quintil de ingreso observadas en Colombia (informe de avance, §IV.B): calibrar por quintil con datos colombianos es parte central del protocolo. No se justifica con una falla atribuida a Pancholi (§1.4) | `CLAUDE.md` |
-| D7 | **Celdas ralas → encogimiento hacia urbano nacional** | Bogotá reduce el n; el respaldo evita inventar celdas | `CLAUDE.md`; umbral y método **PENDIENTES** (WP3) |
+| D7 | **Celdas ralas → encogimiento hacia urbano nacional** | Bogotá reduce el n; el respaldo evita inventar celdas | `CLAUDE.md`; umbral (`n_ef < κ̂`) y método (Dirichlet jerárquico, padre recalibrado a Bogotá) **fijados en WP3**, §3.1 |
 | D8 | **12 meses de GEIH (incluye diciembre, marzo y julio)** con sensibilidades | Ver detalle abajo | `outputs/distribuciones/geih_sensibilidad_{diciembre,julio,marzo}.csv`; `docs/bitacora.md` |
 | D9 | **Medio de pago por categoría, no un % global** | El medio varía por categoría; un porcentaje global de efectivo esconde esa estructura | `enph_p438_matriz_categoria_x_medio.csv` |
 | D10 | **Formalidad: componentes por separado, sin indicador propio** | Un compuesto inventado no es defendible; si hace falta una sola variable se usa la definición oficial del DANE, citándola | `CLAUDE.md` (decisión del 20 sep) |
@@ -318,6 +335,13 @@ Cada tabla declara unidad y dominio. GEIH: 7 módulos son persona y `datos_hogar
 | L15 | **Respaldo documental débil del dominio ENPH** | `DOMINIO = 'BOGOTÁ'` sin código numérico | §4.4 |
 | L16 | **Repeso a hogares bancarizados (D15) asume independencia condicional** entre quintil de `ICGU` y tenencia de productos financieros, dentro de cada estrato agrupado | No verificable con estas fuentes: ENPH no tiene `P5222S*` y GEIH no tiene `ICGU` | §5, D15; `enph_estrato_x_quintil_bancarizado.csv` |
 | L17 | **El medio de pago de `P438` se pregunta por subcapítulo, no por artículo; en los subcapítulos que mezclan categorías de la taxonomía, el medio de pago de cada categoría por separado no es observable** | Afecta la calibración de medios de pago de la capa de emisión (D15) y la comparación contra Pancholi en esos mismos términos (H-P3). Detalle abajo | Cuadernillo 3 (pregunta 6, impresa en cada subcapítulo); `tools/calculos_diseno_muestral.py` |
+| L18 | La asociación **ocupación × quintil** del perfil viene de ENPH 2016-17 y se aplica a los niveles de GEIH 2025 (se asume estabilidad de las razones de momios) | No verificable con estas fuentes; amplía L4 | §3.1; `dependencia_ocupacion_quintil.csv` |
+| L19 | **Dependencia residual de la formalidad con el quintil** (dado estrato y posición) **no modelada** (χ² con deff=2: P6440 p=0,006; P6990 p≈10⁻⁸) | El perfil puede subestimar la variación de formalidad por ingreso dentro del estrato | §3.1 |
+| L20 | El perfil es **un hogar con una persona ocupada de referencia**: no representa hogares sin ocupados, y la posición por hogar difiere del marginal por persona de GEIH (cuenta propia 32,6 % vs. 30,6 %) | Sesgo declarado del muestreo por hogar | §3.1 |
+| L21 | **Hogares fuera del universo:** 19 (0,5 %) sin estrato 1–6 o sin `ICGU` no entran a ninguna celda; 31 con `ICGU = 0` quedan en Q1 (posible subdeclaración) | Pequeña pérdida de cobertura; `ICGU=0` puede contaminar Q1 | §3.1 |
+| L22 | Los **priors de medio de pago por celda (`P438`) están dominados por el padre nacional recalibrado**: el 77,7 % de las combinaciones celda × subcapítulo son ralas (peso mediano del padre 0,72), así que son *forma* nacional ajustada al *nivel* de Bogotá, no dato observado de la celda | El medio de pago por celda está **débilmente identificado**; el encogimiento es el mecanismo, no un dato fuerte | §3.1; `outputs/priors/soporte_celdas.csv` |
+| L23 | El prior de medio de pago es **condicional a comprar** en el subcapítulo (no incluye la probabilidad de compra, PD5) y **no imputa** la no respuesta de `NC2R` (11,42 %) | Amplía L9/L10; se resuelve parcialmente en WP6 (PD5) | §3.1; §5 D11 |
+| — | **Ampliaciones de límites existentes (WP3):** el `n_ef` de Kish no corrige conglomeración → amplía **L1** (`κ̂` y celdas ralas son optimistas, se reporta deff=2); la cota de bancarización (`cota_sesgo_bancarizacion.csv`: máx. +10,3 % rel. de tarjeta en estrato bajo) cuantifica **L16**; la pirámide ENPH+D15 (43,27/50,48/6,25 %) vs. GEIH 2025 (45,8/47,0/7,2 %) ilustra **L4** | — | §3.1 |
 
 **Detalle de L17 (medio de pago por subcapítulo, no por artículo).** Verificado el 22 sep 2026
 contra el texto impreso del Cuadernillo 3 (`data/raw/ENPH_2017/_metadatos/CUADERNILLOS/Cuadernillo 3.pdf`).
@@ -376,8 +400,8 @@ se usa aquí como hallazgo.
 
 | Etapa | Qué se evalúa | Criterio | Estado |
 |---|---|---|---|
-| **1 Priors** | Que el módulo reproduce las marginales de las distribuciones de Bogotá (§3.1) | Comparación contra `outputs/distribuciones/*.csv`; pruebas automatizadas | Tolerancia **PENDIENTE**; previsto 23 sep |
-| **1 Priors** | Encogimiento en celdas ralas | Lista de celdas afectadas y umbral declarados en `outputs/` | **PENDIENTE** (WP3) |
+| **1 Priors** | Que el módulo reproduce las marginales de las distribuciones de Bogotá (§3.1) | Comparación contra `outputs/distribuciones/*.csv`; pruebas automatizadas | ✅ `tests/test_priors.py`: tolerancia = 2 errores estándar de la referencia con `deff = 2` (paso B) y 4–5 errores estándar de Monte Carlo (paso A); 27 oct |
+| **1 Priors** | Encogimiento en celdas ralas | Lista de celdas afectadas y umbral declarados en `outputs/` | ✅ `outputs/priors/soporte_celdas.csv`, `celdas_afectadas.csv`, `perfil_kappa.csv`; 27 oct |
 | **2 Reglas** | Consistencia interna: respeta el medio de pago por categoría y la taxonomía | Muestra sintética funcionando; punto de control con la directora | Previsto 25 sep; métricas **PENDIENTES** |
 | **3 CTGAN** | Fidelidad del dataset sintético v1 (≥ 5.000 transacciones) frente a su fuente (Etapa 2) | **Métricas de fidelidad PENDIENTES**: no hay decisión de cuáles ni con qué umbral | **PENDIENTE** |
 | **4 TSTR** | Desempeño de los 3 clasificadores entrenados en sintético y evaluados en real anotado | F1 macro (con regla de soporte ≥ 10, a revisar); otras métricas **PENDIENTES** | **PENDIENTE** (semana del 5 oct) |
@@ -431,10 +455,10 @@ Criterio del punto de control: si el 25 no hay muestra sintética por reglas fun
 
 | # | Pendiente | Etapa | Bloquea |
 |---|---|---|---|
-| PD1 | Umbral de soporte de las celdas | 1 | Encogimiento |
-| PD2 | Método de encogimiento y lista de celdas afectadas | 1 | Priors por celda |
-| PD3 | Priors de medio de pago por celda (estrato × quintil) y su respaldo urbano nacional | 1 | Generador |
-| PD4 | Cómo entra GEIH al generador (estrato, posición, formalidad) | 1–2 | Generador |
+| PD1 | ~~Umbral de soporte de las celdas~~ ✅ **Resuelto 27 oct (WP3):** rala ⇔ `n_ef < κ̂` (NC2R 199,5 · P438 100,0 · posición 398,1 · formalidad 25,1 · contrato 3,2); ver §3.1 y `docs/justificacion_parametros.md` | 1 | — |
+| PD2 | ~~Método de encogimiento y lista de celdas afectadas~~ ✅ **Resuelto 27 oct (WP3):** Dirichlet jerárquico en forma cerrada, `κ̂` por verosimilitud marginal, padre nacional recalibrado al nivel de Bogotá; lista en `outputs/priors/celdas_afectadas.csv` | 1 | — |
+| PD3 | ✅ Priors de medio de pago por celda implementados (WP3, 27 oct) y **avalados (chat 00)**; L22 declarada (dominio del padre: 77,7 % de combinaciones ralas) | 1 | Generador |
+| PD4 | ✅ Cómo entra GEIH implementado (WP3: nivel por estrato de GEIH + asociación con quintil de ENPH vía IPF) y **avalado (chat 00)**; L18–L20 declaradas | 1–2 | Generador |
 | PD5 | Montos y frecuencias de transacción | 1–2 | Generador |
 | PD6 | Esquema de la transacción | 2 | Generador |
 | PD7 | Fuente de nombres de comercio y de medios digitales | 2 | Generador |

@@ -18,7 +18,7 @@ bitácora (WP0, 22 sep 2026). Tipos:
 | `docs/datos_reales/04_diseno_muestra_y_recoleccion_v1.1.md:15,72` | 3 meses fijos (dic-2025, abr-2026, ago-2026) | Tres observaciones permiten contrastar un mes atípico contra dos de referencia; con dos no se distingue cuál de los dos es el atípico. La razón de cada mes en particular (fin de año, primer semestre, mes reciente) ya está en `docs/datos_reales/01_consentimiento_informado_v1.1.md` §1. El límite superior (no más de 3) lo impone la carga para el voluntario, que debe descargar y entregar un extracto por mes. | convención |
 | `docs/datos_reales/04_diseno_muestra_y_recoleccion_v1.1.md:14` | 20 voluntarios | Es una muestra por conveniencia, formada por personas de la red de la autora dispuestas a entregar extractos. No es una muestra probabilística y no permite inferencia a la población bogotana; su función es dar un conjunto de evaluación etiquetado, no representar a la población. **Se declara como limitación explícita en la tesis** (ya en L8, `docs/protocolo_tecnico.md`), no se resuelve aquí. | convención |
 | `docs/protocolo_tecnico.md:170,351` | Congelar taxonomía tras revisar ≥ 50 descripciones reales (unificado: ambas líneas decían cifras distintas, "≥ 50" y "~50"; ya corregido a "≥ 50" en ambas, punto 2 del encargo anterior) | Criterio operativo: revisar descripciones reales hasta que dejen de aparecer categorías nuevas, con 50 como mínimo. Si a las 50 siguen apareciendo categorías nuevas, se amplía la revisión y se documenta. | convención |
-| `CLAUDE.md:46-47`, `docs/protocolo_tecnico.md:137,147` | Umbral de celda rala ≈ 30 observaciones (`n_menor_30`) | PENDIENTE — no está en la base entregada para las convenciones; el propio documento ya aclara que es "una marca informativa, no el umbral" y que el real se fija en WP3 | pendiente |
+| `CLAUDE.md:46-47`, `docs/protocolo_tecnico.md:137,147` | Umbral de celda rala ≈ 30 observaciones (`n_menor_30`) | **RESUELTO (WP3, 27 oct 2026): el umbral deja de ser 30 y pasa a ser `n_ef < κ̂`**, con `n_ef` = tamaño efectivo de Kish de la celda y `κ̂` = peso del padre en el encogimiento, estimado por máxima verosimilitud marginal (Dirichlet-multinomial), uno por familia de variables: forma de pago `NC2R` 199,5 · medio de pago `P438` 100,0 · posición ocupacional (ENPH) 398,1 · posición ocupacional (GEIH) 398,1 · formalidad 25,1 · tipo de contrato 3,2 (ninguno en el borde de la rejilla 1–10.000). Una celda es rala cuando el padre pesa más que la propia celda (`peso_padre = κ̂/(n_ef+κ̂) > 0,5`). **Por qué no 30:** con una categoría rara el 30 no protege nada (con 0,475 % de crédito, la probabilidad de no ver ni un hogar con crédito en 30 hogares es 86,7 %), y la lista de celdas ralas no cambia para cualquier umbral entre 21 y 129 hogares. `n_menor_30` queda solo como marca informativa. Detalle, listas y sensibilidades en la sección «WP3 — Umbral de soporte y encogimiento» más abajo y en `outputs/priors/` | cálculo |
 | `CLAUDE.md:191`, `docs/protocolo_tecnico.md:268,278-281` | Umbral de diferencia material = 1 p.p. entre meses | PENDIENTE — no está en la base entregada | pendiente |
 | `docs/protocolo_tecnico.md:184,331` | Meta de ≥ 5.000 transacciones sintéticas (dataset v1) | PENDIENTE — no está en la base entregada | pendiente |
 | `docs/datos_reales/04_diseno_muestra_y_recoleccion_v1.1.md:83` | Con 12–15 personas el conjunto "sigue siendo útil" | PENDIENTE — no está en la base entregada | pendiente |
@@ -48,6 +48,62 @@ fuente ENPH". **Es impreciso.** Se verificó contra los METADATOS de ENPH (cuade
 
 **Consecuencia:** esto no es una limitación de la tesis, es trabajo de cálculo pendiente. Se agregó a
 `docs/plan_maestro.md` §8 como pendientes nuevos (ver PD19-PD20), no como limitación.
+
+## WP3 — Umbral de soporte y encogimiento (resuelto 27 oct 2026)
+
+Resuelve PD1 y PD2 (`docs/protocolo_tecnico.md` §8.1). Código: `src/sdg/encogimiento.py`, `src/sdg/priors.py`,
+`tools/construir_priors.py` (SEED = 42, sin aleatoriedad en la estimación); salidas en `outputs/priors/`.
+
+**Método (PD2).** Media posterior de un Dirichlet jerárquico en forma cerrada: `π_post = (n_ef·p̂ + κ·π_padre)/(n_ef + κ)`.
+Tres niveles para las variables de ENPH: marginal urbana nacional (`P3 = 1`; 81.438 hogares) → celda urbana nacional (estrato × quintil
+con los **cortes de Bogotá**) → celda de Bogotá. `κ̂` maximiza la evidencia marginal sobre una rejilla logarítmica de 41 puntos entre 1
+y 10.000 (`outputs/priors/perfil_kappa.csv`); los 29 subcapítulos `P438` comparten un `κ̂`.
+
+**Recalibración al nivel de Bogotá (hallazgo de la verificación).** Encoger hacia el total urbano nacional sin más desplazaba el nivel de
+Bogotá: en `G14` (electrodomésticos y muebles) el marginal agregado pasaba de 28,01 % a 20,2 % de crédito (−7,9 p.p., 3,8 errores
+estándar) y el efectivo subía +8,5 p.p., porque Bogotá usa más crédito que el resto del país y estrato × quintil no capta ese efecto de
+ciudad. Eso sesgaría hacia efectivo justo lo que la tesis quiere medir (H-P3). Se corrigió: el padre nacional aporta solo la **forma entre
+celdas** y se reescala por categoría hasta que su promedio, ponderado por la masa de las celdas de Bogotá, sea el marginal de Bogotá
+(encogido con el mismo `κ`). Después, los 180 marginales de `NC2R` y `P438` quedan a menos de 1,1 errores estándar de los CSV de referencia.
+
+**Celdas ralas (`n_ef < κ̂`)** — `outputs/priors/soporte_celdas.csv`, `celdas_afectadas.csv`:
+
+| Familia | `κ̂` | Celdas ralas |
+|---|---|---|
+| `NC2R` (15 celdas) | 199,5 | 8: alto Q1–Q5, bajo Q5, medio Q1 y Q2 (`n_ef` de 4 a 181) |
+| `P438` (435 combinaciones celda × subcapítulo) | 100,0 | 338 (77,7 %). Alto Q1–Q4: los 29 subcapítulos (peso del padre ≥ 0,95); bajo Q5 y medio Q1: 27; el mejor soportado es medio Q5 (12 de 29) |
+| Posición ocupacional, ENPH (15 celdas) | 398,1 | 9: alto Q1–Q5, bajo Q5, medio Q1–Q3 |
+| Posición ocupacional, GEIH (3 estratos) | 398,1 | ninguna |
+| Formalidad conjunta, GEIH (21 = estrato × posición) | 25,1 | 4, todas posiciones con 1–3 ocupados (`otros`, familiar sin remuneración en alto) |
+| Tipo de contrato, GEIH (21) | 3,2 | 9, todas con 0–3 observaciones |
+
+Con 100 como peso del padre, la mediana de `peso_padre` en `P438` es 0,72: **en la mayoría de las celdas el medio de pago por celda es
+sobre todo la forma nacional recalibrada al nivel de Bogotá, no un dato de la celda.** Solo `P438` en estrato bajo Q1–Q4 y medio Q4–Q5 tiene
+soporte propio en cerca de la mitad de los subcapítulos. Es consecuencia de que cada subcapítulo lo contesta una fracción de los hogares
+(J13 5,9 %, D15 8,1 %, B12 9,8 %), no de la agrupación de estratos.
+
+**Soporte nacional** (`outputs/priors/celdas_hogares.csv`): con los cortes de Bogotá aplicados a los hogares urbanos, la celda mínima tiene
+**118 hogares** (alto Q1). El «mínimo 71» de `docs/fuentes_datos.md` §10.3 C corresponde a quintiles nacionales propios y ya no aplica.
+`ICGU = 0` en 31 hogares de Bogotá (14 + 13 + 4), todos en Q1.
+
+**Sensibilidades** (`outputs/priors/sensibilidad_priors.csv`; diferencia máxima respecto del escenario base):
+
+| Escenario | Dif. máx. en una celda | Dif. máx. en el marginal de Bogotá |
+|---|---|---|
+| `κ̂/2` | 13,4 p.p. | 1,3 p.p. |
+| `2κ̂` | 13,8 p.p. | 2,2 p.p. |
+| `κ = 30` fijo (el viejo «n ≈ 30») | 36,7 p.p. (tipo de contrato; celdas de 0–3 personas) | 1,9 p.p. |
+| `deff = 2` (conglomeración, `κ̂` re-estimado) | 18,1 p.p. | 1,4 p.p. |
+| Padre sin Bogotá (`κ̂` re-estimado) | 9,7 p.p. | 2,5 p.p. |
+
+La elección de `κ` mueve poco el marginal de Bogotá y mucho las celdas ralas: **lo que queda abierto no es el agregado sino qué se afirma de una
+celda de estrato alto.**
+
+**Límites de este parámetro (declarar en la tesis).**
+- `n_ef` de Kish corrige por pesos desiguales, no por conglomeración (sin UPM, L1): es optimista y `κ̂` se desplaza con el `deff` supuesto (fila `deff = 2`). El valor 2 es un supuesto, no una medición.
+- La evidencia marginal con conteos efectivos no enteros es una cuasi-verosimilitud, no un modelo exacto de la encuesta.
+- El padre nacional incluye a Bogotá (CLAUDE.md); contarla dos veces sesga `κ̂` hacia arriba. La fila «padre sin Bogotá» acota el efecto.
+- ENPH es de 2016-17 (L4): el padre y las celdas son estructuras de 2017.
 
 ## Cálculos de soporte respaldo
 

@@ -1,0 +1,26 @@
+escenario,grupo,kappa_base,kappa_escenario,dif_celda_max_pp,donde_celda,dif_marginal_max_pp,donde_marginal
+kappa_mitad,nc2r,199.52623149688807,99.76311574844404,2.4487389845202823,"nc2r|('alto (5-6)', 5)|cat=2",0.03748551612700671,nc2r|cat=0
+kappa_mitad,p438,100.0,50.0,11.491279029239143,"p438:D14|('alto (5-6)', 5)|cat=2",1.3159714515210141,p438:G14|cat=2
+kappa_mitad,formalidad,25.11886431509581,12.559432157547905,12.419876408974527,"formalidad|('bajo (1-2)', 'otros')|cat=3",0.027636487006588162,formalidad|cat=3
+kappa_mitad,tipo_contrato,3.1622776601683795,1.5811388300841898,13.405555922009066,"tipo_contrato|('bajo (1-2)', '5')|cat=1",0.005153097282484254,tipo_contrato|cat=1
+kappa_mitad,posicion,,,2.0651434097967822,"posicion|('alto (5-6)', 1)|cat=3",0.021104535306404326,posicion|cat=0
+kappa_doble,nc2r,199.52623149688807,399.05246299377615,3.932863815140375,"nc2r|('alto (5-6)', 5)|cat=2",0.05515924446243478,nc2r|cat=0
+kappa_doble,p438,100.0,200.0,11.379566050091839,"p438:D13|('alto (5-6)', 5)|cat=2",2.197538648542585,p438:G14|cat=2
+kappa_doble,formalidad,25.11886431509581,50.23772863019162,8.304809758752041,"formalidad|('bajo (1-2)', '6')|cat=9",0.04339821709850866,formalidad|cat=3
+kappa_doble,tipo_contrato,3.1622776601683795,6.324555320336759,13.757973115026578,"tipo_contrato|('bajo (1-2)', 'otros')|cat=0",0.011406230057253719,tipo_contrato|cat=1
+kappa_doble,posicion,,,2.38826440612116,"posicion|('medio (3-4)', 1)|cat=3",0.02315835726641735,posicion|cat=0
+kappa_fijo_30,nc2r,199.52623149688807,30.0,6.023504920679423,"nc2r|('alto (5-6)', 2)|cat=2",0.08081741157971029,nc2r|cat=0
+kappa_fijo_30,p438,100.0,30.0,19.553310510380197,"p438:D14|('alto (5-6)', 5)|cat=2",1.9372142629885292,p438:J13|cat=2
+kappa_fijo_30,formalidad,25.11886431509581,30.0,2.4687566237687255,"formalidad|('bajo (1-2)', 'otros')|cat=3",0.009554787616275484,formalidad|cat=3
+kappa_fijo_30,tipo_contrato,3.1622776601683795,30.0,36.67359295210793,"tipo_contrato|('bajo (1-2)', 'otros')|cat=0",0.07686768921758846,tipo_contrato|cat=0
+kappa_fijo_30,posicion,,,8.727923487186217,"posicion|('alto (5-6)', 1)|cat=0",0.049343388717026926,posicion|cat=0
+deff_2_kappa_reestimado,nc2r,199.52623149688807,199.52623149688807,3.932863815140375,"nc2r|('alto (5-6)', 5)|cat=2",0.05515924446243478,nc2r|cat=0
+deff_2_kappa_reestimado,p438,100.0,79.43282347242817,7.726910588534053,"p438:D13|('alto (5-6)', 5)|cat=2",1.3700582739002876,p438:G14|cat=2
+deff_2_kappa_reestimado,formalidad,25.11886431509581,25.11886431509581,8.304809758752041,"formalidad|('bajo (1-2)', '6')|cat=9",0.04339821709850866,formalidad|cat=3
+deff_2_kappa_reestimado,tipo_contrato,3.1622776601683795,3.981071705534973,18.14041417177224,"tipo_contrato|('bajo (1-2)', 'otros')|cat=0",0.01744253075690594,tipo_contrato|cat=1
+deff_2_kappa_reestimado,posicion,,,1.528685067117358,"posicion|('medio (3-4)', 1)|cat=3",0.02993880027756246,posicion|cat=0
+padre_sin_bogota_kappa_reestimado,nc2r,199.52623149688807,251.18864315095823,2.473087821829656,"nc2r|('alto (5-6)', 5)|cat=2",0.057103150023704585,nc2r|cat=0
+padre_sin_bogota_kappa_reestimado,p438,100.0,125.89254117941675,9.671605973157549,"p438:D13|('alto (5-6)', 5)|cat=2",2.5113925419126826,p438:J13|cat=2
+padre_sin_bogota_kappa_reestimado,formalidad,25.11886431509581,25.11886431509581,0.0,"formalidad|('bajo (1-2)', '1')|cat=0",0.0,formalidad|cat=0
+padre_sin_bogota_kappa_reestimado,tipo_contrato,3.1622776601683795,3.1622776601683795,0.0,"tipo_contrato|('bajo (1-2)', '1')|cat=0",0.0,tipo_contrato|cat=0
+padre_sin_bogota_kappa_reestimado,posicion,,,1.4384512596062826,"posicion|('alto (5-6)', 1)|cat=3",1.1102230246251565e-14,posicion|cat=0
