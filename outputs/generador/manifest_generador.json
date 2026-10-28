@@ -1,18 +1,61 @@
 {
  "script": "tools/construir_generador.py",
- "commit_base": "6c10c8f",
+ "commit_base": "68712a7",
  "pandas": "3.0.6",
  "numpy": "2.4.6",
  "python": "3.11.9",
  "semilla": 42,
  "nota_semilla": "la calibración no usa aleatoriedad; SEED se declara por convención",
  "ipc": {
-  "aplicado": false,
-  "motivo": "no hay serie de IPC en data/raw/IPC/",
-  "modo": "division",
-  "pesos": "2016-17 (sin actualizar)",
-  "modo_solicitado": "division",
-  "archivo": "data\\raw\\IPC\\ipc_bogota_division.csv"
+  "aplicado": true,
+  "modo": "total",
+  "referencia": "mes_recoleccion",
+  "anio_base": 2025,
+  "base": "promedio simple de los 12 meses de 2025",
+  "indice": "total nacional (serie de empalme DANE)",
+  "serie": {
+   "primer_mes": "2003-01",
+   "ultimo_mes": "2026-09"
+  },
+  "meses_recoleccion": [
+   "2016-07",
+   "2017-06",
+   12
+  ],
+  "filas": 212974,
+  "filas_con_caida_al_total": 0,
+  "factor_min": 1.5604974193771863,
+  "factor_max": 1.6213200892535808,
+  "indice_base": {
+   "00": 150.16666666666666
+  },
+  "referencias_equivalentes": {
+   "mes_recoleccion": {
+    "factor_min": 1.5604974193771863,
+    "factor_max": 1.6213200892535808,
+    "factor_medio_de_meses": 1.59549614998863
+   },
+   "promedio_campo": 1.5951278669369473,
+   "meses_campo": [
+    "2016-07",
+    "2017-06",
+    12
+   ],
+   "anio_2017": 1.564915327833261
+  },
+  "modo_solicitado": "total",
+  "referencia_solicitada": "mes_recoleccion",
+  "archivo": "outputs/ipc/ipc_total_nacional.csv",
+  "sha256_serie": "2e252e7fdbbebb40c0a61c9267b3c25b9fbe9f365b88a7f7667ec128819f786d",
+  "manifest_conversion": {
+   "archivo": "anex-IPC-Indices-sep2026.xlsx",
+   "hoja": "IndicesIPC",
+   "sha256_xlsx": "56f8e5e6e9d235d411e487b2284beba1be8eaeee69b7b9516bfa8ea8443c0676",
+   "actualizado": "Actualizado el 7 de Octubre de 2026",
+   "primer_mes": "2003-01",
+   "ultimo_mes": "2026-09",
+   "indice_2018_12": 100.0
+  }
  },
  "kappa_donantes": 158.48931924611142,
  "kappa_en_frontera": false,
@@ -36,20 +79,20 @@
   "periodo_referencia_caps.csv": "5c5f23c6f36ed435f66e780fef4e0accba5911e1de82557522d705dbf51fa5fb",
   "lugares_compra.csv": "194b438c98b2c50ff046bee14c9d78f482418575e1e44d8e29cc0f82c67ac4ce",
   "mapeo_coicop_taxonomia_provisional.csv": "c97d01dff57b603579d45a235cf14e77005b1f55093dd5fe4e1d6000887e5905",
-  "parametros_propios.json": "4ea7eef3af0081cefd5cb845fe0cb476a627c56ab55090dfe0cab3656d933975"
+  "parametros_propios.json": "433d7153dc987a246880ed777e7649407f10e962e2a61b9f51a09668a7e5863d"
  },
  "sha256_salidas": {
   "mezcla_donantes.json": "85b32618c2b86e2dc049d99f960937bb4957cccd0eb0dfb80be77ed8f047a060",
   "estructura_cuentas.csv": "8974be4ca6ad421cbc63f33f1249950f33d0beb70d09a0b66a9b5c1398804868",
-  "diagnostico_calibracion.json": "ea2b8b71f259f6b635bf45522efb841cf108a93384b3104984b96c05802ca61d",
-  "categoria_valor_mensual.csv": "cbff06b6992152bfe24bc0fe9b99b8ebef25da58af9f4b39cc9127d753202371",
+  "diagnostico_calibracion.json": "a978c986fb857f1d3f03d4cb2f1d8c354f663821e3b2d9f9669d0de2831d4c20",
+  "categoria_valor_mensual.csv": "8668d1180089ff06b1a5467c6e4e4c3c8e7fcf34eb63af1fa6185d50fef78f7b",
   "cobertura_mapeo.csv": "5853a4d2409bcb87cfbec7d930a39908aca0fa4e2fa9fdf921cb295268392d95",
   "recurrentes_resumen.csv": "3014fcaef8b1cd0b48abfbbda71a955adb59ce93763ad49ac345460d08a7d8e8"
  },
  "sha256_pool_descomprimido": {
-  "eventos": "1f335132b4f3fe34be7a78ed5b297b87886dca0fb131a8a31f154ee511d65c34",
-  "recurrentes": "0f9c319815d818534554e6b9ca4d14a9a68296cdc92cb76f00f62afce561eb8c",
-  "hogares": "0c9af81bd688110b122f6b836e42f65c8e8c76bd4ff18dfa7b5a9e31367a5cfd"
+  "eventos": "31b8a82249e58557249ac3afef5391c9e3e7ffdaf4b48034362054fd68150cc7",
+  "recurrentes": "55b518c4860533de0c25b5b3b966948e55401e962faa3c1a85e3895333c63bad",
+  "hogares": "f6fb3ecca4522bb58deafa91b53098adcea12b50685077800c9f6ab9df7a00a3"
  },
  "uniones": [
   {

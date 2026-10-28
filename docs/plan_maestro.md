@@ -2,7 +2,7 @@
 
 **Título:** Diseño y validación preliminar de un protocolo de generación de datos sintéticos de transacciones financieras para el contexto colombiano
 **Autora:** Sara J. Cárdenas · Maestría en Inteligencia Artificial, Pontificia Universidad Javeriana
-**Versión:** 4 · **Corte:** lunes 26 de octubre de 2026 · reemplaza la v3 del 24 de septiembre
+**Versión:** 5 · **Corte:** martes 27 de octubre de 2026 · reemplaza la v4 del 26 de octubre
 **Hitos (TG2):** entrega del reporte (PDF, plantilla **IEEE Transactions on AI**, ≤ 24 pp) al correo del programa **antes del 27 nov 2026**; el tutor propone 3 jurados · sustentación presencial **30 nov – 18 dic** · reunión de decisión continuar/cancelar con la tutora, **esta semana**
 
 > Documento vivo de seguimiento del proyecto (WP0). La fuente de verdad técnica es el repositorio `C:\tesis-sdg` (respaldo privado en GitHub). Este documento resume el estado; las cifras y su derivación viven en el repo.
@@ -10,6 +10,8 @@
 ---
 
 ## 0. Resumen ejecutivo
+
+> **Progreso al 27 oct:** Etapa 1 (priors, WP3) y Etapa 2 (generador por reglas, WP6) **cerradas, probadas y en `main`**; reevaluación del pipeline de referencia integrada (WP5). IPC en proceso (deflactor nacional, factor 2017→2025 ≈ 1,565). **Faltan:** CTGAN (Etapa 3, WP7), datos reales — ingesta/anonimización/anotación (WP4) — y TSTR (Etapa 4, WP8), más el reporte IEEE. Avance global ≈ 40 %.
 
 1. **La base empírica se reconstruyó desde cero.** Las cifras del análisis descriptivo del informe de avance estaban escritas a mano, sin factores de expansión y sobre un solo mes. Se re-descargaron los microdatos del DANE y se construyó una base verificable: 112 archivos con hash SHA-256 contra el original, cargador único con 29 pruebas automatizadas y distribuciones ponderadas para Bogotá.
 2. **El dominio quedó definido: Bogotá urbano.** Los 20 voluntarios de la validación son de Bogotá; calibrar contra otro dominio rompería la comparación del TSTR.
@@ -301,9 +303,10 @@ código y documentos se respalda en GitHub privado; los datos no se suben.
 | WP0 — Entorno y seguimiento | Este documento (v4) |
 | WP1 — Perfilado DANE | ✅ Cerrado (`2aebb9e`) |
 | WP2 — Taxonomía | Pendientes en `docs/taxonomia/pendientes_v1.1.md` |
-| WP3 — Priors | **En proceso** (chat WP3, desde el 26 oct) |
+| WP3 — Priors | ✅ Cerrado (27 oct): módulo + aval; `outputs/priors/` |
 | WP4 — Datos reales | Paquete listo; **extractos recolectados**, por ingestar/anonimizar/anotar |
 | WP5 — Pipeline de referencia (Pancholi) | ✅ Ejecutado (etapas 1–3); `docs/reevaluacion_pancholi.md`, `outputs/pancholi/` |
-| WP6 — Generador · WP7 — CTGAN · WP8 — Evaluación TSTR | Por hacer |
+| WP6 — Generador | ✅ Cerrado (27 oct): generador por reglas, modo `por_hogar`; `outputs/sintetico_reglas/`. IPC en proceso |
+| WP7 — CTGAN · WP8 — Evaluación TSTR | Por hacer |
 
 La equivalencia completa entre los chats de trabajo originales y estos WP queda en `docs/bitacora.md`.

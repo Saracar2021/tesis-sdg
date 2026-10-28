@@ -5,7 +5,7 @@ Flujo, en dos capas
                 (categoría, monto, medio de pago). Cada (perfil, categoría) hereda los eventos de un hogar DONANTE de ENPH 2016-17
                 (Bogotá), elegido de la celda estrato × quintil, del quintil o de Bogotá con la mezcla jerárquica calibrada en
                 ``sdg.gasto_enph`` (P(celda) = n_ef/(n_ef+κ)). Los montos se actualizan a pesos de 2025 con el IPC (``sdg.ipc``;
-                sin serie, factor 1,0 y la salida queda marcada «sin IPC»). El medio sale del medio principal del perfil (NC2R / P438).
+                sin serie, factor 1,0 y la salida queda marcada «sin IPC»; con serie, deflactor único: IPC total nacional). El medio sale del medio principal del perfil (NC2R / P438).
   CAPA EMITIDA  Solo lo que vería un banco o una billetera: compras con tarjeta débito/crédito, PSE y transferencias, movimientos de
                 billetera, ingresos, retiros en cajero/corresponsal, recargas de billetera y pagos de tarjeta de crédito. El efectivo
                 no se emite: se acumula y sale como retiros periódicos. Sobre la capa interna se aplica una migración digital
@@ -121,8 +121,8 @@ COLS_HOG = ["DIRECTORIO", "FEX", "estrato_agrupado", "quintil", "celda", "con_ce
 
 def pool_desde_calibracion(R: dict) -> Pool:
     """Pool a partir del resultado de ``gasto_enph.construir()``."""
-    meta = dict(modo_ipc=R["modo_ipc"], ipc_aplicado=bool(R["diag"]["ipc"].get("aplicado", False)), ipc=R["diag"]["ipc"],
-                kappa=float(R["kappa"]["kappa"]))
+    meta = dict(modo_ipc=R["modo_ipc"], referencia_ipc=R.get("referencia_ipc"), ipc_aplicado=bool(R["diag"]["ipc"].get("aplicado", False)),
+                ipc=R["diag"]["ipc"], kappa=float(R["kappa"]["kappa"]))
     return Pool(R["eventos"][COLS_EVENTOS].copy(), R["recurrentes"][COLS_REC].copy(), R["hogares"][COLS_HOG].copy(), R["mezcla"],
                 R["cuentas"].copy(), meta)
 
@@ -513,7 +513,8 @@ def generar(pool: Pool, priors: dict, perfiles: pd.DataFrame, par: dict, seed: i
     lugares = cargar_lugares(dir_param)
     permisos = pd.read_csv(dir_param / "permisos_medios_digitales.csv", dtype={"categoria_n1": str})
     info: dict = {"n_perfiles": n, "semilla": seed, "meses": meses_txt, "escenario_digital": par["digital.escenario"], "modo_donantes": par["donantes.modo"],
-                  "modo_cuentas": par["cuentas.modo"], "ipc_aplicado": bool(pool.meta.get("ipc_aplicado", False)), "avisos": []}
+                  "modo_cuentas": par["cuentas.modo"], "ipc_aplicado": bool(pool.meta.get("ipc_aplicado", False)),
+                  "ipc": {k: v for k, v in (pool.meta.get("ipc") or {}).items() if k != "indice_base"}, "avisos": []}
     if not info["ipc_aplicado"]:
         info["avisos"].append("SIN IPC: montos en pesos de 2016-17 sin actualizar (factor 1,0). No usar para comparar niveles con 2025.")
 

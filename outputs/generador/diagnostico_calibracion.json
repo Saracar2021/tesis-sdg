@@ -111,10 +111,42 @@
   "valor_eventos": 4801441287.166666
  },
  "ipc": {
-  "aplicado": false,
-  "motivo": "no hay serie de IPC en data/raw/IPC/",
-  "modo": "division",
-  "pesos": "2016-17 (sin actualizar)"
+  "aplicado": true,
+  "modo": "total",
+  "referencia": "mes_recoleccion",
+  "anio_base": 2025,
+  "base": "promedio simple de los 12 meses de 2025",
+  "indice": "total nacional (serie de empalme DANE)",
+  "serie": {
+   "primer_mes": "2003-01",
+   "ultimo_mes": "2026-09"
+  },
+  "meses_recoleccion": [
+   "2016-07",
+   "2017-06",
+   12
+  ],
+  "filas": 212974,
+  "filas_con_caida_al_total": 0,
+  "factor_min": 1.5604974193771863,
+  "factor_max": 1.6213200892535808,
+  "indice_base": {
+   "00": 150.16666666666666
+  },
+  "referencias_equivalentes": {
+   "mes_recoleccion": {
+    "factor_min": 1.5604974193771863,
+    "factor_max": 1.6213200892535808,
+    "factor_medio_de_meses": 1.59549614998863
+   },
+   "promedio_campo": 1.5951278669369473,
+   "meses_campo": [
+    "2016-07",
+    "2017-06",
+    12
+   ],
+   "anio_2017": 1.564915327833261
+  }
  },
  "reconciliacion_gcmug": {
   "agregado_eventos_sobre_gcmug": 0.8646015804866185,

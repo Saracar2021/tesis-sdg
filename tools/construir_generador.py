@@ -1,6 +1,6 @@
 """Calibra el gasto del hogar para el generador por reglas (WP6, Etapa 2, PD5) y escribe el pool de donantes (determinista).
 
-Ejecutar desde la raíz:  .venv\\Scripts\\python.exe tools\\construir_generador.py [--ipc RUTA] [--modo-ipc division|total]
+Ejecutar desde la raíz:  .venv\\Scripts\\python.exe tools\\construir_generador.py [--ipc RUTA] [--modo-ipc total|division] [--referencia-ipc mes_recoleccion|promedio_campo|anio_2017]
 
 Entradas: SOLO microdatos vía sdg.carga (dentro de sdg.gasto_enph) y las tablas versionadas de docs/generador/. Sin aleatoriedad.
 Salidas (outputs/generador/):
@@ -14,7 +14,8 @@ Salidas (outputs/generador/):
   recurrentes_resumen.csv           arriendo, cuota de vivienda, servicios públicos y de conectividad
   manifest_generador.json
 
-IPC: sin ``data/raw/IPC/ipc_bogota_division.csv`` los montos quedan en pesos de 2016-17 y la salida se marca «sin IPC» (factor 1,0).
+IPC: el deflactor es el índice TOTAL nacional (``outputs/ipc/ipc_total_nacional.csv``, de ``tools/convertir_ipc.py``); referencia = mes de recolección
+de cada hogar y base = promedio 2025 (ver ``sdg.ipc``). Sin el CSV los montos quedan en pesos de 2016-17 y la salida se marca «sin IPC» (factor 1,0).
 """
 from __future__ import annotations
 
@@ -39,6 +40,15 @@ REDONDEO = 6
 
 def _sha(ruta: Path) -> str:
     return hashlib.sha256(Path(ruta).read_bytes()).hexdigest()
+
+
+def _manifest_conversion() -> dict | None:
+    """Datos del xlsx de origen que dejó ``tools/convertir_ipc.py`` (sha256 del xlsx, texto «Actualizado el…»); ``None`` si no se corrió."""
+    ruta = RAIZ / "outputs" / "ipc" / "manifest_ipc.json"
+    if not ruta.is_file():
+        return None
+    m = json.loads(ruta.read_text(encoding="utf-8"))
+    return {k: m.get(k) for k in ("archivo", "hoja", "sha256_xlsx", "actualizado", "primer_mes", "ultimo_mes", "indice_2018_12")}
 
 
 def _promedio(x: pd.Series, w: pd.Series) -> float:
@@ -91,12 +101,14 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--ipc", default=None, help="ruta del CSV de IPC en formato largo (mes, division, indice)")
     ap.add_argument("--modo-ipc", choices=["division", "total"], default=None)
+    ap.add_argument("--referencia-ipc", choices=list(ipc_mod.REFERENCIAS), default=None)
     a = ap.parse_args()
     par_prop = json.loads((GE.DIR_PARAM / "parametros_propios.json").read_text(encoding="utf-8"))
     modo_ipc = a.modo_ipc or par_prop["calibracion"]["modo_ipc"]["valor"]
+    referencia_ipc = a.referencia_ipc or par_prop["calibracion"]["referencia_ipc"]["valor"]
 
-    print(f"calibrando (modo IPC: {modo_ipc}; archivo IPC: {a.ipc or ipc_mod.RUTA_IPC.relative_to(RAIZ)})…")
-    R = GE.construir(modo_ipc, a.ipc)
+    print(f"calibrando (IPC: modo {modo_ipc}, referencia {referencia_ipc}; archivo {a.ipc or ipc_mod.RUTA_IPC.relative_to(RAIZ)})…")
+    R = GE.construir(modo_ipc, a.ipc, referencia_ipc)
     pool = G.pool_desde_calibracion(R)
     OUT.mkdir(parents=True, exist_ok=True)
     G.guardar_pool(pool, OUT / "pool", OUT)
@@ -114,6 +126,7 @@ def main() -> int:
         commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=RAIZ, capture_output=True, text=True).stdout.strip() or "no disponible"
     except OSError:
         commit = "no disponible"
+    ruta_ipc = Path(a.ipc) if a.ipc else ipc_mod.RUTA_IPC
     rutas_tablas = [GE.DIR_PARAM / n for n in ("mensualizacion_enph.csv", "periodo_referencia_caps.csv", "lugares_compra.csv",
                                                 "mapeo_coicop_taxonomia_provisional.csv", "parametros_propios.json")]
     rutas_salida = [OUT / n for n in ("mezcla_donantes.json", "estructura_cuentas.csv", "diagnostico_calibracion.json", "categoria_valor_mensual.csv",
@@ -121,7 +134,9 @@ def main() -> int:
     man = {
         "script": "tools/construir_generador.py", "commit_base": commit, "pandas": pd.__version__, "numpy": np.__version__, "python": sys.version.split()[0],
         "semilla": GE.SEED, "nota_semilla": "la calibración no usa aleatoriedad; SEED se declara por convención",
-        "ipc": R["diag"]["ipc"] | {"modo_solicitado": modo_ipc, "archivo": str(ipc_mod.RUTA_IPC.relative_to(RAIZ)) if a.ipc is None else a.ipc},
+        "ipc": R["diag"]["ipc"] | {"modo_solicitado": modo_ipc, "referencia_solicitada": referencia_ipc,
+                                   "archivo": str(ipc_mod.RUTA_IPC.relative_to(RAIZ)).replace("\\", "/") if a.ipc is None else a.ipc,
+                                   "sha256_serie": _sha(ruta_ipc) if ruta_ipc.is_file() else None, "manifest_conversion": _manifest_conversion()},
         "kappa_donantes": R["kappa"]["kappa"], "kappa_en_frontera": bool(R["kappa"]["en_frontera"]),
         "conteos": {"hogares_bogota": R["diag"]["hogares"]["n_bogota"], "hogares_con_celda": R["diag"]["hogares"]["n_con_celda"],
                     "eventos": int(len(R["eventos"])), "recurrentes": int(len(R["recurrentes"])), "celdas_ralas_donantes": int(sum(m["rala"] for m in R["mezcla"].values()))},
@@ -136,7 +151,11 @@ def main() -> int:
     r = R["diag"]["reconciliacion_gcmug"]
     print(f"κ donantes = {R['kappa']['kappa']:.2f} | hogares {man['conteos']['hogares_con_celda']} | eventos {man['conteos']['eventos']} | recurrentes {man['conteos']['recurrentes']}")
     print(f"reconciliación con GCMUG: eventos {r['agregado_eventos_sobre_gcmug']:.3f}; eventos + recurrentes {r['agregado_eventos_mas_recurrentes_sobre_gcmug']:.3f}")
-    print(f"IPC aplicado: {R['diag']['ipc'].get('aplicado')} ({R['diag']['ipc'].get('motivo', R['diag']['ipc'].get('base', ''))})")
+    di = R["diag"]["ipc"]
+    if di.get("aplicado"):
+        print(f"IPC aplicado: {di['indice']}, base {di['base']}, referencia {di['referencia']}; factor entre {di['factor_min']:.4f} y {di['factor_max']:.4f}")
+    else:
+        print(f"IPC aplicado: False ({di.get('motivo')})")
     print(tabla[["categoria_n1", "media_mensual_hogar_2016_17", "pct_hogares_con_gasto", "participacion_valor_pct"]].to_string(index=False))
     return 0
 

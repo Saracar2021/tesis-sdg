@@ -1,0 +1,22 @@
+{
+ "archivo": "anex-IPC-Indices-sep2026.xlsx",
+ "hoja": "IndicesIPC",
+ "sha256_xlsx": "56f8e5e6e9d235d411e487b2284beba1be8eaeee69b7b9516bfa8ea8443c0676",
+ "primer_mes": "2003-01",
+ "ultimo_mes": "2026-09",
+ "n_meses": 285,
+ "titulo": "Índices - Serie de empalme 2003 - 2026",
+ "actualizado": "Actualizado el 7 de Octubre de 2026",
+ "fuente": "Fuente: DANE.",
+ "indice_2018_12": 100.0,
+ "base_dic_2018_igual_100": true,
+ "script": "tools/convertir_ipc.py",
+ "csv": "outputs/ipc/ipc_total_nacional.csv",
+ "sha256_csv": "2e252e7fdbbebb40c0a61c9267b3c25b9fbe9f365b88a7f7667ec128819f786d",
+ "division": "00",
+ "indice_base_2025_promedio": 150.16666666666666,
+ "indice_promedio_2017": 95.95833333333333,
+ "meses_2017": 12,
+ "factor_promedio_2017_a_promedio_2025": 1.564915327833261,
+ "nota": "solo el índice total nacional; el factor que usa el generador sale del mes de recolección de cada hogar (ver sdg.ipc)"
+}

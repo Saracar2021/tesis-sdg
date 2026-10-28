@@ -1,5 +1,5 @@
 {
- "version": "0.2.0",
+ "version": "0.3.0",
  "fecha": "2026-10-27",
  "nota": "Parámetros del generador por reglas (WP6) que NO se calculan de datos. Cada uno declara su fuente; «regla propia» significa que no hay fuente DANE/Banrep/GEIH que lo respalde y que debe tratarse como supuesto con sensibilidad. Nada de esto se calibra con los extractos reales (D14).",
  "ventana": {
@@ -27,9 +27,14 @@
    "nota": "Subcapítulos mensuales del Cuadernillo 3: los artículos del mismo hogar, subcapítulo y lugar se emiten como una sola compra. En los de 3 y 12 meses cada artículo es un evento."
   },
   "modo_ipc": {
-   "valor": "division",
-   "fuente": "regla propia (decisión de la autora 27 oct 2026)",
-   "nota": "'division' = IPC de Bogotá por división COICOP; 'total' = factor único (respaldo)."
+   "valor": "total",
+   "fuente": "regla propia (decisión de la autora, 27 oct 2026)",
+   "nota": "'total' = deflactor único: índice TOTAL del IPC nacional (serie de empalme DANE, hoja IndicesIPC, base dic-2018 = 100, anex-IPC-Indices-sep2026.xlsx). NO es por división COICOP ni por ciudad: no se dispone de la serie por división para todo el periodo de la ENPH. 'division' queda disponible para cuando exista esa serie. Base de la actualización: promedio de los 12 meses de 2025."
+  },
+  "referencia_ipc": {
+   "valor": "mes_recoleccion",
+   "fuente": "regla propia (WP6, 27 oct 2026; la autora sugirió promedio 2017 o el periodo de campo)",
+   "nota": "Periodo de referencia de los valores de la ENPH. 'mes_recoleccion': índice del mes de recolección de cada hogar (PERIODO, hogares de Bogotá 2016-07 a 2017-06). 'promedio_campo': un solo factor con el promedio de esos meses. 'anio_2017': un solo factor con el promedio de 2017 (≈2 % menos que las otras dos, porque el campo cae en 2016-17). Supuesto no verificado: los valores de ENPH están en pesos corrientes del mes de recolección."
   }
  },
  "donantes": {

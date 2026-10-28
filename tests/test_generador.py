@@ -623,12 +623,23 @@ class TestCalibracionGastoEnph(unittest.TestCase):
         self.assertGreater(r, 0.8)
         self.assertLess(r, 1.25)
 
-    def test_sin_serie_de_ipc_el_factor_es_uno_y_se_declara(self):
+    def test_factor_ipc_es_uno_y_se_declara_sin_serie_o_es_un_deflactor_unico_con_serie(self):
         from sdg import ipc
-        if ipc.RUTA_IPC.is_file():
-            self.skipTest("hay serie de IPC en data/raw/IPC: el factor ya no es 1,0")
-        self.assertTrue((self.R["eventos"]["factor_ipc"] == 1.0).all())
-        self.assertFalse(self.R["diag"]["ipc"]["aplicado"])
+        ev, rec, hog, d = self.R["eventos"], self.R["recurrentes"], self.R["hogares"], self.R["diag"]["ipc"]
+        if not ipc.RUTA_IPC.is_file():
+            self.assertTrue((ev["factor_ipc"] == 1.0).all())
+            self.assertFalse(d["aplicado"])
+            return
+        self.assertTrue(d["aplicado"])
+        self.assertEqual((d["modo"], d["referencia"]), ("total", "mes_recoleccion"))
+        self.assertEqual(d["filas_con_caida_al_total"], 0)
+        self.assertTrue(((ev["factor_ipc"] > 1.45) & (ev["factor_ipc"] < 1.75)).all())
+        # deflactor único: eventos, recurrentes y el ingreso del mismo hogar llevan exactamente el mismo factor
+        f_hog = hog.set_index("DIRECTORIO")["factor_ipc_total"]
+        for nombre, df in (("eventos", ev), ("recurrentes", rec)):
+            esperado = df["DIRECTORIO"].map(f_hog)
+            self.assertTrue(np.allclose(df["factor_ipc"].to_numpy(), esperado.to_numpy(), rtol=1e-12), nombre)
+        self.assertEqual(self.R["referencia_ipc"], "mes_recoleccion")
 
     def test_estructura_de_cuentas_suma_uno_por_estrato(self):
         c = self.R["cuentas"]

@@ -18,7 +18,8 @@ Decisiones de diseño (cada una es un supuesto declarado, no un hecho de la encu
     P(celda) = n_ef/(n_ef+κ), y el resto va al nivel superior con el mismo esquema. κ se estima por verosimilitud marginal
     Dirichlet-multinomial sobre el gasto mensual de cada categoría discretizado en cuantiles (mismo ``elegir_kappa`` de WP3).
     Reproduce los ceros y las colas empíricas (la lognormal sobrestima el p90 en las 12 divisiones: ver diagnóstico).
-  Actualización a 2025: ``sdg.ipc`` (sin serie, factor 1,0 y la salida se marca «sin IPC»).
+  Actualización a 2025: ``sdg.ipc`` (deflactor único: IPC total nacional, mes de recolección de cada hogar, base promedio 2025; sin serie,
+    factor 1,0 y la salida se marca «sin IPC»).
 
 Límites: ENPH no trae fecha ni día de la semana; el día de cada evento lo pone el generador. El diario tiene fatiga (menos líneas los
 últimos días) que DANE no corrige y aquí tampoco. ``n_ef`` de Kish no corrige conglomeración (L1). Los servicios públicos vienen
@@ -220,7 +221,7 @@ def eventos_menos_frecuentes(P: Parametros, diag: dict) -> pd.DataFrame:
     return ev
 
 
-def completar_eventos(ev: pd.DataFrame, P: Parametros, hog: pd.DataFrame, serie_ipc, modo_ipc: str, diag: dict) -> pd.DataFrame:
+def completar_eventos(ev: pd.DataFrame, P: Parametros, hog: pd.DataFrame, serie_ipc, modo_ipc: str, diag: dict, referencia_ipc: str = "mes_recoleccion") -> pd.DataFrame:
     """Categoría, subtipo, clase de comercio, factor IPC. Todo determinista."""
     ev = ev.copy()
     cat, n2, pref = P.categoria(ev["cod8"])
@@ -229,11 +230,11 @@ def completar_eventos(ev: pd.DataFrame, P: Parametros, hog: pd.DataFrame, serie_
     ev["categoria_n2"] = refinar_n2(cat, n2, ev["clase_comercio"], ev["domicilio"])
     ev["division"] = np.where(ev["cod8"].str[:2].isin(ipc_mod.DIVISIONES), ev["cod8"].str[:2], ipc_mod.TOTAL)
     periodo = ev["DIRECTORIO"].map(hog.set_index("DIRECTORIO")["PERIODO"])
-    ev["factor_ipc"], diag["ipc"] = ipc_mod.factores(serie_ipc, periodo, ev["division"], modo_ipc)
+    ev["factor_ipc"], diag["ipc"] = ipc_mod.factores(serie_ipc, periodo, ev["division"], modo_ipc, referencia_ipc)
     return ev
 
 
-def recurrentes(hog: pd.DataFrame, P: Parametros, serie_ipc, modo_ipc: str, diag: dict) -> pd.DataFrame:
+def recurrentes(hog: pd.DataFrame, P: Parametros, serie_ipc, modo_ipc: str, diag: dict, referencia_ipc: str = "mes_recoleccion") -> pd.DataFrame:
     """Arriendo, cuota de vivienda y servicios públicos/conectividad: pagos recurrentes con probabilidad mensual = 1/meses del pago."""
     cols = [f"P10272S{i}A{j}" for i in SERVICIOS for j in (1, 2)]
     mp = carga.cargar_enph("hogares/gastos_menos_frecuentes_medio_pago.csv", dominio="bogota", columnas=cols)
@@ -259,7 +260,7 @@ def recurrentes(hog: pd.DataFrame, P: Parametros, serie_ipc, modo_ipc: str, diag
         filas.append(d)
     r = pd.concat(filas, ignore_index=True)
     periodo = r["DIRECTORIO"].map(h["PERIODO"])
-    r["factor_ipc"], _ = ipc_mod.factores(serie_ipc, periodo, r["division"], modo_ipc)
+    r["factor_ipc"], _ = ipc_mod.factores(serie_ipc, periodo, r["division"], modo_ipc, referencia_ipc)
     return r
 
 
@@ -363,7 +364,7 @@ def sha256_archivo(ruta) -> str:
     return h.hexdigest()
 
 
-def construir(modo_ipc: str = "division", ruta_ipc=None) -> dict:
+def construir(modo_ipc: str = "total", ruta_ipc=None, referencia_ipc: str = "mes_recoleccion") -> dict:
     """Calibración completa en memoria. Determinista (no usa aleatoriedad)."""
     P = Parametros()
     serie = ipc_mod.cargar_serie(ruta_ipc)
@@ -372,13 +373,13 @@ def construir(modo_ipc: str = "division", ruta_ipc=None) -> dict:
     diag["hogares"] = dict(n_bogota=int(len(hog)), n_con_celda=int(hog["con_celda"].sum()), n_sin_celda=int((~hog["con_celda"]).sum()),
                            cortes_icgu_bogota=[float(c) for c in cortes], n_icgu_cero=int((hog["icgu"] == 0).sum()))
     ev = pd.concat([eventos_diarios(P, diag), eventos_menos_frecuentes(P, diag)], ignore_index=True)
-    ev = completar_eventos(ev, P, hog, serie, modo_ipc, diag)
+    ev = completar_eventos(ev, P, hog, serie, modo_ipc, diag, referencia_ipc)
     ev = ev.merge(hog[["DIRECTORIO", "con_celda"]], on="DIRECTORIO", how="left")
     diag["cobertura_mapeo"] = (ev.assign(valor_mes=ev["valor"] * ev["factor"]).groupby(["prefijo_mapeo", "categoria_n1"])["valor_mes"].sum()
                                .reset_index().sort_values("valor_mes", ascending=False))
-    rec = recurrentes(hog, P, serie, modo_ipc, diag)
+    rec = recurrentes(hog, P, serie, modo_ipc, diag, referencia_ipc)
     # hogares: ingreso monetario disponible actualizado con el IPC total (mismo factor que el gasto del hogar)
-    f_tot, _ = ipc_mod.factores(serie, hog["PERIODO"], pd.Series(ipc_mod.TOTAL, index=hog.index), "total")
+    f_tot, _ = ipc_mod.factores(serie, hog["PERIODO"], pd.Series(ipc_mod.TOTAL, index=hog.index), "total", referencia_ipc)
     hog = hog.assign(factor_ipc_total=f_tot.to_numpy())
     # totales por hogar y categoría (pesos de 2016-17, sin IPC) para κ y para la reconciliación con GCMUG
     ev["mensual"] = ev["valor"] * ev["factor"]
@@ -403,4 +404,4 @@ def construir(modo_ipc: str = "division", ruta_ipc=None) -> dict:
         media_mensual_gcmug=float(np.average(h["gcmug"].fillna(0), weights=w)),
         nota="validación contra el consolidado de DANE, no calibración; ambos salen del mismo insumo (consistencia, no prueba)")
     return dict(P=P, hogares=hog, eventos=ev, recurrentes=rec, totales=totales, kappa=kappa, mezcla=mezcla, cuentas=cuentas,
-                diag=diag, diag_cuentas=diag_cuentas, ipc_serie=serie, modo_ipc=modo_ipc)
+                diag=diag, diag_cuentas=diag_cuentas, ipc_serie=serie, modo_ipc=modo_ipc, referencia_ipc=referencia_ipc)

@@ -9,10 +9,43 @@
  "escenario_digital": "base",
  "modo_donantes": "por_hogar",
  "modo_cuentas": "multiple",
- "ipc_aplicado": false,
- "avisos": [
-  "SIN IPC: montos en pesos de 2016-17 sin actualizar (factor 1,0). No usar para comparar niveles con 2025."
- ],
+ "ipc_aplicado": true,
+ "ipc": {
+  "aplicado": true,
+  "modo": "total",
+  "referencia": "mes_recoleccion",
+  "anio_base": 2025,
+  "base": "promedio simple de los 12 meses de 2025",
+  "indice": "total nacional (serie de empalme DANE)",
+  "serie": {
+   "primer_mes": "2003-01",
+   "ultimo_mes": "2026-09"
+  },
+  "meses_recoleccion": [
+   "2016-07",
+   "2017-06",
+   12
+  ],
+  "filas": 212974,
+  "filas_con_caida_al_total": 0,
+  "factor_min": 1.5604974193771863,
+  "factor_max": 1.6213200892535808,
+  "referencias_equivalentes": {
+   "mes_recoleccion": {
+    "factor_min": 1.5604974193771863,
+    "factor_max": 1.6213200892535808,
+    "factor_medio_de_meses": 1.59549614998863
+   },
+   "promedio_campo": 1.5951278669369473,
+   "meses_campo": [
+    "2016-07",
+    "2017-06",
+    12
+   ],
+   "anio_2017": 1.564915327833261
+  }
+ },
+ "avisos": [],
  "medios": {
   "eventos_con_esquema_p438": 34671,
   "eventos_con_esquema_nc2r": 277838,
@@ -66,13 +99,13 @@
   }
  },
  "filas": {
-  "total": 445192,
+  "total": 448383,
   "interna": 326172,
-  "emitida": 119020
+  "emitida": 122211
  },
  "filas_emitidas_por_cuenta": {
-  "banco": 68508,
-  "billetera": 49017,
+  "banco": 71239,
+  "billetera": 49477,
   "tarjeta_credito": 1495
  },
  "filas_emitidas_por_origen": {
@@ -82,8 +115,8 @@
   "p2p_sin_proposito": 7653,
   "pago_recurrente": 8147,
   "pago_tarjeta": 606,
-  "recarga_billetera": 11846,
-  "retiro": 16228
+  "recarga_billetera": 12286,
+  "retiro": 18979
  },
  "cuentas_perfiles": {
   "tiene_banco": 0.894,
@@ -91,14 +124,14 @@
   "tiene_tarjeta_credito": 0.303
  },
  "capa_interna_valor_por_medio_pago": {
-  "billetera_digital": 0.07279682155896024,
-  "bono_subsidio": 0.0005736626579487093,
-  "efectivo": 0.6592132129420747,
-  "fiado_credito_tienda": 0.0002150760227720047,
-  "otro_nd": 0.011239263511031695,
-  "tarjeta_credito": 0.016785677762415345,
-  "tarjeta_debito": 0.04097278623043525,
-  "transferencia_bancaria": 0.1982034993143621
+  "billetera_digital": 0.07293818035730343,
+  "bono_subsidio": 0.0005749732188864346,
+  "efectivo": 0.6587688406829065,
+  "fiado_credito_tienda": 0.0002157760195762911,
+  "otro_nd": 0.011278160534288435,
+  "tarjeta_credito": 0.016819473879222776,
+  "tarjeta_debito": 0.040989466154983716,
+  "transferencia_bancaria": 0.19841512915283235
  },
  "capa_interna_eventos_por_medio_pago": {
   "efectivo": 0.7584955177023166,
@@ -110,29 +143,29 @@
   "fiado_credito_tienda": 0.0007817961075751444,
   "bono_subsidio": 0.00021461069619709846
  },
- "valor_interno_pagado_desde_cuenta": 0.32875878486617294,
+ "valor_interno_pagado_desde_cuenta": 0.32916224954434226,
  "gasto_sobre_ingreso_por_perfil": {
-  "mediana": 0.9281095286741458,
-  "p90": 2.4514371783575384,
+  "mediana": 0.9281583453300002,
+  "p90": 2.451796174574877,
   "frac_mayor_1": 0.44
  },
  "efectivo": {
-  "gasto_en_efectivo": 5208868500.0,
-  "retiros": 5283350000.0,
-  "retiros_sobre_gasto_efectivo": 1.0142989787513352
+  "gasto_en_efectivo": 8285255100.0,
+  "retiros": 8359400000.0,
+  "retiros_sobre_gasto_efectivo": 1.008949018359133
  },
  "tarjeta_credito": {
-  "compras": 132591200.0,
-  "pagos": 125303300.0
+  "compras": 211467200.0,
+  "pagos": 199772400.0
  },
  "p2p_proposito_declarado": {
   "filas": 8629,
-  "fraccion_filas_emitidas": 0.07250042009746262
+  "fraccion_filas_emitidas": 0.07060739213327769
  },
  "monto": {
-  "mediana_emitida": 14200.0,
-  "p99_emitida": 1869344.499999992
+  "mediana_emitida": 24100.0,
+  "p99_emitida": 2902069.0
  },
- "parametros_version": "0.2.0",
+ "parametros_version": "0.3.0",
  "overrides": {}
 }
