@@ -1,26 +1,18 @@
 # Bitácora
 
 Registro fechado del trabajo técnico del proyecto, organizado por paquete de trabajo (WP).
-Reemplaza la bitácora anterior, organizada por conversación de trabajo («chat»); la tabla de
-equivalencias de abajo mapea esa numeración original a los WP para no perder trazabilidad con
-commits y documentos anteriores que todavía la citan.
 
-## Tabla de equivalencias (numeración original → paquete de trabajo)
+## Paquetes de trabajo
 
-| Numeración original | Paquete de trabajo | Nota |
-|---|---|---|
-| Chat 00 | WP0 — Entorno y seguimiento | Seguimiento transversal del proyecto y decisiones metodológicas; sus entradas de contenido técnico se listan también bajo el WP que corresponde (ver abajo) |
-| Chat 01 | WP1 — Perfilado DANE **y** WP3 — Priors | Se reparte: cargador único, verificación de `FEX_C`/códigos y la investigación de julio/marzo son WP1; las distribuciones para priors y el análisis de fronteras de amontonamiento son WP3 (detalle en el registro de abajo) |
-| Chat 01B | WP5 — Pipeline de referencia | Reevaluación del pipeline de Pancholi et al. |
-| Chat 02 | WP4 — Datos reales | Consentimiento, anonimización, diseño de muestra |
-| Chat 03 | WP2 — Taxonomía | |
-| Chat 04 | WP4 — Datos reales | Según los commits reales (`1dde8ee`, `dfede1c`): paquete de datos reales v1.1 y correcciones transversales (estrato ENPH, taxonomía T2–T4, cuantiles, DP1). `docs/plan_maestro.md` lo había planeado como «documento técnico del protocolo» (esa actividad se registra aquí como WP0); ese documento no se redactó bajo esta etiqueta |
-| Chat 05 | WP3 — Priors **y** WP6 — Generador | Se reparte: umbral de soporte y encogimiento jerárquico son WP3; la reponderación de los priors por bancarización es un entregable de WP3 hecho para satisfacer la decisión D15 de WP6 (detalle abajo) |
-| Chat 06 | WP6 — Generador | |
-| Chat 07 | WP7 — CTGAN | Aún no iniciado |
-| Chat 08 | WP8 — Evaluación TSTR | Aún no iniciado |
-| Chat 09 | *(sin WP técnico)* | Redacción de la tesis y comunicación con la directora; fuera del alcance de WP0–WP8 |
-| Chat 10 | *(sin WP técnico)* | Comunicación con la directora |
+- **WP0 — Entorno y seguimiento:** seguimiento transversal del proyecto y decisiones metodológicas.
+- **WP1 — Perfilado DANE:** cargador único de GEIH/ENPH, verificación de `FEX_C` y de códigos, investigación de las anomalías de julio y marzo.
+- **WP2 — Taxonomía:** taxonomía de categorías de gasto.
+- **WP3 — Priors:** distribuciones ponderadas, umbral de soporte, encogimiento jerárquico y reponderación por bancarización.
+- **WP4 — Datos reales:** consentimiento, anonimización, diseño de muestra y anotación.
+- **WP5 — Pipeline de referencia:** reevaluación del pipeline de Pancholi et al.
+- **WP6 — Generador:** generador por reglas y conversión del IPC.
+- **WP7 — CTGAN:** refinamiento del dataset sintético (aún no iniciado).
+- **WP8 — Evaluación TSTR:** clasificadores y validación contra datos reales (aún no iniciado).
 
 ---
 
