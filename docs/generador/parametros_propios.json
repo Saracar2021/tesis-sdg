@@ -1,0 +1,312 @@
+{
+ "version": "0.2.0",
+ "fecha": "2026-10-27",
+ "nota": "Parámetros del generador por reglas (WP6) que NO se calculan de datos. Cada uno declara su fuente; «regla propia» significa que no hay fuente DANE/Banrep/GEIH que lo respalde y que debe tratarse como supuesto con sensibilidad. Nada de esto se calibra con los extractos reales (D14).",
+ "ventana": {
+  "meses_referencia": {
+   "valor": [
+    "2025-12",
+    "2026-04",
+    "2026-08"
+   ],
+   "fuente": "docs/datos_reales/02_protocolo_anonimizacion_v1.1.md §7 (meses de la recolección real)",
+   "nota": "Meses no consecutivos: cada mes se simula independiente (sin saldos que crucen meses)."
+  },
+  "n_hogares_defecto": {
+   "valor": 1000,
+   "fuente": "regla propia",
+   "nota": "Tamaño de la muestra de trabajo; CTGAN (WP7) decidirá si hace falta más."
+  }
+ },
+ "calibracion": {
+  "agrupar_tablas": {
+   "valor": [
+    "menos_frecuentes_T3"
+   ],
+   "fuente": "regla propia",
+   "nota": "Subcapítulos mensuales del Cuadernillo 3: los artículos del mismo hogar, subcapítulo y lugar se emiten como una sola compra. En los de 3 y 12 meses cada artículo es un evento."
+  },
+  "modo_ipc": {
+   "valor": "division",
+   "fuente": "regla propia (decisión de la autora 27 oct 2026)",
+   "nota": "'division' = IPC de Bogotá por división COICOP; 'total' = factor único (respaldo)."
+  }
+ },
+ "donantes": {
+  "modo": {
+   "valor": "por_hogar",
+   "fuente": "regla propia",
+   "nota": "'por_categoria': un donante independiente por categoría (más diversidad, rompe correlaciones entre categorías); 'por_hogar': el mismo donante para todo (conserva la estructura del hogar, clona hogares). Default cambiado a 'por_hogar' por el chat 00 (27 oct 2026): validado contra ENPH — gasto/ingreso mediana 0,93 vs 0,94 y p90 2,45 vs 2,21; 'por_categoria' sobrepasaba (1,00/2,86)."
+  },
+  "jitter_sigma_log": {
+   "valor": 0.05,
+   "fuente": "regla propia",
+   "nota": "Ruido multiplicativo lognormal sobre el monto del donante para no clonar hogares de celdas ralas."
+  },
+  "redondeo_cop": {
+   "valor": 100,
+   "fuente": "regla propia",
+   "nota": "Los montos se redondean a múltiplos de este valor (COP)."
+  }
+ },
+ "cuentas": {
+  "modo": {
+   "valor": "multiple",
+   "fuente": "regla propia (decisión de la autora 27 oct 2026, P15)",
+   "nota": "'multiple': flujo con cuenta_tipo ∈ {banco, billetera, tarjeta_credito} según la estructura de cuentas de GEIH; 'una': solo banco (reducción si el tiempo aprieta)."
+  },
+  "p_nequi_entre_billeteras": {
+   "valor": 0.5,
+   "fuente": "regla propia",
+   "nota": "GEIH P5222S11 agrupa Nequi, Daviplata, Movii…: no distingue marca."
+  },
+  "bancos": {
+   "valor": {
+    "BANCOLOMBIA": 0.22,
+    "DAVIVIENDA": 0.2,
+    "BANCO DE BOGOTA": 0.12,
+    "BBVA": 0.1,
+    "AV VILLAS": 0.06,
+    "BANCO POPULAR": 0.06,
+    "BANCO DE OCCIDENTE": 0.06,
+    "BANCO CAJA SOCIAL": 0.06,
+    "SCOTIABANK COLPATRIA": 0.05,
+    "NU": 0.04,
+    "ITAU": 0.03
+   },
+   "fuente": "regla propia",
+   "nota": "Pesos aproximados para variar el nombre del banco en descriptores; NO son cuotas de mercado verificadas."
+  }
+ },
+ "digital": {
+  "escenario": {
+   "valor": "base",
+   "fuente": "regla propia",
+   "nota": "Escenario activo de participación digital."
+  },
+  "escenarios": {
+   "valor": {
+    "bajo": 0.1,
+    "base": 0.2,
+    "alto": 0.35
+   },
+   "fuente": "regla propia",
+   "nota": "Fracción de los eventos que ENPH registra con efectivo o débito y que migran a billetera/transferencia. SIN ancla verificada: la tabla primaria de Banrep 2024 no se pudo leer (PD7). Reportar TSTR bajo los tres escenarios."
+  },
+  "prop_billetera": {
+   "valor": 0.6,
+   "fuente": "regla propia",
+   "nota": "De lo que migra, fracción que va a billetera (el resto, a transferencia/PSE)."
+  }
+ },
+ "retiros": {
+  "umbral_dias": {
+   "valor": 3,
+   "fuente": "regla propia",
+   "nota": "Se retira si el efectivo en mano alcanza para menos de estos días de gasto en efectivo (o no cubre la compra)."
+  },
+  "horizonte_dias": {
+   "valor": 7,
+   "fuente": "regla propia",
+   "nota": "El retiro cubre el gasto en efectivo esperado de estos días."
+  },
+  "multiplo_cop": {
+   "valor": 50000,
+   "fuente": "regla propia",
+   "nota": "El monto del retiro se redondea hacia arriba a múltiplos de este valor (COP de 2025)."
+  },
+  "minimo_cop": {
+   "valor": 50000,
+   "fuente": "regla propia"
+  },
+  "maximo_cop": {
+   "valor": 1000000,
+   "fuente": "regla propia",
+   "nota": "Tope por retiro; si la necesidad lo excede se hacen varios."
+  },
+  "p_corresponsal": {
+   "valor": 0.15,
+   "fuente": "regla propia",
+   "nota": "Fracción de retiros en corresponsal o punto de billetera (el resto, cajero)."
+  }
+ },
+ "ingreso": {
+  "posiciones_asalariadas": {
+   "valor": [
+    "1",
+    "2"
+   ],
+   "fuente": "regla propia",
+   "nota": "P6430: 1 empleado particular, 2 empleado del gobierno. Reciben nómina."
+  },
+  "requiere_cotizacion_pension": {
+   "valor": true,
+   "fuente": "regla propia",
+   "nota": "Además cotizan pensión (P6920 == '1')."
+  },
+  "p_quincenal_asalariado": {
+   "valor": 0.35,
+   "fuente": "regla propia",
+   "nota": "Probabilidad de nómina quincenal (el resto, mensual)."
+  },
+  "fraccion_en_cuenta_asalariado": {
+   "valor": 1.0,
+   "fuente": "D15: cuenta principal única"
+  },
+  "fraccion_en_cuenta_otros": {
+   "valor": 0.6,
+   "fuente": "regla propia",
+   "nota": "Fracción del ingreso monetario que llega a la cuenta cuando no es nómina (el resto se recibe en efectivo)."
+  },
+  "lambda_depositos_otros": {
+   "valor": 2.0,
+   "fuente": "regla propia",
+   "nota": "Los demás perciben 1 + Poisson(λ) depósitos al mes."
+  },
+  "p_p2p_otros": {
+   "valor": 0.6,
+   "fuente": "regla propia",
+   "nota": "Fracción de los depósitos de no asalariados que llegan como transferencia de persona (el resto como consignación). Cruce P2P/ingreso de la taxonomía v1."
+  }
+ },
+ "tarjeta_credito": {
+  "fraccion_pago": {
+   "valor": 1.0,
+   "fuente": "regla propia",
+   "nota": "Fracción de las compras del mes con TC que se paga ese mes."
+  },
+  "dia_pago": {
+   "valor": 28,
+   "fuente": "regla propia",
+   "nota": "Día del mes del pago de la tarjeta (se acota al último día)."
+  },
+  "ciclo": {
+   "valor": "mes calendario",
+   "fuente": "regla propia",
+   "nota": "El pago del día dia_pago cubre las compras con tarjeta del mes hasta ese día; las posteriores quedan sin pagar en la ventana."
+  }
+ },
+ "billetera": {
+  "multiplo_recarga_cop": {
+   "valor": 10000,
+   "fuente": "regla propia"
+  },
+  "horizonte_dias": {
+   "valor": 7,
+   "fuente": "regla propia",
+   "nota": "La recarga cubre el gasto esperado de la billetera de estos días."
+  },
+  "umbral_dias": {
+   "valor": 3,
+   "fuente": "regla propia",
+   "nota": "Se recarga si el saldo no cubre las salidas de la billetera de los próximos días (misma regla que los retiros)."
+  },
+  "minimo_cop": {
+   "valor": 10000,
+   "fuente": "regla propia"
+  },
+  "maximo_cop": {
+   "valor": 2000000,
+   "fuente": "regla propia"
+  }
+ },
+ "p2p": {
+  "lambda_enviadas_mes": {
+   "valor": 1.5,
+   "fuente": "regla propia",
+   "nota": "Transferencias a personas sin propósito identificable (sin fuente: cola declarada)."
+  },
+  "lambda_recibidas_mes": {
+   "valor": 1.0,
+   "fuente": "regla propia"
+  },
+  "mediana_fraccion_ingreso": {
+   "valor": 0.02,
+   "fuente": "regla propia",
+   "nota": "Monto mediano como fracción del ingreso mensual del hogar."
+  },
+  "sigma_log": {
+   "valor": 0.8,
+   "fuente": "regla propia"
+  },
+  "piso_cop": {
+   "valor": 5000,
+   "fuente": "regla propia"
+  },
+  "p_billetera_si_ambas": {
+   "valor": 0.5,
+   "fuente": "regla propia",
+   "nota": "Con banco y billetera, prob. de que la transferencia a/desde personas use la billetera."
+  }
+ },
+ "arriendo": {
+  "p_inmobiliaria": {
+   "valor": 0.4,
+   "fuente": "regla propia",
+   "nota": "Fracción del arriendo que se paga a una inmobiliaria (PSE); el resto, a una persona natural (transferencia, canal_p2p)."
+  },
+  "dia_inicio": {
+   "valor": 1,
+   "fuente": "regla propia"
+  },
+  "dia_fin": {
+   "valor": 5,
+   "fuente": "regla propia"
+  }
+ },
+ "servicios": {
+  "dia_inicio": {
+   "valor": 1,
+   "fuente": "regla propia"
+  },
+  "dia_fin": {
+   "valor": 28,
+   "fuente": "regla propia"
+  }
+ },
+ "tipo_medio_hipoteca": {
+  "valor": "transferencia_bancaria",
+  "fuente": "regla propia",
+  "nota": "La cuota de vivienda siempre se emite (débito automático) desde el banco."
+ },
+ "medios": {
+  "p_uso_medio_principal": {
+   "valor": 0.8,
+   "fuente": "regla propia",
+   "nota": "ENPH da el medio PRINCIPAL del hogar (NC2R) o del subcapítulo (P438), no el medio de cada compra. Con esta probabilidad la compra usa el principal; con la restante se sortea el medio de la distribución de la celda. Sensibilidad recomendada: 0,6-1,0."
+  },
+  "internet_sin_efectivo": {
+   "valor": true,
+   "fuente": "regla propia",
+   "nota": "Una compra por internet/catálogo en efectivo pasa a débito (o billetera si no hay banco) cuando el hogar tiene cuenta; el efectivo contra entrega se pierde (declarado)."
+  }
+ },
+ "recurrentes_digital": {
+  "servicios": {
+   "valor": 0.6,
+   "fuente": "regla propia",
+   "nota": "Prob. de que un servicio público o de conectividad se pague por canal digital (PSE/billetera) dado que hay cuenta. ENPH no registra el medio de estos pagos. Sensibilidad: 0,3-0,9."
+  },
+  "arriendo": {
+   "valor": 0.5,
+   "fuente": "regla propia",
+   "nota": "Prob. de pagar el arriendo por transferencia/billetera dado que hay cuenta. Sensibilidad: 0,3-0,9."
+  },
+  "cuota_vivienda": {
+   "valor": 1.0,
+   "fuente": "regla propia",
+   "nota": "La cuota de crédito de vivienda se debita de la cuenta bancaria."
+  }
+ },
+ "descriptores": {
+  "p_sucursal": {
+   "valor": 0.5,
+   "fuente": "regla propia",
+   "nota": "Prob. de añadir una referencia de sucursal (CALLE 80, KR 7...) a un comercio de marca presencial."
+  },
+  "nota": {
+   "valor": "Las plantillas de docs/generador/plantillas_descriptor.csv son regla propia (ejemplos de la guía de anotación y convenciones públicas); NO se calibraron con los extractos reales (D14).",
+   "fuente": "regla propia"
+  }
+ }
+}

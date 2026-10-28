@@ -1,0 +1,98 @@
+{
+ "script": "tools/construir_generador.py",
+ "commit_base": "6c10c8f",
+ "pandas": "3.0.6",
+ "numpy": "2.4.6",
+ "python": "3.11.9",
+ "semilla": 42,
+ "nota_semilla": "la calibración no usa aleatoriedad; SEED se declara por convención",
+ "ipc": {
+  "aplicado": false,
+  "motivo": "no hay serie de IPC en data/raw/IPC/",
+  "modo": "division",
+  "pesos": "2016-17 (sin actualizar)",
+  "modo_solicitado": "division",
+  "archivo": "data\\raw\\IPC\\ipc_bogota_division.csv"
+ },
+ "kappa_donantes": 158.48931924611142,
+ "kappa_en_frontera": false,
+ "conteos": {
+  "hogares_bogota": 3918,
+  "hogares_con_celda": 3899,
+  "eventos": 212974,
+  "recurrentes": 20379,
+  "celdas_ralas_donantes": 6
+ },
+ "reconciliacion_gcmug": {
+  "agregado_eventos_sobre_gcmug": 0.8646015804866185,
+  "agregado_eventos_mas_recurrentes_sobre_gcmug": 1.087579649868942,
+  "media_mensual_eventos": 2051110.296223742,
+  "media_mensual_recurrentes": 528974.9917930596,
+  "media_mensual_gcmug": 2372318.4672752135,
+  "nota": "validación contra el consolidado de DANE, no calibración; ambos salen del mismo insumo (consistencia, no prueba)"
+ },
+ "sha256_tablas_entrada": {
+  "mensualizacion_enph.csv": "7f6ee84798beb3a8005a81ef66292be1940ea004e501b96418ebc529b7db0830",
+  "periodo_referencia_caps.csv": "5c5f23c6f36ed435f66e780fef4e0accba5911e1de82557522d705dbf51fa5fb",
+  "lugares_compra.csv": "194b438c98b2c50ff046bee14c9d78f482418575e1e44d8e29cc0f82c67ac4ce",
+  "mapeo_coicop_taxonomia_provisional.csv": "c97d01dff57b603579d45a235cf14e77005b1f55093dd5fe4e1d6000887e5905",
+  "parametros_propios.json": "4ea7eef3af0081cefd5cb845fe0cb476a627c56ab55090dfe0cab3656d933975"
+ },
+ "sha256_salidas": {
+  "mezcla_donantes.json": "85b32618c2b86e2dc049d99f960937bb4957cccd0eb0dfb80be77ed8f047a060",
+  "estructura_cuentas.csv": "8974be4ca6ad421cbc63f33f1249950f33d0beb70d09a0b66a9b5c1398804868",
+  "diagnostico_calibracion.json": "ea2b8b71f259f6b635bf45522efb841cf108a93384b3104984b96c05802ca61d",
+  "categoria_valor_mensual.csv": "cbff06b6992152bfe24bc0fe9b99b8ebef25da58af9f4b39cc9127d753202371",
+  "cobertura_mapeo.csv": "5853a4d2409bcb87cfbec7d930a39908aca0fa4e2fa9fdf921cb295268392d95",
+  "recurrentes_resumen.csv": "3014fcaef8b1cd0b48abfbbda71a955adb59ce93763ad49ac345460d08a7d8e8"
+ },
+ "sha256_pool_descomprimido": {
+  "eventos": "1f335132b4f3fe34be7a78ed5b297b87886dca0fb131a8a31f154ee511d65c34",
+  "recurrentes": "0f9c319815d818534554e6b9ca4d14a9a68296cdc92cb76f00f62afce561eb8c",
+  "hogares": "0c9af81bd688110b122f6b836e42f65c8e8c76bd4ff18dfa7b5a9e31367a5cfd"
+ },
+ "uniones": [
+  {
+   "nombre": "urbano/gastos_diarios_hogar.txt -> viviendas_hogares",
+   "llave": "DIRECTORIO",
+   "filas_izq": 3393520,
+   "pct_enlazado": 100.0,
+   "umbral": 100.0
+  },
+  {
+   "nombre": "urbano/gastos_diarios_hogar_comidas_fuera.csv -> viviendas_hogares",
+   "llave": "DIRECTORIO",
+   "filas_izq": 504031,
+   "pct_enlazado": 100.0,
+   "umbral": 100.0
+  },
+  {
+   "nombre": "urbano/gastos_diarios_personales.csv -> viviendas_hogares",
+   "llave": "DIRECTORIO",
+   "filas_izq": 524948,
+   "pct_enlazado": 100.0,
+   "umbral": 100.0
+  },
+  {
+   "nombre": "urbano/gastos_personales_comidas_fuera.csv -> viviendas_hogares",
+   "llave": "DIRECTORIO",
+   "filas_izq": 475963,
+   "pct_enlazado": 100.0,
+   "umbral": 100.0
+  },
+  {
+   "nombre": "hogares/gastos_menos_frecuentes_articulos.txt -> viviendas_hogares",
+   "llave": "DIRECTORIO",
+   "filas_izq": 2111331,
+   "pct_enlazado": 100.0,
+   "umbral": 100.0
+  },
+  {
+   "nombre": "hogares/gastos_menos_frecuentes_medio_pago.csv -> viviendas_hogares",
+   "llave": "DIRECTORIO",
+   "filas_izq": 87201,
+   "pct_enlazado": 100.0,
+   "umbral": 100.0
+  }
+ ]
+}

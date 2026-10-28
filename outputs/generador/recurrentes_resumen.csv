@@ -1,0 +1,12 @@
+concepto,categoria_n1,categoria_n2,hogares_con_valor,pct_hogares_expandido,valor_medio_ponderado,frecuencia_mensual_media
+acueducto,vivienda_servicios,servicios_publicos,3583,91.627262,77730.471052,0.533797
+alcantarillado,vivienda_servicios,servicios_publicos,1208,32.09348,37451.730827,0.642633
+alumbrado,vivienda_servicios,servicios_publicos,28,0.65719,27286.119728,1.0
+arriendo,vivienda_servicios,arriendo,1879,49.643688,541348.099187,1.0
+aseo,vivienda_servicios,servicios_publicos,1260,33.547972,23875.748226,0.631371
+cuota_vivienda,obligaciones_financieras,credito_formal,247,6.242934,1055822.678229,1.0
+energia,vivienda_servicios,servicios_publicos,3629,92.897136,53819.591648,0.997941
+gas_natural,vivienda_servicios,servicios_publicos,3281,83.026329,24686.443467,0.999105
+internet_fijo,telecom_conectividad,internet_hogar_tv,1088,29.382133,54121.376653,0.999404
+telefono_fijo,telecom_conectividad,plan_pospago,2144,55.675451,72298.458064,0.999641
+television,telecom_conectividad,internet_hogar_tv,2032,50.563698,34639.826986,0.998688

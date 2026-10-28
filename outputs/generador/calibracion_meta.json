@@ -1,0 +1,11 @@
+{
+ "modo_ipc": "division",
+ "ipc_aplicado": false,
+ "ipc": {
+  "aplicado": false,
+  "motivo": "no hay serie de IPC en data/raw/IPC/",
+  "modo": "division",
+  "pesos": "2016-17 (sin actualizar)"
+ },
+ "kappa": 158.48931924611142
+}

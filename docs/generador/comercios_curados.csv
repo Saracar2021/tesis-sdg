@@ -1,0 +1,267 @@
+nombre,categoria_n1,categoria_n2,concepto,clases,canal,peso
+EXITO,alimentos_mercado,supermercado_cadena,,cadena,ambos,10
+JUMBO,alimentos_mercado,supermercado_cadena,,cadena,ambos,6
+CARULLA,alimentos_mercado,supermercado_cadena,,cadena,ambos,4
+OLIMPICA,alimentos_mercado,supermercado_cadena,,cadena,ambos,5
+JUSTO Y BUENO,alimentos_mercado,supermercado_cadena,,cadena,ambos,4
+METRO,alimentos_mercado,supermercado_cadena,,cadena,ambos,2
+PRICESMART,alimentos_mercado,supermercado_cadena,,cadena,ambos,2
+MAKRO,alimentos_mercado,supermercado_cadena,,cadena,ambos,2
+SURTIMAX,alimentos_mercado,supermercado_cadena,,cadena,ambos,2
+SUPERMERCADO COLSUBSIDIO,alimentos_mercado,supermercado_cadena,,cadena,ambos,3
+CAFAM SUPERMERCADO,alimentos_mercado,supermercado_cadena,,cadena,ambos,2
+COMPENSAR SUPERMERCADO,alimentos_mercado,supermercado_cadena,,cadena,ambos,1
+D1 SAS,alimentos_mercado,supermercado_cadena,,cadena|tienda_barrio,presencial,9
+ARA,alimentos_mercado,supermercado_cadena,,cadena|tienda_barrio,presencial,8
+MERQUEO SAS,alimentos_mercado,domicilio_mercado,,internet|catalogo,linea,3
+MERCADONI,alimentos_mercado,domicilio_mercado,,internet|catalogo,linea,1
+RAPPI SUPER,alimentos_mercado,domicilio_mercado,,internet|catalogo,linea,2
+CREPES Y WAFFLES,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,5
+EL CORRAL,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,6
+FRISBY,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,5
+KFC,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,4
+MCDONALDS,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,5
+SUBWAY,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,4
+DOMINOS PIZZA,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,3
+BURGER KING,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,3
+JUAN VALDEZ,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,4
+STARBUCKS,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,3
+PRESTO,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,4
+HOME BURGERS,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,2
+WOK,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,3
+TOSTAO,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,2
+OMA,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,2
+LA FIORENTINA,comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta,presencial,1
+RAPPI COLOMBIA,comidas_fuera,domicilios_app,,internet|restaurante|cafeteria,linea,10
+DIDI FOOD,comidas_fuera,domicilios_app,,internet|restaurante|cafeteria,linea,4
+IFOOD,comidas_fuera,domicilios_app,,internet|restaurante|cafeteria,linea,1
+UBER BV,transporte,apps_taxi,,internet|persona,linea,10
+DIDI MOBILITY,transporte,apps_taxi,,internet|persona,linea,5
+CABIFY,transporte,apps_taxi,,internet|persona,linea,2
+INDRIVER,transporte,apps_taxi,,internet|persona,linea,3
+BEAT,transporte,apps_taxi,,internet|persona,linea,1
+RECARGA TULLAVE,transporte,publico_masivo,,especializado|otro|internet,ambos,10
+TRANSMILENIO,transporte,publico_masivo,,especializado|otro|internet,ambos,4
+SITP,transporte,publico_masivo,,especializado|otro|internet,ambos,2
+TERMINAL DE TRANSPORTES,transporte,publico_masivo,,especializado|otro|internet,ambos,1
+TERPEL,transporte,combustible,,especializado|otro,presencial,8
+PRIMAX,transporte,combustible,,especializado|otro,presencial,6
+TEXACO,transporte,combustible,,especializado|otro,presencial,3
+BIOMAX,transporte,combustible,,especializado|otro,presencial,3
+ESSO MOBIL,transporte,combustible,,especializado|otro,presencial,2
+EDS LA ESQUINA,transporte,combustible,,especializado|otro,presencial,1
+PARQUEADERO CENTRO,transporte,vehiculo_propio_mantenimiento,,especializado|otro,presencial,2
+PARQUEADERO CALLE 80,transporte,vehiculo_propio_mantenimiento,,especializado|otro,presencial,2
+TECNIMOTOS,transporte,vehiculo_propio_mantenimiento,,especializado|otro,presencial,1
+AUTOLAVADO EXPRESS,transporte,vehiculo_propio_mantenimiento,,especializado|otro,presencial,1
+TALLER MECANICO,transporte,vehiculo_propio_mantenimiento,,especializado|otro,presencial,1
+PEAJE AUTOPISTA NORTE,transporte,vehiculo_propio_mantenimiento,,especializado|otro,presencial,2
+ACUEDUCTO BOGOTA,vivienda_servicios,servicios_publicos,acueducto,especializado|otro|internet,ambos,1
+EAAB,vivienda_servicios,servicios_publicos,alcantarillado,especializado|otro|internet,ambos,1
+ACUEDUCTO BOGOTA,vivienda_servicios,servicios_publicos,aseo,especializado|otro|internet,ambos,1
+EAAB,vivienda_servicios,servicios_publicos,aseo,especializado|otro|internet,ambos,1
+ENEL COLOMBIA,vivienda_servicios,servicios_publicos,energia,especializado|otro|internet,ambos,1
+ENEL COLOMBIA,vivienda_servicios,servicios_publicos,alumbrado,especializado|otro|internet,ambos,1
+VANTI SA ESP,vivienda_servicios,servicios_publicos,gas_natural,especializado|otro|internet,ambos,1
+GAS PIPETA,vivienda_servicios,gas_combustible_hogar,,especializado|otro|tienda_barrio,presencial,1
+VANTI SA ESP,vivienda_servicios,gas_combustible_hogar,,especializado|otro|tienda_barrio,presencial,1
+DISTRIBUIDORA DE GAS,vivienda_servicios,gas_combustible_hogar,,especializado|otro|tienda_barrio,presencial,1
+INMOBILIARIA PROPIEDAD,vivienda_servicios,arriendo,,especializado|internet,ambos,1
+ARRIENDOS BOGOTA,vivienda_servicios,arriendo,,especializado|internet,ambos,1
+FINCA RAIZ SERVICIOS,vivienda_servicios,arriendo,,especializado|internet,ambos,1
+ADMON CONJUNTO RESIDENCIAL,vivienda_servicios,administracion,,especializado|otro,ambos,1
+ADMINISTRACION EDIFICIO,vivienda_servicios,administracion,,especializado|otro,ambos,1
+FERRETERIA EL TORNILLO,vivienda_servicios,,,especializado|sanandresito|tienda_barrio,presencial,1
+FERRETERIA LA 80,vivienda_servicios,,,especializado|sanandresito|tienda_barrio,presencial,1
+PINTURAS Y ACABADOS,vivienda_servicios,,,especializado|sanandresito|tienda_barrio,presencial,1
+RECARGA CLARO,telecom_conectividad,recarga_prepago,,especializado|tienda_barrio|internet|otro|ambulante,ambos,10
+RECARGA MOVISTAR,telecom_conectividad,recarga_prepago,,especializado|tienda_barrio|internet|otro|ambulante,ambos,8
+RECARGA TIGO,telecom_conectividad,recarga_prepago,,especializado|tienda_barrio|internet|otro|ambulante,ambos,8
+RECARGA WOM,telecom_conectividad,recarga_prepago,,especializado|tienda_barrio|internet|otro|ambulante,ambos,4
+RECARGA VIRGIN MOBILE,telecom_conectividad,recarga_prepago,,especializado|tienda_barrio|internet|otro|ambulante,ambos,1
+RECARGA ETB,telecom_conectividad,recarga_prepago,,especializado|tienda_barrio|internet|otro|ambulante,ambos,3
+CLARO,telecom_conectividad,plan_pospago,,especializado|otro|internet,ambos,6
+MOVISTAR,telecom_conectividad,plan_pospago,,especializado|otro|internet,ambos,5
+TIGO UNE,telecom_conectividad,plan_pospago,,especializado|otro|internet,ambos,5
+ETB,telecom_conectividad,plan_pospago,,especializado|otro|internet,ambos,3
+WOM COLOMBIA,telecom_conectividad,plan_pospago,,especializado|otro|internet,ambos,2
+ETB,telecom_conectividad,plan_pospago,telefono_fijo,especializado|otro|internet,ambos,3
+CLARO,telecom_conectividad,plan_pospago,telefono_fijo,especializado|otro|internet,ambos,3
+MOVISTAR,telecom_conectividad,plan_pospago,telefono_fijo,especializado|otro|internet,ambos,2
+CLARO,telecom_conectividad,internet_hogar_tv,internet_fijo,especializado|otro|internet,ambos,5
+ETB,telecom_conectividad,internet_hogar_tv,internet_fijo,especializado|otro|internet,ambos,4
+TIGO UNE,telecom_conectividad,internet_hogar_tv,internet_fijo,especializado|otro|internet,ambos,4
+MOVISTAR,telecom_conectividad,internet_hogar_tv,internet_fijo,especializado|otro|internet,ambos,3
+WOM HOGAR,telecom_conectividad,internet_hogar_tv,internet_fijo,especializado|otro|internet,ambos,1
+DIRECTV,telecom_conectividad,internet_hogar_tv,television,especializado|otro|internet,ambos,3
+CLARO,telecom_conectividad,internet_hogar_tv,television,especializado|otro|internet,ambos,4
+TIGO UNE,telecom_conectividad,internet_hogar_tv,television,especializado|otro|internet,ambos,3
+ETB,telecom_conectividad,internet_hogar_tv,television,especializado|otro|internet,ambos,2
+CLARO,telecom_conectividad,internet_hogar_tv,,especializado|otro|internet,ambos,5
+ETB,telecom_conectividad,internet_hogar_tv,,especializado|otro|internet,ambos,4
+TIGO UNE,telecom_conectividad,internet_hogar_tv,,especializado|otro|internet,ambos,4
+MOVISTAR,telecom_conectividad,internet_hogar_tv,,especializado|otro|internet,ambos,3
+DIRECTV,telecom_conectividad,internet_hogar_tv,,especializado|otro|internet,ambos,2
+FARMATODO,salud,farmacia,,farmacia|especializado|cadena,ambos,8
+CRUZ VERDE,salud,farmacia,,farmacia|especializado|cadena,ambos,8
+DROGUERIAS COLSUBSIDIO,salud,farmacia,,farmacia|especializado|cadena,ambos,4
+LA REBAJA,salud,farmacia,,farmacia|especializado|cadena,ambos,5
+LOCATEL,salud,farmacia,,farmacia|especializado|cadena,ambos,3
+COPIDROGAS,salud,farmacia,,farmacia|especializado|cadena,ambos,1
+DROGAS LA ECONOMIA,salud,farmacia,,farmacia|especializado|cadena,ambos,1
+COPAGO COMPENSAR,salud,consultas_examenes,,especializado|otro|internet,ambos,3
+COPAGO SANITAS,salud,consultas_examenes,,especializado|otro|internet,ambos,3
+COPAGO COLSUBSIDIO,salud,consultas_examenes,,especializado|otro|internet,ambos,2
+COLSANITAS,salud,consultas_examenes,,especializado|otro|internet,ambos,2
+CLINICA DEL COUNTRY,salud,consultas_examenes,,especializado|otro|internet,ambos,1
+CLINICA MARLY,salud,consultas_examenes,,especializado|otro|internet,ambos,1
+LABORATORIO CLINICO ECHAVARRIA,salud,consultas_examenes,,especializado|otro|internet,ambos,1
+SERVICIO MEDICO INTEGRAL,salud,consultas_examenes,,especializado|otro|internet,ambos,1
+OPTICA SANTA LUCIA,salud,otros_salud,,especializado|otro,ambos,1
+CENTRO ODONTOLOGICO,salud,otros_salud,,especializado|otro,ambos,2
+PROTESIS Y ORTESIS,salud,otros_salud,,especializado|otro,ambos,1
+UNIVERSIDAD NACIONAL,educacion,matricula_pension,,especializado|otro|internet,ambos,2
+UNIVERSIDAD JAVERIANA,educacion,matricula_pension,,especializado|otro|internet,ambos,2
+UNIVERSIDAD DE LOS ANDES,educacion,matricula_pension,,especializado|otro|internet,ambos,1
+UNIVERSIDAD DEL ROSARIO,educacion,matricula_pension,,especializado|otro|internet,ambos,1
+UNIVERSIDAD EXTERNADO,educacion,matricula_pension,,especializado|otro|internet,ambos,1
+UNIVERSIDAD DISTRITAL,educacion,matricula_pension,,especializado|otro|internet,ambos,2
+UNIMINUTO,educacion,matricula_pension,,especializado|otro|internet,ambos,3
+UNIVERSIDAD PEDAGOGICA,educacion,matricula_pension,,especializado|otro|internet,ambos,1
+FUNDACION UNIVERSITARIA SAN MATEO,educacion,matricula_pension,,especializado|otro|internet,ambos,1
+COLEGIO NUEVA GRANADA,educacion,matricula_pension,,especializado|otro|internet,ambos,1
+GIMNASIO MODERNO,educacion,matricula_pension,,especializado|otro|internet,ambos,1
+PLATZI,educacion,cursos,,internet|especializado,linea,3
+COURSERA,educacion,cursos,,internet|especializado,linea,2
+UDEMY,educacion,cursos,,internet|especializado,linea,3
+DUOLINGO,educacion,cursos,,internet|especializado,linea,2
+SENA CURSOS,educacion,cursos,,internet|especializado,linea,1
+PANAMERICANA,educacion,utiles_textos,,especializado|otro|internet|cadena,ambos,5
+PAPELERIA LA UNICA,educacion,utiles_textos,,especializado|otro|internet|cadena,ambos,2
+LIBRERIA NACIONAL,educacion,utiles_textos,,especializado|otro|internet|cadena,ambos,3
+LEGIS LIBRERIA,educacion,utiles_textos,,especializado|otro|internet|cadena,ambos,1
+LA PAPELERIA,educacion,utiles_textos,,especializado|otro|internet|cadena,ambos,1
+NETFLIX.COM,entretenimiento,streaming_suscripciones,,internet,linea,10
+SPOTIFY,entretenimiento,streaming_suscripciones,,internet,linea,8
+DISNEY PLUS,entretenimiento,streaming_suscripciones,,internet,linea,4
+MAX,entretenimiento,streaming_suscripciones,,internet,linea,3
+AMAZON PRIME VIDEO,entretenimiento,streaming_suscripciones,,internet,linea,3
+YOUTUBE PREMIUM,entretenimiento,streaming_suscripciones,,internet,linea,3
+APPLE.COM/BILL,entretenimiento,streaming_suscripciones,,internet,linea,4
+GOOGLE PLAY,entretenimiento,streaming_suscripciones,,internet,linea,3
+PLAYSTATION NETWORK,entretenimiento,streaming_suscripciones,,internet,linea,2
+STEAM GAMES,entretenimiento,streaming_suscripciones,,internet,linea,1
+XBOX LIVE,entretenimiento,streaming_suscripciones,,internet,linea,1
+CINE COLOMBIA,entretenimiento,eventos_recreacion,,especializado|cadena|otro|internet,ambos,8
+CINEMARK,entretenimiento,eventos_recreacion,,especializado|cadena|otro|internet,ambos,5
+PROCINAL,entretenimiento,eventos_recreacion,,especializado|cadena|otro|internet,ambos,2
+TUBOLETA,entretenimiento,eventos_recreacion,,especializado|cadena|otro|internet,ambos,2
+PARQUE SALITRE MAGICO,entretenimiento,eventos_recreacion,,especializado|cadena|otro|internet,ambos,1
+MUSEO NACIONAL,entretenimiento,eventos_recreacion,,especializado|cadena|otro|internet,ambos,1
+HOTEL CENTRO,entretenimiento,eventos_recreacion,,especializado|cadena|otro|internet,ambos,1
+HOTEL SAN DIEGO,entretenimiento,eventos_recreacion,,especializado|cadena|otro|internet,ambos,1
+BETPLAY,entretenimiento,apuestas_azar,,internet|especializado|otro,ambos,6
+WPLAY,entretenimiento,apuestas_azar,,internet|especializado|otro,ambos,3
+RUSHBET,entretenimiento,apuestas_azar,,internet|especializado|otro,ambos,2
+GALI CHANCE,entretenimiento,apuestas_azar,,internet|especializado|otro,ambos,4
+SUPER ASTRO,entretenimiento,apuestas_azar,,internet|especializado|otro,ambos,2
+BALOTO,entretenimiento,apuestas_azar,,internet|especializado|otro,ambos,3
+SMARTFIT,entretenimiento,eventos_recreacion,,especializado|otro,presencial,6
+BODYTECH,entretenimiento,eventos_recreacion,,especializado|otro,presencial,3
+GIMNASIO FITNESS,entretenimiento,eventos_recreacion,,especializado|otro,presencial,1
+ESTANCO LA ESQUINA,entretenimiento,bares_licor_tabaco,,especializado|tienda_barrio|otro,presencial,1
+LICORERA EL AMIGO,entretenimiento,bares_licor_tabaco,,especializado|tienda_barrio|otro,presencial,1
+BAR LA TERRAZA,entretenimiento,bares_licor_tabaco,,especializado|tienda_barrio|otro,presencial,1
+CIGARRERIA 24H,entretenimiento,bares_licor_tabaco,,especializado|tienda_barrio|otro,presencial,1
+LICORES EL CHAPINERO,entretenimiento,bares_licor_tabaco,,especializado|tienda_barrio|otro,presencial,1
+PET MARKET,entretenimiento,mascotas,,especializado|otro|internet,ambos,2
+MUNDO ANIMAL,entretenimiento,mascotas,,especializado|otro|internet,ambos,2
+CLINICA VETERINARIA,entretenimiento,mascotas,,especializado|otro|internet,ambos,1
+PET HOME,entretenimiento,mascotas,,especializado|otro|internet,ambos,1
+ARTURO CALLE,vestuario_cuidado_personal,ropa_calzado,,cadena|especializado|otro,presencial,6
+KOAJ,vestuario_cuidado_personal,ropa_calzado,,cadena|especializado|otro,presencial,5
+STUDIO F,vestuario_cuidado_personal,ropa_calzado,,cadena|especializado|otro,presencial,3
+OFFCORSS,vestuario_cuidado_personal,ropa_calzado,,cadena|especializado|otro,presencial,5
+FALABELLA,vestuario_cuidado_personal,ropa_calzado,,cadena|especializado|otro,presencial,4
+ZARA,vestuario_cuidado_personal,ropa_calzado,,cadena|especializado|otro,presencial,1
+H&M,vestuario_cuidado_personal,ropa_calzado,,cadena|especializado|otro,presencial,1
+ADIDAS,vestuario_cuidado_personal,ropa_calzado,,cadena|especializado|otro,presencial,2
+NIKE,vestuario_cuidado_personal,ropa_calzado,,cadena|especializado|otro,presencial,2
+BATA,vestuario_cuidado_personal,ropa_calzado,,cadena|especializado|otro,presencial,2
+CROCS,vestuario_cuidado_personal,ropa_calzado,,cadena|especializado|otro,presencial,1
+TENNIS,vestuario_cuidado_personal,ropa_calzado,,cadena|especializado|otro,presencial,2
+ALMACEN ROPA SANANDRESITO,vestuario_cuidado_personal,ropa_calzado,,sanandresito|especializado,presencial,1
+YVES ROCHER,vestuario_cuidado_personal,aseo_cosmeticos,,especializado|cadena|farmacia|internet,ambos,1
+FALABELLA BELLEZA,vestuario_cuidado_personal,aseo_cosmeticos,,especializado|cadena|farmacia|internet,ambos,1
+SEPHORA,vestuario_cuidado_personal,aseo_cosmeticos,,especializado|cadena|farmacia|internet,ambos,1
+DROGUERIA Y PERFUMERIA,vestuario_cuidado_personal,aseo_cosmeticos,,especializado|cadena|farmacia|internet,ambos,1
+MIEL ROSA,vestuario_cuidado_personal,aseo_cosmeticos,,especializado|cadena|farmacia|internet,ambos,1
+HOMECENTER,hogar_articulos,muebles_electrodomesticos,,cadena|especializado|internet|sanandresito,ambos,8
+ALKOSTO,hogar_articulos,muebles_electrodomesticos,,cadena|especializado|internet|sanandresito,ambos,8
+KTRONIX,hogar_articulos,muebles_electrodomesticos,,cadena|especializado|internet|sanandresito,ambos,4
+EASY,hogar_articulos,muebles_electrodomesticos,,cadena|especializado|internet|sanandresito,ambos,4
+FALABELLA,hogar_articulos,muebles_electrodomesticos,,cadena|especializado|internet|sanandresito,ambos,4
+MUEBLES JAMAR,hogar_articulos,muebles_electrodomesticos,,cadena|especializado|internet|sanandresito,ambos,2
+MERCADO LIBRE,hogar_articulos,muebles_electrodomesticos,,cadena|especializado|internet|sanandresito,ambos,5
+AMAZON,hogar_articulos,muebles_electrodomesticos,,cadena|especializado|internet|sanandresito,ambos,1
+EXITO,hogar_articulos,aseo_hogar,,cadena|especializado|tienda_barrio,presencial,1
+ALKOSTO,hogar_articulos,aseo_hogar,,cadena|especializado|tienda_barrio,presencial,1
+SEGUROS BOLIVAR,obligaciones_financieras,seguros,,especializado|internet|otro,ambos,3
+SEGUROS SURA,obligaciones_financieras,seguros,,especializado|internet|otro,ambos,3
+SEGUROS DEL ESTADO,obligaciones_financieras,seguros,,especializado|internet|otro,ambos,1
+MAPFRE,obligaciones_financieras,seguros,,especializado|internet|otro,ambos,1
+SOAT,obligaciones_financieras,seguros,,especializado|internet|otro,ambos,2
+SEGUROS ALFA,obligaciones_financieras,seguros,,especializado|internet|otro,ambos,1
+COLSANITAS MEDICINA PREPAGADA,obligaciones_financieras,seguros,,especializado|internet|otro,ambos,1
+CUOTA CREDITO,obligaciones_financieras,credito_formal,,especializado|internet|otro,ambos,1
+COMISION CUOTA DE MANEJO,obligaciones_financieras,comisiones_gmf,,especializado|internet|otro,ambos,1
+COMISION TRANSFERENCIA,obligaciones_financieras,comisiones_gmf,,especializado|internet|otro,ambos,1
+IMPUESTO GMF 4X1000,obligaciones_financieras,comisiones_gmf,,especializado|internet|otro,ambos,1
+PILA APORTE,obligaciones_financieras,seguridad_social,,internet|otro,linea,1
+SOI APORTES,obligaciones_financieras,seguridad_social,,internet|otro,linea,1
+IMPUESTO PREDIAL BOGOTA,otros,impuestos_tramites,,internet|otro|especializado,ambos,1
+IMPUESTO VEHICULAR,otros,impuestos_tramites,,internet|otro|especializado,ambos,1
+SECRETARIA DE MOVILIDAD,otros,impuestos_tramites,,internet|otro|especializado,ambos,1
+NOTARIA 40,otros,impuestos_tramites,,internet|otro|especializado,ambos,1
+REGISTRADURIA,otros,impuestos_tramites,,internet|otro|especializado,ambos,1
+PAGO SIM,otros,impuestos_tramites,,internet|otro|especializado,ambos,1
+COMERCIAL LA 14,otros,,,especializado|otro|internet|ambulante|plaza|tienda_barrio|desconocido,ambos,1
+INVERSIONES SAN JORGE,otros,,,especializado|otro|internet|ambulante|plaza|tienda_barrio|desconocido,ambos,1
+DISTRIBUIDORA ANDINA,otros,,,especializado|otro|internet|ambulante|plaza|tienda_barrio|desconocido,ambos,1
+FUNERARIA SAN PEDRO,otros,,,especializado|otro|internet|ambulante|plaza|tienda_barrio|desconocido,ambos,1
+SERVICIOS Y SUMINISTROS,otros,,,especializado|otro|internet|ambulante|plaza|tienda_barrio|desconocido,ambos,1
+DONACION CRUZ ROJA,otros,donaciones,,internet|otro,ambos,1
+FUNDACION SOLIDARIA,otros,donaciones,,internet|otro,ambos,1
+TIENDA {X},alimentos_mercado,tienda_barrio,,tienda_barrio|desconocido|otro|ambulante,presencial,8
+MINIMERCADO {X},alimentos_mercado,tienda_barrio,,tienda_barrio|desconocido|otro,presencial,6
+SUPERTIENDA {X},alimentos_mercado,tienda_barrio,,tienda_barrio|desconocido|otro,presencial,3
+PANADERIA {X},alimentos_mercado,tienda_barrio,,tienda_barrio|especializado|otro,presencial,3
+CARNICERIA {X},alimentos_mercado,tienda_barrio,,tienda_barrio|especializado|otro,presencial,3
+FRUVER {X},alimentos_mercado,plaza_fruver,,plaza|feria|tienda_barrio,presencial,5
+PLAZA {X},alimentos_mercado,plaza_fruver,,plaza|feria,presencial,2
+RESTAURANTE {X},comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta|otro,presencial,6
+CORRIENTAZO {X},comidas_fuera,restaurante_local,,restaurante|cafeteria|plazoleta|otro,presencial,4
+CAFETERIA {X},comidas_fuera,restaurante_local,,cafeteria|plazoleta,presencial,3
+EMPANADAS {X},comidas_fuera,comida_callejera,,ambulante|persona|otro,presencial,1
+PELUQUERIA {X},vestuario_cuidado_personal,peluqueria_estetica,,especializado|otro|persona,presencial,4
+BARBERIA {X},vestuario_cuidado_personal,peluqueria_estetica,,especializado|otro|persona,presencial,4
+SALON DE BELLEZA {X},vestuario_cuidado_personal,peluqueria_estetica,,especializado|otro|persona,presencial,2
+ALMACEN {X},vestuario_cuidado_personal,ropa_calzado,,especializado|sanandresito|otro|tienda_barrio,presencial,3
+CACHARRERIA {X},vestuario_cuidado_personal,aseo_cosmeticos,,especializado|tienda_barrio|otro,presencial,1
+DROGUERIA {X},salud,farmacia,,farmacia|especializado|tienda_barrio,presencial,5
+MUEBLES {X},hogar_articulos,muebles_electrodomesticos,,especializado|sanandresito|otro,presencial,2
+PAPELERIA {X},educacion,utiles_textos,,especializado|tienda_barrio|otro,presencial,3
+COLEGIO {L},educacion,matricula_pension,,especializado|otro,ambos,3
+FERRETERIA {X},vivienda_servicios,,,especializado|tienda_barrio|otro,presencial,2
+ESTANCO {X},entretenimiento,bares_licor_tabaco,,especializado|tienda_barrio|otro,presencial,2
+BAR {X},entretenimiento,bares_licor_tabaco,,especializado|otro,presencial,2
+VETERINARIA {X},entretenimiento,mascotas,,especializado|otro,presencial,1
+PARQUEADERO {X},transporte,vehiculo_propio_mantenimiento,,especializado|otro,presencial,2
+TALLER {X},transporte,vehiculo_propio_mantenimiento,,especializado|otro,presencial,2
+EDS {X},transporte,combustible,,especializado|otro,presencial,1
+CONSULTORIO {X},salud,consultas_examenes,,especializado|otro,presencial,2
+LABORATORIO {X},salud,consultas_examenes,,especializado|otro,presencial,1
+ADMON CONJUNTO {L},vivienda_servicios,administracion,,especializado|otro,ambos,2
+INMOBILIARIA {L},vivienda_servicios,arriendo,,especializado|internet,ambos,2
+ALMACEN {X},otros,,,especializado|otro|plaza|tienda_barrio|desconocido|ambulante,presencial,2
+TIENDA {X},hogar_articulos,aseo_hogar,,tienda_barrio|especializado|otro,presencial,1

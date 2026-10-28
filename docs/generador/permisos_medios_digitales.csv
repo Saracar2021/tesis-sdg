@@ -1,0 +1,13 @@
+categoria_n1,peso_billetera,peso_transferencia,nota
+alimentos_mercado,1.0,0.3,pesos estructurales (regla propia): NO son probabilidades; el IPF los combina con los márgenes del escenario
+comidas_fuera,1.0,0.2,
+transporte,0.6,0.5,
+vivienda_servicios,0.2,1.0,facturas por PSE y arriendo por transferencia
+telecom_conectividad,0.8,1.0,
+salud,0.3,0.5,
+educacion,0.2,1.0,
+entretenimiento,0.5,0.3,
+vestuario_cuidado_personal,0.7,0.4,
+hogar_articulos,0.5,0.6,
+obligaciones_financieras,0.2,1.0,
+otros,0.5,0.5,

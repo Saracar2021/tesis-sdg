@@ -1,0 +1,171 @@
+{
+ "diarios": {
+  "diario_hogar": {
+   "filas_leidas": 168022,
+   "filas_compra_valor_positivo": 162967,
+   "filas_sin_frecuencia_factor_1": 0,
+   "cestas": 78043,
+   "valor_lineas": 1265108050.0,
+   "valor_cestas": 1265108050.0
+  },
+  "cf_hogar": {
+   "filas_leidas": 27770,
+   "filas_compra_valor_positivo": 21844,
+   "filas_sin_frecuencia_factor_1": 0,
+   "cestas": 18780,
+   "valor_lineas": 411644055.9285714,
+   "valor_cestas": 411644055.9285714
+  },
+  "personal": {
+   "filas_leidas": 27386,
+   "filas_compra_valor_positivo": 26593,
+   "filas_sin_frecuencia_factor_1": 0,
+   "cestas": 23269,
+   "valor_lineas": 561126984.7619047,
+   "valor_cestas": 561126984.7619047
+  },
+  "cf_personal": {
+   "filas_leidas": 29588,
+   "filas_compra_valor_positivo": 24625,
+   "filas_sin_frecuencia_factor_1": 0,
+   "cestas": 19952,
+   "valor_lineas": 433922033.3333333,
+   "valor_cestas": 433922033.33333325
+  }
+ },
+ "recurrentes": {
+  "acueducto": {
+   "hogares_con_valor": 3583,
+   "meses_modal": 2.0,
+   "pct_pago_cada_mes": 6.614568797097404
+  },
+  "aseo": {
+   "hogares_con_valor": 1260,
+   "meses_modal": 2.0,
+   "pct_pago_cada_mes": 25.0
+  },
+  "alcantarillado": {
+   "hogares_con_valor": 1208,
+   "meses_modal": 2.0,
+   "pct_pago_cada_mes": 27.31788079470199
+  },
+  "energia": {
+   "hogares_con_valor": 3629,
+   "meses_modal": 1.0,
+   "pct_pago_cada_mes": 99.58666299255994
+  },
+  "alumbrado": {
+   "hogares_con_valor": 28,
+   "meses_modal": 1.0,
+   "pct_pago_cada_mes": 100.0
+  },
+  "gas_natural": {
+   "hogares_con_valor": 3281,
+   "meses_modal": 1.0,
+   "pct_pago_cada_mes": 99.8171289241085
+  },
+  "telefono_fijo": {
+   "hogares_con_valor": 2144,
+   "meses_modal": 1.0,
+   "pct_pago_cada_mes": 99.90671641791045
+  },
+  "internet_fijo": {
+   "hogares_con_valor": 1088,
+   "meses_modal": 1.0,
+   "pct_pago_cada_mes": 99.90808823529412
+  },
+  "television": {
+   "hogares_con_valor": 2032,
+   "meses_modal": 1.0,
+   "pct_pago_cada_mes": 99.70472440944881
+  },
+  "arriendo": {
+   "hogares_con_valor": 1879
+  },
+  "cuota_vivienda": {
+   "hogares_con_valor": 247
+  }
+ },
+ "hogares": {
+  "n_bogota": 3918,
+  "n_con_celda": 3899,
+  "n_sin_celda": 19,
+  "cortes_icgu_bogota": [
+   1127000.0,
+   1810250.0,
+   2766666.66666667,
+   4506283.33333333
+  ],
+  "n_icgu_cero": 31
+ },
+ "menos_frecuentes": {
+  "filas_leidas": 123445,
+  "filas_compra_valor_positivo": 118141,
+  "caps_sin_tabla_asignada": [],
+  "filas_sin_frecuencia_con_factor_por_defecto": {
+   "menos_frecuentes_T3": 8,
+   "menos_frecuentes_T4": 0
+  },
+  "eventos": 72930,
+  "valor_lineas": 4801441287.166666,
+  "valor_eventos": 4801441287.166666
+ },
+ "ipc": {
+  "aplicado": false,
+  "motivo": "no hay serie de IPC en data/raw/IPC/",
+  "modo": "division",
+  "pesos": "2016-17 (sin actualizar)"
+ },
+ "reconciliacion_gcmug": {
+  "agregado_eventos_sobre_gcmug": 0.8646015804866185,
+  "agregado_eventos_mas_recurrentes_sobre_gcmug": 1.087579649868942,
+  "media_mensual_eventos": 2051110.296223742,
+  "media_mensual_recurrentes": 528974.9917930596,
+  "media_mensual_gcmug": 2372318.4672752135,
+  "nota": "validación contra el consolidado de DANE, no calibración; ambos salen del mismo insumo (consistencia, no prueba)"
+ },
+ "cuentas": {
+  "hogares_geih_filas": 9733,
+  "bancarizados": 9074,
+  "universo_emisor": 9017,
+  "bancarizados_sin_cuenta_emisora": 41,
+  "banco_implicito": 91,
+  "marginales_por_estrato": {
+   "alto (5-6)": {
+    "billetera": 0.41125393228643725,
+    "tc": 0.6509673104728558,
+    "solo_billetera": 0.001316975361703045
+   },
+   "bajo (1-2)": {
+    "billetera": 0.6610153028252684,
+    "tc": 0.1581707168415164,
+    "solo_billetera": 0.20005123759227875
+   },
+   "medio (3-4)": {
+    "billetera": 0.5847907639845736,
+    "tc": 0.37779746210419046,
+    "solo_billetera": 0.07085270400256156
+   }
+  }
+ },
+ "kappa_donantes": {
+  "kappa": 158.48931924611142,
+  "en_frontera": false,
+  "categorias_usadas": [
+   "alimentos_mercado",
+   "comidas_fuera",
+   "transporte",
+   "vivienda_servicios",
+   "telecom_conectividad",
+   "salud",
+   "educacion",
+   "entretenimiento",
+   "vestuario_cuidado_personal",
+   "hogar_articulos",
+   "obligaciones_financieras",
+   "otros"
+  ],
+  "categorias_omitidas": [],
+  "n_bins": 8
+ }
+}

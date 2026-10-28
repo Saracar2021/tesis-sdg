@@ -1,0 +1,62 @@
+tipo_evento,plantilla,peso,n2
+compra_debito,COMPRA {C},6,
+compra_debito,COMPRA EN {C},3,
+compra_debito,COMPRA ESTABLECIMIENTO {C},1,
+compra_credito,COMPRA {C},5,
+compra_credito,{C},3,
+compra_credito,COMPRA EN {C},2,
+pago_pse,PAGO PSE {C},8,
+pago_pse,PAGO {C} PSE,1,
+pago_pse,TRANSFERENCIA A {C},2,
+pago_pse,PAGO FACTURA {C},2,
+compra_billetera,PAGO {W} {C},4,
+compra_billetera,COMPRA {W} {C},2,
+compra_billetera,Pago {Wt} {C},4,
+compra_billetera,PAGO QR {W} {C},3,
+p2p_enviada_banco,TRANSFERENCIA A PERSONA,4,indeterminada
+p2p_enviada_banco,TRANSF A PERSONA #,2,indeterminada
+p2p_enviada_banco,TRANSFERENCIA ENVIADA A PERSONA,3,enviada_persona
+p2p_enviada_banco,ENVIO A PERSONA {B},1,enviada_persona
+p2p_enviada_banco,PAGO A PERSONA,1,indeterminada
+p2p_recibida_banco,TRANSFERENCIA RECIBIDA DE PERSONA,4,recibida_persona
+p2p_recibida_banco,ABONO TRANSFERENCIA PERSONA,2,recibida_persona
+p2p_recibida_banco,TRANSF DE PERSONA,2,indeterminada
+p2p_enviada_billetera,ENVIO {W} #,4,enviada_persona
+p2p_enviada_billetera,ENVIO {W} A PERSONA,3,enviada_persona
+p2p_enviada_billetera,Envio a PERSONA {Wt},2,enviada_persona
+p2p_enviada_billetera,PAGO A PERSONA {W},1,indeterminada
+p2p_recibida_billetera,{Wt} de PERSONA,4,recibida_persona
+p2p_recibida_billetera,RECIBIDO {W} #,2,recibida_persona
+p2p_recibida_billetera,RECIBI DE PERSONA {W},2,recibida_persona
+retiro_atm_banco,RETIRO ATM {B},5,
+retiro_atm_banco,RETIRO CAJERO {B},3,
+retiro_atm_banco,RETIRO ATM SERVIBANCA,2,
+retiro_atm_banco,RETIRO ATM REDEBAN,1,
+retiro_corresponsal_banco,RETIRO CORRESPONSAL {B},3,
+retiro_corresponsal_banco,RETIRO CORRESPONSAL BANCARIO,3,
+retiro_corresponsal_banco,RETIRO CORRESPONSAL EXITO,1,
+retiro_corresponsal_banco,RETIRO CORRESPONSAL BALOTO,1,
+retiro_atm_billetera,Retiro {Wt} cajero,4,
+retiro_atm_billetera,RETIRO {W} CAJERO,3,
+retiro_atm_billetera,RETIRO {W} CAJERO {B},2,
+retiro_corresponsal_billetera,Retiro {Wt} punto Baloto,3,
+retiro_corresponsal_billetera,RETIRO {W} CORRESPONSAL,3,
+retiro_corresponsal_billetera,RETIRO {W} PUNTO FISICO,1,
+recarga_origen,RECARGA {W},3,
+recarga_origen,RECARGA {W} DESDE {B},3,
+recarga_origen,TRANSFERENCIA A {W},2,
+recarga_destino,RECARGA DESDE {B},3,
+recarga_destino,Recarga {Wt} desde {B},2,
+recarga_destino,RECARGA DESDE BANCO,2,
+pago_tc_origen,PAGO TC {B},4,
+pago_tc_origen,PAGO TARJETA CREDITO {B},3,
+pago_tc_origen,PAGO TARJETA DE CREDITO,1,
+pago_tc_destino,PAGO RECIBIDO GRACIAS,3,
+pago_tc_destino,ABONO PAGO TARJETA,3,
+pago_tc_destino,ABONO A TARJETA,2,
+nomina,ABONO NOMINA {E},4,
+nomina,PAGO NOMINA {E},3,
+nomina,NOMINA {E},1,
+ingreso_consignacion,CONSIGNACION EFECTIVO,3,
+ingreso_consignacion,CONSIGNACION CORRESPONSAL {B},2,
+ingreso_consignacion,DEPOSITO EN EFECTIVO,1,

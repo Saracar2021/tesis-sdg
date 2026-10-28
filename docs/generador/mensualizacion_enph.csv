@@ -1,0 +1,34 @@
+tabla,codigo_frecuencia,factor,descripcion_codigo,fuente
+diario_hogar,1,30/14,Diaria,Metodologia_ENPH.pdf §2.1.5 Tabla 1 (cuadernillo 2 urbano): ventana de 14 días → mes (DANE usa 2.14)
+diario_hogar,2,30/14,Varias veces por semana,Tabla 1
+diario_hogar,3,30/14,Semanal,Tabla 1
+diario_hogar,4,2,Quincenal,Tabla 1
+diario_hogar,5,1,Mensual,Tabla 1
+diario_hogar,6,1/2,Bimestral,Tabla 1
+diario_hogar,7,1/3,Trimestral,Tabla 1
+diario_hogar,9,1,Esporádica,Tabla 1
+diario_personal,1,30/7,Diaria,Metodologia_ENPH.pdf §2.1.5 Tabla 6 (cuadernillo 4 urbano): ventana de 7 días → mes (DANE usa 4.28)
+diario_personal,2,30/7,Varias veces por semana,Tabla 6
+diario_personal,3,30/7,Semanal,Tabla 6
+diario_personal,4,2,Quincenal,Tabla 6
+diario_personal,5,1,Mensual,Tabla 6
+diario_personal,6,1/2,Bimestral,Tabla 6
+diario_personal,7,1/3,Trimestral,Tabla 6
+diario_personal,9,1,Esporádica,Tabla 6
+menos_frecuentes_T3,3,1,Semanal (periodo de referencia: mes),Tabla 3 (cuadernillo 3 subcapítulos de GASTOS MENSUALES)
+menos_frecuentes_T3,4,1,Quincenal,Tabla 3
+menos_frecuentes_T3,5,1,Mensual,Tabla 3
+menos_frecuentes_T3,6,1/2,Bimestral,Tabla 3
+menos_frecuentes_T3,7,1/3,Trimestral,Tabla 3
+menos_frecuentes_T3,8,1/12,Anual,Tabla 3
+menos_frecuentes_T3,9,1,Esporádica,Tabla 3
+menos_frecuentes_T3,10,1/6,Semestral,Tabla 3
+menos_frecuentes_T4,3,1/3,Semanal (periodo de referencia: 3 meses),Tabla 4 (lectura oficial; la lectura alternativa mueve el agregado -11 pp y NO se usa)
+menos_frecuentes_T4,4,1/3,Quincenal,Tabla 4
+menos_frecuentes_T4,5,1/3,Mensual,Tabla 4
+menos_frecuentes_T4,6,1/3,Bimestral,Tabla 4
+menos_frecuentes_T4,7,1,Trimestral,Tabla 4
+menos_frecuentes_T4,8,1/4,Anual,Tabla 4
+menos_frecuentes_T4,9,1,Esporádica,Tabla 4
+menos_frecuentes_T4,10,1/2,Semestral,Tabla 4
+menos_frecuentes_T12,*,1/12,Cualquier frecuencia (periodo de referencia: 12 meses),Tabla 5; G13/G14/J14 INFERIDOS a 12 meses (decisión de la autora 27 oct 2026)

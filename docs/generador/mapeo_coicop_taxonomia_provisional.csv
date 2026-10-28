@@ -1,0 +1,59 @@
+prefijo,categoria_n1,categoria_n2,estado,nota
+00,otros,ininteligible,provisional,códigos no COICOP (p. ej. 000i)
+01,alimentos_mercado,,provisional,división 01
+02,entretenimiento,bares_licor_tabaco,provisional,alcohol y tabaco → entretenimiento (taxonomía v1: excluye de alimentos_mercado)
+03,vestuario_cuidado_personal,ropa_calzado,provisional,división 03
+04,vivienda_servicios,,provisional,división 04
+0411,vivienda_servicios,arriendo,provisional,
+0412,vivienda_servicios,arriendo,provisional,
+0431,vivienda_servicios,,provisional,reparaciones locativas menores
+0432,vivienda_servicios,,provisional,reparaciones locativas menores
+0441,vivienda_servicios,servicios_publicos,provisional,
+0442,vivienda_servicios,servicios_publicos,provisional,
+0443,vivienda_servicios,servicios_publicos,provisional,
+0444,vivienda_servicios,administracion,provisional,cuotas de administración y celaduría
+0451,vivienda_servicios,servicios_publicos,provisional,energía eléctrica
+0452,vivienda_servicios,gas_combustible_hogar,provisional,gas propano y gas natural
+0453,vivienda_servicios,gas_combustible_hogar,provisional,
+0454,vivienda_servicios,gas_combustible_hogar,provisional,
+0455,vivienda_servicios,gas_combustible_hogar,provisional,
+05,hogar_articulos,muebles_electrodomesticos,provisional,división 05
+0561,hogar_articulos,aseo_hogar,provisional,
+0562,hogar_articulos,servicio_domestico,provisional,
+06,salud,otros_salud,provisional,división 06
+0611,salud,farmacia,provisional,
+0612,salud,farmacia,provisional,
+0621,salud,consultas_examenes,provisional,
+0622,salud,consultas_examenes,provisional,
+0623,salud,consultas_examenes,provisional,
+07,transporte,publico_masivo,provisional,división 07
+071,otros,,provisional,compra de vehículos: taxonomía v1 la envía a otros
+0721,transporte,vehiculo_propio_mantenimiento,provisional,
+0722,transporte,combustible,provisional,
+0723,transporte,vehiculo_propio_mantenimiento,provisional,
+0724,transporte,vehiculo_propio_mantenimiento,provisional,parqueadero peajes licencias
+08,telecom_conectividad,plan_pospago,provisional,división 08
+081,otros,,provisional,servicios postales
+082,otros,,provisional,compra de teléfonos y equipos: taxonomía v1 la envía a otros
+083005,telecom_conectividad,internet_hogar_tv,provisional,internet fijo
+08300506,telecom_conectividad,recarga_prepago,provisional,recargas de celular
+09,entretenimiento,eventos_recreacion,provisional,división 09
+091,hogar_articulos,muebles_electrodomesticos,provisional,equipos de audio video y cómputo
+093,entretenimiento,eventos_recreacion,provisional,juguetes y artículos recreativos
+0934,entretenimiento,mascotas,provisional,alimentos y artículos para animales
+094206,telecom_conectividad,internet_hogar_tv,provisional,TV por suscripción
+095,educacion,utiles_textos,provisional,libros prensa y papelería
+10,educacion,matricula_pension,provisional,división 10
+1050,educacion,cursos,provisional,
+11,comidas_fuera,restaurante_local,provisional,división 11
+1120,entretenimiento,eventos_recreacion,provisional,alojamiento (la taxonomía v1 no tiene categoría de viajes)
+12,otros,,provisional,división 12
+1211,vestuario_cuidado_personal,peluqueria_estetica,provisional,
+1212,vestuario_cuidado_personal,aseo_cosmeticos,provisional,
+1213,vestuario_cuidado_personal,aseo_cosmeticos,provisional,
+123,vestuario_cuidado_personal,ropa_calzado,provisional,efectos personales
+1240,otros,,provisional,protección social (guarderías residencias)
+125,obligaciones_financieras,seguros,provisional,seguros
+1261,obligaciones_financieras,credito_formal,provisional,servicios financieros (cuotas de manejo y de crédito)
+1262,obligaciones_financieras,comisiones_gmf,provisional,comisiones y avances
+1270,otros,impuestos_tramites,provisional,otros servicios (trámites certificados pompas fúnebres agencias)

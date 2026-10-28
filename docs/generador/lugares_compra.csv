@@ -1,0 +1,20 @@
+codigo,descripcion,clase_comercio,formalidad_comercio,acepta_tarjeta
+1,Almacenes supermercados de cadena tiendas por departamento hipermercados,cadena,formal,1
+4,Supermercados de cajas de compensación cooperativas fondos de empleados,cadena,formal,1
+6,Supermercado de barrio tiendas de barrio cigarrerías salsamentarias,tienda_barrio,pequeno_comercio_indeterminado,1
+7,Misceláneas de barrio y cacharrerías,tienda_barrio,pequeno_comercio_indeterminado,1
+10,Plazas de mercado galerías mercados móviles central mayorista graneros,plaza,pequeno_comercio_indeterminado,0
+13,Vendedores ambulantes,ambulante,informal,0
+14,Sanandresitos bodegas y fábricas,sanandresito,pequeno_comercio_indeterminado,1
+16,Establecimiento especializado en el artículo o servicio,especializado,formal,1
+17,Farmacias y droguerías,farmacia,formal,1
+18,Restaurantes,restaurante,formal,1
+19,Cafeterías y establecimientos de comidas rápidas,cafeteria,formal,1
+20,Persona particular,persona,informal,0
+21,Ferias especializadas,feria,formal,1
+22,A través de internet,internet,formal,1
+23,Televentas y ventas por catálogo,catalogo,formal,1
+24,Otro,otro,pequeno_comercio_indeterminado,1
+25,Plazoleta de comidas,plazoleta,formal,1
+26,En el exterior,exterior,formal,1
+,Lugar no registrado,desconocido,pequeno_comercio_indeterminado,1

@@ -9,3 +9,5 @@ __pycache__/
 *.pkl
 *.pt
 notas_locales/
+outputs/generador/pool/
+outputs/sintetico_reglas/transacciones.csv.gz

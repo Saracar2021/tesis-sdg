@@ -1,0 +1,84 @@
+{
+ "script": "tools/generar_sintetico_reglas.py",
+ "commit_base": "6c10c8f",
+ "pandas": "3.0.6",
+ "numpy": "2.4.6",
+ "python": "3.11.9",
+ "semilla": 42,
+ "n_perfiles": 1000,
+ "overrides": {},
+ "parametros_propios_version": "0.2.0",
+ "escenario_digital": "base",
+ "modo_donantes": "por_hogar",
+ "modo_cuentas": "multiple",
+ "ipc_aplicado": false,
+ "aviso": "SIN IPC: montos en pesos de 2016-17 (factor 1,0); no comparar niveles con 2025",
+ "filas": {
+  "total": 445192,
+  "interna": 326172,
+  "emitida": 119020
+ },
+ "meses": [
+  "2025-12",
+  "2026-04",
+  "2026-08"
+ ],
+ "columnas": [
+  "tx_id",
+  "perfil_id",
+  "mes_referencia",
+  "fecha",
+  "capa",
+  "cuenta_id",
+  "cuenta_tipo",
+  "descripcion",
+  "monto",
+  "signo",
+  "categoria_n1",
+  "categoria_n2",
+  "medio_pago",
+  "formalidad_comercio",
+  "canal_p2p",
+  "fuente_etiqueta",
+  "id_interno",
+  "medio_enph",
+  "migrado_digital",
+  "origen"
+ ],
+ "observables": [
+  "descripcion",
+  "monto",
+  "signo",
+  "fecha",
+  "cuenta_tipo"
+ ],
+ "gold": [
+  "categoria_n1",
+  "categoria_n2",
+  "medio_pago",
+  "formalidad_comercio",
+  "canal_p2p",
+  "fuente_etiqueta"
+ ],
+ "sha256_transacciones_csv": "ce5495a37c2f43f96744caa0718c839af02e047a074745471ee6e74785b84d6e",
+ "sha256_perfiles_csv": "b72c538f9e2b699b51d8477c244a5c96e62ffabd4d63de4316a7865aec6747b0",
+ "sha256_priors_json": "7f1786ac8e9d3d6add5e5e1e61fa3fce8cf76070ae5ee1b5250785b224735fd8",
+ "sha256_entradas": {
+  "parametros_propios.json": "4ea7eef3af0081cefd5cb845fe0cb476a627c56ab55090dfe0cab3656d933975",
+  "comercios_curados.csv": "61de7e63b6569999f54b46d1eae93eb0f88c01ddbf6abe5c1b433d1ea1e3b3eb",
+  "plantillas_descriptor.csv": "509faf9bc0ca112d3392eeb91aebb99419a7765df193b9ae43591518a94dc932",
+  "permisos_medios_digitales.csv": "b95745045547a79e726ceb597839c436acef2c3400e61ff027867370121fb9b9",
+  "palabras_nombres.csv": "9cc0316b2eb597f45d1a77ffd747b8f40c9fdc5510f926dace20ed6a86593e44",
+  "sucursales_bogota.csv": "bf7b37dc69ed251e7de841554a8f44d64df05dd6d69c76e2a7bd0f606dd2e13f",
+  "empleadores_ficticios.csv": "a961084f15522fdaf43c994cb2055322809f4d61a51938a4247a892f788019bc",
+  "lugares_compra.csv": "194b438c98b2c50ff046bee14c9d78f482418575e1e44d8e29cc0f82c67ac4ce",
+  "mezcla_donantes.json": "85b32618c2b86e2dc049d99f960937bb4957cccd0eb0dfb80be77ed8f047a060",
+  "estructura_cuentas.csv": "8974be4ca6ad421cbc63f33f1249950f33d0beb70d09a0b66a9b5c1398804868"
+ },
+ "sha256_pool_descomprimido": {
+  "eventos": "1f335132b4f3fe34be7a78ed5b297b87886dca0fb131a8a31f154ee511d65c34",
+  "recurrentes": "0f9c319815d818534554e6b9ca4d14a9a68296cdc92cb76f00f62afce561eb8c",
+  "hogares": "0c9af81bd688110b122f6b836e42f65c8e8c76bd4ff18dfa7b5a9e31367a5cfd"
+ },
+ "sensibilidad": "sensibilidad.csv"
+}

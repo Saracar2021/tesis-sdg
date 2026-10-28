@@ -1,0 +1,138 @@
+{
+ "n_perfiles": 1000,
+ "semilla": 42,
+ "meses": [
+  "2025-12",
+  "2026-04",
+  "2026-08"
+ ],
+ "escenario_digital": "base",
+ "modo_donantes": "por_hogar",
+ "modo_cuentas": "multiple",
+ "ipc_aplicado": false,
+ "avisos": [
+  "SIN IPC: montos en pesos de 2016-17 sin actualizar (factor 1,0). No usar para comparar niveles con 2025."
+ ],
+ "medios": {
+  "eventos_con_esquema_p438": 34671,
+  "eventos_con_esquema_nc2r": 277838,
+  "caps_p438_disponibles": [
+   "A11",
+   "B11",
+   "B12",
+   "C11",
+   "C12",
+   "D11",
+   "D12",
+   "D13",
+   "D14",
+   "D15",
+   "D16",
+   "E11",
+   "E12",
+   "F11",
+   "F12",
+   "F13",
+   "G11",
+   "G12",
+   "G13",
+   "G14",
+   "H11",
+   "H12",
+   "I11",
+   "I12",
+   "J11",
+   "J12",
+   "J13",
+   "L11",
+   "L12"
+  ],
+  "restricciones": {
+   "credito_sin_tarjeta": 1220,
+   "debito_sin_banco_a_billetera": 230,
+   "debito_sin_banco_a_efectivo": 0,
+   "tarjeta_en_lugar_sin_datafono_a_efectivo": 179,
+   "internet_efectivo_a_debito": 179,
+   "internet_efectivo_a_billetera": 22
+  },
+  "migracion": {
+   "escenario": "base",
+   "fraccion_objetivo": 0.2,
+   "prop_billetera": 0.6,
+   "eventos_elegibles": 309712,
+   "a_billetera": 37106,
+   "a_transferencia": 24832,
+   "fraccion_lograda": 0.19998579325308674
+  }
+ },
+ "filas": {
+  "total": 445192,
+  "interna": 326172,
+  "emitida": 119020
+ },
+ "filas_emitidas_por_cuenta": {
+  "banco": 68508,
+  "billetera": 49017,
+  "tarjeta_credito": 1495
+ },
+ "filas_emitidas_por_origen": {
+  "compra": 69272,
+  "ingreso_no_asalariado": 3331,
+  "nomina": 1937,
+  "p2p_sin_proposito": 7653,
+  "pago_recurrente": 8147,
+  "pago_tarjeta": 606,
+  "recarga_billetera": 11846,
+  "retiro": 16228
+ },
+ "cuentas_perfiles": {
+  "tiene_banco": 0.894,
+  "tiene_billetera": 0.608,
+  "tiene_tarjeta_credito": 0.303
+ },
+ "capa_interna_valor_por_medio_pago": {
+  "billetera_digital": 0.07279682155896024,
+  "bono_subsidio": 0.0005736626579487093,
+  "efectivo": 0.6592132129420747,
+  "fiado_credito_tienda": 0.0002150760227720047,
+  "otro_nd": 0.011239263511031695,
+  "tarjeta_credito": 0.016785677762415345,
+  "tarjeta_debito": 0.04097278623043525,
+  "transferencia_bancaria": 0.1982034993143621
+ },
+ "capa_interna_eventos_por_medio_pago": {
+  "efectivo": 0.7584955177023166,
+  "billetera_digital": 0.11709159584513693,
+  "transferencia_bancaria": 0.09855229756079614,
+  "tarjeta_debito": 0.01805795715144157,
+  "tarjeta_credito": 0.003654513569527734,
+  "otro_nd": 0.0031517113670088176,
+  "fiado_credito_tienda": 0.0007817961075751444,
+  "bono_subsidio": 0.00021461069619709846
+ },
+ "valor_interno_pagado_desde_cuenta": 0.32875878486617294,
+ "gasto_sobre_ingreso_por_perfil": {
+  "mediana": 0.9281095286741458,
+  "p90": 2.4514371783575384,
+  "frac_mayor_1": 0.44
+ },
+ "efectivo": {
+  "gasto_en_efectivo": 5208868500.0,
+  "retiros": 5283350000.0,
+  "retiros_sobre_gasto_efectivo": 1.0142989787513352
+ },
+ "tarjeta_credito": {
+  "compras": 132591200.0,
+  "pagos": 125303300.0
+ },
+ "p2p_proposito_declarado": {
+  "filas": 8629,
+  "fraccion_filas_emitidas": 0.07250042009746262
+ },
+ "monto": {
+  "mediana_emitida": 14200.0,
+  "p99_emitida": 1869344.499999992
+ },
+ "parametros_version": "0.2.0",
+ "overrides": {}
+}
