@@ -11,7 +11,7 @@ Registro fechado del trabajo técnico del proyecto, organizado por paquete de tr
 - **WP4 — Datos reales:** consentimiento, anonimización, diseño de muestra y anotación.
 - **WP5 — Pipeline de referencia:** reevaluación del pipeline de Pancholi et al.
 - **WP6 — Generador:** generador por reglas y conversión del IPC.
-- **WP7 — CTGAN:** refinamiento del dataset sintético (aún no iniciado).
+- **WP7 — CTGAN:** refinamiento del dataset sintético (Etapa 3).
 - **WP8 — Evaluación TSTR:** clasificadores y validación contra datos reales (aún no iniciado).
 
 ---
@@ -163,3 +163,11 @@ Registro fechado del trabajo técnico del proyecto, organizado por paquete de tr
 - Cómo se verificó: `tests/test_ipc.py` (28: fórmula a mano, las tres referencias, lectura del xlsx con un xlsx sintético con la misma disposición, huecos y celdas no numéricas, serie real en bandas amplias, coincidencia xlsx↔CSV si el xlsx está) y `tests/test_generador.py` (66; incluye que eventos, recurrentes e ingreso del mismo hogar llevan exactamente el mismo factor) en verde en el entorno de WP6; mutación provocada (promedio del campo sobre todos los meses) detectada por 3 pruebas. La corrida de WP6 con IPC (sha256 de transacciones `35dfa6431a61d085…`) es de referencia; **el manifest canónico lo da la corrida de la autora en su `.venv`**.
 - Límites abiertos (L33): deflactor único (los precios relativos entre categorías quedan como en 2016-17); montos en pesos de promedio 2025, sin reajustar a los meses de 2026 de la ventana (≈ +6,8 % a ago-2026); supuesto no verificado de que ENPH está en pesos corrientes del mes de recolección.
 - Archivo / commit: los de arriba y `.gitignore`; commit pendiente de la autora («[WP6] generador por reglas» y, si prefiere, «[WP6] IPC como deflactor único» aparte).
+
+### 2026-11-17 — WP7: refinamiento con CTGAN (Etapa 3), pre-registro, corrida oficial y resultados
+- `notebooks/03_ctgan_etapa3.ipynb`, `src/sdg/etapa3.py` (reglas duras, cuotas, elasticidad, piso), `tests/test_etapa3.py` (31 pruebas), `requirements-ctgan.txt` (entorno aparte `.venv-ctgan`: SDV 2.2.0 / ctgan 0.13.0 / torch 2.15.0+cpu exigen `pandas<3`). Salidas en `outputs/ctgan/`. Reporte en `docs/reporte/adenda_preregistro_ctgan.md` y §VII.A de `borrador_reporte.md` / `main.tex`.
+- Entrada al CTGAN: campos estructurados de la capa emitida (`capa=="emitida"`, 122.211 filas) con `ingreso_mensual` unido por `perfil_id`; `descripcion` excluida (texto). 12 columnas; condicionamiento por `categoria_n1`; 300 épocas, semilla 42, CPU.
+- Pre-registro (adenda, antes de correr) con cuatro desviaciones aceptadas por la autora: referencia de elasticidad = la propia fuente (no el 1,008 de Pancholi); regla `canal_p2p` según R2; holdout por perfil (train 96.386 filas); «relativo» solo en Column Pair Trends. Seis reglas duras (incl. `signo` por `(origen, cuenta)`). Criterio de elasticidad por razón r = ê_ctgan/ê_train (CONSERVA r≥0,70; ATENÚA 0,30–0,70; NO CONSERVA r<0,30, o ê≤0, o IC incluye 0).
+- Resultados: QualityReport CTGAN v1 Overall 0,931 (piso 0,830, techo 0,974); Column Pair Trends 0,927 recupera el 85,7 % de la distancia piso→techo. Elasticidad: train 0,331 [0,267; 0,388], CTGAN 0,452 [0,441; 0,463], r = 1,37 → **CONSERVA** (amplifica), frente al −0,003 del pipeline de referencia. Rechazo total 14,78 % (> tope 10 %; resultado de fidelidad negativo, reportado): el grueso es `par_n1_n2_inexistente` (10,78 %) → el CTGAN plano no modela bien la jerarquía categórica.
+- Cómo se verificó: `tests/test_etapa3.py` (31) en verde; reproducibilidad bit a bit confirmada (dos entrenamientos con el mismo sha256 de muestra `4371cac1b7e9870c…`); `outputs/ctgan/manifest.json` con versiones, semillas, SHA-256 de entradas y salidas, y entorno. Entrenamiento A 145 min, B 80 min (Windows, 10 hilos torch, CPU).
+- Archivo / commit: los de arriba; commit de la autora «WP7 cerrado: CTGAN…».

@@ -2,7 +2,7 @@
 
 **Título:** Diseño y validación preliminar de un protocolo de generación de datos sintéticos de transacciones financieras para el contexto colombiano
 **Autora:** Sara J. Cárdenas · Maestría en Inteligencia Artificial, Pontificia Universidad Javeriana
-**Versión:** 5 · **Corte:** martes 27 de octubre de 2026 · reemplaza la v4 del 26 de octubre
+**Versión:** 6 · **Corte:** lunes 17 de noviembre de 2026 · reemplaza la v5 del 27 de octubre
 **Hitos (TG2):** entrega del reporte (PDF, plantilla **IEEE Transactions on AI**, ≤ 24 pp) al correo del programa **antes del 27 nov 2026**; el tutor propone 3 jurados · sustentación presencial **30 nov – 18 dic** · reunión de decisión continuar/cancelar con la tutora, **esta semana**
 
 > Documento vivo de seguimiento del proyecto (WP0). La fuente de verdad técnica es el repositorio `C:\tesis-sdg` (respaldo privado en GitHub). Este documento resume el estado; las cifras y su derivación viven en el repo.
@@ -11,7 +11,22 @@
 
 ## 0. Resumen ejecutivo
 
-> **Progreso al 27 oct:** Etapa 1 (priors, WP3) y Etapa 2 (generador por reglas, WP6) **cerradas, probadas y en `main`**; reevaluación del pipeline de referencia integrada (WP5). IPC en proceso (deflactor nacional, factor 2017→2025 ≈ 1,565). **Faltan:** CTGAN (Etapa 3, WP7), datos reales — ingesta/anonimización/anotación (WP4) — y TSTR (Etapa 4, WP8), más el reporte IEEE. Avance global ≈ 40 %.
+> **Progreso al 17 nov:** Etapas 1 (priors, WP3), 2 (generador por reglas, WP6) y **3 (CTGAN, WP7) cerradas, probadas y en `main`**; reevaluación del pipeline de referencia integrada (WP5); IPC decidido (deflactor único nacional, `modo_ipc:"total"`). El CTGAN v1 es **reproducible bit a bit** y **conserva la relación ingreso–monto** (elasticidad 0,45 vs. 0,33 del train, veredicto CONSERVA; rechazo por reglas 14,78 %, reportado como resultado de fidelidad). **Faltan:** datos reales — ingesta/anonimización/anotación (WP4) — y TSTR (Etapa 4, WP8), más el diligenciamiento final del reporte IEEE (borrador avanzado en `docs/reporte/`). Avance global ≈ 55 %.
+
+**Estado por paquete de trabajo (17 nov 2026):**
+
+| WP | Tema | Estado |
+|---|---|---|
+| WP0 | Entorno y seguimiento | En curso (este documento, bitácora) |
+| WP1 | Perfilado DANE | ✅ Cerrado |
+| WP2 | Taxonomía | 🟡 v1 lista; congelamiento a v1.1 pendiente |
+| WP3 | Priors (Etapa 1) | ✅ Cerrado |
+| WP4 | Datos reales | 🟡 Recolectados; ingesta/anonimización/anotación pendientes (ética resuelta) |
+| WP5 | Pipeline de referencia (Pancholi) | ✅ Reevaluado (etapas 1–3) |
+| WP6 | Generador + IPC (Etapa 2) | ✅ Cerrado |
+| WP7 | CTGAN (Etapa 3) | ✅ Cerrado — v1 reproducible, veredicto CONSERVA |
+| WP8 | TSTR (Etapa 4) | ⏳ Por hacer |
+| — | Reporte IEEE | 🟡 Borrador avanzado (`docs/reporte/`); falta TSTR y diligenciamiento |
 
 1. **La base empírica se reconstruyó desde cero.** Las cifras del análisis descriptivo del informe de avance estaban escritas a mano, sin factores de expansión y sobre un solo mes. Se re-descargaron los microdatos del DANE y se construyó una base verificable: 112 archivos con hash SHA-256 contra el original, cargador único con 29 pruebas automatizadas y distribuciones ponderadas para Bogotá.
 2. **El dominio quedó definido: Bogotá urbano.** Los 20 voluntarios de la validación son de Bogotá; calibrar contra otro dominio rompería la comparación del TSTR.

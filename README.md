@@ -48,18 +48,24 @@ limitaciones frente al contexto colombiano se contrastaron así:
   extractos sintéticos con dos capas (gasto interno del hogar y emisión bancarizada); montos
   calibrados con la ENPH y deflactados a pesos de 2025 con el IPC del DANE (`src/sdg/ipc.py`).
   Salidas en `outputs/generador/` y `outputs/sintetico_reglas/`.
+- **Etapa 3 — refinamiento con CTGAN** (`notebooks/03_ctgan_etapa3.ipynb`, `src/sdg/etapa3.py`):
+  CTGAN (SDV) entrenado sobre los campos estructurados del extracto, con pre-registro de columnas,
+  métricas y reglas duras (`docs/reporte/adenda_preregistro_ctgan.md`). Dataset sintético v1
+  reproducible bit a bit; la relación ingreso–monto se conserva (elasticidad 0,45 vs. 0,33 del
+  train, veredicto CONSERVA) y la tasa de rechazo por reglas (14,78 %) se reporta como resultado de
+  fidelidad. Salidas en `outputs/ctgan/`.
 - Reevaluación reproducible del pipeline de referencia (etapas 1–3), con criterios prerregistrados
   (`outputs/pancholi/`).
 - Decisiones de dominio (Bogotá urbano) y de universo del generador (extractos de hogares
   bancarizados) cerradas y documentadas.
 
 **En curso / pendiente:**
-- Etapa 3 — refinamiento con CTGAN.
 - Datos reales de validación: recolectados; falta ingesta, anonimización y anotación (dos
   anotadores con acuerdo medido por Kappa de Cohen).
 - Etapa 4 — clasificadores y evaluación TSTR.
 - Referente de la ENPH para cerrar H-P1 y decisión de la categoría de hospedaje para H-P2.
-- Redacción del reporte final (formato IEEE Transactions on AI).
+- Reporte (formato IEEE Transactions on AI): borrador avanzado en `docs/reporte/`
+  (`main.tex`, `borrador_reporte.md`); faltan los resultados del TSTR y el diligenciamiento final.
 
 Estado por actividad del cronograma: `docs/plan_maestro.md`. Registro fechado del trabajo:
 `docs/bitacora.md`.
@@ -68,7 +74,9 @@ Estado por actividad del cronograma: `docs/plan_maestro.md`. Registro fechado de
 
 ```
 docs/              plan maestro, protocolo técnico, bitácora, justificación de parámetros,
-                   taxonomía, paquete de datos reales, esqueleto del reporte, tablas del generador
+                   taxonomía, paquete de datos reales, tablas del generador
+docs/reporte/      reporte IEEE: main.tex, borrador_reporte.md, adenda de pre-registro del CTGAN,
+                   declaración de uso de IA, esqueleto
 docs/historico/    análisis anterior, archivado como referencia de solo lectura
 src/sdg/           cargador de GEIH/ENPH, pesos y códigos verificados; priors y encogimiento;
                    generador, gasto ENPH, nombres de comercio e IPC
@@ -76,7 +84,8 @@ tools/             normalización de datos, generación de tablas, construcción
                    generador, conversión del IPC
 tests/             pruebas automatizadas (unittest)
 outputs/           cifras y tablas generadas por código (nunca escritas a mano): distribuciones,
-                   priors, pancholi, generador, sintetico_reglas, ipc
+                   priors, pancholi, generador, sintetico_reglas, ipc, ctgan
+notebooks/         Etapa 3: notebook del CTGAN (y su copia ejecutada)
 data/              microdatos del DANE y datos reales — NO se versiona (.gitignore)
 CLAUDE.md          convenciones de datos y decisiones metodológicas del proyecto (no negociables)
 ```
@@ -102,7 +111,15 @@ CLAUDE.md          convenciones de datos y decisiones metodológicas del proyect
    python tools/generar_sintetico_reglas.py  # Etapa 2: muestra sintética -> outputs/sintetico_reglas/
    python -m unittest discover -s tests      # suite de pruebas, debe quedar en verde
    ```
-4. Los datos reales de validación solo existen anonimizados en `data/reales_anon/`, nunca en
+4. Etapa 3 (CTGAN) corre en un entorno aparte, porque SDV exige `pandas<3`:
+   ```
+   python -m venv .venv-ctgan
+   source .venv-ctgan/Scripts/activate
+   pip install -r requirements-ctgan.txt
+   jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=-1 \
+     --output 03_ctgan_etapa3.ejecutado.ipynb notebooks/03_ctgan_etapa3.ipynb   # -> outputs/ctgan/
+   ```
+5. Los datos reales de validación solo existen anonimizados en `data/reales_anon/`, nunca en
    `data/reales_crudos/`; ver `docs/datos_reales/`.
 
 Reproducibilidad: semilla global `SEED = 42`; rutas relativas a la raíz; cada corrida de modelo
@@ -123,6 +140,8 @@ Todas las cifras salen de código y quedan escritas en `outputs/`; ninguna está
 - `outputs/generador/` y `outputs/sintetico_reglas/` — calibración del generador y la muestra
   sintética por reglas, con sus manifiestos.
 - `outputs/pancholi/` — resultados de la reevaluación del pipeline de referencia.
+- `outputs/ctgan/` — dataset sintético v1 del CTGAN, QualityReport (con piso y techo), elasticidad
+  con veredicto, tasa de rechazo por regla y manifest (SHA-256, versiones, reproducibilidad bit a bit).
 
 ## Índice de decisiones metodológicas (D1–D15)
 

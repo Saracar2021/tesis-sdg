@@ -140,7 +140,24 @@ Tres clasificadores entrenados sobre sintético: regresión logística con TF-ID
 \section{Resultados}
 % ================= PRELIMINAR — rellenar al cerrar WP7/WP8 =================
 \subsection{Fidelidad del dataset sintético}
-\emph{[Preliminar, WP7.]} Métricas SDV (Column Shapes, Column Pair Trends con su piso/techo, Overall con brecha al techo) y tasa de rechazo. Como prueba específica, la elasticidad monto--ingreso del CTGAN se compara con la del \textit{train} ($\hat{e}_{\text{train}}\approx 0{,}33$) mediante $r=\hat{e}_{\text{ctgan}}/\hat{e}_{\text{train}}$, con veredicto prerregistrado (CONSERVA $r\ge0{,}70$; ATENÚA $0{,}30\le r<0{,}70$; NO CONSERVA $r<0{,}30$ o $\hat{e}\le0$ o IC incluye 0).
+Corrida oficial: 300 épocas en CPU, semilla 42 (SDV 2.2.0, ctgan 0.13.0), con reproducibilidad \textbf{bit a bit confirmada} (SHA-256 idéntico en dos entrenamientos independientes). Train = 96\,386 filas (80\,\% de perfiles); holdout = 25\,825. La Tabla~\ref{tab:fidelidad} resume la calidad SDV frente al piso (marginales independientes) y el techo (train vs. holdout).
+
+\begin{table}[!t]
+\caption{Fidelidad del dataset sintético v1 (SDV QualityReport)}
+\label{tab:fidelidad}
+\centering
+\begin{tabular}{lccc}
+\toprule
+Métrica & Piso & CTGAN v1 & Techo \\
+\midrule
+Overall            & 0{,}830 & 0{,}931 & 0{,}974 \\
+Column Shapes      & 0{,}980 & 0{,}935 & 0{,}980 \\
+Column Pair Trends & 0{,}680 & 0{,}927 & 0{,}968 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+En dependencias (Column Pair Trends) el CTGAN recupera el 85{,}7\,\% de la distancia piso$\rightarrow$techo, que es su aporte sobre un muestreo trivial; en marginales (Column Shapes) queda por debajo del piso, que las clava por construcción. La elasticidad monto--ingreso da veredicto \textbf{CONSERVA}: train $\hat{e}=0{,}331$ [0{,}267; 0{,}388] frente a CTGAN $\hat{e}=0{,}452$ [0{,}441; 0{,}463], $r=1{,}37$ (incluso amplifica, $r>1$), en contraste con el $-0{,}003$ del pipeline de referencia. La tasa de rechazo por reglas duras fue 14{,}78\,\%, por encima del tope del 10\,\% (resultado de fidelidad negativo, reportado): el grueso (10{,}78\,\%) son pares categoría--subcategoría fuera de la taxonomía, lo que indica que el CTGAN plano no captura bien la jerarquía categórica.
 
 \subsection{Validación TSTR}
 \emph{[Preliminar, WP8.]} F1-macro por clasificador, matriz de confusión por categoría y Kappa; pendiente de la anotación del conjunto real.
