@@ -1,0 +1,13 @@
+Column,Metric,Score
+cuenta_tipo,TVComplement,0.9607534456122865
+signo,TVComplement,0.9807720301049168
+categoria_n1,TVComplement,0.9817713399887487
+categoria_n2,TVComplement,0.9463458487912012
+medio_pago,TVComplement,0.931934787566832
+origen,TVComplement,0.9853201446155488
+formalidad_comercio,TVComplement,0.9623787532715524
+canal_p2p,TVComplement,0.9526707335700481
+monto,KSComplement,0.8817703452481129
+ingreso_mensual,KSComplement,0.9233664744824274
+dia_mes,TVComplement,0.8134376031905779
+mes,TVComplement,0.894142632388687

@@ -1,0 +1,194 @@
+{
+ "notebook": "notebooks/03_ctgan_etapa3.ipynb",
+ "adenda": "docs/reporte/adenda_preregistro_ctgan.md",
+ "modo_prueba": false,
+ "commit_base": "9dca46e",
+ "semilla": 42,
+ "semilla_muestreo_sdv": "FIXED_RNG_SEED interna de SDV",
+ "parametros": {
+  "epocas": 300,
+  "batch_size": 500,
+  "cuda": false,
+  "frac_holdout_perfiles": 0.2,
+  "n_sintetico": 122211,
+  "columnas": [
+   "cuenta_tipo",
+   "signo",
+   "categoria_n1",
+   "categoria_n2",
+   "medio_pago",
+   "origen",
+   "formalidad_comercio",
+   "canal_p2p",
+   "monto",
+   "ingreso_mensual",
+   "dia_mes",
+   "mes"
+  ],
+  "sdtypes": {
+   "cuenta_tipo": "categorical",
+   "signo": "categorical",
+   "categoria_n1": "categorical",
+   "categoria_n2": "categorical",
+   "medio_pago": "categorical",
+   "origen": "categorical",
+   "formalidad_comercio": "categorical",
+   "canal_p2p": "boolean",
+   "dia_mes": "categorical",
+   "mes": "categorical",
+   "monto": "numerical",
+   "ingreso_mensual": "numerical"
+  },
+  "resto_ctgan": "valores por defecto de SDV"
+ },
+ "desviaciones_adenda": [
+  "D1 regla canal_p2p según R2",
+  "D2 referencia de elasticidad = fuente (no 1,008)",
+  "D3 holdout 20 % de perfiles; train = 80 %",
+  "D4 relativo solo en Column Pair Trends; brecha al techo en Column Shapes y Overall"
+ ],
+ "versiones": {
+  "python": "3.11.9",
+  "torch": "2.15.0+cpu",
+  "sdv": "2.2.0",
+  "ctgan": "0.13.0",
+  "rdt": "2.1.0",
+  "sdmetrics": "0.33.0",
+  "pandas": "2.3.3",
+  "numpy": "2.4.6"
+ },
+ "entorno": {
+  "plataforma": "Windows-10-10.0.26200-SP0",
+  "dispositivo": "cpu",
+  "gpu_disponible": false,
+  "hilos_torch": 10,
+  "minutos_entrenamiento_A": 145.03745730320614
+ },
+ "filas": {
+  "fuente": 122211,
+  "train": 96386,
+  "holdout": 25825,
+  "sintetico_v1": 122211
+ },
+ "sha256_entradas": {
+  "transacciones_csv": "35dfa6431a61d0853e1acdc6e9693732748b8030586ebd6732f4d830663a25a0",
+  "perfiles_csv": "a152660f2da8b5ab7b9e53b8ce093d0df37b3970f940398225ddf9ed2af34c2a",
+  "taxonomia_json": "97460746c0cb95a00882c912868a895adff0c9985263087ee57fff92ea4719ad"
+ },
+ "reproducibilidad": {
+  "verificada": true,
+  "sha256_lote_A": "4371cac1b7e9870c8ff02bfa8e00540a3272422a04f6bffc58ac6533ba3f6c3a",
+  "sha256_lote_B": "4371cac1b7e9870c8ff02bfa8e00540a3272422a04f6bffc58ac6533ba3f6c3a",
+  "minutos_B": 79.9057336250941,
+  "bit_a_bit": true
+ },
+ "rechazo": {
+  "filas_generadas": 244422,
+  "filas_rechazadas": 36124,
+  "tasa_rechazo": 0.1477935701368944,
+  "tope_declarado": 0.1,
+  "cumple_tope": false,
+  "resultado_fidelidad": "NEGATIVO: supera el tope; se reporta y se discute",
+  "por_regla": {
+   "monto_no_positivo": 0,
+   "medio_imposible_para_cuenta": 4090,
+   "par_n1_n2_inexistente": 26354,
+   "canal_p2p_incoherente": 616,
+   "fecha_imposible": 271,
+   "signo_incompatible_con_origen": 6504
+  },
+  "tasa_por_regla": {
+   "monto_no_positivo": 0.0,
+   "medio_imposible_para_cuenta": 0.01673335460801401,
+   "par_n1_n2_inexistente": 0.1078217181759416,
+   "canal_p2p_incoherente": 0.0025202314030651905,
+   "fecha_imposible": 0.0011087381659588744,
+   "signo_incompatible_con_origen": 0.026609715983012986
+  },
+  "lotes_usados": 2,
+  "deficit_cuotas": {},
+  "tv_marginal_n1_modelo_vs_train": 0.13111749351531368
+ },
+ "calidad": {
+  "ctgan_v1": {
+   "overall": 0.9307289423624041,
+   "column_shapes": 0.9345553449025785,
+   "column_pair_trends": 0.9269025398222298
+  },
+  "piso_marginales": {
+   "overall": 0.8298828917623702,
+   "column_shapes": 0.9799000236021848,
+   "column_pair_trends": 0.6798657599225556
+  },
+  "techo_train": {
+   "overall": 0.9741118117805172,
+   "column_shapes": 0.9802655535091112,
+   "column_pair_trends": 0.9679580700519231
+  },
+  "brecha_al_techo": {
+   "overall": 0.04338286941811309,
+   "column_shapes": 0.04571020860653263,
+   "column_pair_trends": 0.04105553022969333
+  },
+  "relativo": {
+   "overall": NaN,
+   "column_shapes": NaN,
+   "column_pair_trends": 0.8574917525175962
+  }
+ },
+ "elasticidad": {
+  "fuente_completa": {
+   "n": 122211,
+   "elasticidad": 0.34741043089601914,
+   "ic95_inf": 0.29175497860154836,
+   "ic95_sup": 0.4045024625014191,
+   "razon_vs_train": 1.0505897077386521
+  },
+  "train": {
+   "n": 96386,
+   "elasticidad": 0.3306813576575053,
+   "ic95_inf": 0.2674273841687257,
+   "ic95_sup": 0.3884527523348814,
+   "razon_vs_train": 1.0
+  },
+  "holdout": {
+   "n": 25825,
+   "elasticidad": 0.40719462413721386,
+   "ic95_inf": 0.26277922966797157,
+   "ic95_sup": 0.5519102449807076,
+   "razon_vs_train": 1.2313806469820874
+  },
+  "ctgan_v1": {
+   "n": 122211,
+   "elasticidad": 0.4515066153538321,
+   "ic95_inf": 0.4407548692970386,
+   "ic95_sup": 0.46265381496547475,
+   "razon_vs_train": 1.3653827314373992
+  },
+  "piso_marginales": {
+   "n": 122211,
+   "elasticidad": -0.0047000374762882335,
+   "ic95_inf": -0.015150534932915639,
+   "ic95_sup": 0.006272700682432004,
+   "razon_vs_train": -0.014213191543613344
+  }
+ },
+ "veredicto_elasticidad": {
+  "r": 1.3653827314373992,
+  "umbral_conserva": 0.7,
+  "umbral_atenua": 0.3,
+  "veredicto": "CONSERVA"
+ },
+ "exploratorio": {
+  "frac_par_origen_n1_inexistente": 0.021389236648092235
+ },
+ "sha256_salidas": {
+  "sintetico_v1_csv": "a444cb40650cae7a3ecdb1a0a65f838b5d8b91b153d8dcb9ceeac2536da28a68",
+  "elasticidad.csv": "b2ebf4f63d675c854bc843ca809778d87f9a53c928a205e46f5b1e8ad7b4a1ed",
+  "exploratorio_elasticidad_por_origen.csv": "f11bb18d9bd04839231ca89e6f2006c42712decc4adf75bc108fef4786efd2b6",
+  "quality_column_pair_trends.csv": "a736803a330a921ce8d2491683951d033160ce4e0342251ab0068a907ac67eac",
+  "quality_column_shapes.csv": "cf46dac30a140ba6c03c963546eaba3a72b5c43f538654aa1d877c0cfbd19933",
+  "quality_report.csv": "e9901ce0dfdbb62474cc061cb9e2065e7725d74f7a877bf0634b69965c0d69a1",
+  "rechazo.json": "4c9d924daa8321ec2789635ab6acd1d5972121ee9ed36ba7bbf1e759546e0301"
+ }
+}

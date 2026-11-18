@@ -300,13 +300,11 @@ código y documentos se respalda en GitHub privado; los datos no se suben.
 
 | WP | Estado |
 |---|---|
-| WP0 — Entorno y seguimiento | Este documento (v4) |
+| WP0 — Entorno y seguimiento | Este documento (v5) |
 | WP1 — Perfilado DANE | ✅ Cerrado (`2aebb9e`) |
 | WP2 — Taxonomía | Pendientes en `docs/taxonomia/pendientes_v1.1.md` |
 | WP3 — Priors | ✅ Cerrado (27 oct): módulo + aval; `outputs/priors/` |
 | WP4 — Datos reales | Paquete listo; **extractos recolectados**, por ingestar/anonimizar/anotar |
 | WP5 — Pipeline de referencia (Pancholi) | ✅ Ejecutado (etapas 1–3); `docs/reevaluacion_pancholi.md`, `outputs/pancholi/` |
-| WP6 — Generador | ✅ Cerrado (27 oct): generador por reglas, modo `por_hogar`; `outputs/sintetico_reglas/`. IPC en proceso |
+| WP6 — Generador | ✅ Cerrado (27 oct): generador por reglas, modo `por_hogar`; `outputs/sintetico_reglas/`. Deflactor IPC decidido: factor único nacional (`modo_ipc: "total"`, `parametros_propios.json` v0.3.0) |
 | WP7 — CTGAN · WP8 — Evaluación TSTR | Por hacer |
-
-La equivalencia completa entre los chats de trabajo originales y estos WP queda en `docs/bitacora.md`.

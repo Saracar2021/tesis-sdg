@@ -1,0 +1,177 @@
+%% ============================================================
+%%  Diseño y validación preliminar de un protocolo de generación
+%%  de datos sintéticos de transacciones financieras — Colombia
+%%  Trabajo de Grado II · Maestría en IA · Pont. Univ. Javeriana
+%%  Plantilla: IEEE Transactions on AI (IEEEtran, journal)
+%%
+%%  BORRADOR 17-nov-2026. Porta docs/reporte/borrador_reporte.md.
+%%  Cifras verificadas contra outputs/ (plan_maestro §5). Las
+%%  secciones de resultados (VII) van PRELIMINARES hasta cerrar
+%%  WP7 (CTGAN) y WP8 (TSTR). Compila en Overleaf sin paquetes
+%%  extra. Reemplazar los <...> y los bloques marcados % TODO.
+%% ============================================================
+\documentclass[journal]{IEEEtran}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\begin{document}
+
+\title{Diseño y validación preliminar de un protocolo de generación de datos sintéticos de transacciones financieras para el contexto colombiano}
+
+\author{Sara~J.~Cárdenas% <-- completar afiliación/correo institucional
+\thanks{Maestría en Inteligencia Artificial, Pontificia Universidad Javeriana, Bogotá, Colombia.}%
+\thanks{Directora de tesis: <nombre>. Manuscrito: 17 de noviembre de 2026.}}
+
+\markboth{Trabajo de Grado II -- Maestría en Inteligencia Artificial, 2026}%
+{Cárdenas: Datos sintéticos de transacciones financieras para Colombia}
+
+\maketitle
+
+\begin{abstract}
+El acceso a datos transaccionales financieros en Colombia es prácticamente inexistente en el dominio público: su naturaleza privada y sensible —amparada en la Ley 1266 de 2008 (Habeas Data) y la regulación de la Superintendencia Financiera— impide entrenar y validar modelos de clasificación de gastos para la población colombiana. Este trabajo diseña y valida de forma preliminar un protocolo reproducible de generación de datos sintéticos de transacciones (extractos bancarios) calibrado con fuentes abiertas del DANE —la Gran Encuesta Integrada de Hogares (GEIH) 2025 y la Encuesta Nacional de Presupuestos de los Hogares (ENPH) 2016-2017— para Bogotá como caso de estudio. El protocolo adapta el pipeline multi-agente de Pancholi \textit{et al.} incorporando variables ausentes en el modelo de referencia: el estrato socioeconómico y el quintil de ingreso como \textit{priors} bayesianos jerárquicos, y la distribución de medios de pago condicionada a la categoría de gasto. Consta de cuatro etapas: \textit{priors} bayesianos, generador por reglas, refinamiento con CTGAN y validación Train on Synthetic, Test on Real (TSTR). Como contribución metodológica, el pipeline de referencia se reevaluó mediante una ejecución reproducible con criterios prerregistrados: de sus tres limitaciones reportadas, una se refuta, una se confirma solo para las etapas ejecutadas y la de sensibilidad al ingreso resulta no concluyente frente a Colombia. Los resultados disponibles confirman la viabilidad del protocolo y cuantifican las diferencias estructurales con el modelo de referencia; la validación TSTR contra transacciones reales anotadas de voluntarios bogotanos se reporta como preliminar.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Datos sintéticos, CTGAN, clasificación de transacciones, TSTR, \textit{priors} bayesianos, informalidad financiera, Colombia.
+\end{IEEEkeywords}
+
+\section{Introducción}
+\IEEEPARstart{E}{l} desarrollo de sistemas de inteligencia artificial para finanzas personales enfrenta en Colombia una barrera fundamental: la inexistencia de conjuntos de datos públicos de transacciones financieras. A diferencia de contextos como el estadounidense, donde existen bases abiertas derivadas de encuestas de consumidores y registros de pagos, en Colombia los datos transaccionales son estrictamente privados y están bajo el resguardo de entidades sujetas a la Ley 1266 de 2008 (Habeas Data) y a la Superintendencia Financiera. Esta restricción no es técnica sino regulatoria y de privacidad: no se resuelve con más cómputo ni mejores algoritmos.
+
+La brecha impide entrenar, validar y replicar modelos de clasificación de gastos, detección de patrones de ahorro o asesoría financiera para la población colombiana. El problema se agrava por la estructura del país: según el Banco de la República, el efectivo es el instrumento más usado en los pagos habituales (77{,}8\,\% de las transacciones en su encuesta de 2024 \cite{banrep2024}), y la tenencia de tarjeta de crédito es minoritaria (7{,}2\,\% de los hogares \cite{rif2024}). Estas características hacen inviable transferir directamente modelos entrenados con datos de economías formalizadas.
+
+Pancholi \textit{et al.} \cite{pancholi2026} propusieron un sistema integral de finanzas personales basado en IA que incluye un generador de datos sintéticos, un clasificador de gastos y un asesor de inversión. Aunque su contribución metodológica es relevante, el sistema fue diseñado y validado exclusivamente con datos demográficos del American Community Survey de Washington D.C. y comercios de Yelp y de esa ciudad. Como parte de este trabajo, el pipeline se ejecutó y se reevaluó de forma reproducible (Sección~\ref{sec:pancholi}); sus tres limitaciones reportadas —insensibilidad al ingreso, sesgo de categorías hacia el ocio y asignación monolítica del medio de pago— se contrastan con criterios prerregistrados en lugar de darse por sentadas.
+
+Ante esta situación, se propone un protocolo de generación de datos sintéticos de transacciones calibrado para el contexto colombiano, con \textbf{Bogotá urbana como caso de estudio} (el dominio donde se recolecta el conjunto real de validación, lo que exige calibrar y evaluar en el mismo dominio). El protocolo usa como insumos la GEIH 2025 y la ENPH 2016-2017 del DANE para construir \textit{priors} bayesianos que reflejen la estructura demográfica y de gasto real, y su utilidad se valida mediante el paradigma Train on Synthetic, Test on Real (TSTR) \cite{esteban2017}.
+
+\section{Trabajo relacionado}
+\subsection{Generación de datos sintéticos financieros}
+Lopez-Rojas \textit{et al.} \cite{paysim2016} desarrollaron PaySim, un simulador de transacciones móviles basado en agentes y calibrado con datos reales anonimizados, orientado a detección de fraude; no modela categorías de gasto ni perfiles demográficos, y opera sobre transferencias y pagos sin considerar el efectivo. Xu \textit{et al.} \cite{ctgan2019} propusieron el Conditional Tabular GAN (CTGAN), que extiende las GAN a datos tabulares con tipos mixtos, distribuciones no gaussianas y desbalance de clases, mediante normalización específica por modo y un generador condicional; es el componente del módulo de refinamiento de este trabajo. Altman \textit{et al.} \cite{altman2023} aportaron un generador con \textit{ground truth} completo para modelos de lavado de activos. Hounwanou \textit{et al.} \cite{hounwanou2025} compararon modelos generativos para datos financieros. Karst \textit{et al.} \cite{karst2024} compararon CTGAN, DGAN, FinDiff y TVAE sobre datos bancarios, hallando en CTGAN el mejor equilibrio entre fidelidad y síntesis.
+
+\subsection{Clasificación automática de transacciones}
+La clasificación de transacciones es un problema de clasificación de texto con descripciones cortas, vocabulario de dominio y alto desbalance de clases. Pancholi \textit{et al.} \cite{pancholi2026} evaluaron regresión logística con TF-IDF, LSTM, BERT \textit{fine-tuneado} y LLaMA~3 en modo \textit{few-shot}, con mejor desempeño de LLaMA~3, pero exclusivamente sobre transacciones en inglés de Washington D.C. En el contexto colombiano la investigación es escasa y sin datasets públicos, lo que justifica la contribución de datos sintéticos abiertos.
+
+\subsection{Train on Synthetic, Test on Real (TSTR)}
+TSTR fue formalizado por Esteban \textit{et al.} \cite{esteban2017}: se entrena sobre datos sintéticos y se evalúa sobre datos reales no vistos, midiendo la utilidad práctica más allá de la fidelidad distribucional. Su aplicación a finanzas personales colombianas, donde los datos reales son escasos \emph{por diseño}, es una de las contribuciones metodológicas de este trabajo.
+
+\section{Planteamiento e hipótesis}
+El desarrollo de clasificadores de gastos para usuarios colombianos enfrenta una contradicción estructural: entrenar un modelo requiere transacciones etiquetadas, pero esos datos son privados por diseño y no existen en el dominio público. La reevaluación reproducible del pipeline de referencia (Sección~\ref{sec:pancholi}) muestra que no todas sus limitaciones se sostienen tal como se enunciaron, pero sí confirma que el modelo de referencia no reproduce la relación ingreso--gasto ni la estructura de medios de pago colombiana, lo que motiva la adaptación.
+
+\textbf{Pregunta.} ¿Puede un protocolo calibrado con fuentes colombianas (GEIH 2025 y ENPH 2016-2017) producir transacciones suficientemente realistas para entrenar un clasificador de gastos que funcione sobre transacciones reales de usuarios bogotanos, validado mediante TSTR?
+
+\textbf{Hipótesis.} Un pipeline que incorpore el estrato socioeconómico y el quintil de ingreso como \textit{priors} bayesianos, y la distribución de medios de pago condicionada a la categoría de gasto observada en Colombia, producirá datos con mayor utilidad de entrenamiento —medida por F1-macro en TSTR— que el pipeline de referencia aplicado sin adaptación.
+% TODO [DECISIÓN P16]: precisar que bajo la arquitectura de dos capas la ENPH calibra la capa interna; la mezcla observable se introduce por regla de migración por escenarios.
+
+\section{Datos y metodología}
+\subsection{Fuentes y dominio}
+Regla de calibración: \textbf{la ENPH aporta ingreso (\texttt{ICGU}) y gasto; la GEIH aporta la estructura demográfica y laboral}; el ingreso laboral individual (\texttt{INGLABO}) es solo descriptivo por su amontonamiento. GEIH 2025 (12 meses apilados) aporta estrato, posición ocupacional, formalidad y tenencia de productos financieros; muestra de Bogotá: 9\,733 hogares y 13\,552 ocupados. ENPH 2016-2017 aporta ingreso del hogar, gasto por categoría y forma de pago; muestra de Bogotá: 3\,918 hogares. Los valores de la ENPH se deflactan a pesos de 2025 con el índice total del IPC nacional del DANE (factor por mes de recolección entre 1{,}56 y 1{,}62). El dominio es Bogotá urbana (\texttt{AREA}=11). Todo cálculo usa factores de expansión; los 112 archivos del DANE se verifican por SHA-256 y ninguna cifra se escribe a mano.
+
+\subsection{Hallazgos descriptivos de calibración (Bogotá, con FEX)}
+La Tabla~\ref{tab:estrato} muestra la distribución de estrato en ambas encuestas. La forma de pago principal en gastos frecuentes (\texttt{NC2R}, $n{=}3\,517$) es efectivo 97{,}0\,\%, débito 2{,}0\,\%, crédito 0{,}5\,\% y otras 0{,}5\,\% (no respuesta 11{,}4\,\%). El medio de pago varía con la categoría: el efectivo supera el 85\,\% en 22 de 29 subcapítulos, pero la tarjeta de crédito sube en electrodomésticos y muebles (28{,}0\,\%) y transporte (22{,}4\,\%). En el mercado laboral, el 58{,}9\,\% son empleados particulares y el 30{,}5\,\% trabaja por cuenta propia. El 93{,}47\,\% de los hogares tiene al menos un producto financiero.
+
+\begin{table}[!t]
+\caption{Distribución de estrato agrupado en Bogotá (\% de hogares, con FEX)}
+\label{tab:estrato}
+\centering
+\begin{tabular}{lcc}
+\toprule
+Estrato & ENPH 2016-17 & GEIH 2025 \\
+\midrule
+Bajo (1--2)  & 44{,}7 & 47{,}3 \\
+Medio (3--4) & 49{,}5 & 46{,}0 \\
+Alto (5--6)  & 5{,}9  & 6{,}8  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Decisiones de diseño}
+Las centrales: dominio Bogotá; ENPH calibra, GEIH estructura; estrato agrupado en 3 $\times$ quintil en 5 = 15 celdas; encogimiento jerárquico para las 4 celdas ralas; \textbf{el generador emite extractos bancarios} (capa interna de gasto del hogar calibrada con ENPH; capa emitida = lo que ve un banco; el efectivo sale como retiros periódicos; población = hogares bancarizados); \textbf{los datos reales solo evalúan, nunca calibran}.
+
+\subsection{Las cuatro etapas}
+\textbf{1) \textit{Priors} bayesianos.} Para cada una de las 15 celdas (estrato $\times$ quintil) se estima la distribución categórica como media posterior de un Dirichlet jerárquico:
+\begin{equation}
+\pi_{\text{post}} = \frac{n\,\hat{p} + \kappa\,\pi_{\text{padre}}}{n + \kappa},
+\end{equation}
+con $n$ el tamaño efectivo de Kish, $\pi_{\text{padre}}$ el nivel urbano nacional recalibrado a Bogotá y $\kappa$ estimado por verosimilitud marginal. Una celda se encoge cuando $n_{\text{ef}} < \hat{\kappa}$.
+\textbf{2) Generador por reglas.} Muestrea perfiles de hogares bancarizados y emite el extracto (compras con medio condicionado a la categoría, retiros, nómina, transferencias P2P, recargas, pagos recurrentes). El texto de la descripción se construye con una biblioteca curada de comercios y plantillas.
+\textbf{3) Refinamiento con CTGAN} (SDV): aprende correlaciones de alto orden entre los campos estructurados del extracto.
+\textbf{4) Validación TSTR:} entrenar clasificadores sobre sintético y evaluarlos sobre el conjunto real anotado de Bogotá.
+
+\section{Reevaluación del pipeline de referencia}
+\label{sec:pancholi}
+Las tres limitaciones que el informe de avance atribuía al pipeline de referencia se reevaluaron ejecutándolo (etapas 1--3, reproducible), con criterios fijados por escrito antes de correr (Tabla~\ref{tab:pancholi}). Prerregistrar los criterios es lo que da credibilidad: no se ajustó la definición para obtener un resultado. La conclusión que sostiene el protocolo es que el pipeline de referencia no reproduce ni la relación ingreso--gasto ni la estructura de medios de pago colombiana.
+
+\begin{table}[!t]
+\caption{Reevaluación de las hipótesis sobre el pipeline de referencia}
+\label{tab:pancholi}
+\centering
+\footnotesize
+\begin{tabular}{p{0.9cm}p{2.3cm}p{4.0cm}}
+\toprule
+Hip. & Enunciado & Veredicto tras la ejecución \\
+\midrule
+H-P1 & Insensibilidad al ingreso & \textbf{No concluyente} frente a Colombia. La etapa de reglas conserva la relación monto--ingreso (elasticidad 1{,}008), pero la salida final del CTGAN la pierde ($-0{,}003$). \\
+H-P2 & Dominio de ocio & \textbf{Refutada} con la definición prerregistrada (entretenimiento 13{,}0\,\% vs. alimentos 14{,}8\,\%). \\
+H-P3 & 100\,\% tarjeta & \textbf{Confirmada} (etapas 1--3): 0 de 5\,M de registros son retiros, transferencias o billetera. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Diseño experimental}
+\subsection{Dataset sintético}
+% PRELIMINAR (WP6/WP7)
+Corrida de referencia del generador: 1\,000 perfiles $\times$ 3 meses, semilla 42 $\rightarrow$ 448\,383 filas (122\,211 emitidas). El CTGAN se entrena sobre los campos estructurados de la capa emitida (parámetros, métricas y criterios de rechazo prerregistrados; véase la adenda de pre-registro).
+
+\subsection{Conjunto real de validación}
+% PRELIMINAR (WP4)
+20 voluntarios de Bogotá (muestra por conveniencia; conjunto de validación, no representativo), con extractos anonimizados y etiquetados por dos anotadores con la taxonomía y concordancia (Cohen's Kappa). Estado: aval de ética resuelto; ingesta y anotación en curso.
+
+\subsection{Protocolo TSTR}
+Tres clasificadores entrenados sobre sintético: regresión logística con TF-IDF (baseline), BETO \textit{fine-tuneado} y LLaMA~3 \textit{few-shot}. Métricas: F1-macro, Cohen's Kappa y AUC. Dado que la descripción textual se genera por plantillas condicionadas a la categoría, se incluye un \textbf{brazo de control con solo campos estructurados} que aísla el aporte del CTGAN.
+
+\section{Resultados}
+% ================= PRELIMINAR — rellenar al cerrar WP7/WP8 =================
+\subsection{Fidelidad del dataset sintético}
+\emph{[Preliminar, WP7.]} Métricas SDV (Column Shapes, Column Pair Trends con su piso/techo, Overall con brecha al techo) y tasa de rechazo. Como prueba específica, la elasticidad monto--ingreso del CTGAN se compara con la del \textit{train} ($\hat{e}_{\text{train}}\approx 0{,}33$) mediante $r=\hat{e}_{\text{ctgan}}/\hat{e}_{\text{train}}$, con veredicto prerregistrado (CONSERVA $r\ge0{,}70$; ATENÚA $0{,}30\le r<0{,}70$; NO CONSERVA $r<0{,}30$ o $\hat{e}\le0$ o IC incluye 0).
+
+\subsection{Validación TSTR}
+\emph{[Preliminar, WP8.]} F1-macro por clasificador, matriz de confusión por categoría y Kappa; pendiente de la anotación del conjunto real.
+
+\subsection{Comparación con el pipeline de referencia}
+\emph{[Preliminar, WP8.]} F1-macro TSTR del protocolo adaptado frente al pipeline de referencia sin adaptación.
+
+\section{Discusión y limitaciones}
+El aporte disponible es doble: una base empírica reconstruida y verificable de Bogotá con un protocolo de generación de priors jerárquicos y medios condicionados a la categoría; y una reevaluación reproducible y prerregistrada del pipeline de referencia. La validación TSTR es preliminar; acota, no cierra, la hipótesis. Limitaciones principales: los archivos públicos no traen segmento ni UPM, por lo que no se reportan intervalos de confianza de diseño; la ENPH es de 2016-2017 y no registra billeteras ni transferencias, que se introducen por una regla de migración por escenarios sin ancla verificada; los extractos no ven el efectivo (un retiro es una fila); los 20 voluntarios son una muestra por conveniencia; y el texto sintético, generado por plantillas, es más limpio que un extracto real, por lo que el TSTR es un techo optimista. Además, el CTGAN aprende de la capa emitida (ya sintética), por lo que su fidelidad es a la salida de las reglas, no a la realidad colombiana; la prueba frente a la realidad es el TSTR.
+
+\section{Conclusiones y trabajo futuro}
+El trabajo entrega un protocolo reproducible para generar extractos bancarios sintéticos calibrado con microdatos del DANE para Bogotá, con \textit{priors} bayesianos jerárquicos por estrato y quintil, medios de pago condicionados a la categoría, y una reevaluación prerregistrada del pipeline de referencia. Trabajo futuro: cerrar la validación TSTR con el conjunto real anotado; extender a otras ciudades; anclar la participación de medios digitales con una fuente primaria; y reemplazar la biblioteca curada de comercios por una capa empírica.
+
+\section*{Declaración de uso de herramientas de IA}
+% TODO [obligatorio]: describir el uso de asistentes de IA en la reconstrucción de la base, la implementación de los módulos, la reevaluación del pipeline y la redacción asistida, conforme a la política de integridad académica de la Universidad.
+
+\section*{Agradecimientos}
+% opcional
+
+\begin{thebibliography}{11}
+\bibitem{pancholi2026} S.~Pancholi, A.~Jaglan, H.~Makadia, P.~Doshi, and M.~Jafari, ``An end-to-end multi-agent AI system for personal finance: synthetic data generation, budget optimization, and investment advisory,'' \textit{Neural Computing and Applications}, vol.~38, 2026, doi:~10.1007/s00521-025-11749-7.
+\bibitem{banrep2024} Banco de la República de Colombia, ``Resultados de la encuesta de percepción sobre el uso de los instrumentos para los pagos habituales en Colombia 2024,'' Bogotá, 2024.
+\bibitem{geih2025} DANE, ``Gran Encuesta Integrada de Hogares --- GEIH 2025,'' Bogotá, 2025. [Online]. Available: \url{https://microdatos.dane.gov.co/index.php/catalog/853}
+\bibitem{enph2017} DANE, ``Encuesta Nacional de Presupuestos de los Hogares --- ENPH 2016-2017,'' Bogotá, 2017. [Online]. Available: \url{https://microdatos.dane.gov.co/index.php/catalog/566}
+\bibitem{esteban2017} C.~Esteban, S.~L.~Hyland, and G.~Rätsch, ``Real-valued (medical) time series generation with recurrent conditional GANs,'' arXiv:1706.02633, 2017.
+\bibitem{paysim2016} E.~A.~Lopez-Rojas, A.~Elmir, and S.~Axelsson, ``PaySim: A financial mobile money simulator for fraud detection,'' in \textit{Proc. 28th European Modeling and Simulation Symp. (EMSS)}, Larnaca, Cyprus, 2016.
+\bibitem{ctgan2019} L.~Xu, M.~Skoularidou, A.~Cuesta-Infante, and K.~Veeramachaneni, ``Modeling tabular data using conditional GAN,'' in \textit{Advances in Neural Information Processing Systems (NeurIPS)}, vol.~32, 2019.
+\bibitem{altman2023} E.~Altman \textit{et al.}, ``Realistic synthetic financial transactions for anti-money laundering models,'' in \textit{NeurIPS Datasets and Benchmarks Track}, 2023, arXiv:2306.16424.
+\bibitem{hounwanou2025} C.~D.~Hounwanou, P.~Ntakirutimana, and Y.~U.~Gaba, ``Evaluating generative models for synthetic financial data,'' arXiv:2512.21791, 2025. % [verificar título/autores]
+\bibitem{karst2024} N.~Karst \textit{et al.}, ``Generative AI for banks: Benchmarks and algorithms for synthetic financial transaction data,'' arXiv:2412.14730, 2024.
+\bibitem{rif2024} Banca de las Oportunidades y Superintendencia Financiera de Colombia, ``Reporte de Inclusión Financiera 2024,'' Bogotá, 2024.
+\end{thebibliography}
+
+\end{document}

@@ -11,3 +11,5 @@ __pycache__/
 notas_locales/
 outputs/generador/pool/
 outputs/sintetico_reglas/transacciones.csv.gz
+.venv-ctgan/
+outputs/ctgan/ctgan_A.pkl

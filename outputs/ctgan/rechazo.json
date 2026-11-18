@@ -1,0 +1,27 @@
+{
+ "filas_generadas": 244422,
+ "filas_rechazadas": 36124,
+ "tasa_rechazo": 0.1477935701368944,
+ "tope_declarado": 0.1,
+ "cumple_tope": false,
+ "resultado_fidelidad": "NEGATIVO: supera el tope; se reporta y se discute",
+ "por_regla": {
+  "monto_no_positivo": 0,
+  "medio_imposible_para_cuenta": 4090,
+  "par_n1_n2_inexistente": 26354,
+  "canal_p2p_incoherente": 616,
+  "fecha_imposible": 271,
+  "signo_incompatible_con_origen": 6504
+ },
+ "tasa_por_regla": {
+  "monto_no_positivo": 0.0,
+  "medio_imposible_para_cuenta": 0.01673335460801401,
+  "par_n1_n2_inexistente": 0.1078217181759416,
+  "canal_p2p_incoherente": 0.0025202314030651905,
+  "fecha_imposible": 0.0011087381659588744,
+  "signo_incompatible_con_origen": 0.026609715983012986
+ },
+ "lotes_usados": 2,
+ "deficit_cuotas": {},
+ "tv_marginal_n1_modelo_vs_train": 0.13111749351531368
+}
