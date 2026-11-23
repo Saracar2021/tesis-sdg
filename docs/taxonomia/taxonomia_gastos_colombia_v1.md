@@ -1,7 +1,7 @@
 # Taxonomía de categorías de gasto para transacciones financieras en el contexto colombiano
 
-**Versión 1.0.0 — 19 de julio de 2026**
-Documento de acompañamiento del esquema `taxonomia_gastos_colombia_v1.json`. Entregable del Objetivo Específico 2 del Trabajo de Grado.
+**Versión 1.1.0 — 22 de noviembre de 2026** (congelada para la anotación del conjunto real / TSTR)
+Documento de acompañamiento del esquema `taxonomia_gastos_colombia_v1.json`. Entregable del Objetivo Específico 2 del Trabajo de Grado. Cambios de v1.1 en §9.
 
 ## 1. Propósito y triple uso
 
@@ -60,4 +60,17 @@ Frente al esquema de Pancholi et al., esta taxonomía introduce cinco diferencia
 
 ## 8. Versionado y evolución
 
-El esquema sigue versionado semántico. Cambios que agreguen subtipos de nivel 2 o ejemplos incrementan la versión menor; cambios que agreguen, eliminen o fusionen categorías de nivel 1 incrementan la versión mayor y obligan a re-etiquetar o mapear el conjunto real ya anotado. La versión utilizada en el etiquetado TSTR debe congelarse antes de iniciar la recolección de agosto y citarse en la tesis; los desacuerdos entre anotadores que revelen ambigüedades del esquema se documentan como insumo de la versión 2, no se resuelven cambiando la taxonomía a mitad del etiquetado.
+El esquema sigue versionado semántico. Cambios que agreguen subtipos de nivel 2 o ejemplos incrementan la versión menor; cambios que agreguen, eliminen o fusionen categorías de nivel 1 incrementan la versión mayor y obligan a re-etiquetar o mapear el conjunto real ya anotado. La versión utilizada en el etiquetado TSTR debe congelarse antes de iniciar la recolección y citarse en la tesis; los desacuerdos entre anotadores que revelen ambigüedades del esquema se documentan como insumo de la versión 2, no se resuelven cambiando la taxonomía a mitad del etiquetado.
+
+## 9. Cambios de la versión 1.1.0 (congelamiento para TSTR, 22 nov 2026)
+
+Correcciones verificadas respecto a v1.0.0 (ninguna toca las 16 categorías de nivel 1; es un cambio menor):
+
+- **T1 — Fuente de `NC2R_CC_P6`:** es Cuadernillo 2, capítulo D urbano (sección D2, pregunta 2), no «cuadernillo C».
+- **T2 — Dos esquemas de códigos:** los de `P438*` (1 débito, 2 crédito, 3 efectivo, 4 bonos, 5 cheques, 6 otro) y los de `NC2R_CC_P6` (1 débito, 2 crédito, 3 efectivo, **4 fiado, 5 bonos**, 6 otra) **difieren en 4 y 5**. El DDI rotula el 4 de `NC2R_CC_P6` como «fiador»: es un error, el cuadernillo dice «Fiado».
+- **T3 — Doble equivalencia:** cada valor de `medio_pago` lleva ahora `equivalencia_enph_p438` y `equivalencia_nc2r_cc_p6` (un mismo medio tiene códigos distintos en cada variable).
+- **T4 — Fiado anclado:** `fiado_credito_tienda` sí tiene anclaje en ENPH vía `NC2R_CC_P6=4` (solo gastos frecuentes); anclaje débil (4 hogares, 0,09 % en Bogotá). En `P438` sigue sin código.
+- **T6 — Observabilidad en extracto y `cuenta_tipo`:** nuevo campo `observable_en_extracto` por medio de pago (el efectivo y el fiado **no** se ven como medio en un extracto; el efectivo solo como `retiro_efectivo`, por D15). Se añade `cuenta_tipo` (banco/billetera/tarjeta_credito) como campo de anotación y posible entrada del clasificador.
+- **T5 — Redacción sobre Pancholi (§7):** se mantiene neutral. Nota: WP5 ya se ejecutó (reevaluación reproducible en `docs/reevaluacion_pancholi.md`), así que las tres hipótesis sobre el pipeline de referencia ya tienen veredicto empírico.
+
+**Pendiente de v1.1:** validación contra ≥ 50 descripciones reales, que se hace en la primera pasada de anotación; los ajustes que surjan (subtipos, ejemplos, umbral de soporte según el tamaño real del corpus) se registran para una v1.1.x o v2.

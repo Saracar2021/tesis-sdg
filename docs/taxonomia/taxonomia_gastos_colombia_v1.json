@@ -1,8 +1,8 @@
 {
   "metadata": {
     "nombre": "Taxonomía de categorías de gasto para transacciones financieras — Contexto colombiano",
-    "version": "1.0.0",
-    "fecha": "2026-07-19",
+    "version": "1.1.0",
+    "fecha": "2026-11-22",
     "proposito": [
       "Etiquetado manual de transacciones reales (validación TSTR)",
       "Espacio de salida del clasificador automático de gastos",
@@ -11,11 +11,12 @@
     "anclaje": "COICOP (divisiones 01-12) según uso de la ENPH 2016-2017 (DANE), extendida con categorías operativas propias del ecosistema transaccional colombiano (P2P, retiros, movimientos propios, informalidad).",
     "fuentes": [
       "ENPH 2016-2017, Cuadernillo 3: códigos oficiales de medio de pago (P438: 1=Tarjeta débito, 2=Tarjeta de crédito, 3=Efectivo, 4=Bonos, 5=Cheques, 6=Otro) y de lugar de compra (listado *4)",
-      "ENPH 2016-2017, variable NC2R_CC_P6 (forma de pago, gastos diarios cuadernillo C)",
+      "ENPH 2016-2017, variable NC2R_CC_P6 (forma de pago en gastos diarios; Cuadernillo 2, capítulo D urbano / sección D2, pregunta 2): códigos 1=Tarjeta débito, 2=Tarjeta de crédito, 3=Efectivo, 4=Fiado, 5=Bonos, 6=Otra — esquema DISTINTO al de P438 (difieren en 4 y 5: 'bonos' es 4 en P438 y 5 en NC2R_CC_P6). El DDI rotula el código 4 de NC2R_CC_P6 como 'fiador', pero el cuadernillo dice 'Fiado' (error de rotulado).",
       "Banco de la República, Encuesta de percepción sobre uso de instrumentos de pago 2024 (para instrumentos ausentes en ENPH: billeteras digitales, transferencias)",
       "Clasificación COICOP de Naciones Unidas"
     ],
-    "nota_metodologica": "El instrumento ENPH 2016-2017 NO contempla billeteras digitales ni transferencias electrónicas entre sus códigos de medio de pago; estos valores del enum medio_pago se calibran con fuentes 2024 (Banrep, Reporte de Inclusión Financiera). Esta asimetría de fuentes debe declararse en la sección de supuestos de calibración de la tesis."
+    "nota_metodologica": "El instrumento ENPH 2016-2017 NO contempla billeteras digitales ni transferencias electrónicas entre sus códigos de medio de pago; estos valores del enum medio_pago se calibran con fuentes 2024 (Banrep, Reporte de Inclusión Financiera). Esta asimetría de fuentes debe declararse en la sección de supuestos de calibración de la tesis. Los esquemas de códigos de P438 y NC2R_CC_P6 difieren (ver 'fuentes'): por eso cada valor de medio_pago lleva DOS equivalencias, 'equivalencia_enph_p438' y 'equivalencia_nc2r_cc_p6'. Además, en un extracto bancario el efectivo y el fiado no aparecen como medio de pago de una compra (solo el retiro de efectivo es visible); el campo 'observable_en_extracto' marca qué valores se ven en los registros emitidos y reales.",
+    "congelamiento_v1_1": "Congelada como v1.1.0 el 22 nov 2026 para la anotación del conjunto real (TSTR). Correcciones respecto a v1.0.0: T1 (fuente de NC2R_CC_P6), T2 (los dos esquemas de códigos difieren), T3 (dos campos de equivalencia por medio de pago), T4 (fiado anclado en NC2R_CC_P6=4), T6 (campo 'observable_en_extracto' y campo de anotación 'cuenta_tipo'). Pendiente: validación contra >=50 descripciones reales, que se hace en la primera pasada de anotación; los desacuerdos entre anotadores se documentan como insumo de v2, no se resuelven cambiando el esquema a mitad del etiquetado."
   },
 
   "estructura": {
@@ -29,14 +30,14 @@
 
   "dimension_medio_pago": {
     "valores": [
-      {"id": "efectivo", "equivalencia_enph_p438": 3, "descripcion": "Pago en billetes/monedas. Incluye pago contraentrega en efectivo de compras por app."},
-      {"id": "billetera_digital", "equivalencia_enph_p438": null, "descripcion": "Nequi, Daviplata, Movii, dale!, Powwi y similares. Ausente en el instrumento ENPH 2016-2017; calibrado con Banrep 2024.", "ejemplos_texto": ["Nequi", "Daviplata", "Envío Movii"]},
-      {"id": "tarjeta_debito", "equivalencia_enph_p438": 1, "descripcion": "Compra con tarjeta débito en datáfono o e-commerce."},
-      {"id": "tarjeta_credito", "equivalencia_enph_p438": 2, "descripcion": "Compra con tarjeta de crédito. No confundir con el PAGO de la tarjeta (categoría obligaciones_financieras)."},
-      {"id": "transferencia_bancaria", "equivalencia_enph_p438": null, "descripcion": "PSE, transferencia interbancaria, llaves Bre-B. Ausente en el instrumento ENPH 2016-2017.", "ejemplos_texto": ["Pago PSE", "Transferencia ACH", "Llave Bre-B"]},
-      {"id": "fiado_credito_tienda", "equivalencia_enph_p438": null, "descripcion": "Crédito informal del comercio ('fiado'). En ENPH corresponde a forma de adquisición a crédito, no a un código P438.", "nota": "Solo observable si el voluntario lo declara; raro en extractos digitales."},
-      {"id": "bono_subsidio", "equivalencia_enph_p438": 4, "descripcion": "Bonos, vales, redención de subsidios en especie."},
-      {"id": "otro_nd", "equivalencia_enph_p438": 6, "descripcion": "Otro medio o sin dato."}
+      {"id": "efectivo", "equivalencia_enph_p438": 3, "equivalencia_nc2r_cc_p6": 3, "observable_en_extracto": false, "descripcion": "Pago en billetes/monedas. En un extracto NO aparece como medio de pago de una compra: el efectivo solo es visible como la categoría retiro_efectivo (D15). En el conjunto real solo se anota como medio si el voluntario lo declara."},
+      {"id": "billetera_digital", "equivalencia_enph_p438": null, "equivalencia_nc2r_cc_p6": null, "observable_en_extracto": true, "descripcion": "Nequi, Daviplata, Movii, dale!, Powwi y similares. Ausente en el instrumento ENPH 2016-2017; calibrado con Banrep 2024.", "ejemplos_texto": ["Nequi", "Daviplata", "Envío Movii"]},
+      {"id": "tarjeta_debito", "equivalencia_enph_p438": 1, "equivalencia_nc2r_cc_p6": 1, "observable_en_extracto": true, "descripcion": "Compra con tarjeta débito en datáfono o e-commerce."},
+      {"id": "tarjeta_credito", "equivalencia_enph_p438": 2, "equivalencia_nc2r_cc_p6": 2, "observable_en_extracto": true, "descripcion": "Compra con tarjeta de crédito. No confundir con el PAGO de la tarjeta (categoría obligaciones_financieras)."},
+      {"id": "transferencia_bancaria", "equivalencia_enph_p438": null, "equivalencia_nc2r_cc_p6": null, "observable_en_extracto": true, "descripcion": "PSE, transferencia interbancaria, llaves Bre-B. Ausente en el instrumento ENPH 2016-2017.", "ejemplos_texto": ["Pago PSE", "Transferencia ACH", "Llave Bre-B"]},
+      {"id": "fiado_credito_tienda", "equivalencia_enph_p438": null, "equivalencia_nc2r_cc_p6": 4, "observable_en_extracto": false, "descripcion": "Crédito informal del comercio ('fiado'). Anclaje en ENPH SOLO para gastos frecuentes, campo NC2R_CC_P6=4 (rotulado 'fiado', no 'fiador'); P438 no tiene código de fiado. Anclaje débil: 4 hogares (0,09 %) en la muestra de Bogotá.", "nota": "No observable como medio en un extracto; solo si el voluntario lo declara. Raro en extractos digitales."},
+      {"id": "bono_subsidio", "equivalencia_enph_p438": 4, "equivalencia_nc2r_cc_p6": 5, "observable_en_extracto": true, "descripcion": "Bonos, vales, redención de subsidios en especie. El código difiere entre esquemas: 4 en P438, 5 en NC2R_CC_P6."},
+      {"id": "otro_nd", "equivalencia_enph_p438": 6, "equivalencia_nc2r_cc_p6": 6, "observable_en_extracto": true, "descripcion": "Otro medio o sin dato."}
     ]
   },
 
@@ -301,7 +302,8 @@
       {"campo": "medio_pago", "tipo": "enum dimension_medio_pago", "obligatorio": true},
       {"campo": "formalidad_comercio", "tipo": "enum dimension_formalidad_comercio", "obligatorio": true},
       {"campo": "canal_p2p", "tipo": "boolean", "obligatorio": false, "nota": "true cuando el propósito fue declarado por el voluntario pero el canal fue transferencia a persona (regla R2). Permite medir cuánto gasto real viaja disfrazado de P2P."},
-      {"campo": "fuente_etiqueta", "tipo": "enum [texto, declaracion_voluntario]", "obligatorio": true, "nota": "Distingue lo clasificable por texto de lo que requirió declaración; define el techo de desempeño esperable del clasificador."}
+      {"campo": "fuente_etiqueta", "tipo": "enum [texto, declaracion_voluntario]", "obligatorio": true, "nota": "Distingue lo clasificable por texto de lo que requirió declaración; define el techo de desempeño esperable del clasificador."},
+      {"campo": "cuenta_tipo", "tipo": "enum [banco, billetera, tarjeta_credito]", "obligatorio": true, "nota": "Producto donde se registra el movimiento (del protocolo de anonimización). Se anota y puede usarse como entrada del clasificador además de la descripción (decisión T6, v1.1)."}
     ]
   }
 }

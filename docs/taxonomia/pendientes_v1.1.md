@@ -1,7 +1,11 @@
 # Taxonomía — correcciones pendientes para v1.1
 
-> No regenerar la taxonomía todavía. Este archivo acumula lo que hay que corregir cuando
-> se aborde WP2. Fecha de apertura: 20 sep 2026.
+> **APLICADO (22 nov 2026):** T1–T6 aplicadas y congeladas en `taxonomia_gastos_colombia_v1.json`
+> y `.md` como **v1.1.0** (ver §9 del `.md`). Queda abierta solo la validación contra ≥ 50
+> descripciones reales (condición 2), que se hace en la primera pasada de anotación de WP4.
+> Este archivo se conserva como registro de las correcciones.
+>
+> (Histórico) Fecha de apertura: 20 sep 2026.
 
 ## Condiciones para congelar v1.1
 1. ~~Cerrada la verificación de `P438*` (¿es medio de pago por subcapítulo de gasto?).~~ **Cumplida (20 sep 2026):** son 29 columnas, una por subcapítulo del Cuadernillo 3, con sus códigos verificados (T2). Gaps abiertos que **no** bloquean el congelamiento pero deben declararse: no existen `P438J14` ni `P438K11`, y la correspondencia de `P438J13` con un bloque del Cuadernillo 3 no está verificada (`outputs/distribuciones/enph_p438_gaps.csv`).
