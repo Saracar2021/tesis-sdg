@@ -1,0 +1,94 @@
+{
+  "modo": "sanity",
+  "reportable": false,
+  "fuente": "ctgan",
+  "brazo": "logreg_tfidf_char_wb_3_5",
+  "advertencia": null,
+  "f1_macro_regla_soporte": 0.8660373708685374,
+  "ic95_bootstrap": [
+    0.8589928183672877,
+    0.873009691517232
+  ],
+  "f1_macro_sin_regla": 0.8660373708685374,
+  "accuracy": 0.906476291780878,
+  "n_test": 24443,
+  "clases_evaluadas": 16,
+  "clases_fusionadas_a_otros": [],
+  "solo_etiqueta_por_texto": {
+    "f1_macro_regla_soporte": 0.9091629960597872,
+    "ic95_bootstrap": [
+      0.9020154051661906,
+      0.9156293009596368
+    ],
+    "n_test": 21585,
+    "clases_evaluadas": 16,
+    "clases_fusionadas_a_otros": []
+  },
+  "frac_test_etiqueta_por_declaracion": 0.1169250910281062,
+  "bootstrap": {
+    "n": 1000,
+    "unidad": "fila"
+  },
+  "segundos_entrenamiento_y_prediccion": 50.1,
+  "n_train": 97768,
+  "n_train_disponible": 97768,
+  "n_test_completo": 24443,
+  "contrato_wp4_faltan": null,
+  "brazo_meta": {
+    "n_vocabulario": 4963,
+    "submuestra": null
+  },
+  "entrada": {
+    "version": "serializacion_v1",
+    "formato": "[CUENTA=<cuenta_tipo>] [SIGNO=<signo>] [MONTO=<bin_log>] <descripcion>",
+    "bordes_monto_cop_2025": [
+      1000.0,
+      3162.2776601683795,
+      10000.0,
+      31622.776601683792,
+      100000.0,
+      316227.7660168379,
+      1000000.0,
+      3162277.6601683795,
+      10000000.0
+    ],
+    "etiquetas_monto": [
+      "<1K",
+      "1K-3K",
+      "3K-10K",
+      "10K-30K",
+      "30K-100K",
+      "100K-300K",
+      "300K-1M",
+      "1M-3M",
+      "3M-10M",
+      ">=10M"
+    ],
+    "deflactor_test": {
+      "deflactado": false,
+      "motivo": "sanity: test sintético, ya en pesos de promedio 2025"
+    }
+  },
+  "semilla": 42,
+  "soporte_min": 10,
+  "train": {
+    "ruta": "outputs/ctgan/sintetico_v1_con_texto.csv.gz",
+    "sha256": "62efb64ec42d5f56ad9c4f49d683972a31864cad24180c4e7d6750b971925574"
+  },
+  "test": {
+    "split": "estratificado categoria_n1 0.2"
+  },
+  "taxonomia": {
+    "ruta": "docs/taxonomia/taxonomia_gastos_colombia_v1.json",
+    "version": "1.1.0",
+    "sha256": "8f4e4a19a9b9598a894940063c324f40adb9f3bc11a0815b8a957f5033526997"
+  },
+  "versiones": {
+    "python": "3.11.9",
+    "sklearn": "1.9.1",
+    "pandas": "3.0.6",
+    "numpy": "2.4.6"
+  },
+  "plataforma": "Windows-10-10.0.26200-SP0",
+  "fecha_utc": "2026-11-24T02:46:56+00:00"
+}

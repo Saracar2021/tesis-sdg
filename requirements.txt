@@ -4,3 +4,6 @@ pandas==3.0.6
 numpy==2.4.6
 openpyxl==3.1.5
 pyreadstat==1.3.6
+# WP8 / Etapa 4 (clasificadores TSTR, baseline en .venv). BETO (torch/transformers) va en .venv-ctgan; groq se fija al llegar al brazo 3.
+scikit-learn==1.9.1
+python-dotenv==1.2.4

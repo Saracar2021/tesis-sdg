@@ -1,5 +1,64 @@
 # Reevaluación del pipeline de referencia (Pancholi et al.)
 
+<!-- WP8:inicio -->
+
+## 0. Resumen WP5 → WP8 (actualización del 23 nov 2026)
+
+**Veredicto para WP8: comparación tipo (a).** La salida del pipeline de referencia **no es** mapeable a las 16 `categoria_n1` de la taxonomía v1.1.0: su generador alcanza 8 de 16 (6 sin las rutas marginales). Pancholi entra a WP8 solo como contexto: su F1 reportado se cita, no se compara. No se genera `outputs/pancholi/baseline_sintetico.csv.gz`.
+
+### 0.1 Según diseño → según ejecución
+
+«Diseño» = lo que dice su código (lectura). «Ejecución» = lo medido corriendo su código con el commit fijado (etapas 1–3: 10 semillas, criterios prerregistrados; §1–§3). Conjunto principal: réplica literal, etapa 3.
+
+| Hipótesis | Según diseño | Según ejecución (etapas 1–3) | Etapa 4 (LLM) |
+|---|---|---|---|
+| H-P1 ingreso | Etapa 2: monto ∝ ingreso (elasticidad 1 por construcción). Etapa 3: el ingreso no es columna del CTGAN. Etapa 4: el ingreso entra al prompt como rango esperado | Etapa 2: 1,008 [1,007; 1,009]. Salida final (etapa 3): -0,003 [-0,008; 0,002]: **no conserva** la relación. Frente a Colombia: **no concluyente (sin referente colombiano en este entorno)** | elasticidad entre clientes 0,794 [0,598; 1,095], n = 25 clientes, una corrida: **sensible al ingreso**. Mecanismo: su prompt le da al LLM un «Expected spending range» proporcional al ingreso |
+| H-P2 categorías | 7 etiquetas (etapa 2) y 39 subcategorías (etapa 4) en las mismas 6 familias de comercio de D.C. | Entretenimiento 13,0 % [13,0; 13,0] vs. alimentos 14,8 % [14,8; 14,9]: dominio de ocio **refutada** (**confirmada** si el hospedaje cuenta como ocio); 6 de 16 categorías con registros | 8 categoria_n1 (la cota del código). Entretenimiento 17,3 % [13,5; 22,0] vs. alimentos 24,0 % [19,5; 29,1]: **no concluyente**; con hospedaje 31,7 % [26,7; 37,1]: **no concluyente**. El LLM respeta la subcategoría pedida en el 99,7 % |
+| H-P3 medio de pago | Etapas 1–3: sin campo. Etapa 4: `payment_type` en texto libre («Appropriate payment method»); un registro = una compra | Sin columna de medio de pago; 0 de 5.000.000 registros de retiro/P2P/movimiento propio/ingreso: **confirmada para las etapas 1–3** | `tarjeta_credito` 89,0 % [85,0; 92,1]; `tarjeta_debito` 11,0 % [7,9; 15,0] (6 grafías de 2 medios). Efectivo, billetera y transferencia: 0 de 300 (cota superior 1,3 %). Registros de extracto: 0. **Domina la tarjeta, pero no es 100 % `credit_card`** |
+
+### 0.2 Etapa 4 (LLM): estado de la ejecución
+
+- **Ejecutada** con `openai/gpt-oss-120b` — **desviación:** llama-3.3-70b-versatile no disponible para esta cuenta; sustituido por openai/gpt-oss-120b. 300 llamadas, 0 fallidas (0,0 %), 300 registros, 82,7 min, 85.658 tokens de entrada y 42.016 de salida. Parámetros y SHA-256 en `outputs/pancholi/etapa4/manifest_etapa4.json`; respuestas crudas en `llamadas.jsonl`.
+- Semilla 42, pausa 10 s, temperatura 0,5, 25 clientes, pandas 2.2.3 (la versión que fija su repo). Las peticiones son idénticas entre corridas con la misma semilla; las respuestas del LLM no, y por eso el análisis parte de los registros guardados. El 11,7 % de los registros usa su comercio genérico de respaldo («DC … Service»). Costo: se reportan tokens; no se fijó precio por token.
+- **Limitaciones de esta corrida:** un solo modelo, distinto del de su código; una sola corrida, sin IC entre corridas del LLM; 25 clientes. Verifica cómo se comporta la etapa 4, no estima su variabilidad.
+- **La ejecución confirma la cota de diseño:** la etapa 4 emitió exactamente las categoria_n1 que su código puede sortear; el LLM no creó ninguna. El veredicto de §0.3 no cambia.
+
+### 0.3 Criterio único para WP8: ¿es mapeable a las 16 `categoria_n1`?
+
+**Regla:** mapeable ⇔ las 16 categoria_n1 alcanzables desde etiquetas con peso > 0 (etapas 2 y 4). Mapeos versionados: `docs/taxonomia/mapeo_pancholi_taxonomia_v1.csv` (etapa 2) y `docs/taxonomia/mapeo_pancholi_etapa4_taxonomia_v1.csv` (etapa 4), con prueba en `tests/`. Para no sesgar hacia (a), los mapeos son **generosos**: `driving_lessons` → `educacion` y `boarding_house` → `vivienda_servicios.arriendo` se aceptan aunque pesen 0,01 en su código. Cálculo: `tools/mapeabilidad_pancholi.py` → `outputs/pancholi/wp8_mapeabilidad.json`.
+
+| categoria_n1 | ¿Alcanzable? | Etiquetas de Pancholi que llegan | Peso en su código (etapa 4) | Filas en el sintético del protocolo |
+|---|---|---|---|---|
+| alimentos_mercado | sí | etapa2:groceries; etapa4:groceries; etapa4:bakery; etapa4:packaged_foods; etapa4:seafood_market | 0,20 | 20,2 % |
+| comidas_fuera | sí | etapa2:dining; etapa4:deli_prepared_foods; etapa4:vending_snacks; etapa4:ice_cream; etapa4:food_truck; etapa4:restaurant_dining; etapa4:catering_services | 0,18 | 14,5 % |
+| transporte | sí | etapa2:transportation; etapa4:gas_station; etapa4:car_rental; etapa4:car_wash | 0,07 | 12,9 % |
+| vivienda_servicios | sí | etapa4:boarding_house | 0,01 | 4,8 % |
+| telecom_conectividad | **no** | — | 0,00 | 3,3 % |
+| salud | **no** | — | 0,00 | 0,5 % |
+| educacion | sí | etapa4:driving_lessons | 0,01 | 0,4 % |
+| entretenimiento | sí | etapa2:entertainment; etapa4:movie_theater; etapa4:event_venue; etapa4:live_theater; etapa4:bowling; etapa4:pool_hall; etapa4:skating_rink; etapa4:sports_events; etapa4:special_events | 0,13 | 0,8 % |
+| vestuario_cuidado_personal | sí | etapa2:personal_care; etapa4:beauty_services; etapa4:barber_services; etapa4:skin_care; etapa4:nail_salon; etapa4:spa_services; etapa4:massage_parlor | 0,10 | 4,1 % |
+| hogar_articulos | **no** | — | 0,00 | 1,4 % |
+| obligaciones_financieras | **no** | — | 0,00 | 0,8 % |
+| transferencias_p2p | **no** | — | 0,00 | 6,3 % |
+| retiro_efectivo | **no** | — | 0,00 | 15,6 % |
+| movimiento_propio | **no** | — | 0,00 | 9,8 % |
+| ingreso | **no** | — | 0,00 | 4,4 % |
+| otros | sí | etapa2:housing; etapa2:other; etapa4:hotel_lodging; etapa4:motel_lodging; etapa4:bnb_lodging; etapa4:vacation_rental | 0,09 | 0,2 % |
+
+- **Resultado:** 8 de 16 alcanzables → **NO mapeable**. No alcanzables: `telecom_conectividad`, `salud`, `hogar_articulos`, `obligaciones_financieras`, `transferencias_p2p`, `retiro_efectivo`, `movimiento_propio`, `ingreso`. La sensibilidad con las clases de soporte ≥ 10 da el mismo resultado (no mapeable).
+- **Techo de F1-macro** de un clasificador entrenado con su salida y evaluado en las 16 clases: 0,500 (0,375 sin las rutas marginales), aun si acertara todo lo que puede predecir: una clase que nunca predice tiene F1 = 0.
+- **Masa afectada:** en el sintético del protocolo (`outputs/ctgan/sintetico_v1.csv.gz`), el 42,1 % de las filas cae en clases que Pancholi no puede emitir (47,4 % sin las rutas marginales). Es una aproximación: la composición real del conjunto anotado (WP4) la reemplaza cuando exista.
+- **Contexto colombiano** (descriptivo, no cambia la regla): de las 13 columnas del esquema de `sintetico_v1`, 3 salen directas de su salida, 3 son constantes (solo compras), 3 no existen (`cuenta_tipo`, `medio_pago` en las etapas 1–3, `formalidad_comercio`), 2 son parciales (`categoria_n1`, `categoria_n2`) y `monto` e `ingreso_mensual` exigirían inventar una conversión de USD de D.C. a COP de Bogotá.
+
+**Implicación para WP8 y riesgos.**
+1. **Comparación tipo (a).** El TSTR se reporta para el protocolo; Pancholi se cita con su F1 publicado como contexto, sin compararlo. La no transferibilidad es un hallazgo que justifica el protocolo, no un hueco.
+2. **Inconsistencia con el borrador.** `docs/reporte/borrador_reporte.md` (método, «Comparación con el pipeline de referencia», y resultados, «F1-macro TSTR del protocolo adaptado vs. el pipeline de referencia») promete la comparación (b): entrenar sobre su salida y evaluar en Bogotá. Hay que reescribir ambos pasajes en términos de (a).
+3. **Alternativa descartada:** un (b) restringido a las clases compartidas. Cambiaría la tarea (otro espacio de etiquetas y otra métrica) y ya no mediría lo mismo que el TSTR del protocolo. Se puede mencionar como trabajo futuro, no como resultado.
+4. **El techo de F1 es una cota, no una medición.** El valor real sería menor, porque además las descripciones de texto de su salida son nombres de comercios de D.C. en inglés.
+
+<!-- WP8:fin -->
+
 > Documento generado por `tools/informe_pancholi.py` a partir de `outputs/pancholi/`. No editar las cifras a mano: se regeneran con `python tools/analisis_pancholi.py && python tools/informe_pancholi.py`.
 
 ## 1. Qué se corrió y cómo

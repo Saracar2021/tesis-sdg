@@ -1,0 +1,301 @@
+customer_id,amount,timestamp,merchant_details,payment_type
+a4aa83eb-3f1e-4f4a-8db0-f24b44da16fb,47.58,2024-11-08T14:23:11Z,"{'name': 'SABABA/BINDAAS', 'category': 'restaurant_dining', 'zipcode': '20008'}",credit_card
+a4aa83eb-3f1e-4f4a-8db0-f24b44da16fb,84.73,2024-11-05T14:27:39Z,"{'name': 'Sunset Boarding House', 'category': 'boarding_house', 'zipcode': '20008'}",debit_card
+a4aa83eb-3f1e-4f4a-8db0-f24b44da16fb,27.99,2024-11-08T14:23:47Z,"{'name': 'DC Movie_theater Service', 'category': 'movie_theater', 'zipcode': '20008'}",credit_card
+a4aa83eb-3f1e-4f4a-8db0-f24b44da16fb,46.28,2024-11-08T14:23:11Z,"{'name': 'CONNECTICUT AVENUE AMOCO INC.', 'category': 'gas_station', 'zipcode': '20008'}",debit_card
+a4aa83eb-3f1e-4f4a-8db0-f24b44da16fb,112.37,2024-11-05T14:23:48Z,"{'name': 'Target Corporation', 'category': 'groceries', 'zipcode': '20008'}",debit_card
+a4aa83eb-3f1e-4f4a-8db0-f24b44da16fb,112.73,2024-11-10T14:27:05Z,"{'name': 'Target Corporation', 'category': 'groceries', 'zipcode': '20008'}",debit_card
+a4aa83eb-3f1e-4f4a-8db0-f24b44da16fb,158.23,2024-11-10T14:27:45Z,"{'name': 'CAPITOL GROCER', 'category': 'groceries', 'zipcode': '20008'}",debit_card
+a4aa83eb-3f1e-4f4a-8db0-f24b44da16fb,349.27,2024-11-08T14:23:11Z,"{'name': 'SONO NORMANDY DC LLC', 'category': 'hotel_lodging', 'zipcode': '20008'}",credit_card
+a4aa83eb-3f1e-4f4a-8db0-f24b44da16fb,46.28,2024-11-05T14:23:11Z,"{'name': 'ANACOSTIA REALTY, LLC', 'category': 'gas_station', 'zipcode': '20008'}",debit
+530afd8a-0b55-4e8f-9f4c-703d6d67aba9,27.99,2024-11-08T14:23:45Z,"{'name': 'Alamo Drafthouse DC LLC', 'category': 'movie_theater', 'zipcode': '20002'}",credit_card
+530afd8a-0b55-4e8f-9f4c-703d6d67aba9,127.53,2024-11-08T14:27:45Z,"{'name': 'WENDIM LIQUORS INC', 'category': 'groceries', 'zipcode': '20002'}",Credit Card
+530afd8a-0b55-4e8f-9f4c-703d6d67aba9,95.23,2024-11-05T14:27:38Z,"{'name': 'LE SUPER NAILS LLC.', 'category': 'nail_salon', 'zipcode': '20002'}",credit_card
+530afd8a-0b55-4e8f-9f4c-703d6d67aba9,124.58,2024-11-08T14:23:47Z,"{'name': 'SOPHIE DC INCORPORATED', 'category': 'bnb_lodging', 'zipcode': '20002'}",credit_card
+530afd8a-0b55-4e8f-9f4c-703d6d67aba9,22.47,2024-11-08T14:23:11Z,"{'name': 'Insomnia Cookies Operators LLC', 'category': 'bakery', 'zipcode': '20002'}",credit_card
+530afd8a-0b55-4e8f-9f4c-703d6d67aba9,127.34,2024-11-08T14:27:53Z,"{'name': 'Root Retail LLC t/a 7 River Mart', 'category': 'groceries', 'zipcode': '20002'}",Credit Card
+530afd8a-0b55-4e8f-9f4c-703d6d67aba9,87.46,2024-11-08T14:27:53Z,"{'name': 'TAMZEE INCORPORATED', 'category': 'groceries', 'zipcode': '20002'}",Credit Card
+530afd8a-0b55-4e8f-9f4c-703d6d67aba9,47.23,2024-11-08T14:27:53Z,"{'name': 'DC Seafood Market', 'category': 'seafood_market', 'zipcode': '20002'}",credit_card
+530afd8a-0b55-4e8f-9f4c-703d6d67aba9,190.27,2024-11-08T14:23:45Z,"{'name': 'Meski LLC', 'category': 'catering_services', 'zipcode': '20002'}",credit_card
+530afd8a-0b55-4e8f-9f4c-703d6d67aba9,48.57,2024-11-08T19:42:15Z,"{'name': 'H & Chicken', 'category': 'restaurant_dining', 'zipcode': '20002'}",credit_card
+bcef2764-f01f-47c7-b19b-8007a71eec47,17.49,2024-11-08T14:23:11Z,"{'name': 'WAL-MART #3035 (Bakery)', 'category': 'bakery', 'zipcode': '20011'}",credit_card
+bcef2764-f01f-47c7-b19b-8007a71eec47,84.57,2024-11-05T14:23:41Z,"{'name': 'NATIONAL REHABILITATION           HOSPITAL INC. (Driving School)', 'category': 'driving_lessons', 'zipcode': '20010'}",credit_card
+bcef2764-f01f-47c7-b19b-8007a71eec47,124.57,2024-11-08T14:23:41Z,"{'name': 'Trinity Grill & Social Market', 'category': 'groceries', 'zipcode': '20017'}",credit_card
+bcef2764-f01f-47c7-b19b-8007a71eec47,13.27,2024-11-08T14:23:11Z,"{'name': 'CASA BLANCA INTERNATIONAL CORP', 'category': 'bakery', 'zipcode': '20002'}",credit_card
+bcef2764-f01f-47c7-b19b-8007a71eec47,7.92,2024-11-08T14:23:11Z,"{'name': 'FAHRENHIGHT HOSPITALITY INC', 'category': 'vending_snacks', 'zipcode': '20002'}",credit_card
+bcef2764-f01f-47c7-b19b-8007a71eec47,162.47,2024-11-08T14:23:11Z,"{'name': 'Coco Foods LLC', 'category': 'catering_services', 'zipcode': '20017'}",credit_card
+bcef2764-f01f-47c7-b19b-8007a71eec47,312.47,2024-11-05T14:23:11Z,"{'name': 'TWELVE STREET LLC', 'category': 'hotel_lodging', 'zipcode': '20017'}",credit_card
+bcef2764-f01f-47c7-b19b-8007a71eec47,57.84,2024-11-08T14:27:53Z,"{'name': 'BMT ENTERPRISE LLC', 'category': 'groceries', 'zipcode': '20017'}",credit_card
+bcef2764-f01f-47c7-b19b-8007a71eec47,47.68,2024-11-05T14:23:11Z,"{'name': 'SD SERVICES LLC.', 'category': 'gas_station', 'zipcode': '20017'}",credit_card
+bd02e42f-84e5-4e70-bf71-34799e2ae131,27.99,2024-11-08T14:23:45Z,"{'name': 'DC Movie_theater Service', 'category': 'movie_theater', 'zipcode': '20004'}",credit_card
+bd02e42f-84e5-4e70-bf71-34799e2ae131,46.78,2024-11-08T14:32:15Z,"{'name': 'BOWERS FANCY DAIRY PRODUCTS', 'category': 'groceries', 'zipcode': '20004'}",debit_card
+bd02e42f-84e5-4e70-bf71-34799e2ae131,27.99,2024-11-05T14:23:47Z,"{'name': 'DC Movie_theater Service', 'category': 'movie_theater', 'zipcode': '20004'}",credit_card
+bd02e42f-84e5-4e70-bf71-34799e2ae131,124.87,2024-11-08T14:23:11Z,"{'name': 'BOWERS FANCY DAIRY PRODUCTS', 'category': 'groceries', 'zipcode': '20004'}",debit_card
+bd02e42f-84e5-4e70-bf71-34799e2ae131,42.87,2024-11-08T14:23:11Z,"{'name': 'BOWERS FANCY DAIRY PRODUCTS', 'category': 'groceries', 'zipcode': '20004'}",debit_card
+bd02e42f-84e5-4e70-bf71-34799e2ae131,85.23,2024-11-05T14:27:38Z,"{'name': 'GOLDEN NAILS DC LLC', 'category': 'nail_salon', 'zipcode': '20004'}",debit_card
+bd02e42f-84e5-4e70-bf71-34799e2ae131,182.37,2024-11-08T14:23:51Z,"{'name': 'URBAN ADVENTURES AT GALLERY PLACE LLC', 'category': 'spa_services', 'zipcode': '20004'}",debit_card
+bd02e42f-84e5-4e70-bf71-34799e2ae131,352.78,2024-11-08T14:23:41Z,"{'name': 'CCMH DC LLC', 'category': 'hotel_lodging', 'zipcode': '20004'}",credit_card
+bd02e42f-84e5-4e70-bf71-34799e2ae131,5.75,2024-11-10T14:23:41Z,"{'name': 'D&B Vending Services', 'category': 'vending_snacks', 'zipcode': '20009'}",debit_card
+bd02e42f-84e5-4e70-bf71-34799e2ae131,48.67,2024-11-08T14:23:11Z,"{'name': 'BOWERS FANCY DAIRY PRODUCTS', 'category': 'groceries', 'zipcode': '20004'}",debit_card
+3363f22c-8073-48fc-b434-dd76c2b3a286,85.2,2024-11-08T14:37:12Z,"{'name': 'DC Pool_hall Service', 'category': 'pool_hall', 'zipcode': '20018'}",credit_card
+3363f22c-8073-48fc-b434-dd76c2b3a286,48.67,2024-11-08T14:23:11Z,"{'name': 'DC Seafood Market', 'category': 'seafood_market', 'zipcode': '20018'}",debit_card
+3363f22c-8073-48fc-b434-dd76c2b3a286,115.23,2024-11-10T14:27:45Z,"{'name': 'SALUMERIA 2703 LLC.', 'category': 'groceries', 'zipcode': '20018'}",debit_card
+3363f22c-8073-48fc-b434-dd76c2b3a286,47.23,2024-11-08T14:32:10Z,"{'name': 'Sadr LLC', 'category': 'gas_station', 'zipcode': '20018'}",credit_card
+3363f22c-8073-48fc-b434-dd76c2b3a286,112.07,2026-11-10T14:23:45Z,"{'name': 'NAOM LLC', 'category': 'groceries', 'zipcode': '20018'}",debit_card
+3363f22c-8073-48fc-b434-dd76c2b3a286,84.75,2024-11-08T14:23:11Z,"{'name': 'Nice Hands Grooming Shop', 'category': 'barber_services', 'zipcode': '20001'}",debit_card
+3363f22c-8073-48fc-b434-dd76c2b3a286,112.47,2024-11-08T13:45:22Z,"{'name': 'New Neighborhood Market', 'category': 'groceries', 'zipcode': '20018'}",debit_card
+3363f22c-8073-48fc-b434-dd76c2b3a286,85.2,2024-11-05T14:23:47Z,"{'name': 'DC Bowling Service', 'category': 'bowling', 'zipcode': '20018'}",credit_card
+3363f22c-8073-48fc-b434-dd76c2b3a286,47.23,2024-11-08T14:27:53Z,"{'name': 'COSTCO WHOLESALE CORPORATION (Bakery)', 'category': 'bakery', 'zipcode': '20018'}",Credit Card
+228fab4e-c59f-470a-956a-46c5a7e6561c,34.99,2024-11-08T14:23:11Z,"{'name': 'DC Movie_theater Service', 'category': 'movie_theater', 'zipcode': '20009'}",credit_card
+228fab4e-c59f-470a-956a-46c5a7e6561c,45.0,2024-11-08T14:23:11Z,"{'name': 'DC Movie_theater Service', 'category': 'movie_theater', 'zipcode': '20009'}",credit_card
+228fab4e-c59f-470a-956a-46c5a7e6561c,84.57,2024-11-08T19:42:05Z,"{'name': 'Street Concepts LLC.', 'category': 'restaurant_dining', 'zipcode': '20009'}",credit_card
+228fab4e-c59f-470a-956a-46c5a7e6561c,210.45,2024-11-05T14:27:13Z,"{'name': 'Solidcore', 'category': 'spa_services', 'zipcode': '20009'}",credit_card
+228fab4e-c59f-470a-956a-46c5a7e6561c,108.73,2024-11-08T14:27:53Z,"{'name': 'CARAVAN HOSTEL, L.L.C.', 'category': 'boarding_house', 'zipcode': '20009'}",credit_card
+228fab4e-c59f-470a-956a-46c5a7e6561c,210.45,2024-11-08T14:27:53Z,"{'name': 'Solidcore', 'category': 'spa_services', 'zipcode': '20009'}",credit_card
+228fab4e-c59f-470a-956a-46c5a7e6561c,115.47,2024-11-08T14:23:11Z,"{'name': 'Glow Aesthetics', 'category': 'skin_care', 'zipcode': '20009'}",credit_card
+228fab4e-c59f-470a-956a-46c5a7e6561c,48.57,2024-11-05T14:23:41Z,"{'name': 'BEDROCK BILLIARDS INC.', 'category': 'pool_hall', 'zipcode': '20009'}",credit_card
+228fab4e-c59f-470a-956a-46c5a7e6561c,115.47,2024-11-08T14:23:11Z,"{'name': 'MYE NAILS & SPA', 'category': 'nail_salon', 'zipcode': '20009'}",credit_card
+228fab4e-c59f-470a-956a-46c5a7e6561c,84.57,2024-11-08T14:23:11Z,"{'name': ""MCCLELLAN'S RETREAT"", 'category': 'restaurant_dining', 'zipcode': '20009'}",credit_card
+228fab4e-c59f-470a-956a-46c5a7e6561c,48.23,2024-11-08T14:37:12Z,"{'name': 'M CAFE', 'category': 'restaurant_dining', 'zipcode': '20009'}",credit_card
+228fab4e-c59f-470a-956a-46c5a7e6561c,22.47,2024-11-08T14:23:11Z,"{'name': 'BAKERY 350, LLC', 'category': 'bakery', 'zipcode': '20009'}",credit_card
+fbb9566b-49e9-4a50-9d51-9912be6c39ad,5.75,2024-11-08T14:23:41Z,"{'name': 'GUEST SERVICES (#1420)', 'category': 'vending_snacks', 'zipcode': '20024'}",debit_card
+fbb9566b-49e9-4a50-9d51-9912be6c39ad,108.45,2024-11-10T14:27:53Z,"{'name': 'R STANLEY EVANS', 'category': 'seafood_market', 'zipcode': '20024'}",debit_card
+fbb9566b-49e9-4a50-9d51-9912be6c39ad,13.27,2024-11-08T14:23:51Z,"{'name': 'LEVY @ DC UNITED - LA PEPA (Delicatessen)', 'category': 'deli_prepared_foods', 'zipcode': '20024'}",credit_card
+fbb9566b-49e9-4a50-9d51-9912be6c39ad,115.75,2024-11-08T14:23:41Z,"{'name': 'WASHINGTON NATIONALS  BASEBALL CLUB LLC', 'category': 'sports_events', 'zipcode': '20003'}",credit_card
+fbb9566b-49e9-4a50-9d51-9912be6c39ad,5.75,2024-11-05T14:23:41Z,"{'name': 'DC Ice_cream Service', 'category': 'ice_cream', 'zipcode': '20024'}",credit_card
+fbb9566b-49e9-4a50-9d51-9912be6c39ad,13.57,2024-11-08T14:23:11Z,"{'name': 'Pitango Otto LLC.', 'category': 'deli_prepared_foods', 'zipcode': '20024'}",debit_card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,149.99,2024-11-05T14:23:47Z,"{'name': 'AVIS RENT A CAR SYSTEM LLC', 'category': 'car_rental', 'zipcode': '20008'}",credit_card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,15.27,2024-11-08T14:32:11Z,"{'name': 'ALI SWEET INCORPORATED', 'category': 'ice_cream', 'zipcode': '20007'}",credit_card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,527.84,2024-11-08T14:23:11Z,"{'name': 'The Capital Hotel', 'category': 'hotel_lodging', 'zipcode': '20007'}",credit_card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,27.48,2024-11-08T14:23:11Z,"{'name': 'Levain Bakery Cookie Company, LLC', 'category': 'bakery', 'zipcode': '20007'}",Credit Card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,131.45,2024-11-08T14:23:57Z,"{'name': 'DTRS WASHINGTON, L.L.C.', 'category': 'massage_parlor', 'zipcode': '20007'}",credit_card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,527.84,2024-11-08T14:27:53Z,"{'name': 'FOUR SEASONS HOTEL', 'category': 'hotel_lodging', 'zipcode': '20007'}",credit_card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,84.57,2024-11-08T19:42:15Z,"{'name': 'GF INC. T/A IL CANALE', 'category': 'restaurant_dining', 'zipcode': '20007'}",credit_card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,27.48,2024-11-08T14:23:11Z,"{'name': 'I & I Palisades, Inc.', 'category': 'deli_prepared_foods', 'zipcode': '20007'}",debit_card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,527.84,2024-11-08T14:23:11Z,"{'name': 'GEORGETOWN WASHINGTON DC INN LLC', 'category': 'hotel_lodging', 'zipcode': '20007'}",credit_card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,78.45,2024-11-08T14:23:11Z,"{'name': 'DC Sports Events Service', 'category': 'sports_events', 'zipcode': '20007'}",credit_card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,262.47,2024-11-05T14:23:11Z,"{'name': 'GLOVER PARK ALLIANCE (Special Events)', 'category': 'special_events', 'zipcode': '20007'}",credit_card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,523.87,2024-11-05T14:23:41Z,"{'name': 'Capital City Hotel', 'category': 'hotel_lodging', 'zipcode': '20007'}",credit_card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,27.48,2024-11-05T14:23:11Z,"{'name': 'Levain Bakery Cookie Company, LLC', 'category': 'bakery', 'zipcode': '20007'}",credit_card
+4c9ba67d-cde0-40b6-88b0-202fdbeefd1b,87.45,2024-11-05T14:23:11Z,"{'name': 'shanghailounge', 'category': 'restaurant_dining', 'zipcode': '20007'}",credit_card
+5fa42b12-1f70-436b-8198-ef416d8de548,127.84,2024-11-08T14:23:57Z,"{'name': 'METRO SUPERMARKET', 'category': 'groceries', 'zipcode': '20037'}",Credit Card
+5fa42b12-1f70-436b-8198-ef416d8de548,57.25,2024-11-08T14:37:22Z,"{'name': 'FOGGY BOTTOM BARBER SHOP', 'category': 'barber_services', 'zipcode': '20037'}",credit_card
+5fa42b12-1f70-436b-8198-ef416d8de548,247.68,2024-11-08T14:23:47Z,"{'name': 'WARRIORS INCORPORATED', 'category': 'special_events', 'zipcode': '20037'}",credit_card
+5fa42b12-1f70-436b-8198-ef416d8de548,112.37,2024-11-08T14:22:41Z,"{'name': 'METRO SUPERMARKET', 'category': 'groceries', 'zipcode': '20037'}",Credit Card
+5fa42b12-1f70-436b-8198-ef416d8de548,84.63,2024-11-05T14:27:38Z,"{'name': 'METRO SUPERMARKET', 'category': 'groceries', 'zipcode': '20037'}",Credit Card
+5fa42b12-1f70-436b-8198-ef416d8de548,84.57,2024-11-08T14:23:11Z,"{'name': 'METRO SUPERMARKET', 'category': 'groceries', 'zipcode': '20037'}",Credit Card
+5fa42b12-1f70-436b-8198-ef416d8de548,87.46,2024-11-08T14:27:53Z,"{'name': 'METRO SUPERMARKET', 'category': 'groceries', 'zipcode': '20037'}",Credit Card
+5fa42b12-1f70-436b-8198-ef416d8de548,124.58,2024-11-08T14:27:03Z,"{'name': 'XL West End', 'category': 'bnb_lodging', 'zipcode': '20037'}",credit_card
+5fa42b12-1f70-436b-8198-ef416d8de548,247.89,2026-11-12T14:37:22Z,"{'name': 'WARRIORS INCORPORATED', 'category': 'special_events', 'zipcode': '20037'}",credit_card
+5fa42b12-1f70-436b-8198-ef416d8de548,47.25,2024-11-08T14:32:10Z,"{'name': 'FOGGY BOTTOM BARBER SHOP', 'category': 'barber_services', 'zipcode': '20037'}",credit_card
+5fa42b12-1f70-436b-8198-ef416d8de548,13.47,2024-11-08T14:23:11Z,"{'name': 'ALI SWEET INCORPORATED', 'category': 'ice_cream', 'zipcode': '20007'}",credit_card
+5fa42b12-1f70-436b-8198-ef416d8de548,87.34,2024-11-05T14:23:11Z,"{'name': 'METRO SUPERMARKET', 'category': 'groceries', 'zipcode': '20037'}",Credit Card
+5fa42b12-1f70-436b-8198-ef416d8de548,124.58,2024-11-08T14:23:47Z,"{'name': 'XL West End', 'category': 'bnb_lodging', 'zipcode': '20037'}",credit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,562.47,2024-11-05T14:23:11Z,"{'name': 'HHC TRS HIGHLAND LLC.', 'category': 'hotel_lodging', 'zipcode': '20009'}",credit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,46.23,2024-11-05T14:27:31Z,"{'name': 'LP MAPP DOWNSTREAM MARKETING LLC', 'category': 'gas_station', 'zipcode': '20009'}",credit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,543.27,2024-11-08T14:23:11Z,"{'name': 'Generator Washington DC', 'category': 'hotel_lodging', 'zipcode': '20009'}",credit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,118.73,2024-11-08T19:42:15Z,"{'name': 'ROOSTER & OWL', 'category': 'restaurant_dining', 'zipcode': '20009'}",credit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,47.23,2024-11-05T14:27:38Z,"{'name': '14TH STREET BP', 'category': 'gas_station', 'zipcode': '20009'}",credit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,87.45,2024-11-08T14:27:53Z,"{'name': '1110 U STREET LLC.', 'category': 'restaurant_dining', 'zipcode': '20009'}",credit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,78.45,2024-11-08T14:27:53Z,"{'name': 'Amazon Retail LLC', 'category': 'groceries', 'zipcode': '20009'}",Credit Card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,78.45,2024-11-08T14:27:53Z,"{'name': 'WHITELAW MARKET', 'category': 'groceries', 'zipcode': '20009'}",credit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,78.45,2024-11-05T14:27:38Z,"{'name': 'FREEDOM MARKET INC', 'category': 'groceries', 'zipcode': '20009'}",debit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,45.0,2024-11-08T14:23:57Z,"{'name': 'DC Movie_theater Service', 'category': 'movie_theater', 'zipcode': '20009'}",credit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,13.27,2024-11-08T14:23:11Z,"{'name': 'DC Food_truck Service', 'category': 'food_truck', 'zipcode': '20009'}",credit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,68.47,2024-11-05T14:23:11Z,"{'name': 'LP MAPP DOWNSTREAM MARKETING LLC', 'category': 'gas_station', 'zipcode': '20009'}",credit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,124.75,2024-11-08T14:32:19Z,"{'name': 'LuLuu Spa & Salon', 'category': 'beauty_services', 'zipcode': '20009'}",credit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,27.49,2024-11-05T14:23:11Z,"{'name': 'Insomnia Cookies', 'category': 'bakery', 'zipcode': '20009'}",credit_card
+47253ab8-c013-4f5b-ac0c-b9df9f56994b,118.73,2024-11-05T14:27:09Z,"{'name': 'BIG CHIEF DC LLC.', 'category': 'restaurant_dining', 'zipcode': '20009'}",credit_card
+486f097a-9026-4b91-8ed2-fee0654cd060,149.87,2024-11-08T14:23:45Z,"{'name': 'Thompson Washington DC c/o Oxford Hotels & Resorts, LLC', 'category': 'hotel_lodging', 'zipcode': '20003'}",credit_card
+486f097a-9026-4b91-8ed2-fee0654cd060,38.27,2024-11-08T14:23:11Z,"{'name': 'EAGLE ACADEMY PUBLIC CHARTER SCHOOL', 'category': 'restaurant_dining', 'zipcode': '20032'}",debit_card
+486f097a-9026-4b91-8ed2-fee0654cd060,68.45,2024-11-08T14:23:11Z,"{'name': 'LRBM LLC t/a Spar Liquors', 'category': 'packaged_foods', 'zipcode': '20032'}",debit_card
+486f097a-9026-4b91-8ed2-fee0654cd060,42.67,2024-11-08T14:23:11Z,"{'name': 'CAPITAL FOODS 1523 LLC', 'category': 'restaurant_dining', 'zipcode': '20032'}",credit_card
+356d6c7c-432b-4830-be0b-c794bf72edb6,12.47,2024-11-08T14:23:51Z,"{'name': 'DOLCEZZA GELATO PINTS LLC.', 'category': 'ice_cream', 'zipcode': '20002'}",credit_card
+356d6c7c-432b-4830-be0b-c794bf72edb6,242.57,2024-11-08T14:23:41Z,"{'name': 'USF S&H DC, LLC.', 'category': 'spa_services', 'zipcode': '20003'}",credit_card
+356d6c7c-432b-4830-be0b-c794bf72edb6,124.87,2024-11-08T14:23:11Z,"{'name': 'FANATIX NAILS LLC.', 'category': 'beauty_services', 'zipcode': '20003'}",credit_card
+356d6c7c-432b-4830-be0b-c794bf72edb6,479.84,2024-10-28T16:42:05Z,"{'name': 'SKCG 50 M LLC', 'category': 'hotel_lodging', 'zipcode': '20003'}",credit_card
+356d6c7c-432b-4830-be0b-c794bf72edb6,48.75,2024-11-08T14:27:53Z,"{'name': 'Bearded Goat Barber', 'category': 'barber_services', 'zipcode': '20003'}",credit_card
+356d6c7c-432b-4830-be0b-c794bf72edb6,124.57,2024-11-08T14:23:45Z,"{'name': 'Bravado Hair Design, LLC', 'category': 'beauty_services', 'zipcode': '20003'}",credit_card
+356d6c7c-432b-4830-be0b-c794bf72edb6,48.67,2024-11-08T14:23:11Z,"{'name': 'DC Seafood_market Service', 'category': 'seafood_market', 'zipcode': '20003'}",credit_card
+356d6c7c-432b-4830-be0b-c794bf72edb6,115.27,2024-11-08T14:23:41Z,"{'name': 'Beauty Shop Esthetics', 'category': 'skin_care', 'zipcode': '20003'}",credit_card
+356d6c7c-432b-4830-be0b-c794bf72edb6,479.85,2024-11-08T14:23:11Z,"{'name': 'Capital Riverfront Hotel LLC', 'category': 'hotel_lodging', 'zipcode': '20003'}",credit_card
+356d6c7c-432b-4830-be0b-c794bf72edb6,152.47,2024-11-08T14:23:11Z,"{'name': 'Bravado Hair Design, LLC', 'category': 'beauty_services', 'zipcode': '20003'}",credit_card
+356d6c7c-432b-4830-be0b-c794bf72edb6,119.45,2024-11-08T14:27:53Z,"{'name': 'Glow Aesthetics', 'category': 'skin_care', 'zipcode': '20003'}",credit_card
+356d6c7c-432b-4830-be0b-c794bf72edb6,119.73,2024-11-08T14:27:53Z,"{'name': 'YELLOW TRANSPORTATION SERVICES LLC', 'category': 'car_rental', 'zipcode': '20002'}",credit_card
+356d6c7c-432b-4830-be0b-c794bf72edb6,32.87,2024-11-08T14:23:11Z,"{'name': ""HAYDEN'S INC."", 'category': 'packaged_foods', 'zipcode': '20003'}",credit_card
+69161713-3f51-4ea8-a97d-6650508d0fb0,87.34,2024-11-08T14:23:11Z,"{'name': ""Flaherty & O'Hara, P.C."", 'category': 'restaurant_dining', 'zipcode': '20001'}",credit_card
+69161713-3f51-4ea8-a97d-6650508d0fb0,110.45,2024-11-08T14:27:53Z,"{'name': 'Sneacos Mobile Car Wash and Detail, LLC', 'category': 'car_wash', 'zipcode': '20009'}",credit_card
+69161713-3f51-4ea8-a97d-6650508d0fb0,118.73,2024-11-08T14:27:53Z,"{'name': 'Buddies Nails Spa & Barber', 'category': 'beauty_services', 'zipcode': '20001'}",credit_card
+69161713-3f51-4ea8-a97d-6650508d0fb0,118.45,2024-11-08T14:27:53Z,"{'name': '4 SEASONS NAIL & SPA LLC', 'category': 'beauty_services', 'zipcode': '20001'}",credit_card
+69161713-3f51-4ea8-a97d-6650508d0fb0,13.57,2024-11-05T14:23:11Z,"{'name': 'Compass Coffee; Harrison Suarez (Delicatessen)', 'category': 'deli_prepared_foods', 'zipcode': '20001'}",credit_card
+69161713-3f51-4ea8-a97d-6650508d0fb0,32.57,2024-11-08T14:23:11Z,"{'name': 'COMET INVESTORS LP.', 'category': 'pool_hall', 'zipcode': '20001'}",credit_card
+69161713-3f51-4ea8-a97d-6650508d0fb0,212.37,2024-11-08T14:23:11Z,"{'name': 'METRO CATERING & CONCESSIONS, Inc.', 'category': 'catering_services', 'zipcode': '20001'}",credit_card
+69161713-3f51-4ea8-a97d-6650508d0fb0,47.58,2024-11-05T14:27:39Z,"{'name': 'SEASONS CULINARY SERVICE INC.', 'category': 'restaurant_dining', 'zipcode': '20001'}",credit_card
+69161713-3f51-4ea8-a97d-6650508d0fb0,4.85,2024-11-08T14:23:11Z,"{'name': 'FAHRENHIGHT HOSPITALITY INC', 'category': 'vending_snacks', 'zipcode': '20002'}",credit_card
+69161713-3f51-4ea8-a97d-6650508d0fb0,87.45,2024-11-08T14:27:53Z,"{'name': 'CSDAK LLC', 'category': 'restaurant_dining', 'zipcode': '20001'}",credit_card
+69161713-3f51-4ea8-a97d-6650508d0fb0,215.0,2024-11-08T14:27:53Z,"{'name': 'CrossFit MPH', 'category': 'spa_services', 'zipcode': '20001'}",credit_card
+69161713-3f51-4ea8-a97d-6650508d0fb0,84.57,2024-11-08T14:23:11Z,"{'name': 'COMET INVESTORS LP.', 'category': 'restaurant_dining', 'zipcode': '20001'}",credit_card
+53283229-6e07-443e-8cd6-fe094af1d113,45.99,2024-11-10T14:27:53Z,"{'name': 'AVIS RENT A CAR SYSTEM LLC', 'category': 'car_rental', 'zipcode': '20008'}",credit_card
+53283229-6e07-443e-8cd6-fe094af1d113,68.45,2024-11-08T14:27:53Z,"{'name': 'PROTESTANT EPISCOPAL CATHEDRAL FOUNDATION OF THE DISTRICT OF COLUMBIA (Special Events)', 'category': 'special_events', 'zipcode': '20016'}",debit_card
+53283229-6e07-443e-8cd6-fe094af1d113,68.45,2026-11-05T14:23:11Z,"{'name': 'DC Seafood Market', 'category': 'seafood_market', 'zipcode': '20016'}",debit_card
+53283229-6e07-443e-8cd6-fe094af1d113,75.2,2024-11-08T14:27:53Z,"{'name': 'USF S&H DC, LLC.', 'category': 'spa_services', 'zipcode': '20016'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,262.47,2024-11-08T14:23:11Z,"{'name': 'BAILEY C RIZER LLC.', 'category': 'spa_services', 'zipcode': '20011'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,262.47,2024-11-08T14:23:11Z,"{'name': 'DC REGISTERED AGENT INC', 'category': 'catering_services', 'zipcode': '20011'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,45.0,2026-11-10T19:45:12Z,"{'name': 'DC Movie_theater Service', 'category': 'movie_theater', 'zipcode': '20011'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,45.27,2024-11-08T14:32:11Z,"{'name': 'EABLAD LLC.', 'category': 'gas_station', 'zipcode': '20011'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,312.47,2024-11-08T14:23:51Z,"{'name': 'SmokeDatt BBQ, Inc', 'category': 'catering_services', 'zipcode': '20011'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,28.47,2024-11-08T14:23:51Z,"{'name': 'ERODRIGUEZ LLC', 'category': 'deli_prepared_foods', 'zipcode': '20011'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,130.47,2024-11-05T14:23:11Z,"{'name': 'DC Skating_rink Service', 'category': 'skating_rink', 'zipcode': '20011'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,45.0,2024-11-05T14:23:11Z,"{'name': 'DC Movie_theater Service', 'category': 'movie_theater', 'zipcode': '20011'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,27.43,2024-11-05T14:27:19Z,"{'name': 'Gedam Sefere Cafe', 'category': 'deli_prepared_foods', 'zipcode': '20011'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,262.47,2024-11-05T14:23:11Z,"{'name': 'SmokeDatt BBQ, Inc', 'category': 'catering_services', 'zipcode': '20011'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,58.75,2024-11-05T14:23:41Z,"{'name': 'Barber Shop', 'category': 'barber_services', 'zipcode': '20011'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,262.47,2024-11-08T14:23:11Z,"{'name': 'PEACHES KITCHEN/CATERING LLC.', 'category': 'catering_services', 'zipcode': '20011'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,4.57,2024-11-10T14:23:45Z,"{'name': ""Jake's Vending LLC"", 'category': 'vending_snacks', 'zipcode': '20010'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,45.23,2024-11-08T14:37:52Z,"{'name': 'DC Movie_theater Service', 'category': 'movie_theater', 'zipcode': '20011'}",credit_card
+086e5e3c-c7a5-48e0-be78-8d7043eaf197,262.47,2024-11-08T14:23:51Z,"{'name': 'BAILEY C RIZER LLC.', 'category': 'spa_services', 'zipcode': '20011'}",credit_card
+79b78eb3-f109-4d46-b2a9-10be8d46a4e3,124.57,2024-11-08T14:23:41Z,"{'name': ""TRADER JOE'S EAST, INC"", 'category': 'groceries', 'zipcode': '20007'}",Credit Card
+79b78eb3-f109-4d46-b2a9-10be8d46a4e3,251.87,2024-11-08T14:23:45Z,"{'name': 'GLOVER PARK ALLIANCE (Special Events)', 'category': 'special_events', 'zipcode': '20007'}",credit_card
+79b78eb3-f109-4d46-b2a9-10be8d46a4e3,259.87,2024-11-05T14:23:11Z,"{'name': 'DC Stays L.L.C.', 'category': 'motel_lodging', 'zipcode': '20007'}",credit_card
+79b78eb3-f109-4d46-b2a9-10be8d46a4e3,84.57,2024-11-08T14:23:11Z,"{'name': 'NAI Saturn Eastern LLC.', 'category': 'groceries', 'zipcode': '20007'}",Visa Credit Card
+79b78eb3-f109-4d46-b2a9-10be8d46a4e3,527.34,2024-11-08T14:23:57Z,"{'name': 'The Capital Hotel', 'category': 'hotel_lodging', 'zipcode': '20007'}",credit_card
+79b78eb3-f109-4d46-b2a9-10be8d46a4e3,5.27,2024-11-08T14:32:19Z,"{'name': 'Kommitted Vending Services', 'category': 'vending_snacks', 'zipcode': '20007'}",credit_card
+79b78eb3-f109-4d46-b2a9-10be8d46a4e3,242.67,2026-11-12T09:45:23Z,"{'name': 'DC Sports_events Service', 'category': 'sports_events', 'zipcode': '20007'}",credit_card
+79b78eb3-f109-4d46-b2a9-10be8d46a4e3,48.23,2024-11-08T14:27:53Z,"{'name': 'DC Sports_events Service', 'category': 'sports_events', 'zipcode': '20007'}",credit_card
+79b78eb3-f109-4d46-b2a9-10be8d46a4e3,45.67,2024-11-05T14:23:11Z,"{'name': 'DC Movie_theater Service', 'category': 'movie_theater', 'zipcode': '20007'}",credit_card
+79b78eb3-f109-4d46-b2a9-10be8d46a4e3,84.67,2024-11-08T14:23:11Z,"{'name': 'NAI Saturn Eastern LLC.', 'category': 'groceries', 'zipcode': '20007'}",Credit Card
+79b78eb3-f109-4d46-b2a9-10be8d46a4e3,258.97,2024-11-08T14:23:41Z,"{'name': 'DC Vacation Rental Service', 'category': 'vacation_rental', 'zipcode': '20007'}",credit_card
+79b78eb3-f109-4d46-b2a9-10be8d46a4e3,12.79,2024-11-05T14:27:31Z,"{'name': 'SPRINKLES CUPCAKES DC LLC.', 'category': 'bakery', 'zipcode': '20007'}",Credit Card
+79b78eb3-f109-4d46-b2a9-10be8d46a4e3,158.73,2024-11-08T14:27:53Z,"{'name': 'T&U LLC', 'category': 'groceries', 'zipcode': '20007'}",Credit Card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,118.73,2024-11-08T14:27:53Z,"{'name': 'NAI Saturn Eastern LLC', 'category': 'groceries', 'zipcode': '20024'}",Credit Card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,152.37,2024-11-08T14:23:11Z,"{'name': 'Enterprise Rent-A-Car', 'category': 'car_rental', 'zipcode': '20024'}",credit_card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,312.47,2024-11-08T14:23:51Z,"{'name': ""IT'S MY VENUE LLC. (Public Hall)"", 'category': 'event_venue', 'zipcode': '20024'}",credit_card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,148.73,2024-11-08T14:27:53Z,"{'name': 'NAI Saturn Eastern LLC', 'category': 'groceries', 'zipcode': '20024'}",Credit Card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,46.23,2024-11-05T14:27:38Z,"{'name': '8th & Pennsylvania Inc', 'category': 'gas_station', 'zipcode': '20003'}",credit_card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,32.57,2024-11-08T14:23:11Z,"{'name': 'Milzels 2 LLC', 'category': 'bakery', 'zipcode': '20024'}",Credit Card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,45.0,2024-11-08T14:27:53Z,"{'name': '8TH DAY PRODUCTIONS LLC', 'category': 'movie_theater', 'zipcode': '20003'}",credit_card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,118.73,2024-11-08T14:27:53Z,"{'name': 'NAI Saturn Eastern LLC', 'category': 'groceries', 'zipcode': '20024'}",Credit Card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,312.47,2024-11-08T14:23:51Z,"{'name': ""IT'S MY VENUE LLC. (Public Hall)"", 'category': 'event_venue', 'zipcode': '20024'}",credit_card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,87.46,2024-11-08T14:27:53Z,"{'name': 'CASEYS COFFE INC', 'category': 'restaurant_dining', 'zipcode': '20024'}",credit_card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,47.25,2024-11-08T14:32:10Z,"{'name': 'Lucy Nails Spa & Barber', 'category': 'barber_services', 'zipcode': '20001'}",credit_card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,124.37,2024-11-08T14:23:11Z,"{'name': 'NAI Saturn Eastern LLC', 'category': 'groceries', 'zipcode': '20024'}",credit_card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,118.73,2024-11-08T19:42:15Z,"{'name': 'Live K LLC', 'category': 'restaurant_dining', 'zipcode': '20024'}",credit_card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,87.34,2024-11-08T13:45:22Z,"{'name': ""FRIENDLY DAVID'S MARKET, INC."", 'category': 'groceries', 'zipcode': '20024'}",Visa Credit
+f534b88c-dd87-4034-af58-5a6cd3c5605e,47.25,2024-11-08T14:32:10Z,"{'name': 'Lucy Nails Spa & Barber', 'category': 'barber_services', 'zipcode': '20001'}",credit_card
+f534b88c-dd87-4034-af58-5a6cd3c5605e,152.37,2024-11-08T13:45:22Z,"{'name': 'B&V LLC.', 'category': 'bnb_lodging', 'zipcode': '20024'}",credit_card
+d1883194-2bbc-46e1-9105-452ebbce0a3d,152.73,2024-11-05T14:27:41Z,"{'name': 'TAMZEE INCORPORATED', 'category': 'groceries', 'zipcode': '20002'}",Credit Card
+d1883194-2bbc-46e1-9105-452ebbce0a3d,115.2,2026-11-05T14:23:11Z,"{'name': '930 CLUB', 'category': 'live_theater', 'zipcode': '20009'}",credit_card
+d1883194-2bbc-46e1-9105-452ebbce0a3d,452.67,2024-11-08T14:23:41Z,"{'name': '411 New York Ave Holdings LLC', 'category': 'hotel_lodging', 'zipcode': '20002'}",credit_card
+d1883194-2bbc-46e1-9105-452ebbce0a3d,115.23,2024-11-05T14:27:39Z,"{'name': 'NATIONAL REHABILITATION HOSPITAL INC. (Driving School)', 'category': 'driving_lessons', 'zipcode': '20010'}",credit_card
+d1883194-2bbc-46e1-9105-452ebbce0a3d,115.23,2024-11-05T14:27:39Z,"{'name': 'Sneacos Mobile Car Wash and Detail, LLC', 'category': 'car_wash', 'zipcode': '20009'}",credit_card
+d1883194-2bbc-46e1-9105-452ebbce0a3d,87.46,2024-11-08T14:27:53Z,"{'name': '1107 SAFI LLC', 'category': 'groceries', 'zipcode': '20002'}",Visa Credit Card
+d1883194-2bbc-46e1-9105-452ebbce0a3d,118.73,2024-11-08T14:27:53Z,"{'name': 'WENDIM LIQUORS INC', 'category': 'groceries', 'zipcode': '20002'}",Credit Card
+d1883194-2bbc-46e1-9105-452ebbce0a3d,247.36,2024-11-08T14:27:53Z,"{'name': 'DC Vacation_rental Service', 'category': 'vacation_rental', 'zipcode': '20002'}",credit_card
+d1883194-2bbc-46e1-9105-452ebbce0a3d,247.36,2026-11-05T14:23:11Z,"{'name': 'DC Vacation Rental Service', 'category': 'vacation_rental', 'zipcode': '20002'}",credit_card
+d1883194-2bbc-46e1-9105-452ebbce0a3d,47.25,2024-11-08T14:32:10Z,"{'name': 'SPIN DC LLC. (Public Hall)', 'category': 'event_venue', 'zipcode': '20002'}",credit_card
+d1883194-2bbc-46e1-9105-452ebbce0a3d,47.23,2024-11-05T14:27:39Z,"{'name': 'DC Seafood_market Service', 'category': 'seafood_market', 'zipcode': '20002'}",credit_card
+d1883194-2bbc-46e1-9105-452ebbce0a3d,47.23,2024-11-08T14:37:52Z,"{'name': 'DC Seafood_market Service', 'category': 'seafood_market', 'zipcode': '20002'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,580.27,2024-11-05T14:23:48Z,"{'name': 'SQUARE 369 HOTEL TRS, LLC.', 'category': 'hotel_lodging', 'zipcode': '20001'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,84.75,2024-11-08T14:27:53Z,"{'name': 'Lucy Nails Spa & Barber', 'category': 'barber_services', 'zipcode': '20001'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,47.85,2024-11-05T14:27:13Z,"{'name': 'Lucy Nails Spa & Barber', 'category': 'barber_services', 'zipcode': '20001'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,311.78,2024-11-08T14:23:47Z,"{'name': 'DC LOFTY LLC', 'category': 'motel_lodging', 'zipcode': '20001'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,317.45,2024-11-08T14:27:53Z,"{'name': 'NATIONAL BRAIN TUMOR SOCIETY INC. (Special Events)', 'category': 'special_events', 'zipcode': '20001'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,31.27,2024-11-05T14:23:11Z,"{'name': 'WALGREENS #17712', 'category': 'Food Products', 'zipcode': '20001'}",Credit Card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,47.58,2024-11-08T14:23:41Z,"{'name': 'DC Seafood_market Service', 'category': 'seafood_market', 'zipcode': '20001'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,95.0,2024-11-08T14:23:47Z,"{'name': 'Barber Shop', 'category': 'barber_services', 'zipcode': '20001'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,312.45,2026-11-12T18:37:22Z,"{'name': 'GRAND HYATT WASHINGTON (Public Hall)', 'category': 'event_venue', 'zipcode': '20001'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,27.43,2024-11-08T14:27:53Z,"{'name': ""SONYA'S MARKET"", 'category': 'deli_prepared_foods', 'zipcode': '20001'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,34.87,2024-11-08T14:23:11Z,"{'name': 'HAMPTON INN - DC CONVENTION CENTER', 'category': 'packaged_foods', 'zipcode': '20001'}",Credit Card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,87.45,2024-11-08T14:23:11Z,"{'name': 'CHINESE CONSOLIDATED BENEVOLENT ASSOCIATION (Special Events)', 'category': 'special_events', 'zipcode': '20001'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,27.48,2024-11-08T14:23:11Z,"{'name': 'FLAVOR US MARKET, LLC.', 'category': 'deli_prepared_foods', 'zipcode': '20001'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,87.42,2026-11-08T14:23:11Z,"{'name': 'DC Seafood_market Service', 'category': 'seafood_market', 'zipcode': '20001'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,42.75,2024-11-08T20:14:32Z,"{'name': 'Alamo Drafthouse DC LLC', 'category': 'movie_theater', 'zipcode': '20002'}",credit_card
+aa712ced-ae61-4f61-b5bf-c4b1197a7168,620.75,2024-11-05T14:27:38Z,"{'name': 'CHIRINGUITO LLC', 'category': 'hotel_lodging', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,84.27,2024-11-08T14:23:11Z,"{'name': 'DC Sports Events Service', 'category': 'sports_events', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,87.45,2024-11-08T14:27:53Z,"{'name': 'Khalil and Hamoudi DC-003 LLC', 'category': 'restaurant_dining', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,562.47,2024-11-05T14:23:11Z,"{'name': 'CITYMARKET HOTEL DEVELOPMENT LLC', 'category': 'hotel_lodging', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,87.45,2024-11-08T14:27:53Z,"{'name': 'CLOUD RESTAURANT & LOUNGE SPORTS BAR', 'category': 'restaurant_dining', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,112.73,2024-11-05T14:27:19Z,"{'name': 'URBAN GRAPE DC, LLC', 'category': 'restaurant_dining', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,618.47,2024-11-08T14:23:11Z,"{'name': 'CITYMARKET HOTEL DEVELOPMENT LLC', 'category': 'hotel_lodging', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,84.73,2024-11-05T14:27:39Z,"{'name': 'DC Sports_events Service', 'category': 'sports_events', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,421.58,2024-11-05T14:27:13Z,"{'name': 'C Alan Systems LLC.', 'category': 'beauty_services', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,85.73,2024-11-08T14:27:41Z,"{'name': 'DC Sports_events Service', 'category': 'sports_events', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,132.45,2024-11-08T14:27:53Z,"{'name': 'D C ARENA L.P.', 'category': 'event_venue', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,28.73,2024-11-08T14:27:53Z,"{'name': 'SEAT PLEASANT DRUGS INC', 'category': 'packaged_foods', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,87.45,2024-11-08T14:27:53Z,"{'name': 'YADA GROUP INC', 'category': 'restaurant_dining', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,127.34,2024-11-08T14:27:53Z,"{'name': 'FLIK INTERNATIONAL CORPORATION', 'category': 'restaurant_dining', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,87.45,2024-11-08T14:27:53Z,"{'name': 'STOP SMACKN, L.L.C.', 'category': 'restaurant_dining', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,312.47,2024-11-08T14:23:51Z,"{'name': 'Equinox 800 K Street Inc', 'category': 'spa_services', 'zipcode': '20001'}",credit_card
+3072a673-19b8-481b-a42b-92c141749632,118.73,2024-11-08T19:42:15Z,"{'name': 'Mezcal Cantina', 'category': 'restaurant_dining', 'zipcode': '20001'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,84.75,2024-11-08T14:23:11Z,"{'name': 'ALEX UNISEX, INC. II', 'category': 'barber_services', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,718.45,2024-11-08T14:23:57Z,"{'name': 'WASHINGTON HILTON HOTEL (THE)', 'category': 'hotel_lodging', 'zipcode': '20009'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,352.47,2024-11-08T14:23:11Z,"{'name': 'DC Vacation Rental Service', 'category': 'vacation_rental', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,45.67,2024-11-05T14:23:11Z,"{'name': 'DC Bowling Service', 'category': 'bowling', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,158.47,2024-11-08T14:23:11Z,"{'name': 'DISTRICT BRIDGES (Special Events)', 'category': 'special_events', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,352.47,2024-11-08T14:23:11Z,"{'name': 'DECADES, LLC. (Public Hall)', 'category': 'event_venue', 'zipcode': '20036'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,87.45,2024-11-08T14:27:53Z,"{'name': ""SONNY'S SQUARE PIE"", 'category': 'restaurant_dining', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,348.27,2024-11-08T14:23:45Z,"{'name': 'Guang Li (Inn And Motel)', 'category': 'motel_lodging', 'zipcode': '20001'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,124.67,2024-11-08T14:23:11Z,"{'name': 'NUNEZ PROPERTY MANAGEMENT LLC', 'category': 'restaurant_dining', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,28.47,2024-11-08T14:23:11Z,"{'name': 'THREE STAR LLC', 'category': 'deli_prepared_foods', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,718.45,2024-11-08T14:27:53Z,"{'name': 'LHO TOM JOAD CIRCLE DC LESSEE, LLC', 'category': 'hotel_lodging', 'zipcode': '20005'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,87.34,2024-11-08T19:42:15Z,"{'name': 'BOMBAY STREET FOOD', 'category': 'restaurant_dining', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,182.47,2026-11-08T14:23:11Z,"{'name': 'LJAS Inc. d/b/a Waxing the City', 'category': 'skin_care', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,182.47,2024-11-08T14:23:11Z,"{'name': 'LJAS Inc. d/b/a Waxing the City', 'category': 'skin_care', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,48.75,2024-11-05T14:27:39Z,"{'name': 'ALEX UNISEX INC I', 'category': 'barber_services', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,342.57,2026-11-10T14:23:45Z,"{'name': 'Harmonious Kitchen, LLC', 'category': 'catering_services', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,13.27,2024-11-08T14:23:51Z,"{'name': 'ABIDAN LLC t/a Argyle Convenience Store (Delicatessen)', 'category': 'deli_prepared_foods', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,87.45,2024-11-08T14:23:11Z,"{'name': 'ALEX UNISEX INC I', 'category': 'barber_services', 'zipcode': '20010'}",credit_card
+5f088729-53df-458c-a16f-b2315805c84c,197.45,2024-11-08T14:27:53Z,"{'name': 'U-HAUL CO OF DISTRICT OF COLUMBIA', 'category': 'car_rental', 'zipcode': '20002'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,421.67,2024-11-08T14:23:11Z,"{'name': 'DC Vacation Rental Service', 'category': 'vacation_rental', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,429.87,2024-11-08T14:23:51Z,"{'name': 'DC Vacation Rental Service', 'category': 'vacation_rental', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,118.47,2024-11-08T14:23:51Z,"{'name': 'DC Sports_events Service', 'category': 'sports_events', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,124.37,2024-11-08T14:27:53Z,"{'name': 'Mid-Atlantic Shellfish, LLC', 'category': 'restaurant_dining', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,124.85,2024-11-05T19:42:13Z,"{'name': 'GEORGETOWN RESTAURANT CORPORATION', 'category': 'restaurant_dining', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,118.47,2024-11-08T14:23:51Z,"{'name': 'DC Sports Events Service', 'category': 'sports_events', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,85.23,2024-11-08T14:37:52Z,"{'name': 'BOULANGERIE CHRISTOPHE LLC', 'category': 'restaurant_dining', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,14.87,2024-11-05T13:42:19Z,"{'name': 'DC Food_truck Service', 'category': 'food_truck', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,182.45,2024-11-08T14:23:57Z,"{'name': 'Sneacos Mobile Car Wash and Detail, LLC', 'category': 'car_wash', 'zipcode': '20009'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,412.67,2026-11-12T09:45:27Z,"{'name': 'DC Vacation Rental Service', 'category': 'vacation_rental', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,47.23,2024-11-08T14:27:53Z,"{'name': 'Public Bar Live', 'category': 'event_venue', 'zipcode': '20036'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,47.99,2024-11-08T14:23:45Z,"{'name': 'Sneacos Mobile Car Wash and Detail, LLC', 'category': 'car_wash', 'zipcode': '20009'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,38.74,2024-11-05T14:27:13Z,"{'name': 'STUDENTS OF GEORGETOWN INC.', 'category': 'packaged_foods', 'zipcode': '20007'}",Credit Card
+cf8313e4-0708-4c24-ae07-25c282a39253,58.0,2024-11-08T14:23:47Z,"{'name': 'DC Movie_theater Service', 'category': 'movie_theater', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,189.45,2024-11-08T14:27:53Z,"{'name': 'HHLP GEORGETOWN LESSEE, LLC.', 'category': 'massage_parlor', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,78.23,2024-11-08T14:27:53Z,"{'name': 'DC Seafood_market Service', 'category': 'seafood_market', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,382.57,2024-11-08T14:23:11Z,"{'name': 'MARACAS ICE POPS', 'category': 'catering_services', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,127.85,2024-11-08T16:42:07Z,"{'name': 'DC Sports_events Service', 'category': 'sports_events', 'zipcode': '20007'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,382.57,2026-11-10T14:23:45Z,"{'name': 'EQUITY 18 LLC (Public Hall)', 'category': 'event_venue', 'zipcode': '20036'}",credit_card
+cf8313e4-0708-4c24-ae07-25c282a39253,382.57,2024-11-08T14:23:11Z,"{'name': 'EQUITY 18 LLC (Public Hall)', 'category': 'event_venue', 'zipcode': '20036'}",credit_card
+2db31a69-a9d2-4180-afaf-f657ead0c8f2,38.75,2024-11-05T14:23:41Z,"{'name': 'DC Bowling Service', 'category': 'bowling', 'zipcode': '20019'}",debit_card
+2db31a69-a9d2-4180-afaf-f657ead0c8f2,47.89,2024-11-05T14:27:31Z,"{'name': 'SHARKS FISH AND CHICKEN', 'category': 'restaurant_dining', 'zipcode': '20019'}",credit_card
+2db31a69-a9d2-4180-afaf-f657ead0c8f2,68.45,2024-11-05T14:23:11Z,"{'name': 'DC Seafood_market Service', 'category': 'seafood_market', 'zipcode': '20019'}",debit_card
+2db31a69-a9d2-4180-afaf-f657ead0c8f2,38.47,2026-11-08T13:45:22Z,"{'name': 'CHE-ATAA & COMPANY LLC', 'category': 'bnb_lodging', 'zipcode': '20019'}",debit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,820.45,2024-11-08T14:27:53Z,"{'name': 'MOTEL 6', 'category': 'hotel_lodging', 'zipcode': '20012'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,447.23,2024-11-08T14:27:53Z,"{'name': 'DC Vacation Rental Service', 'category': 'vacation_rental', 'zipcode': '20011'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,581.23,2024-11-08T14:27:45Z,"{'name': 'B FOREVER FLAWLESS BY ENER LLC', 'category': 'beauty_services', 'zipcode': '20011'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,87.34,2024-11-08T14:23:11Z,"{'name': 'KIDY LOUNGE LLC', 'category': 'restaurant_dining', 'zipcode': '20011'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,85.73,2024-11-08T19:42:15Z,"{'name': '441 Kennedy Street Kitchen LLC', 'category': 'restaurant_dining', 'zipcode': '20011'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,820.45,2024-11-08T14:23:57Z,"{'name': 'MOTEL 6', 'category': 'hotel_lodging', 'zipcode': '20012'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,428.73,2024-11-08T14:27:53Z,"{'name': 'MDM LLC (Public Hall)', 'category': 'event_venue', 'zipcode': '20012'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,47.25,2024-11-08T14:37:12Z,"{'name': 'DC Bowling Service', 'category': 'bowling', 'zipcode': '20011'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,820.45,2024-11-08T14:27:53Z,"{'name': 'MOTEL 6', 'category': 'hotel_lodging', 'zipcode': '20012'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,118.63,2024-11-08T14:27:45Z,"{'name': 'OULEY HAIR GALLERY LLC.', 'category': 'beauty_services', 'zipcode': '20011'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,47.89,2024-11-08T14:23:11Z,"{'name': 'DC Seafood_market Service', 'category': 'seafood_market', 'zipcode': '20011'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,84.63,2024-11-05T14:27:38Z,"{'name': 'VINEGAR HILL HOSPITALITY LLC', 'category': 'restaurant_dining', 'zipcode': '20011'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,118.73,2024-11-05T14:27:19Z,"{'name': 'SEWA INTERNATIONAL INC.', 'category': 'groceries', 'zipcode': '20011'}",Credit Card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,212.37,2024-11-05T14:23:11Z,"{'name': 'DC Car Rental Service', 'category': 'car_rental', 'zipcode': '20011'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,152.47,2024-11-08T14:23:11Z,"{'name': 'SEWA INTERNATIONAL INC.', 'category': 'groceries', 'zipcode': '20011'}",Credit Card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,85.47,2024-11-08T14:23:11Z,"{'name': ""Jackie Lee's"", 'category': 'restaurant_dining', 'zipcode': '20011'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,412.73,2024-11-08T14:27:35Z,"{'name': 'VegHeaven L.C', 'category': 'catering_services', 'zipcode': '20011'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,42.87,2024-11-08T14:23:11Z,"{'name': 'CROWN BAKERY L.L.C.', 'category': 'bakery', 'zipcode': '20011'}",Credit Card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,27.45,2024-11-05T14:23:11Z,"{'name': 'Washingtonians Car Wash Corp', 'category': 'car_wash', 'zipcode': '20011'}",credit_card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,124.87,2024-11-08T14:23:11Z,"{'name': 'HIWOT MARKET INC', 'category': 'groceries', 'zipcode': '20011'}",Credit Card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,124.87,2024-11-08T14:23:11Z,"{'name': 'KENYNUR INC.', 'category': 'groceries', 'zipcode': '20011'}",Credit Card
+6ac8472c-0114-4f28-9de6-e9ea57486c7c,212.47,2024-11-08T14:23:51Z,"{'name': 'Vana Residential llc', 'category': 'bnb_lodging', 'zipcode': '20011'}",credit_card
+1bff9b30-35f9-44f9-a50b-1a10aa6f98c1,68.23,2024-11-05T14:27:39Z,"{'name': 'YANLIM, INC.', 'category': 'restaurant_dining', 'zipcode': '20008'}",credit_card
+1bff9b30-35f9-44f9-a50b-1a10aa6f98c1,92.47,2024-11-08T14:23:11Z,"{'name': 'Target Corporation', 'category': 'groceries', 'zipcode': '20008'}",debit_card
+1bff9b30-35f9-44f9-a50b-1a10aa6f98c1,78.23,2024-11-05T14:27:39Z,"{'name': 'ANNABELLE LLC', 'category': 'restaurant_dining', 'zipcode': '20008'}",credit_card
+1bff9b30-35f9-44f9-a50b-1a10aa6f98c1,312.47,2026-11-10T13:45:22Z,"{'name': 'Omni Shoreham Corporation', 'category': 'hotel_lodging', 'zipcode': '20008'}",credit_card
+1bff9b30-35f9-44f9-a50b-1a10aa6f98c1,78.23,2024-11-08T14:27:45Z,"{'name': 'CAPITOL GROCER', 'category': 'groceries', 'zipcode': '20008'}",debit_card
+1bff9b30-35f9-44f9-a50b-1a10aa6f98c1,132.78,2024-11-05T14:27:31Z,"{'name': 'PARK PLACE INC (Public Hall)', 'category': 'event_venue', 'zipcode': '20008'}",credit_card
+1bff9b30-35f9-44f9-a50b-1a10aa6f98c1,87.23,2024-11-05T14:27:39Z,"{'name': 'Target Corporation', 'category': 'groceries', 'zipcode': '20008'}",debit_card

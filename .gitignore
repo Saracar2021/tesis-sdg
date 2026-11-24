@@ -13,3 +13,7 @@ outputs/generador/pool/
 outputs/sintetico_reglas/transacciones.csv.gz
 .venv-ctgan/
 outputs/ctgan/ctgan_A.pkl
+.env
+
+# WP5: entorno con las versiones que fija el pipeline de referencia
+.venv-pancholi/

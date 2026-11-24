@@ -1,0 +1,31 @@
+descripcion,monto,fecha,signo,cuenta_tipo,categoria_n1,fuente_etiqueta,voluntario_id
+COMPRA EXITO CALLE 80,10300,2026-08-14,-,banco,alimentos_mercado,texto,V01
+COMPRA TIENDAS D1 SUBA,42500,2026-08-03,-,banco,alimentos_mercado,texto,V01
+PAGO QR TIENDA DONDE PEPE,8700,2026-04-21,-,billetera,alimentos_mercado,texto,V01
+TRANSFERENCIA A PERSONA,35000,2026-04-09,-,billetera,alimentos_mercado,declaracion_voluntario,V01
+ENVIO A PERSONA BANCOLOMBIA,200000,2025-12-20,-,banco,transferencias_p2p,texto,V01
+TRANSFERENCIA RECIBIDA DE PERSONA,150000,2025-12-24,+,billetera,transferencias_p2p,texto,V01
+PAGO NOMINA EMPRESA ANDINA SAS,2850000,2025-12-30,+,banco,ingreso,texto,V01
+RETIRO ATM BANCOLOMBIA,1010000,2025-12-15,-,banco,retiro_efectivo,texto,V01
+COMPRA RAPPI RESTAURANTES,38900,2026-04-12,-,tarjeta_credito,comidas_fuera,texto,V01
+ENVIO NEQUI A PERSONA,20000,2026-08-22,-,billetera,transferencias_p2p,texto,V01
+COMPRA CARULLA EXPRESS,105000,2026-04-05,-,tarjeta_credito,alimentos_mercado,texto,V02
+COMPRA ARA BOSA,27300,2026-04-18,-,banco,alimentos_mercado,texto,V02
+PAGO A PERSONA,60000,2026-08-09,-,banco,alimentos_mercado,declaracion_voluntario,V02
+TRANSFERENCIA A PERSONA,15000,2026-08-27,-,billetera,alimentos_mercado,declaracion_voluntario,V02
+ENVIO A PERSONA DAVIVIENDA,80000,2025-12-07,-,banco,transferencias_p2p,texto,V02
+TRANSFERENCIA RECIBIDA NEQUI,50000,2025-12-11,+,billetera,transferencias_p2p,texto,V02
+RECIBISTE DINERO DE PERSONA,30000,2026-04-30,+,billetera,transferencias_p2p,texto,V02
+PAGO NOMINA COMERCIALIZADORA DEL SUR,1750000,2026-04-30,+,banco,ingreso,texto,V02
+RETIRO CORRESPONSAL BANCOLOMBIA,300000,2026-08-16,-,banco,retiro_efectivo,texto,V02
+COMPRA CORRIENTAZO LA SAZON,15000,2026-08-11,-,billetera,comidas_fuera,texto,V02
+COMPRA OLIMPICA CHAPINERO,64200,2025-12-19,-,banco,alimentos_mercado,texto,V03
+COMPRA JUSTO Y BUENO KENNEDY,23800,2026-08-06,-,banco,alimentos_mercado,texto,V03
+COMPRA SURTIMAX FONTIBON,51000,2026-04-25,-,billetera,alimentos_mercado,texto,V03
+ENVIO A PERSONA BBVA,120000,2026-04-02,-,banco,transferencias_p2p,texto,V03
+TRANSFERENCIA RECIBIDA DE PERSONA,90000,2026-08-19,+,banco,transferencias_p2p,texto,V03
+ENVIO DAVIPLATA A PERSONA,25000,2025-12-28,-,billetera,transferencias_p2p,texto,V03
+TRANSFERENCIA A PERSONA,45000,2026-04-14,-,billetera,transferencias_p2p,texto,V03
+PAGO NOMINA SERVICIOS TECNICOS LTDA,2100000,2026-08-31,+,banco,ingreso,texto,V03
+RETIRO ATM DAVIVIENDA,200000,2026-04-08,-,banco,retiro_efectivo,texto,V03
+COMPRA PRESTO HAMBURGUESAS,32000,2025-12-21,-,tarjeta_credito,comidas_fuera,texto,V03

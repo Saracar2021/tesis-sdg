@@ -1,0 +1,165 @@
+{
+ "criterio": "mapeable ⇔ las 16 categoria_n1 alcanzables desde etiquetas con peso > 0 (etapas 2 y 4)",
+ "taxonomia_version": "1.1.0",
+ "n_clases_taxonomia": 16,
+ "etiquetas_etapa2": 7,
+ "etiquetas_etapa4": 39,
+ "etiquetas_etapa4_peso_cero": [
+  "beauty_booth",
+  "electrolysis",
+  "hair_braiding",
+  "towing_company",
+  "towing_services",
+  "vehicle_storage"
+ ],
+ "clases_alcanzables": [
+  "alimentos_mercado",
+  "comidas_fuera",
+  "educacion",
+  "entretenimiento",
+  "otros",
+  "transporte",
+  "vestuario_cuidado_personal",
+  "vivienda_servicios"
+ ],
+ "n_clases_alcanzables": 8,
+ "clases_no_alcanzables": [
+  "telecom_conectividad",
+  "salud",
+  "hogar_articulos",
+  "obligaciones_financieras",
+  "transferencias_p2p",
+  "retiro_efectivo",
+  "movimiento_propio",
+  "ingreso"
+ ],
+ "rutas_de_peso_minimo": {
+  "educacion": 0.01,
+  "vivienda_servicios": 0.01
+ },
+ "sensibilidad_soporte": {
+  "soporte_min": 10,
+  "fuente_soporte": "outputs/ctgan/sintetico_v1.csv.gz",
+  "clases_evaluadas": [
+   "alimentos_mercado",
+   "comidas_fuera",
+   "transporte",
+   "vivienda_servicios",
+   "telecom_conectividad",
+   "salud",
+   "educacion",
+   "entretenimiento",
+   "vestuario_cuidado_personal",
+   "hogar_articulos",
+   "obligaciones_financieras",
+   "transferencias_p2p",
+   "retiro_efectivo",
+   "movimiento_propio",
+   "ingreso",
+   "otros"
+  ],
+  "alcanzables_entre_evaluadas": [
+   "alimentos_mercado",
+   "comidas_fuera",
+   "transporte",
+   "vivienda_servicios",
+   "educacion",
+   "entretenimiento",
+   "vestuario_cuidado_personal",
+   "otros"
+  ]
+ },
+ "clases_por_ruta_marginal": [
+  "educacion",
+  "vivienda_servicios"
+ ],
+ "n_clases_alcanzables_sin_marginales": 6,
+ "techo_f1_macro_16_sin_marginales": 0.375,
+ "masa_sintetico_v1_sin_marginales": 0.5264337907389678,
+ "techo_f1_macro_16": 0.5,
+ "techo_f1_macro_clases_evaluadas": 0.5,
+ "masa_sintetico_v1_en_clases_alcanzables": 0.5785567583932707,
+ "masa_sintetico_v1_por_origen_no_alcanzable": {
+  "retiro": 0.3646830404815066,
+  "recarga_billetera": 0.2249490340743617,
+  "p2p_sin_proposito": 0.14839335986797397,
+  "compra": 0.09626249878652558,
+  "ingreso_no_asalariado": 0.06898359382584215,
+  "pago_recurrente": 0.041957091544510244,
+  "nomina": 0.036870206776041164,
+  "pago_tarjeta": 0.01790117464323852
+ },
+ "derivabilidad_esquema_wp8": {
+  "fecha": {
+   "estado": "directa",
+   "nota": "timestamp"
+  },
+  "cuenta_tipo": {
+   "estado": "ausente",
+   "nota": "no modela cuentas"
+  },
+  "signo": {
+   "estado": "constante",
+   "nota": "todo registro es una compra: '-'"
+  },
+  "categoria_n1": {
+   "estado": "parcial",
+   "nota": "ver cobertura"
+  },
+  "categoria_n2": {
+   "estado": "parcial",
+   "nota": "ver mapeos"
+  },
+  "medio_pago": {
+   "estado": "ausente",
+   "nota": "etapas 1-3 sin campo; etapa 4: payment_type en texto libre en inglés"
+  },
+  "origen": {
+   "estado": "constante",
+   "nota": "solo 'compra'"
+  },
+  "formalidad_comercio": {
+   "estado": "ausente",
+   "nota": "no modela formalidad"
+  },
+  "canal_p2p": {
+   "estado": "constante",
+   "nota": "sin P2P: False"
+  },
+  "monto": {
+   "estado": "inventada",
+   "nota": "USD de D.C.; pasar a COP exige tipo de cambio y paridad de poder adquisitivo externos"
+  },
+  "ingreso_mensual": {
+   "estado": "inventada",
+   "nota": "ingreso anual en USD del ACS de D.C."
+  },
+  "dia_mes": {
+   "estado": "directa",
+   "nota": "de timestamp"
+  },
+  "mes": {
+   "estado": "directa",
+   "nota": "de timestamp"
+  }
+ },
+ "columnas_salida_etapa3": [
+  "customer_id",
+  "zipcode",
+  "category",
+  "merchant_name",
+  "mapped_category",
+  "transaction_amount",
+  "timestamp"
+ ],
+ "columnas_salida_etapa4": [
+  "customer_id",
+  "amount",
+  "timestamp",
+  "merchant_details",
+  "payment_type"
+ ],
+ "mapeable": false,
+ "mapeable_sensibilidad": false,
+ "veredicto_wp8": "(a) Pancholi solo como contexto"
+}

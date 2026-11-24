@@ -1,0 +1,168 @@
+{
+ "simulado": false,
+ "modelo_usado": "openai/gpt-oss-120b",
+ "desviacion_modelo": "llama-3.3-70b-versatile no disponible para esta cuenta; sustituido por openai/gpt-oss-120b",
+ "N_filas": 300,
+ "llamadas": 300,
+ "fallos": 0,
+ "tasa_fallo": 0.0,
+ "H-P3": {
+  "valores_distintos_payment_type": 6,
+  "medio_mas_frecuente": "tarjeta_credito",
+  "part_medio_mas_frecuente": 0.89,
+  "ic95_medio_mas_frecuente": [
+   0.8495437677561146,
+   0.9205947146887394
+  ],
+  "monolitico_100pct": false,
+  "medios_v1_distintos": [
+   "tarjeta_credito",
+   "tarjeta_debito"
+  ],
+  "ausentes_cota_sup_wilson": {
+   "efectivo": 0.012642971224546034,
+   "billetera_digital": 0.012642971224546034,
+   "transferencia_bancaria": 0.012642971224546034
+  },
+  "part_por_medio_v1": {
+   "tarjeta_credito": {
+    "part": 0.89,
+    "ic95": [
+     0.8495437677561146,
+     0.9205947146887394
+    ]
+   },
+   "tarjeta_debito": {
+    "part": 0.11,
+    "ic95": [
+     0.07940528531126051,
+     0.15045623224388538
+    ]
+   }
+  },
+  "registros_extracto_retiro_p2p_propio_ingreso": 0
+ },
+ "H-P2": {
+  "categorias_n1_emitidas": {
+   "alimentos_mercado": {
+    "n": 72,
+    "part": 0.24,
+    "ic95": [
+     0.19515315695222746,
+     0.29142118808453643
+    ]
+   },
+   "comidas_fuera": {
+    "n": 70,
+    "part": 0.23333333333333334,
+    "ic95": [
+     0.18902823823172718,
+     0.28438134642136403
+    ]
+   },
+   "entretenimiento": {
+    "n": 52,
+    "part": 0.17333333333333334,
+    "ic95": [
+     0.13470060049746765,
+     0.22022614070256905
+    ]
+   },
+   "otros": {
+    "n": 41,
+    "part": 0.13666666666666666,
+    "ic95": [
+     0.10236514609208625,
+     0.1801554129977505
+    ]
+   },
+   "vestuario_cuidado_personal": {
+    "n": 41,
+    "part": 0.13666666666666666,
+    "ic95": [
+     0.10236514609208625,
+     0.1801554129977505
+    ]
+   },
+   "transporte": {
+    "n": 20,
+    "part": 0.06666666666666667,
+    "ic95": [
+     0.043567515545158274,
+     0.10072305951611496
+    ]
+   },
+   "vivienda_servicios": {
+    "n": 2,
+    "part": 0.006666666666666667,
+    "ic95": [
+     0.0018301483579117855,
+     0.023977583250306973
+    ]
+   },
+   "educacion": {
+    "n": 2,
+    "part": 0.006666666666666667,
+    "ic95": [
+     0.0018301483579117855,
+     0.023977583250306973
+    ]
+   }
+  },
+  "n_categorias_n1": 8,
+  "ocio_entretenimiento": {
+   "part_ocio": 0.17333333333333334,
+   "ic95_ocio": [
+    0.13470060049746765,
+    0.22022614070256905
+   ],
+   "part_alimentos": 0.24,
+   "ic95_alimentos": [
+    0.19515315695222746,
+    0.29142118808453643
+   ],
+   "veredicto": "no concluyente"
+  },
+  "ocio_con_hospedaje": {
+   "part_ocio": 0.31666666666666665,
+   "ic95_ocio": [
+    0.26662835068573615,
+    0.37134073876326396
+   ],
+   "part_alimentos": 0.24,
+   "ic95_alimentos": [
+    0.19515315695222746,
+    0.29142118808453643
+   ],
+   "veredicto": "no concluyente"
+  },
+  "part_comercio_generico_fallback": 0.11666666666666667,
+  "fidelidad_categoria_llm": 0.9966666666666667
+ },
+ "H-P1": {
+  "elasticidad_entre_clientes": 0.7944412815438394,
+  "ic95_bootstrap_clientes": [
+   0.5978086934588662,
+   1.0952457334861043
+  ],
+  "n_clientes": 25,
+  "sensible_al_ingreso": true,
+  "mecanismo": "el prompt incluye 'Expected spending range' = peso de la subcategoría x ingreso/12"
+ },
+ "monto_usd": {
+  "media": 148.80926666666667,
+  "mediana": 87.45,
+  "p01": 5.7452000000000005,
+  "p99": 719.4699999999991
+ },
+ "costo": {
+  "prompt_tokens": 85658,
+  "completion_tokens": 42016,
+  "minutos": 82.73781050841013,
+  "usd_estimado": null,
+  "precio_usd_por_M": [
+   null,
+   null
+  ]
+ }
+}

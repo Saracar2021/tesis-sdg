@@ -138,10 +138,16 @@ class Plantillas:
         return sorted(self._por_tipo)
 
     def descripciones(self, rng: np.random.Generator, tipo: np.ndarray, comercio: np.ndarray, banco: np.ndarray,
-                      billetera: np.ndarray, empleador: np.ndarray | None = None) -> tuple[np.ndarray, np.ndarray]:
+                      billetera: np.ndarray, empleador: np.ndarray | None = None,
+                      n2_objetivo: np.ndarray | None = None) -> tuple[np.ndarray, np.ndarray]:
         """Una descripción por fila y el subtipo p2p que implica la plantilla (vacío si no aplica).
 
-        Marcadores: {C} comercio, {B} banco, {W} billetera en mayúsculas, {Wt} billetera en título, {E} empleador."""
+        Marcadores: {C} comercio, {B} banco, {W} billetera en mayúsculas, {Wt} billetera en título, {E} empleador.
+
+        ``n2_objetivo`` (opcional; capa de texto ``sdg.texto``): cuando el subtipo ya viene fijado por la capa estructural,
+        se sortea solo entre las plantillas de ese tipo cuyo ``n2`` coincide (pesos renormalizados); si ninguna coincide
+        o el objetivo es vacío, entre todas las del tipo. Con ``n2_objetivo=None`` el recorrido y los sorteos son
+        idénticos a la versión del generador por reglas (mismo resultado bit a bit)."""
         n = len(tipo)
         out = np.empty(n, dtype=object)
         n2 = np.full(n, "", dtype=object)
@@ -149,12 +155,21 @@ class Plantillas:
         for t in sorted(set(tipo)):
             if t not in self._por_tipo:
                 raise KeyError(f"tipo de evento sin plantilla: {t!r}")
-            idx = np.flatnonzero(tipo == t)
-            g = self._por_tipo[t]
-            j = rng.choice(len(g), size=len(idx), p=_pesos(g["peso"].to_numpy()))
-            pl = g["plantilla"].to_numpy()[j]
-            n2[idx] = g["n2"].to_numpy()[j]
-            out[idx] = [p.replace("{C}", c).replace("{B}", b).replace("{Wt}", w.title()).replace("{W}", w).replace("{E}", e)
-                        for p, c, b, w, e in zip(pl, comercio[idx], banco[idx], billetera[idx], emp[idx])]
+            idx_t = np.flatnonzero(tipo == t)
+            g_t = self._por_tipo[t]
+            if n2_objetivo is None:
+                bloques = [(idx_t, g_t)]
+            else:
+                bloques = []
+                obj = n2_objetivo[idx_t]
+                for v in sorted(set(obj)):
+                    g = g_t[g_t["n2"] == v] if v != "" else g_t.iloc[0:0]
+                    bloques.append((idx_t[obj == v], g if len(g) else g_t))
+            for idx, g in bloques:
+                j = rng.choice(len(g), size=len(idx), p=_pesos(g["peso"].to_numpy()))
+                pl = g["plantilla"].to_numpy()[j]
+                n2[idx] = g["n2"].to_numpy()[j]
+                out[idx] = [p.replace("{C}", c).replace("{B}", b).replace("{Wt}", w.title()).replace("{W}", w).replace("{E}", e)
+                            for p, c, b, w, e in zip(pl, comercio[idx], banco[idx], billetera[idx], emp[idx])]
         out = np.array([" ".join(s.split()) for s in out], dtype=object)
         return out, n2

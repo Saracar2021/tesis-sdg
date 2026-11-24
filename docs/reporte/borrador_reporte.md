@@ -92,7 +92,7 @@ Las decisiones de diseño se documentan con su justificación (`docs/protocolo_t
 
 ## V. Reevaluación del pipeline de referencia (Pancholi et al.)
 
-Las tres limitaciones que el informe de avance atribuía al pipeline de referencia se reevaluaron **ejecutándolo** (etapas 1–3, reproducible), con los criterios de evaluación **fijados por escrito antes de correr**. Resultado:
+Las tres limitaciones que se atribuían al pipeline de referencia se reevaluaron **ejecutando su propio código** (clon con commit fijo, con sus dependencias) en **tres diseños** (A: rejilla de ingreso; B: réplica literal con sus 155 clientes; C: su etapa 1 reentrenada + etapas 2–3), con **10 semillas**, hasta **5.000.000 de registros**, intervalos bootstrap y criterios **fijados por escrito antes de correr**. Dos aclaraciones de honestidad: (a) solo se corrieron las **etapas 1–3**; las 4–5 (enriquecimiento con LLM vía API externa) estaban bloqueadas, así que se caracteriza su código, no su salida final publicada; (b) las cifras del informe inicial (5 perfiles, 149 tx, «USD 12», 100 % tarjeta) venían de su *app web*, no del pipeline del paper, y **quedan retiradas**. Resultado:
 
 | Hipótesis | Enunciado del informe | Veredicto tras la ejecución |
 |---|---|---|
@@ -113,14 +113,28 @@ Prerregistrar los criterios es lo que da credibilidad a la reevaluación: no se 
 `[PRELIMINAR — WP4]` 20 voluntarios de Bogotá (muestra por conveniencia; conjunto de validación, no representativo). Extractos de Nequi, Daviplata o bancarios de 3 meses de referencia, anonimizados según protocolo (`docs/datos_reales/02_protocolo_anonimizacion_v1.1.md`). Etiquetado por 2 anotadores con la taxonomía v1.1 y concordancia inter-anotador (Cohen's Kappa). **Estado:** aval de ética resuelto; ingesta/anonimización en curso; anotación pendiente.
 
 ### C. Protocolo TSTR y clasificadores
-Tres clasificadores entrenados sobre sintético: (i) regresión logística con TF-IDF (baseline), (ii) BETO fine-tuneado, (iii) LLaMA 3 few-shot. Métricas: F1-macro (con regla de soporte ≥ 10 por clase), Cohen's Kappa y AUC. Comparación contra el pipeline de referencia. **Brazo de control (solo campos estructurados):** como la descripción de texto se genera por plantillas condicionadas a la categoría, un clasificador de texto mediría las plantillas y no el aporte del CTGAN; por eso se incluye un brazo entrenado únicamente con los campos estructurados (monto, medio de pago, cuenta, etc.), que aísla la contribución del refinamiento generativo.
+Tres clasificadores entrenados sobre sintético: (i) regresión logística con TF-IDF (baseline), (ii) BETO fine-tuneado, (iii) LLaMA 3 few-shot. Métricas: F1-macro (con regla de soporte ≥ 10 por clase), Cohen's Kappa y AUC. **Brazo de control (solo campos estructurados):** como la descripción de texto se genera por plantillas condicionadas a la categoría, un clasificador de texto mediría las plantillas y no el aporte del CTGAN; por eso se incluye un brazo entrenado únicamente con los campos estructurados (monto, medio de pago, cuenta, etc.), que aísla la contribución del refinamiento generativo. **Comparación con el pipeline de referencia:** la comparación justa NO es contra el F1 que los autores reportan (medido sobre datos en inglés de otra ciudad, con otras categorías), sino entrenar un clasificador sobre la salida de *su* pipeline y evaluarlo sobre el *mismo* conjunto real de Bogotá; el desempeño reportado por los autores se cita como contexto, no como un número directamente comparable.
 
 ---
 
 ## VII. Resultados
 
 ### A. Fidelidad del dataset sintético
-`[PRELIMINAR — WP7]` Métricas SDV (Column Shapes, Column Pair Trends) del dataset v1, reportadas **relativas a un piso** (muestreo de marginales independientes) **y un techo** (fuente dividida en train/holdout), evaluadas contra el holdout y tras el filtro de reglas duras; se reporta además la **tasa de rechazo**. Como prueba específica, la **elasticidad monto–ingreso** (pendiente OLS de log-monto sobre log-ingreso, con `ingreso_mensual` incorporado como columna) se compara entre el **train** (ê_train ≈ 0,33) y la salida del CTGAN, mediante la razón `r = ê_ctgan/ê_train` y un veredicto prerregistrado: CONSERVA (r ≥ 0,70), ATENÚA (0,30 ≤ r < 0,70) o NO CONSERVA (r < 0,30, o ê ≤ 0, o IC incluye 0). Verifica si **nuestro** refinamiento conserva la relación ingreso–monto; la comparación con el pipeline de referencia (sus reglas 1,008 → su salida CTGAN −0,003, H-P1) es cualitativa. Toda cifra sale de `outputs/ctgan/`.
+Corrida oficial (300 épocas, CPU, semilla 42; SDV 2.2.0 / ctgan 0.13.0). **Reproducibilidad bit a bit confirmada:** dos entrenamientos independientes dan el mismo SHA-256 de la muestra. Train = 96.386 filas (80 % de los perfiles); holdout = 25.825.
+
+**Calidad (SDV QualityReport)**, con piso = muestreo de marginales independientes y techo = train vs. holdout:
+
+| Métrica | Piso | CTGAN v1 | Techo | Brecha al techo |
+|---|---|---|---|---|
+| Overall | 0,830 | 0,931 | 0,974 | 0,043 |
+| Column Shapes | 0,980 | 0,935 | 0,980 | 0,046 |
+| Column Pair Trends | 0,680 | 0,927 | 0,968 | 0,041 |
+
+En **dependencias** (Column Pair Trends) el CTGAN recupera el **85,7 %** de la distancia piso→techo (0,927 frente a piso 0,680 y techo 0,968): ahí está su aporte sobre un muestreo trivial. En **marginales** (Column Shapes) el CTGAN (0,935) queda por debajo del piso (0,980), que clava las marginales por construcción; la desviación en la marginal de `categoria_n1` es ≈ 0,13.
+
+**Elasticidad monto–ingreso** (veredicto prerregistrado): train ê = 0,331 [0,267; 0,388]; **CTGAN v1 ê = 0,452 [0,441; 0,463], r = 1,37 → CONSERVA** (de hecho amplifica, r > 1); piso ≈ 0 (−0,005). Nuestro CTGAN conserva —e intensifica— la relación ingreso–monto, en contraste con el del pipeline de referencia que la colapsa (−0,003). La amplificación por encima del train (ICs que no se solapan) se discute como posible sobre-ajuste de la correlación.
+
+**Reglas duras / rechazo:** tasa total **14,78 %**, que **supera el tope declarado del 10 %** → resultado de fidelidad **negativo**, reportado. El grueso es `par_n1_n2_inexistente` (10,78 %): el CTGAN plano genera pares categoría–subcategoría fuera de la taxonomía, señal de que **no captura bien la jerarquía categórica**. El resto: signo incompatible 2,66 %, medio imposible para la cuenta 1,67 %, `canal_p2p` 0,25 %, fecha 0,11 %. El dataset v1 (122.211 filas) es el resultado tras filtrar las violaciones.
 
 ### B. Validación TSTR
 `[PRELIMINAR — WP8]` F1-macro por clasificador, matriz de confusión por categoría, Kappa. Pendiente de la anotación del conjunto real.
@@ -142,6 +156,7 @@ Limitaciones declaradas (`docs/protocolo_tecnico.md`, L1–L17), las principales
 - **L16** — El repeso a bancarizados (D15) asume independencia condicional entre quintil de `ICGU` y tenencia de productos, dentro del estrato.
 - **Realismo del texto sintético** — Las descripciones provienen de una biblioteca curada de comercios y plantillas (regla propia, no calibrada con los extractos reales): son más limpias y regulares que un extracto real, por lo que el TSTR es un **techo optimista** que se estrecha al incorporar los datos reales anotados. Como el texto se genera por plantillas condicionadas a la categoría, un clasificador de texto mide en parte el sistema de plantillas, no el refinamiento del CTGAN (de ahí el brazo de control solo-estructurado, §VI.C).
 - **Fidelidad del CTGAN a las reglas, no a Colombia** — El CTGAN se entrena sobre la capa emitida, que ya es sintética (salida del generador por reglas); por tanto sus métricas de fidelidad miden cercanía a la salida de las reglas, no a la realidad colombiana. La prueba frente a la realidad es el TSTR contra datos reales.
+- **Jerarquía categórica en el CTGAN** — El CTGAN plano genera un 10,78 % de pares categoría–subcategoría inexistentes en la taxonomía (rechazo total 14,78 %, por encima del tope prerregistrado del 10 %). Modelar explícitamente la jerarquía o restringir el muestreo condicional es trabajo futuro. La amplificación de la elasticidad por el CTGAN (0,45 vs. 0,33 del train) también debe vigilarse como posible sobre-ajuste de la correlación ingreso–monto.
 
 ---
 

@@ -1,0 +1,59 @@
+{
+ "descripcion": "WP5 — etapa 4 del pipeline de referencia (enriquecimiento con LLM), corrida acotada",
+ "repositorio": {
+  "url": "https://github.com/aman-jaglan/Capstone_Project.git",
+  "commit": "d0a61e783353f52123b1821bc1876824d608d2a1"
+ },
+ "script": "src/Data_Synthesizer/code/transaction_deepseek_synthesizer.py (TransactionGenerator)",
+ "parches": [
+  "P3 config en memoria desde .env",
+  "P4 sustitución de modelo si no está disponible",
+  "P4b reasoning_effort=low solo para gpt-oss"
+ ],
+ "modelo_codigo": "llama-3.3-70b-versatile",
+ "modelo_usado": "openai/gpt-oss-120b",
+ "desviacion_modelo": "llama-3.3-70b-versatile no disponible para esta cuenta; sustituido por openai/gpt-oss-120b",
+ "modelos_disponibles_cuenta": [
+  "allam-2-7b",
+  "canopylabs/orpheus-arabic-saudi",
+  "canopylabs/orpheus-v1-english",
+  "meta-llama/llama-prompt-guard-2-22m",
+  "meta-llama/llama-prompt-guard-2-86m",
+  "openai/gpt-oss-120b",
+  "openai/gpt-oss-20b",
+  "openai/gpt-oss-safeguard-20b",
+  "qwen/qwen3.8-27b",
+  "whisper-large-v3",
+  "whisper-large-v3-turbo"
+ ],
+ "parametros": {
+  "n_objetivo": 300,
+  "semilla": 42,
+  "pausa_s": 10.0,
+  "temperatura": 0.5,
+  "max_tokens": 500,
+  "clientes": 25,
+  "random_state_clientes": 42,
+  "clientes_archivo": "synthetic_customer_gan.csv"
+ },
+ "resultado": {
+  "llamadas": 300,
+  "fallos": 0,
+  "filas_salida": 300,
+  "prompt_tokens": 85658,
+  "completion_tokens": 42016,
+  "minutos": 82.73781050841013
+ },
+ "sha256": {
+  "transacciones_etapa4.csv": "ad3a4ab5cebb00979f7bdbd4830cd48e9b5655d77f664d94f401db7c35a15599",
+  "llamadas.jsonl": "c514180909d0f3275d2ca4390285dcb9413140f9f0aee771d70577f767c382f2"
+ },
+ "entorno": {
+  "python": "3.11.9",
+  "plataforma": "Windows-10-10.0.26200-SP0",
+  "pandas": "2.2.3",
+  "numpy": "2.2.3",
+  "requests": "2.32.3"
+ },
+ "simulado": false
+}

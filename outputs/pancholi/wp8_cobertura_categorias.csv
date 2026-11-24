@@ -1,0 +1,17 @@
+categoria_n1,alcanzable_pancholi,etiquetas_pancholi,peso_codigo_etapa4,filas_sintetico_v1,part_sintetico_v1
+alimentos_mercado,True,etapa2:groceries; etapa4:groceries; etapa4:bakery; etapa4:packaged_foods; etapa4:seafood_market,0.19999999999999998,24660,0.20178216363502466
+comidas_fuera,True,etapa2:dining; etapa4:deli_prepared_foods; etapa4:vending_snacks; etapa4:ice_cream; etapa4:food_truck; etapa4:restaurant_dining; etapa4:catering_services,0.18,17705,0.1448723928287961
+transporte,True,etapa2:transportation; etapa4:gas_station; etapa4:car_rental; etapa4:car_wash,0.07,15791,0.12921095482403383
+vivienda_servicios,True,etapa4:boarding_house,0.01,5897,0.04825261228530983
+telecom_conectividad,False,,0.0,4050,0.03313940643640916
+salud,False,,0.0,557,0.004557691206192568
+educacion,True,etapa4:driving_lessons,0.01,473,0.003870355368992971
+entretenimiento,True,etapa2:entertainment; etapa4:movie_theater; etapa4:event_venue; etapa4:live_theater; etapa4:bowling; etapa4:pool_hall; etapa4:skating_rink; etapa4:sports_events; etapa4:special_events,0.13,959,0.00784708414136207
+vestuario_cuidado_personal,True,etapa2:personal_care; etapa4:beauty_services; etapa4:barber_services; etapa4:skin_care; etapa4:nail_salon; etapa4:spa_services; etapa4:massage_parlor,0.09999999999999999,5016,0.04104376856420453
+hogar_articulos,False,,0.0,1766,0.014450417720172488
+obligaciones_financieras,False,,0.0,986,0.008068013517604798
+transferencias_p2p,False,,0.0,7733,0.06327580986981532
+retiro_efectivo,False,,0.0,19060,0.15595977448838486
+movimiento_propio,False,,0.0,12025,0.09839539812291856
+ingreso,False,,0.0,5328,0.043596730245231606
+otros,True,etapa2:housing; etapa2:other; etapa4:hotel_lodging; etapa4:motel_lodging; etapa4:bnb_lodging; etapa4:vacation_rental,0.09,205,0.0016774267455466365

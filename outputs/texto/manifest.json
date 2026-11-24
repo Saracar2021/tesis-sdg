@@ -1,0 +1,107 @@
+{
+  "script": "tools/etapa3b_texto.py",
+  "modulo": "src/sdg/texto.py",
+  "semilla": 42,
+  "declaracion": "Capa de texto del protocolo (2.ª capa del generador, WP6), aplicada con la misma función, plantillas y semilla a la capa emitida del generador por reglas y al CTGAN. Plantillas y comercios: docs/generador (regla propia, listados públicos). Latentes del comercio: pool ENPH 2016-17 (FEX × frecuencia). No usa el real anotado de WP4 (D14).",
+  "validacion_tipo_evento_vs_reglas": {
+    "filas": 122211,
+    "coinciden": 122211,
+    "frac": 1.0,
+    "ejemplos_no_coinciden": []
+  },
+  "parametros": {
+    "docs/generador/plantillas_descriptor.csv": "509faf9bc0ca112d3392eeb91aebb99419a7765df193b9ae43591518a94dc932",
+    "docs/generador/comercios_curados.csv": "61de7e63b6569999f54b46d1eae93eb0f88c01ddbf6abe5c1b433d1ea1e3b3eb",
+    "docs/generador/parametros_propios.json": "433d7153dc987a246880ed777e7649407f10e962e2a61b9f51a09668a7e5863d",
+    "docs/generador/lugares_compra.csv": "194b438c98b2c50ff046bee14c9d78f482418575e1e44d8e29cc0f82c67ac4ce",
+    "docs/generador/palabras_nombres.csv": "9cc0316b2eb597f45d1a77ffd747b8f40c9fdc5510f926dace20ed6a86593e44",
+    "docs/generador/sucursales_bogota.csv": "bf7b37dc69ed251e7de841554a8f44d64df05dd6d69c76e2a7bd0f606dd2e13f",
+    "docs/generador/empleadores_ficticios.csv": "a961084f15522fdaf43c994cb2055322809f4d61a51938a4247a892f788019bc"
+  },
+  "pool": {
+    "eventos.csv.gz": "2148534988e3dbf74985f79f1b4cdc7d1729916844692b80ac9f93f29df17cbd",
+    "recurrentes.csv.gz": "60e6eeeda23af5bcac2b7e46d9c609da927a8de01f62ae7fb91ebf7d290df013"
+  },
+  "versiones": {
+    "python": "3.11.9",
+    "numpy": "2.4.6",
+    "pandas": "3.0.6"
+  },
+  "plataforma": "Windows-10-10.0.26200-SP0",
+  "fuentes": {
+    "ctgan": {
+      "entrada": "outputs/ctgan/sintetico_v1.csv.gz",
+      "sha256_entrada": "63ca0656cdb5c55913d020941431fb1179a7b807acc9e51a32a47300f144b607",
+      "salida": "outputs/ctgan/sintetico_v1_con_texto.csv.gz",
+      "sha256_contenido_salida": "09a43ab0cca8a7f62c9180f52bc6bb0c09797e555f7335e4f4e225f0692a4cd4",
+      "filas": 122211,
+      "incoherencias_estructurales": {
+        "origen_vs_categoria_n1": 2039,
+        "cuenta_signo_vs_origen": 157,
+        "origen_vs_categoria_n1+cuenta_signo": 42
+      },
+      "frac_incoherente": 0.018312590519674987,
+      "comercio_sin_soporte_en_pool": 626,
+      "comercio_generico_fallback_almacen": 1284,
+      "descripciones_unicas": 13643,
+      "descripciones_unicas_por_categoria_n1": {
+        "alimentos_mercado": 3637,
+        "comidas_fuera": 3459,
+        "educacion": 267,
+        "entretenimiento": 570,
+        "hogar_articulos": 560,
+        "ingreso": 126,
+        "movimiento_propio": 314,
+        "obligaciones_financieras": 104,
+        "otros": 141,
+        "retiro_efectivo": 336,
+        "salud": 319,
+        "telecom_conectividad": 527,
+        "transferencias_p2p": 195,
+        "transporte": 1911,
+        "vestuario_cuidado_personal": 1953,
+        "vivienda_servicios": 231
+      },
+      "fuente_etiqueta": {
+        "texto": 107975,
+        "declaracion_voluntario": 14236
+      },
+      "semilla": 42
+    },
+    "reglas": {
+      "entrada": "outputs/sintetico_reglas/transacciones.csv.gz",
+      "sha256_entrada": "8cd0c84aecf0a3cde93169dcf3fa5469ceeb194d3e1fe4f3e5798774b39ed42b",
+      "salida": "outputs/sintetico_reglas/sintetico_reglas_con_texto_v1.csv.gz",
+      "sha256_contenido_salida": "ad1bc05669f7bec79742bab8fec21b65eba1dab7a6da7ba8217465c0ba8be12d",
+      "filas": 122211,
+      "incoherencias_estructurales": {},
+      "frac_incoherente": 0.0,
+      "comercio_sin_soporte_en_pool": 0,
+      "comercio_generico_fallback_almacen": 620,
+      "descripciones_unicas": 13458,
+      "descripciones_unicas_por_categoria_n1": {
+        "alimentos_mercado": 3578,
+        "comidas_fuera": 3251,
+        "educacion": 248,
+        "entretenimiento": 622,
+        "hogar_articulos": 580,
+        "ingreso": 112,
+        "movimiento_propio": 60,
+        "obligaciones_financieras": 146,
+        "otros": 139,
+        "retiro_efectivo": 70,
+        "salud": 294,
+        "telecom_conectividad": 344,
+        "transferencias_p2p": 32,
+        "transporte": 1848,
+        "vestuario_cuidado_personal": 2255,
+        "vivienda_servicios": 246
+      },
+      "fuente_etiqueta": {
+        "texto": 113582,
+        "declaracion_voluntario": 8629
+      },
+      "semilla": 42
+    }
+  }
+}
