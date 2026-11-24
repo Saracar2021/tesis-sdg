@@ -2,7 +2,7 @@
 
 **Título:** Diseño y validación preliminar de un protocolo de generación de datos sintéticos de transacciones financieras para el contexto colombiano
 **Autora:** Sara J. Cárdenas · Maestría en Inteligencia Artificial, Pontificia Universidad Javeriana
-**Versión:** 6 · **Corte:** lunes 17 de noviembre de 2026 · reemplaza la v5 del 27 de octubre
+**Versión:** 7 · **Corte:** domingo 23 de noviembre de 2026 · reemplaza la v6 del 17 de noviembre
 **Hitos (TG2):** entrega del reporte (PDF, plantilla **IEEE Transactions on AI**, ≤ 24 pp) al correo del programa **antes del 27 nov 2026**; el tutor propone 3 jurados · sustentación presencial **30 nov – 18 dic** · reunión de decisión continuar/cancelar con la tutora, **esta semana**
 
 > Documento vivo de seguimiento del proyecto (WP0). La fuente de verdad técnica es el repositorio `C:\tesis-sdg` (respaldo privado en GitHub). Este documento resume el estado; las cifras y su derivación viven en el repo.
@@ -11,7 +11,7 @@
 
 ## 0. Resumen ejecutivo
 
-> **Progreso al 17 nov:** Etapas 1 (priors, WP3), 2 (generador por reglas, WP6) y **3 (CTGAN, WP7) cerradas, probadas y en `main`**; reevaluación del pipeline de referencia integrada (WP5); IPC decidido (deflactor único nacional, `modo_ipc:"total"`). El CTGAN v1 es **reproducible bit a bit** y **conserva la relación ingreso–monto** (elasticidad 0,45 vs. 0,33 del train, veredicto CONSERVA; rechazo por reglas 14,78 %, reportado como resultado de fidelidad). **Faltan:** datos reales — ingesta/anonimización/anotación (WP4) — y TSTR (Etapa 4, WP8), más el diligenciamiento final del reporte IEEE (borrador avanzado en `docs/reporte/`). Avance global ≈ 55 %.
+> **Progreso al 23 nov:** Etapas 1 (priors, WP3), 2 (generador por reglas + capa de texto, WP6) y 3 (CTGAN, WP7) cerradas y en `main`; **taxonomía v1.1.0 CONGELADA (WP2, T1–T6)**; **WP5 (Pancholi) EJECUTADO** (etapas 1–4) con veredicto de mapeabilidad **rama (a) no mapeable** (contexto, no comparable; techo F1-macro 0,50); **WP8 (arnés TSTR) construido y probado**: 3 brazos (LogReg+TF-IDF, BETO, LLM few-shot vía Groq), entrada serializada idéntica, ablación reglas↔CTGAN, swap de test listo. El CTGAN v1 es reproducible bit a bit y conserva la relación ingreso–monto (elasticidad 0,45 vs. 0,33, CONSERVA; rechazo 14,78 %). **Único bloqueante del número reportable: WP4** (ingesta/anonimización/anotación del real, Opción A; ética por confirmar). Falta además el diligenciamiento del reporte IEEE (reescribir el pasaje de comparación de (b) a (a)). Avance global ≈ 78 %.
 
 **Estado por paquete de trabajo (17 nov 2026):**
 
@@ -19,14 +19,14 @@
 |---|---|---|
 | WP0 | Entorno y seguimiento | En curso (este documento, bitácora) |
 | WP1 | Perfilado DANE | ✅ Cerrado |
-| WP2 | Taxonomía | 🟡 v1 lista; congelamiento a v1.1 pendiente |
+| WP2 | Taxonomía | ✅ v1.1.0 congelada (T1–T6, 22 nov); falta solo validar ≥50 descripciones reales en la 1ª pasada de WP4 |
 | WP3 | Priors (Etapa 1) | ✅ Cerrado |
-| WP4 | Datos reales | 🟡 Recolectados; ingesta/anonimización/anotación pendientes (ética resuelta) |
-| WP5 | Pipeline de referencia (Pancholi) | ✅ Reevaluado (etapas 1–3) |
+| WP4 | Datos reales | 🟡 RUTA CRÍTICA. Recolectados (39 PDF en `data/reales_crudos/`); ingesta/anonimización/anotación pendientes. Ética NO cerrada: confirmar consentimiento firmado antes de procesar (Ley 1581). Flujo Opción A |
+| WP5 | Pipeline de referencia (Pancholi) | ✅ Ejecutado (etapas 1–4); veredicto mapeabilidad rama (a) no mapeable → contexto. `outputs/pancholi/wp8_mapeabilidad.json` |
 | WP6 | Generador + IPC (Etapa 2) | ✅ Cerrado |
 | WP7 | CTGAN (Etapa 3) | ✅ Cerrado — v1 reproducible, veredicto CONSERVA |
-| WP8 | TSTR (Etapa 4) | ⏳ Por hacer |
-| — | Reporte IEEE | 🟡 Borrador avanzado (`docs/reporte/`); falta TSTR y diligenciamiento |
+| WP8 | TSTR (Etapa 4) | 🟡 Arnés construido y probado (3 brazos, entrada serializada, ablación reglas↔CTGAN, swap listo); números reportables esperan el real de WP4 |
+| — | Reporte IEEE | 🟡 Borrador avanzado (`docs/reporte/`); falta TSTR, reescribir comparación (b)→(a) y diligenciamiento |
 
 1. **La base empírica se reconstruyó desde cero.** Las cifras del análisis descriptivo del informe de avance estaban escritas a mano, sin factores de expansión y sobre un solo mes. Se re-descargaron los microdatos del DANE y se construyó una base verificable: 112 archivos con hash SHA-256 contra el original, cargador único con 29 pruebas automatizadas y distribuciones ponderadas para Bogotá.
 2. **El dominio quedó definido: Bogotá urbano.** Los 20 voluntarios de la validación son de Bogotá; calibrar contra otro dominio rompería la comparación del TSTR.
@@ -151,7 +151,9 @@ Esta matriz es el insumo con el que el generador condiciona el medio de pago a l
 | «El 25,5 % sin dato es probablemente efectivo no declarado» | Supuesto sin sustento; la no respuesta no se imputa |
 | «Análisis de todos los meses de la GEIH» | Cubría solo enero |
 
-**Afirmaciones sobre el pipeline de referencia (Pancholi et al.): reevaluadas con una ejecución reproducible** (etapas 1–3; criterios prerregistrados antes de correr; detalle en `docs/reevaluacion_pancholi.md`)
+**Afirmaciones sobre el pipeline de referencia (Pancholi et al.): reevaluadas con una ejecución reproducible** (etapas 1–4; criterios prerregistrados antes de correr; detalle en `docs/reevaluacion_pancholi.md`)
+
+> **Actualización 23 nov — ejecución completa + veredicto de mapeabilidad.** La etapa 4 ya corrió con Groq (modelo sustituto `gpt-oss-120b`; una corrida, evidencia indicativa). Veredicto para el TSTR: **rama (a), NO mapeable** (`outputs/pancholi/wp8_mapeabilidad.json`): el pipeline solo emite compras → 8 de 16 `categoria_n1`, techo F1-macro 0,50. **Pancholi va como contexto, no como fila comparable.** H-P1: la etapa 4 responde al ingreso (elasticidad 0,79) solo porque el prompt inyecta un rango de gasto derivado del ingreso; el CTGAN propio SÍ conserva la relación (r≈1,37), el de ellos no (−0,003). H-P3: domina la tarjeta (89 % crédito) pero no es 100 %. La tabla de abajo conserva los resultados de las etapas 1–3 como registro histórico.
 
 | Afirmación del informe | Estado tras la ejecución |
 |---|---|
@@ -315,11 +317,12 @@ código y documentos se respalda en GitHub privado; los datos no se suben.
 
 | WP | Estado |
 |---|---|
-| WP0 — Entorno y seguimiento | Este documento (v5) |
+| WP0 — Entorno y seguimiento | Este documento (v7) |
 | WP1 — Perfilado DANE | ✅ Cerrado (`2aebb9e`) |
-| WP2 — Taxonomía | Pendientes en `docs/taxonomia/pendientes_v1.1.md` |
+| WP2 — Taxonomía | ✅ v1.1.0 congelada (T1–T6); `docs/taxonomia/` |
 | WP3 — Priors | ✅ Cerrado (27 oct): módulo + aval; `outputs/priors/` |
 | WP4 — Datos reales | Paquete listo; **extractos recolectados**, por ingestar/anonimizar/anotar |
 | WP5 — Pipeline de referencia (Pancholi) | ✅ Ejecutado (etapas 1–3); `docs/reevaluacion_pancholi.md`, `outputs/pancholi/` |
 | WP6 — Generador | ✅ Cerrado (27 oct): generador por reglas, modo `por_hogar`; `outputs/sintetico_reglas/`. Deflactor IPC decidido: factor único nacional (`modo_ipc: "total"`, `parametros_propios.json` v0.3.0) |
-| WP7 — CTGAN · WP8 — Evaluación TSTR | Por hacer |
+| WP7 — CTGAN | ✅ Cerrado (v1 reproducible, veredicto CONSERVA) |
+| WP8 — Evaluación TSTR | 🟡 Arnés construido y probado; espera el real de WP4 |

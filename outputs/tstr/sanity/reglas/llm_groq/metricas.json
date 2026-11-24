@@ -1,0 +1,233 @@
+{
+  "modo": "sanity",
+  "reportable": false,
+  "fuente": "reglas",
+  "brazo": "llm_groq_openai/gpt-oss-120b",
+  "advertencia": "solo 1 clase(s) evaluable(s): F1-macro no interpretable",
+  "f1_macro_regla_soporte": 1.0,
+  "ic95_bootstrap": [
+    0.6875,
+    1.0
+  ],
+  "f1_macro_sin_regla": 0.783149678604224,
+  "accuracy": 0.775,
+  "n_test": 40,
+  "clases_evaluadas": 1,
+  "clases_fusionadas_a_otros": [
+    "alimentos_mercado",
+    "comidas_fuera",
+    "educacion",
+    "entretenimiento",
+    "hogar_articulos",
+    "ingreso",
+    "movimiento_propio",
+    "obligaciones_financieras",
+    "retiro_efectivo",
+    "salud",
+    "telecom_conectividad",
+    "transferencias_p2p",
+    "transporte",
+    "vestuario_cuidado_personal",
+    "vivienda_servicios"
+  ],
+  "solo_etiqueta_por_texto": {
+    "f1_macro_regla_soporte": 1.0,
+    "ic95_bootstrap": [
+      0.9246550262102992,
+      1.0
+    ],
+    "n_test": 35,
+    "clases_evaluadas": 1,
+    "clases_fusionadas_a_otros": [
+      "alimentos_mercado",
+      "comidas_fuera",
+      "educacion",
+      "entretenimiento",
+      "hogar_articulos",
+      "ingreso",
+      "movimiento_propio",
+      "obligaciones_financieras",
+      "retiro_efectivo",
+      "salud",
+      "telecom_conectividad",
+      "transferencias_p2p",
+      "transporte",
+      "vestuario_cuidado_personal",
+      "vivienda_servicios"
+    ]
+  },
+  "frac_test_etiqueta_por_declaracion": 0.125,
+  "bootstrap": {
+    "n": 1000,
+    "unidad": "fila"
+  },
+  "segundos_entrenamiento_y_prediccion": 305.7,
+  "n_train": 18,
+  "n_train_disponible": 97768,
+  "n_test_completo": 24443,
+  "contrato_wp4_faltan": null,
+  "brazo_meta": {
+    "modelo_pedido": "llama-3.3-70b-versatile",
+    "modelo": "openai/gpt-oss-120b",
+    "desviacion": "llama-3.3-70b-versatile no disponible para esta cuenta (retirado por Groq 16-ago-2026); sustituido por openai/gpt-oss-120b",
+    "parametros": {
+      "temperature": 0,
+      "seed": 42,
+      "max_completion_tokens": 512,
+      "reasoning_effort": "low",
+      "include_reasoning": false
+    },
+    "clases_dificiles": [
+      "otros",
+      "hogar_articulos",
+      "educacion",
+      "transferencias_p2p",
+      "ingreso",
+      "vivienda_servicios"
+    ],
+    "n_ejemplos_few_shot": 18,
+    "few_shot": [
+      {
+        "entrada": "[CUENTA=banco] [SIGNO=-] [MONTO=100K-300K] PAGO PSE NOTARIA 40",
+        "etiqueta": "otros"
+      },
+      {
+        "entrada": "[CUENTA=billetera] [SIGNO=-] [MONTO=1K-3K] COMPRA DAVIPLATA SERVICIOS Y SUMINISTROS AUT NORTE",
+        "etiqueta": "otros"
+      },
+      {
+        "entrada": "[CUENTA=billetera] [SIGNO=-] [MONTO=300K-1M] PAGO NEQUI ALMACEN DONA ROSA",
+        "etiqueta": "otros"
+      },
+      {
+        "entrada": "[CUENTA=banco] [SIGNO=-] [MONTO=10K-30K] COMPRA ALKOSTO CENTRO",
+        "etiqueta": "hogar_articulos"
+      },
+      {
+        "entrada": "[CUENTA=billetera] [SIGNO=-] [MONTO=30K-100K] PAGO DAVIPLATA FALABELLA CL 53",
+        "etiqueta": "hogar_articulos"
+      },
+      {
+        "entrada": "[CUENTA=billetera] [SIGNO=-] [MONTO=3K-10K] Pago Nequi EXITO",
+        "etiqueta": "hogar_articulos"
+      },
+      {
+        "entrada": "[CUENTA=banco] [SIGNO=-] [MONTO=300K-1M] TRANSFERENCIA A COLEGIO SAN ANTONIO",
+        "etiqueta": "educacion"
+      },
+      {
+        "entrada": "[CUENTA=banco] [SIGNO=-] [MONTO=3K-10K] PAGO PSE PAPELERIA LA UNICA",
+        "etiqueta": "educacion"
+      },
+      {
+        "entrada": "[CUENTA=tarjeta_credito] [SIGNO=-] [MONTO=300K-1M] COMPRA EN LIBRERIA NACIONAL",
+        "etiqueta": "educacion"
+      },
+      {
+        "entrada": "[CUENTA=banco] [SIGNO=-] [MONTO=100K-300K] ENVIO A PERSONA BANCO CAJA SOCIAL",
+        "etiqueta": "transferencias_p2p"
+      },
+      {
+        "entrada": "[CUENTA=banco] [SIGNO=-] [MONTO=3K-10K] TRANSFERENCIA A PERSONA",
+        "etiqueta": "transferencias_p2p"
+      },
+      {
+        "entrada": "[CUENTA=billetera] [SIGNO=-] [MONTO=100K-300K] PAGO A PERSONA NEQUI",
+        "etiqueta": "transferencias_p2p"
+      },
+      {
+        "entrada": "[CUENTA=banco] [SIGNO=+] [MONTO=1M-3M] NOMINA ASEO Y MANTENIMIENTO INTEGRAL SAS",
+        "etiqueta": "ingreso"
+      },
+      {
+        "entrada": "[CUENTA=banco] [SIGNO=+] [MONTO=300K-1M] NOMINA CONSTRUCTORA LA SABANA SAS",
+        "etiqueta": "ingreso"
+      },
+      {
+        "entrada": "[CUENTA=banco] [SIGNO=+] [MONTO=30K-100K] PAGO NOMINA IMPORTADORA BOGOTA SAS",
+        "etiqueta": "ingreso"
+      },
+      {
+        "entrada": "[CUENTA=banco] [SIGNO=-] [MONTO=300K-1M] PAGO PSE FERRETERIA LA FORTUNA",
+        "etiqueta": "vivienda_servicios"
+      },
+      {
+        "entrada": "[CUENTA=banco] [SIGNO=-] [MONTO=3K-10K] TRANSFERENCIA A EAAB",
+        "etiqueta": "vivienda_servicios"
+      },
+      {
+        "entrada": "[CUENTA=billetera] [SIGNO=-] [MONTO=10K-30K] Pago Nequi ACUEDUCTO BOGOTA",
+        "etiqueta": "vivienda_servicios"
+      }
+    ],
+    "sha256_system": "9ef97adf1f1eb8e9eec56c525c687ec26115ffaaea5f7e2b035f40c5a77987f1",
+    "regla_incluida": "R1",
+    "entradas_unicas": 38,
+    "llamadas_nuevas": 38,
+    "respuestas_de_registro": 0,
+    "llamadas_fallidas": 0,
+    "estado_parseo_filas": {
+      "exacta": 38,
+      "fuera_de_enum": 2
+    },
+    "tokens_llamadas_nuevas": {
+      "prompt": 60400,
+      "completion": 1984
+    },
+    "registro": "outputs/tstr/llm_cache/openai_gpt-oss-120b.jsonl",
+    "costo": "openai/gpt-oss-120b: 38 entradas únicas, 38 llamadas nuevas, 62,384 tokens; DESVIACIÓN: llama-3.3-70b-versatile no disponible para esta cuenta (retirado por Groq 16-ago-2026); sustituido por openai/gpt-oss-120b"
+  },
+  "entrada": {
+    "version": "serializacion_v1",
+    "formato": "[CUENTA=<cuenta_tipo>] [SIGNO=<signo>] [MONTO=<bin_log>] <descripcion>",
+    "bordes_monto_cop_2025": [
+      1000.0,
+      3162.2776601683795,
+      10000.0,
+      31622.776601683792,
+      100000.0,
+      316227.7660168379,
+      1000000.0,
+      3162277.6601683795,
+      10000000.0
+    ],
+    "etiquetas_monto": [
+      "<1K",
+      "1K-3K",
+      "3K-10K",
+      "10K-30K",
+      "30K-100K",
+      "100K-300K",
+      "300K-1M",
+      "1M-3M",
+      "3M-10M",
+      ">=10M"
+    ],
+    "deflactor_test": {
+      "deflactado": false,
+      "motivo": "sanity: test sintético, ya en pesos de promedio 2025"
+    }
+  },
+  "semilla": 42,
+  "soporte_min": 10,
+  "train": {
+    "ruta": "outputs/sintetico_reglas/sintetico_reglas_con_texto_v1.csv.gz",
+    "sha256": "4d920e3755add8239df87872100ea39f8bdacabbaf9e08ad68ebbfb32b2ae3e3"
+  },
+  "test": {
+    "split": "estratificado categoria_n1 0.2"
+  },
+  "taxonomia": {
+    "ruta": "docs/taxonomia/taxonomia_gastos_colombia_v1.json",
+    "version": "1.1.0",
+    "sha256": "8f4e4a19a9b9598a894940063c324f40adb9f3bc11a0815b8a957f5033526997"
+  },
+  "versiones": {
+    "python": "3.11.9",
+    "sklearn": "1.9.1",
+    "pandas": "3.0.6",
+    "numpy": "2.4.6"
+  },
+  "plataforma": "Windows-10-10.0.26200-SP0",
+  "fecha_utc": "2026-11-24T03:00:20+00:00"
+}

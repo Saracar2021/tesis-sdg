@@ -1,5 +1,11 @@
 # CLAUDE.md — Tesis SDG Colombia (Sara Cárdenas, Maestría en IA, U. Javeriana)
 
+> v6 — 23 nov 2026. WP5 (Pancholi) YA ejecutado, veredicto de mapeabilidad rama (a) no mapeable
+> (ver sección de pipeline de referencia); taxonomía v1.1.0 congelada (T1–T6); WP8 (arnés TSTR:
+> 3 brazos, entrada serializada, ablación reglas↔CTGAN) construido y probado, a la espera del real
+> de WP4; regla de datos personales reforzada (Ley 1581: autorización antes de procesar; anonimización
+> local, Opción A).
+>
 > v5 — 22 sep 2026. Añade D15 (universo del generador: extractos de hogares bancarizados) y la
 > regla de evidencia sobre el pipeline de Pancholi.
 >
@@ -11,7 +17,8 @@
 Diseño y validación preliminar de un protocolo de generación de datos sintéticos de
 transacciones financieras para el contexto colombiano.
 Pipeline: (1) priors bayesianos desde DANE → (2) generador por reglas + nombres de
-comercio → (3) CTGAN → (4) clasificadores + evaluación TSTR contra datos reales etiquetados.
+comercio → (3) CTGAN → (3b) capa de texto por plantillas (`src/sdg/texto.py`, aplicada por igual a
+reglas y CTGAN para la ablación) → (4) clasificadores + evaluación TSTR contra datos reales etiquetados.
 Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega final: **27 nov 2026** (TG2; reporte en plantilla IEEE Transactions on AI, ≤ 24 pp; el tutor lo envía al programa y propone 3 jurados; sustentación 30 nov–18 dic).
 
 ## Idioma y entregables
@@ -59,22 +66,26 @@ Plan y estado: `docs/plan_maestro.md`. Bitácora: `docs/bitacora.md`. Entrega fi
   Bogotá**, no sobre el total nacional.
 
 
-## Pipeline de referencia (Pancholi et al.) — regla de evidencia (22 sep)
-- **El pipeline de Pancholi no se ha ejecutado.** Ninguna salida suya es un resultado hasta que
-  WP5 lo ejecute de forma reproducible. **No se citan** como hallazgos: la diferencia de
-  USD 12 entre perfiles, los 5 perfiles, las 149 transacciones, el dominio de categorías de ocio
-  (Athletic Exhibition, Skating Rink, etc.) ni el 100 % de `credit_card`. Aparecen en el informe
-  de avance y en la presentación sin respaldo de ejecución.
-- **Sí se puede citar, con referencia al paper, lo que el paper documenta de su diseño:**
-  demografía del ACS 2015-2019 de Washington D.C. por código postal (ZIP 20001), nombres de
-  comercio de Yelp y de D.C., simulación por reglas con gasto calibrado por ingreso y hogar,
-  refinamiento con CTGAN. Su Tabla 5 muestra 4 transacciones de ejemplo, todas con tarjeta de
-  crédito: es un ejemplo, no una proporción.
-- Las «tres limitaciones» (ingreso, categorías, medio de pago) son **hipótesis a verificar**.
-  H-P1 (ingreso): el paper **sí** calibra el gasto por ingreso y características del hogar, pero con la
-  distribución de Estados Unidos (ACS 2015-2019 de D.C.). La hipótesis NO es «insensibilidad al
-  ingreso»: es que la relación ingreso–gasto que produce no corresponde a la de los hogares
-  colombianos. «Insensibilidad al ingreso» no se usa en ningún documento.
+## Pipeline de referencia (Pancholi et al.) — EJECUTADO (WP5; actualizado 23 nov)
+- **El pipeline de Pancholi YA se ejecutó** de forma reproducible (etapas 1–4, criterios
+  prerregistrados en `docs/prerregistro_wp5.md`; detalle en `docs/reevaluacion_pancholi.md`,
+  `outputs/pancholi/`). La regla previa de «no citar hasta ejecutar» queda cumplida.
+- **Veredicto de mapeabilidad para el TSTR: rama (a), NO MAPEABLE** (`outputs/pancholi/wp8_mapeabilidad.json`).
+  Su pipeline solo emite COMPRAS → alcanza 8 de las 16 `categoria_n1` → techo de F1-macro = **0,50**.
+  Faltan ingreso, retiro, movimiento propio, P2P, obligaciones financieras, telecom, salud y hogar
+  (42 % de las filas del sintético propio). **Pancholi entra al informe como CONTEXTO**, nunca como
+  fila comparable en la tabla TSTR; la no-transferibilidad es un hallazgo que justifica el protocolo.
+- Veredictos de las hipótesis (una corrida, modelo sustituto `gpt-oss-120b` porque Groq retiró
+  `llama-3.3-70b-versatile` el 16-ago-2026; evidencia indicativa, no definitiva):
+  - **H-P1 (ingreso):** la etapa 4 responde al ingreso (elasticidad 0,79), pero solo porque el prompt
+    le inyecta al LLM un «rango de gasto esperado» derivado del ingreso. Su CTGAN (etapa 3) NO conserva
+    la relación: −0,003. Contraste a favor del protocolo: el CTGAN propio SÍ la conserva (r≈1,37).
+  - **H-P2 (ocio):** no concluyente (intervalos solapados), con o sin hospedaje.
+  - **H-P3 (medio de pago):** domina la tarjeta (89 % crédito) pero NO es 100 % `credit_card` como
+    decía el informe de avance; efectivo/billetera/transferencia: 0 de 300.
+- **Sí se puede citar, con referencia al paper, su diseño:** demografía del ACS 2015-2019 de
+  Washington D.C. (ZIP 20001), comercios de Yelp y de D.C., simulación por reglas con gasto calibrado
+  por ingreso y hogar, refinamiento con CTGAN.
 
 ## Universo del generador (D15, 22 sep)
 - **El universo del generador son extractos de hogares bancarizados (D15).** El generador simula
@@ -187,7 +198,16 @@ data/interim/  data/processed/  data/reales_anon/   outputs/   docs/   src/sdg/ 
 
 ### Datos personales
 - Datos reales de voluntarios: solo la versión anonimizada, en `data/reales_anon/`.
-  Nunca leer `data/reales_crudos/`.
+  **Nunca leer `data/reales_crudos/`** (ni abrirlos, ni subirlos a una sesión en la nube).
+- **Autorización antes de procesar (Ley 1581 de 2012).** Leer o procesar un extracto es tratamiento
+  de datos personales: exige autorización previa, informada y firmada del titular ANTES de procesar,
+  no solo antes de reportar. El registro vive en `data/consentimientos/registro.md`. Ante cualquier
+  duda, consultar al comité de ética / la Javeriana antes de procesar.
+- **Opción A (flujo acordado, WP4):** la anonimización la corre la autora en su máquina, con un script
+  de `tools/` que lee `data/reales_crudos/` y escribe SOLO en `data/reales_anon/`, siguiendo
+  `docs/datos_reales/02_protocolo_anonimizacion_v1.1.md`. Los asistentes nunca tocan los crudos y
+  trabajan solo sobre lo anonimizado. `data/reales_anon/` tampoco se versiona; la trazabilidad del
+  TSTR se guarda como SHA-256 + procedencia, no el dato.
 
 ## Decisiones abiertas y supuestos declarados
 Todo lo de esta sección va **declarado en la tesis**, no escondido.

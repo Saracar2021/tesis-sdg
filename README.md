@@ -11,8 +11,8 @@ clasificadores de transacciones que funcionen sobre transacciones reales (evalua
 on synthetic, test on real*).
 
 El protocolo se organiza en cuatro etapas: (1) priors bayesianos calibrados con microdatos del
-DANE, (2) un generador por reglas con nombres de comercio, (3) refinamiento con CTGAN, y (4)
-clasificadores evaluados contra transacciones reales etiquetadas.
+DANE, (2) un generador por reglas con nombres de comercio y una capa de texto por plantillas,
+(3) refinamiento con CTGAN, y (4) clasificadores evaluados contra transacciones reales etiquetadas.
 
 **Dominio:** el protocolo se diseña para ser colombiano y reutilizable, pero la calibración y la
 validación empírica se hacen sobre **Bogotá urbano** como caso de estudio (los 20 voluntarios del
@@ -21,19 +21,21 @@ se indique explícitamente.
 
 ## Reevaluación del pipeline de referencia (Pancholi et al.)
 
-El pipeline de referencia (Pancholi et al.) se ejecutó de forma reproducible (etapas 1–3, con
-criterios prerregistrados antes de correr; detalle en `docs/reevaluacion_pancholi.md`). Las
-limitaciones frente al contexto colombiano se contrastaron así:
+El pipeline de referencia (Pancholi et al.) se ejecutó de forma reproducible (etapas 1–4, con
+criterios prerregistrados antes de correr; detalle en `docs/reevaluacion_pancholi.md`,
+`outputs/pancholi/`). **Veredicto de mapeabilidad para el TSTR: rama (a), no mapeable** — su
+pipeline solo emite compras, alcanza 8 de las 16 categorías de la taxonomía (techo de F1-macro
+0,50), así que entra al reporte como **contexto**, no como línea base comparable; esa
+no-transferibilidad es, en sí, un resultado que motiva el protocolo. Las hipótesis frente al
+contexto colombiano se contrastaron así (etapa 4 con modelo sustituto `gpt-oss-120b`; una corrida,
+evidencia indicativa):
 
-- **H-P1 (ingreso):** no concluyente respecto a Colombia (falta el referente de la ENPH). Hallazgo
-  firme: la salida final (CTGAN) no conserva la relación ingreso–monto (elasticidad −0,003
-  [−0,008; 0,002], frente a 1,008 en la etapa de reglas).
-- **H-P2 (categorías):** refutada con la definición prerregistrada (ocio = entretenimiento);
-  confirmada si el hospedaje se cuenta como ocio. Solo 6 de 16 categorías de la taxonomía tienen
-  registros; servicios públicos 0 %.
-- **H-P3 (medio de pago):** confirmada para las etapas ejecutadas (1–3): sin campo de medio de pago
-  ni registros de retiro o transferencia. La distribución de `payment_type` (etapa 4) queda no
-  concluyente (no ejecutable).
+- **H-P1 (ingreso):** la etapa 4 responde al ingreso (elasticidad 0,79) solo porque el prompt le
+  inyecta un rango de gasto derivado del ingreso; la salida CTGAN no conserva la relación (−0,003).
+  Contraste a favor del protocolo: el CTGAN propio sí la conserva (elasticidad 0,45 vs. 0,33, r≈1,37).
+- **H-P2 (categorías):** no concluyente (intervalos solapados), con o sin hospedaje como ocio.
+- **H-P3 (medio de pago):** domina la tarjeta (89 % crédito) pero no es 100 % `credit_card` como
+  decía el informe de avance; efectivo, billetera y transferencia: 0 de 300 registros.
 
 ## Estado actual
 
@@ -54,18 +56,24 @@ limitaciones frente al contexto colombiano se contrastaron así:
   reproducible bit a bit; la relación ingreso–monto se conserva (elasticidad 0,45 vs. 0,33 del
   train, veredicto CONSERVA) y la tasa de rechazo por reglas (14,78 %) se reporta como resultado de
   fidelidad. Salidas en `outputs/ctgan/`.
-- Reevaluación reproducible del pipeline de referencia (etapas 1–3), con criterios prerregistrados
-  (`outputs/pancholi/`).
+- Reevaluación reproducible del pipeline de referencia (etapas 1–4), con criterios prerregistrados;
+  veredicto de mapeabilidad rama (a) no mapeable (`outputs/pancholi/`).
 - Decisiones de dominio (Bogotá urbano) y de universo del generador (extractos de hogares
   bancarizados) cerradas y documentadas.
+- **Taxonomía v1.1.0 congelada** (`docs/taxonomia/`): 16 categorías y reglas R1–R7, con las
+  correcciones T1–T6. Falta solo validarla contra ≥50 descripciones reales en la 1ª pasada de anotación.
+- **Etapa 4 — arnés TSTR construido y probado** (`tools/etapa4_tstr.py`, `etapa4_beto.py`,
+  `etapa4_llm.py`): tres brazos (LogReg+TF-IDF, BETO, LLM few-shot vía Groq), entrada serializada
+  idéntica y ablación reglas↔CTGAN. Los números reportables esperan el conjunto real de la Etapa 4.
 
 **En curso / pendiente:**
-- Datos reales de validación: recolectados; falta ingesta, anonimización y anotación (dos
-  anotadores con acuerdo medido por Kappa de Cohen).
-- Etapa 4 — clasificadores y evaluación TSTR.
-- Referente de la ENPH para cerrar H-P1 y decisión de la categoría de hospedaje para H-P2.
+- **Datos reales de validación (ruta crítica):** recolectados; falta ingesta, anonimización (flujo
+  local, los crudos nunca salen de la máquina) y anotación por dos anotadores con Kappa de Cohen.
+  Requiere confirmar consentimiento firmado antes de procesar (Ley 1581).
+- **TSTR con el conjunto real** + la comparación-contexto con Pancholi (rama a).
 - Reporte (formato IEEE Transactions on AI): borrador avanzado en `docs/reporte/`
-  (`main.tex`, `borrador_reporte.md`); faltan los resultados del TSTR y el diligenciamiento final.
+  (`main.tex`, `borrador_reporte.md`); faltan los resultados del TSTR, reescribir el pasaje de
+  comparación de (b) a (a) y el diligenciamiento final.
 
 Estado por actividad del cronograma: `docs/plan_maestro.md`. Registro fechado del trabajo:
 `docs/bitacora.md`.
@@ -82,7 +90,7 @@ src/sdg/           cargador de GEIH/ENPH, pesos y códigos verificados; priors y
                    generador, gasto ENPH, nombres de comercio e IPC
 tools/             normalización de datos, generación de tablas, construcción de priors y del
                    generador, conversión del IPC
-tests/             pruebas automatizadas (unittest)
+tests/             pruebas automatizadas (pytest)
 outputs/           cifras y tablas generadas por código (nunca escritas a mano): distribuciones,
                    priors, pancholi, generador, sintetico_reglas, ipc, ctgan
 notebooks/         Etapa 3: notebook del CTGAN (y su copia ejecutada)
@@ -109,7 +117,7 @@ CLAUDE.md          convenciones de datos y decisiones metodológicas del proyect
    python tools/convertir_ipc.py             # serie de IPC a formato largo -> outputs/ipc/
    python tools/construir_generador.py       # pool y calibración del generador
    python tools/generar_sintetico_reglas.py  # Etapa 2: muestra sintética -> outputs/sintetico_reglas/
-   python -m unittest discover -s tests      # suite de pruebas, debe quedar en verde
+   python -m pytest -q tests                 # suite de pruebas, debe quedar en verde
    ```
 4. Etapa 3 (CTGAN) corre en un entorno aparte, porque SDV exige `pandas<3`:
    ```

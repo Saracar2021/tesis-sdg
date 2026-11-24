@@ -1,0 +1,17 @@
+real\pred,alimentos_mercado,comidas_fuera,transporte,vivienda_servicios,telecom_conectividad,salud,educacion,entretenimiento,vestuario_cuidado_personal,hogar_articulos,obligaciones_financieras,transferencias_p2p,retiro_efectivo,movimiento_propio,ingreso,otros
+alimentos_mercado,6,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0
+comidas_fuera,1,4,0,0,0,0,0,0,0,0,0,1,0,0,0,0
+transporte,0,0,2,0,3,0,0,0,0,0,0,0,0,0,0,0
+vivienda_servicios,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0
+telecom_conectividad,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+salud,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+educacion,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+entretenimiento,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+vestuario_cuidado_personal,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1
+hogar_articulos,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+obligaciones_financieras,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+transferencias_p2p,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0
+retiro_efectivo,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0
+movimiento_propio,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0
+ingreso,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0
+otros,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

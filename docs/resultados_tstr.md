@@ -1,7 +1,7 @@
 # Resultados TSTR — WP8
 
 > **PROVISIONAL.** Archivo regenerado por `tools/etapa4_tstr.py`; no editar a mano.
-> Última regeneración: 2026-11-24T02:54:39+00:00.
+> Última regeneración: 2026-11-24T03:08:41+00:00.
 > Taxonomía 1.1.0, target `categoria_n1`, semilla 42.
 
 **Taxonomía.** La v1.1.0 no cambió las 16 categorías ni las reglas R1–R7, solo documentación y metadatos
@@ -76,9 +76,11 @@ texto. Las filas que el CTGAN emite con combinaciones que el generador por regla
 | Modo | Fuente | Brazo | n train efectivo | segundos | detalle |
 |---|---|---|---|---|---|
 | sanity | ctgan | beto | 2,000 | 2,602 | BETO CPU 4 hilos: 2,000 filas x 3 épocas = 375 pasos, 2.71 s/paso, 0.28 h de entrenamiento |
+| sanity | ctgan | llm_groq | 18 | 184 | openai/gpt-oss-120b: 38 entradas únicas, 38 llamadas nuevas, 62,027 tokens; DESVIACIÓN: llama-3.3-70b-versatile no disponible para esta cuenta (retirado por Groq 16-ago-2026); sustituido por openai/gpt-oss-120b |
 | sanity | ctgan | logreg | 97,768 | 50 |  |
 | sanity | ctgan | logreg_n20000 | 20,000 | 12 |  |
 | sanity | reglas | beto | 2,000 | 2,830 | BETO CPU 4 hilos: 2,000 filas x 3 épocas = 375 pasos, 2.02 s/paso, 0.21 h de entrenamiento |
+| sanity | reglas | llm_groq | 18 | 306 | openai/gpt-oss-120b: 38 entradas únicas, 38 llamadas nuevas, 62,384 tokens; DESVIACIÓN: llama-3.3-70b-versatile no disponible para esta cuenta (retirado por Groq 16-ago-2026); sustituido por openai/gpt-oss-120b |
 | sanity | reglas | logreg | 97,768 | 34 |  |
 | sanity | reglas | logreg_n20000 | 20,000 | 11 |  |
 
@@ -94,8 +96,10 @@ por reglas (diagnóstico de la capa de texto factorizada).
 | Brazo | Fuente train | F1-macro (soporte ≥10) | IC95 | F1-macro solo etiqueta-por-texto | IC95 | n train | n test | fusionadas a otros |
 |---|---|---|---|---|---|---|---|---|
 | beto | ctgan | 0.566 | [0.560, 0.572] | 0.593 | [0.586, 0.600] | 2,000 | 24,443 | — |
+| llm_groq | ctgan | 1.000 | [0.713, 1.000] | 1.000 | [0.789, 1.000] | 18 | 40 | 15 clases (lista en metricas.json) |
 | logreg | ctgan | 0.866 | [0.859, 0.873] | 0.909 | [0.902, 0.916] | 97,768 | 24,443 | — |
 | logreg_n20000 | ctgan | 0.864 | [0.857, 0.871] | 0.907 | [0.899, 0.914] | 20,000 | 24,443 | — |
 | beto | reglas | 0.616 | [0.607, 0.624] | 0.647 | [0.638, 0.656] | 2,000 | 24,443 | — |
+| llm_groq | reglas | 1.000 | [0.688, 1.000] | 1.000 | [0.925, 1.000] | 18 | 40 | 15 clases (lista en metricas.json) |
 | logreg | reglas | 0.889 | [0.878, 0.898] | 0.941 | [0.931, 0.948] | 97,768 | 24,443 | — |
 | logreg_n20000 | reglas | 0.860 | [0.850, 0.869] | 0.936 | [0.927, 0.945] | 20,000 | 24,443 | — |
