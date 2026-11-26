@@ -1,7 +1,7 @@
 # Resultados TSTR — WP8
 
 > **PROVISIONAL.** Archivo regenerado por `tools/etapa4_tstr.py`; no editar a mano.
-> Última regeneración: 2026-11-24T03:08:41+00:00.
+> Última regeneración: 2026-11-26T06:08:37+00:00.
 > Taxonomía 1.1.0, target `categoria_n1`, semilla 42.
 
 **Taxonomía.** La v1.1.0 no cambió las 16 categorías ni las reglas R1–R7, solo documentación y metadatos
@@ -11,29 +11,56 @@ siendo válido para el TSTR y no se regenera.
 **Texto (D14).** Ambas fuentes reciben la `descripcion` de la misma capa de texto (`src/sdg/texto.py`,
 `tools/etapa3b_texto.py`): mismas plantillas, comercios y semilla, ninguna calibrada con el real de WP4.
 
-**Swap a WP4.** El TSTR se activa con una sola ruta (`--test data/reales_anon/<real>.csv`). Esquema esperado:
-`descripcion, monto, fecha, signo, cuenta_tipo, categoria_n1, fuente_etiqueta, voluntario_id`. Verificado de punta a punta con un real simulado de 30 filas
-(`tests/fixtures/real_simulado_wp4.csv`, `tests/test_swap_wp4.py`).
+**Swap a WP4.** El TSTR se activa con una sola ruta (`--test data/reales_anon/test_real_wp4_<AAAAMMDD>.csv`, escrito
+por `tools/consolidar_test_wp4.py`). Esquema: `descripcion, monto, fecha, signo, cuenta_tipo, categoria_n1, fuente_etiqueta, voluntario_id` y columnas de análisis
+`item_id, tx_id, categoria_n2, medio_pago, formalidad_comercio, canal_p2p, peso_muestreo, estrato_muestreo, doble_anotacion, origen_etiqueta, caso_convencion, subgrupo_reverso, unica_por_descripcion`, ninguna como entrada. Verificado de punta a punta con el real simulado
+(`tests/fixtures/real_simulado_wp4.csv`) y con la salida del consolidador sobre datos simulados
+(`tests/test_swap_wp4.py`). Las predicciones por ítem del real van a `data/_privado/tstr/` (ignorado por git).
 
 ## Tabla TSTR (único resultado reportable)
 
-Entrenamiento sobre **todo** el sintético; evaluación sobre el conjunto **real anotado de WP4**.
-F1-macro con regla de soporte: clases con < 10 ejemplos en el test real se recodifican a
-`otros` (en etiqueta real y predicha) antes del promedio. IC95 por bootstrap (1000 réplicas),
-por conglomerado (voluntario) cuando el test trae esa columna. «Solo etiqueta-por-texto» excluye las filas con
-`fuente_etiqueta = declaracion_voluntario` (pagos a persona con propósito declarado, regla R2): su categoría no
-está en el texto del extracto, así que acotan por diseño a cualquier clasificador de texto.
+Entrenamiento sobre **todo** el sintético; evaluación sobre el conjunto **real anotado de WP4** (pre-registro
+`docs/datos_reales/05_prerregistro_muestreo_anotacion.md` v1.3). **Métrica principal:** F1-macro **sin ponderar**
+sobre los ítems del test, con regla de soporte: clases con < 10 filas de la muestra se recodifican a
+`otros` (en etiqueta real y predicha) antes del promedio. **IC95 principal (D-M7):** bootstrap por fila
+(1000 réplicas, semilla 42) estratificado por `estrato_muestreo`. **Sensibilidad:** bootstrap por
+grupo de extractos (`voluntario_id` = grupo, no titular). **Secundaria (D-M6):** exactitud ponderada con
+`peso_muestreo` (estimador de Hájek), con IC por el mismo bootstrap; la exactitud sin ponderar describe la mezcla de
+la muestra, no la de un extracto.
 
-| Brazo | Fuente train | F1-macro (soporte ≥10) | IC95 | F1-macro solo etiqueta-por-texto | IC95 | n train | n test | fusionadas a otros |
-|---|---|---|---|---|---|---|---|---|
-| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (reglas) | pendiente WP4 | | | | | | |
-| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (CTGAN) | pendiente WP4 | | | | | | |
-| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (reglas) | pendiente WP4 | | | | | | |
-| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (CTGAN) | pendiente WP4 | | | | | | |
-| BETO fine-tuning | protocolo (reglas) | pendiente WP4 | | | | | | |
-| BETO fine-tuning | protocolo (CTGAN) | pendiente WP4 | | | | | | |
-| LLM vía Groq, prompting few-shot (modelo y desviación en Costo) | protocolo (reglas) | pendiente WP4 | | | | | | |
-| LLM vía Groq, prompting few-shot (modelo y desviación en Costo) | protocolo (CTGAN) | pendiente WP4 | | | | | | |
+| Brazo | Fuente train | F1-macro (soporte ≥10) | IC95 principal (fila estrat.) | IC95 por grupo (sensibilidad) | Exactitud | Exactitud ponderada [IC95] | n train | n test | fusionadas a otros |
+|---|---|---|---|---|---|---|---|---|---|
+| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (reglas) | pendiente WP4 | | | | | | | |
+| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (CTGAN) | pendiente WP4 | | | | | | | |
+| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (reglas) | pendiente WP4 | | | | | | | |
+| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (CTGAN) | pendiente WP4 | | | | | | | |
+| BETO fine-tuning | protocolo (reglas) | pendiente WP4 | | | | | | | |
+| BETO fine-tuning | protocolo (CTGAN) | pendiente WP4 | | | | | | | |
+| LLM vía Groq, prompting few-shot (modelo y desviación en Costo) | protocolo (reglas) | no evaluado: brazo LLM no evaluado sobre el real por restricción de tratamiento de datos; humo sobre sintético en `outputs/tstr/sanity/reglas/llm_groq/` | | | | | | | |
+| LLM vía Groq, prompting few-shot (modelo y desviación en Costo) | protocolo (CTGAN) | no evaluado: brazo LLM no evaluado sobre el real por restricción de tratamiento de datos; humo sobre sintético en `outputs/tstr/sanity/ctgan/llm_groq/` | | | | | | | |
+
+### Sensibilidades pre-registradas (§4)
+
+Cada F1 recalcula la regla de soporte en su subconjunto («fusiona además» = clases que se pierden frente a la
+principal). (c) recorta los pesos al percentil 95 y renormaliza; ⚠ si cambia la exactitud ponderada en más de 5
+puntos. (d) los reversos y devoluciones de tarjeta están dentro de la métrica principal y se muestran aparte.
+(e) el κ sin los casos de convención lo calcula `tools/acuerdo_wp4.py`, no WP8.
+
+| Brazo | Fuente train | (a) F1 una fila por descripción [IC95] | (b) F1 solo doble anotación [IC95] | (c) Exactitud ponderada P95 (Δ vs. sin recorte) | (d) Reversos: aciertos/n |
+|---|---|---|---|---|---|
+| — | pendiente WP4 | | | | |
+
+**Declaraciones (D-M6, D-M7, pre-registro §3–§4).**
+- **Alcance del IC:** incertidumbre de muestreo **dentro de estos extractos**; no es generalización a nuevos titulares.
+  El IC por fila supone filas independientes y subestima la variación entre personas.
+- **Sensibilidad por grupo:** 6 grupos de extractos; solo admiten unas pocas réplicas distintas y las clases están
+  concentradas por grupo, así que ese IC es inestable. Se reporta al lado, no como principal.
+- **Exactitud ponderada:** n efectivo de Kish = 48 según el pre-registro §3 (cota inferior: los ítems pesados son copias de la misma
+  descripción). Su IC sale ancho por diseño. Los PSE sin facturador (≈ 4,4 % del marco, 95 filas) no tienen ningún ítem
+  en el test: la exactitud ponderada no dice nada de ellos.
+- **Etiqueta-por-texto vs. declaración:** ver metricas.json.
+- **Representatividad:** 6 grupos de ≤ 7 titulares por conveniencia; los pesos corrigen el diseño muestral, no la
+  representatividad poblacional.
 
 **Asimetría de tamaño (declarada).** BETO entrena sobre una submuestra estratificada de 20,000 filas por
 costo de CPU. La comparación de igual a igual es LogReg @20k frente a BETO @20k
@@ -44,9 +71,9 @@ igualdad de datos. El brazo LLM no entrena: el sintético solo entra por los eje
 
 ### Ablación reglas → CTGAN (Δ = CTGAN − reglas, bootstrap pareado sobre el mismo test)
 
-| Brazo | Δ F1-macro | IC95 | Δ solo etiqueta-por-texto | IC95 |
-|---|---|---|---|---|
-| — | pendiente WP4 | | | |
+| Brazo | Δ F1-macro | IC95 principal (fila estrat.) | IC95 por grupo (sensibilidad) |
+|---|---|---|---|
+| — | pendiente WP4 | | |
 
 **Entrada (idéntica en los tres brazos).** `[CUENTA=<cuenta_tipo>] [SIGNO=<signo>] [MONTO=<bin_log>] <descripcion>`; `monto` en bins log10 de media década, en
 pesos de promedio 2025 (el sintético ya lo está; el real de WP4 se deflacta con el IPC total nacional del mes si trae
@@ -57,10 +84,10 @@ cuenta y el monto separan P2P recibida de ingreso y P2P sin propósito de pagos 
 en las filas etiquetadas por declaración el monto mueve errores hacia clases raras (en el sanity, `educacion` cae).
 El techo por diseño de esas filas sigue intacto; el efecto real se mide solo sobre el test de WP4.
 
-**Brazo LLM.** El sintético entra solo por los ejemplos few-shot (3 por clase difícil): su Δ CTGAN − reglas mide el
-efecto de la fuente de esos ejemplos, no de un entrenamiento, y se espera cerca de cero. Groq retiró
-`llama-3.3-70b-versatile` de las cuentas free/developer el 16-ago-2026: el modelo usado y la desviación quedan en la
-tabla de costo y en `metricas.json`.
+**Brazo LLM.** brazo LLM no evaluado sobre el real por restricción de tratamiento de datos; humo sobre sintético en `outputs/tstr/sanity/{reglas,ctgan}/llm_groq/` (decisión final del 26-nov-2026: no se envían datos
+reales a Groq). El humo usa `openai/gpt-oss-120b` porque Groq retiró `llama-3.3-70b-versatile` de las cuentas
+free/developer el 16-ago-2026 (desviación en `metricas.json`); las respuestas vacías o fuera del enum se cuentan como
+error (etiqueta centinela `__fuera_de_enum__`), no se descartan. Con 40 filas su F1-macro no es interpretable.
 
 **Cómo leer estos números.** El TSTR absoluto mide *plantillas + estructura*: está acotado por el realismo
 de las plantillas de texto (regla propia, más limpias y regulares que un extracto real), así que es una cota
@@ -76,11 +103,11 @@ texto. Las filas que el CTGAN emite con combinaciones que el generador por regla
 | Modo | Fuente | Brazo | n train efectivo | segundos | detalle |
 |---|---|---|---|---|---|
 | sanity | ctgan | beto | 2,000 | 2,602 | BETO CPU 4 hilos: 2,000 filas x 3 épocas = 375 pasos, 2.71 s/paso, 0.28 h de entrenamiento |
-| sanity | ctgan | llm_groq | 18 | 184 | openai/gpt-oss-120b: 38 entradas únicas, 38 llamadas nuevas, 62,027 tokens; DESVIACIÓN: llama-3.3-70b-versatile no disponible para esta cuenta (retirado por Groq 16-ago-2026); sustituido por openai/gpt-oss-120b |
+| sanity | ctgan | llm_groq | 18 | 0 | openai/gpt-oss-120b: 38 entradas únicas (0 llamadas nuevas, 38 del registro), 62,027 tokens; DESVIACIÓN: llama-3.3-70b-versatile no disponible para esta cuenta (retirado por Groq 16-ago-2026); sustituido por openai/gpt-oss-120b |
 | sanity | ctgan | logreg | 97,768 | 50 |  |
 | sanity | ctgan | logreg_n20000 | 20,000 | 12 |  |
 | sanity | reglas | beto | 2,000 | 2,830 | BETO CPU 4 hilos: 2,000 filas x 3 épocas = 375 pasos, 2.02 s/paso, 0.21 h de entrenamiento |
-| sanity | reglas | llm_groq | 18 | 306 | openai/gpt-oss-120b: 38 entradas únicas, 38 llamadas nuevas, 62,384 tokens; DESVIACIÓN: llama-3.3-70b-versatile no disponible para esta cuenta (retirado por Groq 16-ago-2026); sustituido por openai/gpt-oss-120b |
+| sanity | reglas | llm_groq | 18 | 0 | openai/gpt-oss-120b: 38 entradas únicas (0 llamadas nuevas, 38 del registro), 62,384 tokens; DESVIACIÓN: llama-3.3-70b-versatile no disponible para esta cuenta (retirado por Groq 16-ago-2026); sustituido por openai/gpt-oss-120b |
 | sanity | reglas | logreg | 97,768 | 34 |  |
 | sanity | reglas | logreg_n20000 | 20,000 | 11 |  |
 
@@ -96,10 +123,10 @@ por reglas (diagnóstico de la capa de texto factorizada).
 | Brazo | Fuente train | F1-macro (soporte ≥10) | IC95 | F1-macro solo etiqueta-por-texto | IC95 | n train | n test | fusionadas a otros |
 |---|---|---|---|---|---|---|---|---|
 | beto | ctgan | 0.566 | [0.560, 0.572] | 0.593 | [0.586, 0.600] | 2,000 | 24,443 | — |
-| llm_groq | ctgan | 1.000 | [0.713, 1.000] | 1.000 | [0.789, 1.000] | 18 | 40 | 15 clases (lista en metricas.json) |
+| llm_groq | ctgan | 0.987 ⚠ no interpretable (1 clase evaluable) | [0.702, 1.000] | 0.986 | [0.770, 1.000] | 18 | 40 | 15 clases (lista en metricas.json) |
 | logreg | ctgan | 0.866 | [0.859, 0.873] | 0.909 | [0.902, 0.916] | 97,768 | 24,443 | — |
 | logreg_n20000 | ctgan | 0.864 | [0.857, 0.871] | 0.907 | [0.899, 0.914] | 20,000 | 24,443 | — |
 | beto | reglas | 0.616 | [0.607, 0.624] | 0.647 | [0.638, 0.656] | 2,000 | 24,443 | — |
-| llm_groq | reglas | 1.000 | [0.688, 1.000] | 1.000 | [0.925, 1.000] | 18 | 40 | 15 clases (lista en metricas.json) |
+| llm_groq | reglas | 0.974 ⚠ no interpretable (1 clase evaluable) | [0.715, 1.000] | 1.000 | [0.925, 1.000] | 18 | 40 | 15 clases (lista en metricas.json) |
 | logreg | reglas | 0.889 | [0.878, 0.898] | 0.941 | [0.931, 0.948] | 97,768 | 24,443 | — |
 | logreg_n20000 | reglas | 0.860 | [0.850, 0.869] | 0.936 | [0.927, 0.945] | 20,000 | 24,443 | — |

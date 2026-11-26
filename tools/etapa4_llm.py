@@ -14,8 +14,8 @@ Qué ve el modelo
            baseline en el sanity (unión reglas ∪ CTGAN), antes de ver el real.
   user   : la MISMA serialización canónica de los tres brazos (etapa4_tstr.serializar).
 Parámetros: temperature 0, seed 42; modelos de razonamiento (gpt-oss): reasoning_effort "low", razonamiento oculto.
-Parseo: etiqueta exacta del enum; si no, la única etiqueta del enum contenida en la respuesta; si no, 'otros'
-(se cuentan fuera_de_enum y vacías).
+Parseo: etiqueta exacta del enum; si no, la única etiqueta del enum contenida en la respuesta; si no, la etiqueta
+centinela __fuera_de_enum__, que cuenta como ERROR (no se descarta ni se convierte en 'otros').
 
 Modelo. Se pide llama-3.3-70b-versatile; Groq lo retiró de las cuentas free/developer el 16-ago-2026. Si /models no lo
 ofrece a esta cuenta se usa --modelo-sustituto (por defecto openai/gpt-oss-120b, el mismo sustituto de WP5) y la
@@ -27,14 +27,14 @@ repetida sale de ese registro sin llamar a la API. Entradas idénticas se consul
 
 Llave: GROQ_API_KEY en .env (python-dotenv). Nunca se imprime ni se guarda.
 
-DATOS REALES. En TSTR las descripciones de los voluntarios salen a un tercero (Groq, EE. UU.): exige
---autorizo-envio-real (consentimiento informado y Ley 1581 de 2012) y el registro se guarda en data/_privado/llm_cache/
-(data/ está ignorado por git), nunca en outputs/. Las predicciones de outputs/tstr/ solo llevan etiquetas.
+DATOS REALES: NO. Decisión final del 26-nov-2026: no se envían datos reales a Groq. El brazo LLM no se evalúa sobre el
+real de WP4 (restricción de tratamiento de datos); solo existe el humo sobre sintético (outputs/tstr/sanity/<fuente>/
+llm_groq/). --test se rechaza.
 
 Uso (desde la raíz del repo, entorno .venv):
   .venv/Scripts/python tools/etapa4_llm.py --max-test 40            # prueba de humo (sanity, 2 fuentes)
   .venv/Scripts/python tools/etapa4_llm.py                          # sanity (400 filas por fuente)
-  .venv/Scripts/python tools/etapa4_llm.py --test data/reales_anon/<real>.csv --autorizo-envio-real   # TSTR
+  .venv/Scripts/python tools/etapa4_llm.py --max-test 40 --desde-registro   # repuntúa el humo sin llamar a la API
 """
 from __future__ import annotations
 
@@ -65,8 +65,9 @@ MAX_TEST_SANITY = 400
 PAUSA_DEFECTO = 2.1          # ≈ 28 solicitudes/min, bajo el límite típico de 30 RPM del plan gratuito
 MAX_TOKENS = {"razonamiento": 512, "normal": 16}
 REINTENTOS = 6
-CACHE = Path("outputs/tstr/llm_cache")            # sanity: entradas sintéticas, se versiona
-CACHE_PRIVADO = Path("data/_privado/llm_cache")   # TSTR: entradas REALES de WP4; data/ está ignorado por git
+CACHE = Path("outputs/tstr/llm_cache")            # solo entradas sintéticas (humo); se versiona
+DECISION_SIN_REAL = ("brazo LLM no evaluado sobre el real por restricción de tratamiento de datos; humo sobre sintético "
+                     "en outputs/tstr/sanity/<fuente>/llm_groq/")
 
 
 # --------------------------------------------------------------------------- prompt
@@ -117,17 +118,22 @@ def mensajes(sistema: str, shots: list[tuple[str, str]], entrada: str) -> list[d
 
 
 # --------------------------------------------------------------------------- parseo
+FUERA_DE_ENUM = "__fuera_de_enum__"   # nunca coincide con una etiqueta real: cuenta como ERROR, no se descarta
+
+
 def parsear(contenido: str | None, clases: list[str]) -> tuple[str, str]:
-    """(etiqueta, estado) con estado en exacta | contenida | fuera_de_enum | vacia."""
+    """(etiqueta, estado) con estado en exacta | contenida | fuera_de_enum | vacia. Las respuestas vacías o fuera
+    del enum se predicen como FUERA_DE_ENUM: se mantienen en el denominador y cuentan como error (también cuando la
+    etiqueta real es 'otros')."""
     if not contenido or not str(contenido).strip():
-        return base.CLASE_RESIDUAL, "vacia"
+        return FUERA_DE_ENUM, "vacia"
     t = str(contenido).strip().strip("`'\".:;, \n").lower()
     if t in clases:
         return t, "exacta"
     hallados = {c for c in clases if re.search(rf"(?<![a-z_]){re.escape(c)}(?![a-z_])", t)}
     if len(hallados) == 1:
         return hallados.pop(), "contenida"
-    return base.CLASE_RESIDUAL, "fuera_de_enum"
+    return FUERA_DE_ENUM, "fuera_de_enum"
 
 
 # --------------------------------------------------------------------------- API
@@ -175,9 +181,9 @@ class ClienteGroq:
 
 # --------------------------------------------------------------------------- brazo
 class BrazoLLM:
-    def __init__(self, clases, cliente: ClienteGroq, modelo: str, desviacion: str | None, privado: bool = False):
+    def __init__(self, clases, cliente: ClienteGroq | None, modelo: str, desviacion: str | None):
         self.clases, self.cliente, self.modelo, self.desviacion = clases, cliente, modelo, desviacion
-        self.dir_cache = CACHE_PRIVADO if privado else CACHE
+        self.dir_cache = CACHE
         self.razonamiento = modelo.startswith("openai/gpt-oss")
 
     def _parametros(self) -> dict:
@@ -207,12 +213,19 @@ class BrazoLLM:
                                               "params": params}, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
 
         resp, nuevas, fallos, tokens = {}, 0, 0, {"prompt": 0, "completion": 0}
+        tokens_total = {"prompt": 0, "completion": 0}       # todas las entradas usadas, del registro o nuevas
         with ruta_cache.open("a", encoding="utf-8") as reg:
             for i, x in enumerate(unicas):
                 k = clave(x)
                 if k in cache:
                     resp[x] = cache[k]["contenido"]
+                    uso_c = cache[k].get("usage", {}) or {}
+                    tokens_total["prompt"] += int(uso_c.get("prompt_tokens", 0) or 0)
+                    tokens_total["completion"] += int(uso_c.get("completion_tokens", 0) or 0)
                     continue
+                if self.cliente is None:
+                    sys.exit(f"--desde-registro: falta en el registro la respuesta para una entrada ({i + 1}/{len(unicas)}); "
+                             "no se llama a la API")
                 st, d, seg = self.cliente.completar({"model": self.modelo, "messages": mensajes(sistema, shots, x), **params})
                 nuevas += 1
                 if st != 200:
@@ -225,6 +238,8 @@ class BrazoLLM:
                 uso = d.get("usage", {}) or {}
                 tokens["prompt"] += int(uso.get("prompt_tokens", 0) or 0)
                 tokens["completion"] += int(uso.get("completion_tokens", 0) or 0)
+                tokens_total["prompt"] += int(uso.get("prompt_tokens", 0) or 0)
+                tokens_total["completion"] += int(uso.get("completion_tokens", 0) or 0)
                 fila = {"clave": k, "modelo": self.modelo, "modelo_respuesta": d.get("model"), "entrada": x,
                         "contenido": cont, "usage": uso, "segundos": round(seg, 3),
                         "fecha_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
@@ -245,9 +260,11 @@ class BrazoLLM:
             "sha256_system": hashlib.sha256(sistema.encode()).hexdigest(), "regla_incluida": "R1",
             "entradas_unicas": len(unicas), "llamadas_nuevas": nuevas, "respuestas_de_registro": len(unicas) - nuevas,
             "llamadas_fallidas": fallos, "estado_parseo_filas": {k: int(v) for k, v in estados.items()},
-            "tokens_llamadas_nuevas": tokens, "registro": (self.dir_cache / ruta_cache.name).as_posix(),
-            "costo": (f"{self.modelo}: {len(unicas):,} entradas únicas, {nuevas:,} llamadas nuevas, "
-                      f"{tokens['prompt'] + tokens['completion']:,} tokens"
+            "fuera_de_enum_contadas_como_error": int(sum(v for k, v in estados.items() if k in ("fuera_de_enum", "vacia"))),
+            "etiqueta_fuera_de_enum": FUERA_DE_ENUM,
+            "tokens_llamadas_nuevas": tokens, "tokens_totales_entradas_usadas": tokens_total, "registro": (self.dir_cache / ruta_cache.name).as_posix(),
+            "costo": (f"{self.modelo}: {len(unicas):,} entradas únicas ({nuevas:,} llamadas nuevas, "
+                      f"{len(unicas) - nuevas:,} del registro), {tokens_total['prompt'] + tokens_total['completion']:,} tokens"
                       + (f"; DESVIACIÓN: {self.desviacion}" if self.desviacion else "")),
         }
 
@@ -280,17 +297,16 @@ def main() -> None:
                     help=f"Filas de test (muestra estratificada). Sanity: {MAX_TEST_SANITY} por defecto; TSTR: todas.")
     ap.add_argument("--modelo-sustituto", default=SUSTITUTO_DEFECTO)
     ap.add_argument("--pausa", type=float, default=PAUSA_DEFECTO, help="segundos mínimos entre llamadas")
-    ap.add_argument("--autorizo-envio-real", action="store_true",
-                    help="Obligatorio con --test: confirma que el consentimiento de los voluntarios y la política de "
-                         "datos cubren enviar sus descripciones (anonimizadas) a una API externa (Groq, EE. UU.).")
+    ap.add_argument("--desde-registro", action="store_true",
+                    help="Repuntúa desde outputs/tstr/llm_cache/ sin llamar a la API (no necesita llave).")
     args = ap.parse_args()
-    if args.test is not None and not args.autorizo_envio_real:
-        sys.exit("TSTR con LLM envía las descripciones REALES de WP4 a Groq (tercero, fuera de Colombia). Verifica que "
-                 "el consentimiento informado y la Ley 1581 de 2012 lo cubran y relanza con --autorizo-envio-real. "
-                 f"Las respuestas se guardan en {CACHE_PRIVADO.as_posix()} (ignorado por git), no en outputs/.")
-
-    cliente = ClienteGroq(cargar_llave(), os.environ.get("GROQ_BASE_URL", URL_GROQ), args.pausa)
-    disponibles = cliente.modelos()
+    if args.test is not None:
+        sys.exit("Decisión final (26-nov-2026): no se envían datos reales a Groq. " + DECISION_SIN_REAL)
+    if args.desde_registro:
+        cliente, disponibles = None, [args.modelo_sustituto]
+    else:
+        cliente = ClienteGroq(cargar_llave(), os.environ.get("GROQ_BASE_URL", URL_GROQ), args.pausa)
+        disponibles = cliente.modelos()
     if MODELO_PEDIDO in disponibles:
         modelo, desviacion = MODELO_PEDIDO, None
     elif args.modelo_sustituto in disponibles:
@@ -300,9 +316,9 @@ def main() -> None:
         sys.exit(f"Ni {MODELO_PEDIDO} ni {args.modelo_sustituto} están disponibles: {disponibles[:20]}")
     print(f"Modelo: {modelo}" + (f"  (DESVIACIÓN: {desviacion})" if desviacion else ""), flush=True)
 
-    max_test = args.max_test if args.max_test is not None else (None if args.test else MAX_TEST_SANITY)
+    max_test = args.max_test if args.max_test is not None else MAX_TEST_SANITY
     clases, sha_tax = base.cargar_taxonomia()
-    brazo_obj = BrazoLLM(clases, cliente, modelo, desviacion, privado=args.test is not None)
+    brazo_obj = BrazoLLM(clases, cliente, modelo, desviacion)
 
     for f in args.fuentes:
         ruta = base.FUENTES.get(f, Path(f))

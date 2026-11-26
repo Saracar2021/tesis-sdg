@@ -1,0 +1,62 @@
+# Hoja de calibración — 4 casos sin resolver en la taxonomía v1.1.0
+
+**Sesión:** 26 nov 2026 · A1 + A2 · Pre-registro 05 v1.3 §5
+
+**Cómo se decide cada convención:**
+- Se elige **solo con el texto de la taxonomía v1.1** (regla o definición citada abajo). **Nunca** mirando lo que hace
+  el generador sintético.
+- Lo que se acuerde se aplica igual en todo el lote, queda escrito aquí y pasa como **hallazgo para la v1.2**.
+- En estos casos el κ mide **el seguimiento de una convención pactada**, no un acuerdo independiente; se declara así.
+
+Pesos: filas del marco (2.183) · ítems en el test (200) · Σ `peso_muestreo` de esos ítems.
+
+---
+
+### Caso 1 — Reversos y devoluciones (tarjeta, `signo = ingreso`) · marco 6 · test 6 · Σ peso 6
+Ej.: «REVERSADA - <comercio>», «ANUL. CONSUMO …», «DEVOLUCION». La taxonomía **no los menciona**.
+**Se reportan como subgrupo aparte** (probablemente no existen en el sintético).
+- **R1:** «si la descripción identifica el comercio o el bien/servicio, se asigna la categoría del bien».
+- **`otros` (definición):** «Transacciones que no encajan en ninguna categoría o cuyo texto es ininteligible».
+- **R7:** «Ante ambigüedad irresoluble tras aplicar R1-R6, usar … otros.ininteligible; nunca adivinar».
+- `ingreso` (definición) enumera «salario, honorarios, ventas del negocio, subsidios estatales, rendimientos»; no
+  menciona reembolsos.
+
+Convención acordada: ______________________________ · Regla citada: ________ · ¿Con y sin comercio? ________
+
+### Caso 2 — PSE sin facturador (`banco`, `egreso`) · marco 95 · test 0 · en la calibración: C03
+Ej.: «Compra <banco o pasarela> Compras y Pagos PSE», «… Pago por PSE»: el texto nombra la pasarela, no la factura.
+⚠ Pesa 4,4 % del marco, pero el sorteo no dejó ningún ítem en el test. La convención solo se aplica en la calibración.
+Si el texto sí nombra al facturador (un colegio, una telefónica…), no es este caso: aplica R5 directamente.
+No confundir con «PAGOS POR PSE» en tarjeta con `signo = ingreso`: eso es pago de la tarjeta (R6).
+- **R5:** «Pagos de factura vía PSE/corresponsal → categoría de la factura …, no una categoría de 'pagos'».
+- **R7:** «… otros.ininteligible; nunca adivinar».
+
+Convención acordada: ______________________________ · Regla citada: ________
+
+### Caso 3 — Transferencias a/desde billetera sin persona (`banco`) · marco 254 · test 7 · Σ peso ≈ 386
+Ej.: «TRANSFERENCIAS A NEQUI» (**235 transacciones**, el descriptor más repetido del marco: 3 ítems con peso ≈ 119
+cada uno), «TRANSFERENCIA DESDE NEQUI». No dice si la billetera es del mismo titular.
+- **`movimiento_propio` (definición):** «recarga de billetera desde cuenta bancaria»; ejemplo
+  «RECARGA NEQUI DESDE BANCOLOMBIA».
+- **`movimiento_propio` (caso límite):** «Distinguir p2p vs. cuenta propia exige conocer la titularidad; cuando el
+  texto no lo indica, el voluntario lo declara … En inferencia pura queda como p2p.indeterminada».
+- **`transferencias_p2p` (excluye):** «traslado entre cuentas propias → movimiento_propio».
+
+Convención acordada: ______________________________ · Regla citada: ________ · ¿Igual para «A» y «DESDE»? ____
+
+### Caso 4 — «Compra en PERSONA» · marco 48 · test 4 · Σ peso ≈ 41
+Ej.: «PERSONA» sola en tarjeta (34), «PAGO QR PERSONA» (12), «COMPRA EN PERSONA» (2): un nombre de persona
+anonimizado en lo que parece una compra.
+- **`transferencias_p2p` (excluye):** «pago identificable a comercio o por bien/servicio, aunque el canal sea
+  billetera → categoría del bien (regla R1)».
+- **R2:** «transferencias_p2p solo aplica cuando la contraparte es persona natural Y el propósito no es identificable».
+- **R7:** «… el subtipo *indeterminada* de P2P o la categoría otros.ininteligible».
+- Formalidad (solo A1): `informal` = «persona particular vendiendo bienes/servicios».
+
+Convención acordada: ______________________________ · Regla citada: ________ · ¿Igual en tarjeta y en banco? ____
+
+---
+
+**Regla común (las dos anotadoras):** no buscar en internet comercios desconocidos; aplicar R7 y marcar `duda = 1`.
+
+Firmas: A1 ____________ A2 ____________ · Hora de cierre de la calibración: ______

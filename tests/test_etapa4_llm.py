@@ -13,9 +13,25 @@ CLASES, _ = base.cargar_taxonomia()
 def test_parseo():
     assert llm.parsear("comidas_fuera", CLASES) == ("comidas_fuera", "exacta")
     assert llm.parsear("Categoría: ingreso.", CLASES) == ("ingreso", "contenida")
-    assert llm.parsear("ingreso o transferencias_p2p", CLASES) == ("otros", "fuera_de_enum")
-    assert llm.parsear("", CLASES) == ("otros", "vacia")
-    assert llm.parsear(None, CLASES) == ("otros", "vacia")
+    assert llm.parsear("ingreso o transferencias_p2p", CLASES) == (llm.FUERA_DE_ENUM, "fuera_de_enum")
+    assert llm.parsear("", CLASES) == (llm.FUERA_DE_ENUM, "vacia")
+    assert llm.parsear(None, CLASES) == (llm.FUERA_DE_ENUM, "vacia")
+
+
+def test_fuera_de_enum_cuenta_como_error_aunque_la_real_sea_otros():
+    import numpy as np
+    y_true = np.array(["otros"] * 10 + ["ingreso"] * 10)
+    y_pred = np.array([llm.FUERA_DE_ENUM] * 10 + ["ingreso"] * 10, dtype=object)
+    r = base.evaluar(y_true, y_pred, CLASES)
+    assert r["accuracy"] == 0.5 and r["f1_macro_regla_soporte"] < 1.0
+
+
+def test_llm_rechaza_test_real(monkeypatch):
+    import pytest
+    monkeypatch.setattr(sys, "argv", ["etapa4_llm.py", "--test", "tests/fixtures/real_simulado_wp4.csv"])
+    with pytest.raises(SystemExit) as e:
+        llm.main()
+    assert "no se envían datos reales" in str(e.value)
 
 
 def test_prompt_sistema_tiene_16_clases_y_r1():
