@@ -12,7 +12,9 @@
 - Se elige **solo con el texto de la taxonomía v1.1** (regla o definición citada abajo). **Nunca** mirando lo que hace
   el generador sintético.
 - Lo que se acuerde se aplica igual en todo el lote, queda escrito aquí y pasa como **hallazgo para la v1.2**.
-- En estos casos el κ mide **el seguimiento de una convención pactada**, no un acuerdo independiente; se declara así.
+- ~~En estos casos el κ mide el seguimiento de una convención pactada~~ **(superado, v1.4 §13):** como no hubo
+  calibración previa, las anotaciones de estos casos también son independientes. Las convenciones se fijaron
+  después, en la adjudicación, y el κ (0,934) se calculó con las anotaciones originales.
 
 Pesos: filas del marco (2.183) · ítems en el test (200) · Σ `peso_muestreo` de esos ítems.
 

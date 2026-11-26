@@ -46,3 +46,16 @@ def test_lectura_en_data_raw_y_fuera_de_data_permitida(tmp_path):
     f = tmp_path / "x.csv"
     f.write_text("a\n1\n", encoding="utf-8")
     assert pd.read_csv(f)["a"].tolist() == [1]
+
+
+def test_escribir_en_outputs_y_en_resultados_falla_leer_no():
+    for ruta in (RAIZ / "outputs" / "tstr" / "tablas_informe.tex", RAIZ / "outputs" / INEXISTENTE,
+                 RAIZ / "docs" / "resultados_tstr.md"):
+        with pytest.raises(PermissionError, match="guarda de pruebas"):
+            open(ruta, "a", encoding="utf-8")
+    with pytest.raises(PermissionError, match="guarda de pruebas"):
+        os.mkdir(RAIZ / "outputs" / "__guardia_dir__")
+    with pytest.raises(PermissionError, match="guarda de pruebas"):
+        pd.DataFrame({"a": [1]}).to_csv(RAIZ / "outputs" / INEXISTENTE)   # pandas también pasa por la guarda
+    with pytest.raises(FileNotFoundError):                         # leer pasa la guarda
+        open(RAIZ / "outputs" / INEXISTENTE, encoding="utf-8")

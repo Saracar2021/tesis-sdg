@@ -9,6 +9,11 @@ test_priors y test_ipc leen a propósito y en solo lectura. Escribir en data/raw
 
 Si una prueba toca data/, la apertura falla en el acto con PermissionError (no se llega a leer nada) y la prueba
 falla con un mensaje que dice qué ruta intentó abrir.
+
+Extensión (26-nov-2026): outputs/ y docs/resultados_tstr.md son SOLO LECTURA para las pruebas. Ahí viven los
+resultados reales (TSTR, tablas del informe, sintéticos); una prueba que escriba en ellos los sobrescribe con cifras
+simuladas. Leer y listar outputs/ sigue permitido (los sintéticos, priors e IPC se leen a propósito). Toda escritura
+de una prueba va a tmp_path.
 """
 import os
 import sys
@@ -17,6 +22,8 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 _DATA = os.path.normcase(os.path.realpath(RAIZ / "data"))
 _RAW = os.path.normcase(os.path.realpath(RAIZ / "data" / "raw"))
+_SOLO_LECTURA = [os.path.normcase(os.path.realpath(RAIZ / "outputs")),
+                 os.path.normcase(os.path.realpath(RAIZ / "docs" / "resultados_tstr.md"))]
 _ESCRITURA = os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_APPEND | os.O_TRUNC
 _EVENTOS_ESCRITURA = {"os.mkdir", "os.remove", "os.rmdir", "os.rename", "os.truncate", "os.chmod", "shutil.rmtree"}
 _EVENTOS_LISTADO = {"os.listdir", "os.scandir"}
@@ -53,7 +60,14 @@ def _guardia(evento, args):
     rutas = args[:2] if evento == "os.rename" else args[:1]
     for p in rutas:
         r = _normalizar(p)
-        if r is None or not _bajo(r, _DATA):
+        if r is None:
+            continue
+        if any(_bajo(r, b) for b in _SOLO_LECTURA):
+            if _es_lectura(evento, args):
+                continue
+            raise PermissionError(f"[guarda de pruebas] {evento} (escritura) en outputs/ o docs/resultados_tstr.md "
+                                  f"prohibido en las pruebas; escribir en tmp_path: {p}")
+        if not _bajo(r, _DATA):
             continue
         if _bajo(r, _RAW) and _es_lectura(evento, args):
             continue

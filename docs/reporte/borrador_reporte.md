@@ -1,16 +1,18 @@
-# Diseño y validación preliminar de un protocolo de generación de datos sintéticos de transacciones financieras para el contexto colombiano
+# Diseño y validación de un protocolo de generación de datos sintéticos de transacciones financieras para el contexto colombiano
 
-> **BORRADOR DE TRABAJO — 17 nov 2026.** Andamiaje para montar en la plantilla IEEE Transactions on AI. Porta la narrativa del informe de avance pero **toda cifra está reemplazada por la vigente** (`plan_maestro.md` §5, calculada sobre Bogotá con factores de expansión); las cifras retiradas del informe (§6) **no** se reutilizan. Las secciones de resultados experimentales (VII) van como **preliminares**. Texto asistido por IA — declararlo en la sección de uso de IA. La autora revisa y aprueba cada sección; ninguna cifra se escribe a mano: sale de `outputs/`.
->
-> Marcadores: `[CIFRA→outputs/...]` número por verificar/citar del repo · `[PRELIMINAR]` pendiente de WP7/WP8 · `[DECISIÓN]` requiere confirmación de la autora.
+**Sara Juliana Cárdenas Bohórquez y Cecile <apellido>** (asesores: por completar) · Maestría en Inteligencia Artificial, Pontificia Universidad Javeriana · correo: <correo institucional>
+
+> **Versión final — 26 nov 2026.** Espejo en markdown de `docs/reporte/main.tex` (plantilla IEEE Transactions on AI, clase `IEEEtai.cls`); el PDF de entrega se compila desde el `.tex`. Cifras del TSTR: `docs/resultados_tstr.md` (sección Trazabilidad); conjunto real: pre-registro `docs/datos_reales/05_prerregistro_muestreo_anotacion.md` v1.4 e inventario `data/reales_anon/_inventario_reales.md`. Por completar por la autora: `<correo institucional>`, `Cecile <apellido>` y los nombres de los asesores.
 
 ---
 
 ## Abstract
 
-El acceso a datos transaccionales financieros en Colombia es prácticamente inexistente en el dominio público: su naturaleza privada y sensible —amparada en la Ley 1266 de 2008 (Habeas Data) y la regulación de la Superintendencia Financiera— impide entrenar y validar modelos de clasificación de gastos para la población colombiana. Este trabajo diseña y valida de forma preliminar un protocolo reproducible de generación de datos sintéticos de transacciones (extractos bancarios) calibrado con fuentes abiertas del DANE —la Gran Encuesta Integrada de Hogares (GEIH) 2025 y la Encuesta Nacional de Presupuestos de los Hogares (ENPH) 2016-2017— para Bogotá como caso de estudio. El protocolo adapta el pipeline multi-agente de Pancholi et al. incorporando variables ausentes en el modelo de referencia: el estrato socioeconómico y el quintil de ingreso como priors bayesianos jerárquicos, y la distribución de medios de pago condicionada a la categoría de gasto. El protocolo consta de cuatro etapas —priors bayesianos, generador por reglas, refinamiento con CTGAN y validación Train on Synthetic, Test on Real (TSTR)—. Como contribución metodológica, el pipeline de referencia se **reevaluó mediante una ejecución reproducible con criterios prerregistrados**: su salida **no es mapeable** a la taxonomía colombiana (cubre 8 de 16 categorías, con un techo de F1-macro de 0,50 por construcción), lo que motiva un protocolo propio; de sus tres limitaciones reportadas, una se refuta, la de medios de pago se corrige y la de sensibilidad al ingreso resulta de su *prompt*, no del modelo generativo. Los resultados disponibles confirman la viabilidad del protocolo y cuantifican las diferencias estructurales con el modelo de referencia; la validación TSTR contra transacciones reales anotadas de voluntarios bogotanos se reporta como preliminar.
+El acceso a datos transaccionales financieros en Colombia es prácticamente inexistente en el dominio público: su naturaleza privada y regulada (Ley 1266 de 2008, Habeas Data) impide entrenar y validar clasificadores de gastos para la población colombiana. Este trabajo diseña y valida un protocolo reproducible de generación de extractos bancarios sintéticos calibrado con microdatos abiertos del DANE —la GEIH 2025 y la ENPH 2016-2017— para Bogotá. El protocolo adapta el pipeline de Pancholi *et al.* con *priors* bayesianos jerárquicos por estrato y quintil de ingreso y con medios de pago condicionados a la categoría de gasto, en cuatro etapas: *priors*, generador por reglas, refinamiento con CTGAN y validación Train on Synthetic, Test on Real (TSTR). La reevaluación reproducible y prerregistrada del pipeline de referencia muestra que su salida no es mapeable a la taxonomía colombiana (8 de 16 categorías, techo de F1-macro de 0,50). En el TSTR sobre 200 transacciones reales anonimizadas y anotadas por dos anotadoras independientes (κ de Cohen de 0,934), una regresión logística entrenada solo con datos sintéticos alcanza un F1-macro de 0,57 [IC95: 0,51; 0,62], frente a 0,06 del azar estratificado. Con la misma capa de texto, el generador por reglas y el CTGAN rinden igual (Δ = +0,001 [−0,055; +0,053]). El error dominante es de etiquetado: el generador marca como ingreso parte de las transferencias recibidas de personas, mientras que el conjunto real, sin propósito declarado, las deja como transferencias entre personas; el sintético debe etiquetarse con la misma información que el real.
 
-**Index Terms —** datos sintéticos, CTGAN, clasificación de transacciones, TSTR, priors bayesianos, informalidad financiera, Colombia.
+**Declaración de impacto —** En Colombia no existen datos públicos de transacciones bancarias, porque la ley los protege; sin ellos es difícil construir y auditar herramientas de finanzas personales para una población que usa mucho efectivo y transferencias entre personas. Este trabajo ofrece un procedimiento abierto y reproducible para fabricar extractos bancarios artificiales a partir de encuestas oficiales del DANE, sin usar datos de ningún cliente. Un clasificador de gastos entrenado solo con esos extractos artificiales acierta muy por encima del azar sobre transacciones reales de voluntarios de Bogotá. Esto sugiere que universidades, reguladores y empresas pequeñas podrían desarrollar y probar modelos sin acceder a datos sensibles. El trabajo deja además una lección práctica: los datos artificiales deben etiquetarse con la misma información que tendrá quien etiquete los datos reales; si no, el modelo aprende distinciones que en la práctica no se pueden hacer.
+
+**Index Terms —** Datos sintéticos, CTGAN, clasificación de transacciones, TSTR, *priors* bayesianos, Colombia.
 
 ---
 
@@ -52,9 +54,7 @@ Usar datos sintéticos de pipelines calibrados en otros países no es viable sin
 ¿Puede un protocolo de generación de datos sintéticos calibrado con fuentes colombianas (GEIH 2025 y ENPH 2016-2017 del DANE) producir transacciones suficientemente realistas para entrenar un clasificador de gastos que funcione sobre transacciones reales de usuarios bogotanos, validado mediante el paradigma TSTR?
 
 ### C. Hipótesis
-Un pipeline que incorpore el estrato socioeconómico y el quintil de ingreso como priors bayesianos, y la distribución de medios de pago condicionada a la categoría de gasto observada en Colombia, producirá datos con mayor utilidad de entrenamiento —medida por F1-score macro en TSTR— que el pipeline de referencia aplicado sin adaptación.
-
-> **[DECISIÓN — P16]** Precisar, con la directora, que bajo la arquitectura de dos capas (D15) la ENPH calibra la **capa interna** de gasto del hogar; la mezcla de medios observable en el extracto (billetera/transferencia) se introduce con una regla de migración parametrizada por escenarios, no directamente desde la ENPH (que no registra esos instrumentos). La redacción de la hipótesis debe reflejarlo.
+Un pipeline que incorpore el estrato socioeconómico y el quintil de ingreso como *priors* bayesianos, y la distribución de medios de pago condicionada a la categoría de gasto observada en Colombia, producirá datos sintéticos con utilidad de entrenamiento suficiente —medida por F1-macro en TSTR sobre transacciones reales bogotanas— para un clasificador de gastos funcional. La contextualización no es opcional: el pipeline de referencia no cubre, por construcción, el espacio de categorías colombiano (Sección V), de modo que la comparación pertinente es la ganancia que aporta la capa estructural propia (ablación generador por reglas frente a CTGAN), no un F1 cabeza a cabeza con un pipeline no mapeable. Bajo la arquitectura de dos capas (Sección \ref{sec:metodo}), la ENPH calibra la capa interna de gasto del hogar; la participación de billeteras y transferencias en la capa observable se introduce mediante una regla de migración parametrizada por escenarios (10/20/35 %), dado que la ENPH 2016-2017 no registra esos instrumentos; el TSTR de este informe usa el escenario base (20 %).
 
 ---
 
@@ -82,11 +82,11 @@ Las decisiones de diseño se documentan con su justificación (`docs/protocolo_t
 ### D. Las cuatro etapas del protocolo
 1. **Priors bayesianos.** Para cada una de las 15 celdas (estrato × quintil) se estima la distribución categórica de gasto, forma y medio de pago y ocupación como media posterior de un Dirichlet jerárquico: `π_post = (n·p̂ + κ·π_padre)/(n + κ)`, con `n` el tamaño efectivo de Kish, `π_padre` el nivel urbano nacional recalibrado al nivel de Bogotá, y `κ` estimado por verosimilitud marginal (no elegido a mano). Una celda se encoge cuando `n_ef < κ̂`.
 2. **Generador por reglas.** Muestrea perfiles de hogares bancarizados y emite el extracto: compras (medio condicionado a la categoría), retiros, nómina, transferencias P2P, recargas y pagos recurrentes. El texto de la descripción se construye con una biblioteca curada de comercios y plantillas de descriptor que imitan el formato anonimizado real.
-3. **Refinamiento con CTGAN** (SDV): aprende correlaciones de alto orden entre los campos estructurados del extracto. `[DECISIÓN]` parámetros y métricas prerregistrados (ver VI).
+3. **Refinamiento con CTGAN** (SDV): aprende correlaciones de alto orden entre los campos estructurados del extracto, con pre-registro de columnas, métricas y reglas duras (ver VII.A).
 4. **Validación TSTR:** entrenar clasificadores sobre sintético y evaluarlos sobre el conjunto real anotado de Bogotá.
 
 ### E. Taxonomía de categorías
-`[PRELIMINAR — WP2]` Taxonomía v1 adaptada a Colombia (incluye P2P y comercio informal), con la variable de medio de pago como dimensión. Congelamiento a v1.1 pendiente tras revisar ≥ 50 descripciones reales (`docs/taxonomia/`).
+Taxonomía v1.1.0 congelada (`docs/taxonomia/taxonomia_gastos_colombia_v1.json`): 16 categorías de primer nivel (`categoria_n1`), que incluyen transferencias entre personas (P2P) y movimientos propios, con las reglas de asignación R1–R7 y el medio de pago como dimensión aparte. La v1.1.0 no cambió las categorías ni las reglas de la v1.0, solo documentación y metadatos de anotación.
 
 ---
 
@@ -107,13 +107,25 @@ Prerregistrar los criterios es lo que da credibilidad a la reevaluación: no se 
 ## VI. Diseño experimental
 
 ### A. Dataset sintético
-`[PRELIMINAR — WP6/WP7]` Corrida de referencia del generador: 1.000 perfiles × 3 meses (dic-2025, abr-2026, ago-2026), semilla 42 → 448.383 filas (122.211 emitidas; `outputs/sintetico_reglas/resumen_generacion.json`). El CTGAN (SDV) se entrena sobre los campos estructurados de la capa emitida para producir el dataset sintético v1 (≥ 5.000 transacciones). Parámetros prerregistrados: entradas, condicionamiento por `categoria_n1`, `epochs`, semilla y criterios de rechazo (hoja de pre-registro, `outputs/ctgan/manifest.json`).
+Corrida de referencia del generador: 1.000 perfiles × 3 meses (dic-2025, abr-2026, ago-2026), semilla 42 → 448.383 filas (122.211 emitidas; `outputs/sintetico_reglas/resumen_generacion.json`). El CTGAN (SDV) se entrena sobre los campos estructurados de la capa emitida y produce el dataset sintético v1 (122.211 filas). Parámetros prerregistrados: entradas, condicionamiento por `categoria_n1`, `epochs`, semilla y criterios de rechazo (hoja de pre-registro, `outputs/ctgan/manifest.json`).
 
-### B. Conjunto real de validación
-`[PRELIMINAR — WP4]` 20 voluntarios de Bogotá (muestra por conveniencia; conjunto de validación, no representativo). Extractos de Nequi, Daviplata o bancarios de 3 meses de referencia, anonimizados según protocolo (`docs/datos_reales/02_protocolo_anonimizacion_v1.1.md`). Etiquetado por 2 anotadores con la taxonomía v1.1 y concordancia inter-anotador (Cohen's Kappa). **Estado:** aval de ética resuelto; ingesta/anonimización en curso; anotación pendiente.
+### B. Conjunto real de evaluación
+El conjunto real proviene de extractos de cuentas de ahorro y de tarjetas de crédito de voluntarios de Bogotá, recolectados con consentimiento informado y aval de ética. Es una muestra por conveniencia que sirve para evaluar, no para representar a la población, y por la separación entre datos reales y calibración solo evalúa: ni la muestra ni las etiquetas alimentan el generador ni las plantillas de texto.
+
+**Extracción y conciliación.** Las transacciones se extraen de los PDF por código; cuando una página es una imagen escaneada sin capa de texto se aplica reconocimiento óptico de caracteres (OCR). Cada extracto que imprime totales del periodo (créditos y débitos) se concilia contra la suma de los movimientos extraídos; los de tarjeta no traen totales comparables.
+
+**Anonimización.** Los nombres de personas naturales se reemplazan por el token `PERSONA`, el mismo que emite el generador, para no presentar en la evaluación un formato que el clasificador nunca vio al entrenar. El token enmascara también al propio titular, de modo que el texto no distingue una transferencia a un tercero de una a cuenta propia. Las llaves Bre-B (alias y correos) se reemplazan por `LLAVE`. Este documento no reproduce ninguna descripción real.
+
+**Muestreo (pre-registrado).** El marco excluye los meses sin IPC incorporado al repositorio al congelarlo, porque el clasificador recibe los montos deflactados a pesos de 2025 con el IPC del mes. La muestra de n = 200 se estratifica por una preclasificación heurística por palabras clave —herramienta de muestreo, no etiqueta, que las anotadoras no ven—, con un mínimo de 10 ítems por estrato y un tope de 3 filas por descripción normalizada, en dos etapas con probabilidades de inclusión exactas; el peso de muestreo es 1/(π₁π₂). El sorteo usa claves SHA-256 y es idéntico en cualquier máquina.
+
+**Anotación doble a ciegas.** Dos anotadoras asignan `categoria_n1` de forma independiente viendo solo lo que ve el clasificador (tipo de cuenta, signo, monto y descripción). El acuerdo se mide con el κ de Cohen, con IC95 por *bootstrap* estratificado, y cada desacuerdo se adjudica registrando su causa. La primera anotadora (la autora) participó en la extracción, así que no es ciega a los datos, solo a las etiquetas de la otra; por eso la etiqueta adjudicada debe justificarse con lo que ve el clasificador.
+
+**Desviaciones de ejecución** (pre-registro v1.4, §13), ninguna sobre el diseño muestral ni las métricas: (i) no hubo sesión de calibración previa, de modo que el κ mide acuerdo sin coordinación; (ii) las convenciones de cuatro casos que la taxonomía v1.1 no resuelve (reversos, pagos PSE sin facturador, transferencias a o desde billetera sin persona y pagos a `PERSONA`) se fijaron en la adjudicación, citando la taxonomía, viendo las dos anotaciones y antes de ver cualquier predicción, y se aplicaron a todos los ítems de cada caso; el κ usa las anotaciones originales; (iii) el patrón del cuarto caso se amplió después de anotar; y (iv) un error del consolidador marcó 7 ítems como de anotación simple, que se corrigió sin cambiar ninguna etiqueta.
 
 ### C. Protocolo TSTR y clasificadores
-Tres clasificadores entrenados sobre sintético: (i) regresión logística con TF-IDF (baseline), (ii) BETO fine-tuneado, (iii) LLaMA 3 few-shot. Métricas: F1-macro (con regla de soporte ≥ 10 por clase), Cohen's Kappa y AUC. **Brazo de control (solo campos estructurados):** como la descripción de texto se genera por plantillas condicionadas a la categoría, un clasificador de texto mediría las plantillas y no el aporte del CTGAN; por eso se incluye un brazo entrenado únicamente con los campos estructurados (monto, medio de pago, cuenta, etc.), que aísla la contribución del refinamiento generativo. **Comparación con el pipeline de referencia:** su salida no es mapeable a la taxonomía colombiana (solo emite compras, 8 de 16 categorías; Sección V), así que **no admite un entrenamiento TSTR comparable**: un clasificador entrenado con ella queda acotado a un techo de F1-macro de 0,50 por construcción. La comparación es, por tanto, **estructural** —la no-transferibilidad del pipeline de referencia frente a la cobertura completa del protocolo propio—, no un F1 medido cabeza a cabeza. El desempeño que los autores reportan (datos en inglés, otra ciudad, otras categorías) se cita solo como contexto.
+Los clasificadores se entrenan sobre cada sintético —generador por reglas y CTGAN, ambos con 122.211 filas— y se evalúan sobre los 200 ítems reales; el objetivo es `categoria_n1`. Ambas fuentes reciben la descripción de la misma capa de texto (mismas plantillas, comercios y semilla, ninguna calibrada con el real), de modo que la diferencia entre reglas y CTGAN aísla la capa estructural. La entrada es idéntica en todos los brazos: tipo de cuenta, signo y monto en rangos logarítmicos de media década (pesos de 2025; el real se deflacta con el IPC del mes), seguidos de la descripción. Clasificadores: (i) regresión logística con TF-IDF de n-gramas de caracteres 3–5, con todo el sintético y con una submuestra estratificada de 20.000 filas; (ii) BETO afinado sobre esa misma submuestra, por costo de cómputo en CPU, de modo que la comparación de igual a igual es regresión logística @20k frente a BETO @20k; y (iii) un LLM *few-shot* vía Groq, que no se evaluó sobre el real porque no se envían datos reales a la API.
+
+**Métricas (pre-registradas).** Principal: F1-macro sin ponderar con regla de soporte: las clases con menos de 10 ítems en el test se fusionan con `otros`, en la etiqueta real y en la predicha, con la regla fijada una vez sobre el test observado. IC95 principal por *bootstrap* por fila estratificado por estrato de muestreo (1.000 réplicas, semilla 42); como sensibilidad, *bootstrap* por grupo de extractos. El alcance es la incertidumbre de muestreo dentro de estos extractos, no la generalización a nuevos titulares. Secundaria: exactitud ponderada con los pesos de muestreo (estimador de Hájek). La ablación mide Δ = F1_CTGAN−F1_reglas por *bootstrap* pareado sobre el mismo test; la comparación principal es la regresión logística con todo el sintético y las otras dos son secundarias, sin corrección por multiplicidad: una Δ secundaria cuyo IC toque o cruce cero no se interpreta como efecto. Líneas base: clase mayoritaria del sintético y predicción aleatoria con su distribución. El pipeline de referencia no entra como fila de la tabla TSTR (Sección VIII).
 
 ---
 
@@ -136,43 +148,119 @@ En **dependencias** (Column Pair Trends) el CTGAN recupera el **85,7 %** de la d
 
 **Reglas duras / rechazo:** tasa total **14,78 %**, que **supera el tope declarado del 10 %** → resultado de fidelidad **negativo**, reportado. El grueso es `par_n1_n2_inexistente` (10,78 %): el CTGAN plano genera pares categoría–subcategoría fuera de la taxonomía, señal de que **no captura bien la jerarquía categórica**. El resto: signo incompatible 2,66 %, medio imposible para la cuenta 1,67 %, `canal_p2p` 0,25 %, fecha 0,11 %. El dataset v1 (122.211 filas) es el resultado tras filtrar las violaciones.
 
-### B. Validación TSTR
-`[PRELIMINAR — WP8]` F1-macro por clasificador, matriz de confusión por categoría, Kappa. Pendiente de la anotación del conjunto real.
+### B. Conjunto real y anotación
+Los 53 extractos dan 2.471 transacciones anonimizadas. De ellos, 31 se concilian contra los totales impresos por el banco, sin ningún descuadre, y 22 no traen totales comparables. El marco muestral tiene 2.183 transacciones de diciembre de 2025 a septiembre de 2026 (corte en el último mes de la serie de IPC incorporada) en 6 grupos de extractos, que corresponden a lo sumo a 6 titulares. La muestra estratificada de 200 ítems cubre 153 descripciones distintas; sus pesos son insesgados (todas las filas del marco tienen probabilidad de inclusión positiva), pero el tope por descripción concentra el peso en pocos ítems y deja un tamaño efectivo de Kish de 48. La anotación doble independiente alcanza κ = 0,934 [0,896; 0,967] sobre `categoria_n1`, con 12 desacuerdos adjudicados; excluyendo los ítems de los casos de convención, el κ queda entre 0,925 y 0,935 según el patrón usado para identificarlos.
 
-### C. Comparación con el pipeline de referencia
-`[PRELIMINAR — WP8]` El pipeline de referencia **no es mapeable** a la taxonomía colombiana (Sección V): su salida cubre 8 de 16 categorías, con un techo de F1-macro de 0,50 por construcción, así que **no entra como fila comparable** en la tabla TSTR. La comparación es estructural (no-transferibilidad) y se reporta como contexto; la tabla TSTR contrasta las dos variantes propias —generador por reglas vs. generador con CTGAN (ablación de la Etapa 3)— sobre el mismo conjunto real.
+**Tabla — TSTR: entrenamiento en sintético, evaluación en el conjunto real anotado (n = 200). F1-macro con regla de soporte ≥ 10**
 
----
+| Clasificador | n train | Fuente | F1-macro | IC95 fila^a | IC95 grupo^b | Exactitud | Exact. ponderada [IC95] |
+|---|---|---|---|---|---|---|---|
+| Reg. logística (TF-IDF 3–5) | 122.211 | reglas | 0,566 | [0,507; 0,619] | [0,471; 0,601] | 0,440 | 0,324 [0,222; 0,438] |
+|  | 122.211 | CTGAN | 0,567 | [0,507; 0,619] | [0,447; 0,602] | 0,420 | 0,307 [0,210; 0,421] |
+| Reg. logística @20k | 20.000 | reglas | 0,458 | [0,397; 0,508] | [0,354; 0,544] | 0,350 | 0,230 [0,146; 0,350] |
+|  | 20.000 | CTGAN | 0,511 | [0,446; 0,568] | [0,366; 0,578] | 0,370 | 0,290 [0,194; 0,406] |
+| BETO afinado @20k | 20.000 | reglas | 0,453 | [0,385; 0,520] | [0,335; 0,491] | 0,385 | 0,225 [0,164; 0,304] |
+|  | 20.000 | CTGAN | 0,474 | [0,410; 0,528] | [0,357; 0,514] | 0,355 | 0,201 [0,143; 0,275] |
+| LLM *few-shot* (Groq) | – | ambas | no evaluado sobre el real (restricción de tratamiento de datos) |  |  |  |  |
+| *Líneas base* |  |  |  |  |  |  |  |
+| Clase mayoritaria | 122.211 | reglas / CTGAN | 0,013 | [0,009; 0,017] | – | 0,075 | 0,105 |
+| Aleatorio estratificado | 122.211 | reglas | 0,060 | [0,038; 0,085] | – | 0,055 | 0,057 |
+|  | 122.211 | CTGAN | 0,059 | [0,037; 0,083] | – | 0,055 | 0,057 |
+
+*^a*Bootstrap* por fila estratificado por estrato de muestreo (1.000 réplicas, semilla 42), principal. ^b*Bootstrap* por grupo de extractos (6 grupos), sensibilidad. Cinco clases con soporte <10 se fusionan con `otros`; se evalúan 11 clases.*
+
+### C. Utilidad TSTR
+La Tabla TSTR resume el TSTR. Con todo el sintético, la regresión logística alcanza un F1-macro de 0,566 [0,507; 0,619] entrenada con el generador por reglas y de 0,567 [0,507; 0,619] con el CTGAN; con el IC por grupo de extractos, [0,471; 0,601] y [0,447; 0,602]. Con 20.000 filas, la regresión logística obtiene 0,458 (reglas) y 0,511 (CTGAN), y BETO, 0,453 y 0,474. Las líneas base quedan en 0,013 (clase mayoritaria) y 0,060 y 0,059 (aleatorio estratificado, reglas y CTGAN).
+
+**Tabla — Ablación: Δ F1-macro = CTGAN − reglas, con la misma capa de texto (*bootstrap* pareado)**
+
+| Clasificador (rol) | Δ | IC95 fila | IC95 grupo |
+|---|---|---|---|
+| Reg. log. completo (princ.) | +0,001 | [−0,055; 0,053] | [−0,061; 0,034] |
+| Reg. log. @20k (sec.) | +0,053 | [0,012; 0,096] | [−0,010; 0,081] |
+| BETO @20k (sec.) | +0,021 | [−0,030; 0,073] | [−0,017; 0,062] |
+
+*Tres comparaciones sin corrección por multiplicidad; una Δ secundaria cuyo IC (fila o grupo) toca o cruza cero no se interpreta como efecto.*
+
+### D. Ablación: generador por reglas frente a CTGAN
+En la comparación principal (Tabla de ablación), Δ = +0,001 [−0,055; +0,053] (por grupo, [−0,061; +0,034]): no hay diferencia detectable entre fuentes, y el intervalo hace improbable una diferencia mayor que unos 0,05 puntos de F1 en cualquier dirección. Las dos comparaciones secundarias no se interpretan como efecto: con la regresión logística @20k, Δ = +0,053 [+0,012; +0,096], pero su IC por grupo cruza cero ([−0,010; +0,081]); con BETO, Δ = +0,021 [−0,030; +0,073]. Las tres comparaciones no se corrigen por multiplicidad.
+
+### E. Volumen de entrenamiento y arquitectura
+Pasar de 20.000 a 122.211 filas sube el F1-macro de la regresión logística entre 0,06 (CTGAN) y 0,11 (reglas). Con el mismo número de filas, BETO no supera a la regresión logística (0,453 frente a 0,458 con reglas; 0,474 frente a 0,511 con CTGAN).
+
+**Tabla — F1 por clase, regresión logística con todo el sintético, sobre el conjunto real**
+
+| Clase | Soporte | Reglas | CTGAN |
+|---|---|---|---|
+| `retiro_efectivo` | 10 | 1,000 | 1,000 |
+| `salud` | 11 | 0,957 | 0,957 |
+| `educacion` | 10 | 0,762 | 0,625 |
+| `transporte` | 13 | 0,667 | 0,545 |
+| `comidas_fuera` | 25 | 0,652 | 0,650 |
+| `ingreso` | 11 | 0,485 | 0,625 |
+| `otros`^† | 44 | 0,485 | 0,441 |
+| `obligaciones_financieras` | 17 | 0,432 | 0,552 |
+| `alimentos_mercado` | 15 | 0,333 | 0,240 |
+| `hogar_articulos` | 16 | 0,270 | 0,313 |
+| `transferencias_p2p` | 28 | 0,188 | 0,294 |
+
+*^†Incluye las clases con soporte <10 fusionadas: `entretenimiento` (9), `telecom_conectividad` (5), `vestuario_cuidado_personal` (5), `vivienda_servicios` (1) y `movimiento_propio` (1).*
+
+### F. Desempeño por clase
+La Tabla por clase desagrega el F1 de la comparación principal. Las mejores clases son `retiro_efectivo` (1,00) y `salud` (0,96); las peores, `transferencias_p2p` (0,19 con reglas y 0,29 con CTGAN), `hogar_articulos` y `alimentos_mercado`. La exactitud es de 0,44 (reglas) y 0,42 (CTGAN), y la exactitud ponderada, de 0,32 y 0,31. La caída al ponderar se explica por el peso de `transferencias_p2p`, la clase peor clasificada: es el 14 % de la muestra, pero su peso estimado en el marco es del 33,7 %.
+
+**Tabla — Sensibilidades pre-registradas**
+
+| Clasificador | Fuente | (a) F1, una fila | (c) Exact. pond. | (d) Re- |
+|---|---|---|---|---|
+|  |  | por descripción | P95 (Δ) | versos |
+| Reg. log. | reglas | 0,531 [0,460; 0,593] | 0,348 (−0,024) | 1/6 |
+| (completo) | CTGAN | 0,556 [0,481; 0,626] | 0,327 (−0,020) | 1/6 |
+| Reg. log. | reglas | 0,404 [0,328; 0,467] | 0,233 (−0,003) | 0/6 |
+| @20k | CTGAN | 0,498 [0,417; 0,571] | 0,306 (−0,016) | 0/6 |
+| BETO | reglas | 0,447 [0,366; 0,525] | 0,275 (−0,0498)^c | 0/6 |
+| @20k | CTGAN | 0,433 [0,357; 0,502] | 0,245 (−0,044) | 0/6 |
+
+*(a) n = 153; la regla de soporte fusiona además `educacion`, `ingreso` y `retiro_efectivo`. (b) No aplica: todos los ítems tienen doble anotación. (c) Pesos recortados al percentil 95 y renormalizados; Δ = sin recorte − con recorte; alerta si \|Δ\|>0,05. ^cEn el umbral, sin alerta formal; se reporta sin redondear. (d) Aciertos sobre los reversos y devoluciones de tarjeta.*
+
+### G. Sensibilidades pre-registradas
+La Tabla de sensibilidades reporta las sensibilidades fijadas antes de anotar. (a) Con una sola fila por descripción, el F1-macro de la comparación principal baja a 0,531 (reglas) y 0,556 (CTGAN): las descripciones repetidas sostienen parte del resultado, pero no lo explican. (b) No aplica, porque todos los ítems tienen doble anotación. (c) Recortar los pesos al percentil 95 no dispara la alerta en ningún brazo; la diferencia mayor, la de BETO con reglas (−0,0498), queda en el umbral. (d) De los 6 reversos y devoluciones de tarjeta, la regresión logística con todo el sintético acierta 1 y los demás brazos ninguno; es un tipo de transacción que probablemente no existe en el sintético.
 
 ## VIII. Discusión y limitaciones
+### A. Discusión
+**Utilidad.** Un clasificador entrenado solo con datos sintéticos alcanza un F1-macro de 0,57 sobre transacciones reales, frente a 0,06 del azar estratificado: el sintético transfiere al dato real con una utilidad moderada. El alcance es el de estos extractos; con 6 grupos de extractos no se afirma generalización a nuevos titulares.
 
-El aporte disponible a la fecha es doble: (1) una base empírica reconstruida y verificable de Bogotá, y un protocolo de generación con priors jerárquicos y medios de pago condicionados a la categoría; (2) una reevaluación reproducible y prerregistrada del pipeline de referencia. La validación TSTR es preliminar; su resultado acota —no cierra— la hipótesis, porque el conjunto real todavía se está anotando.
+**Reglas frente a CTGAN.** Con la misma capa de texto, el generador por reglas y el CTGAN rinden igual, aunque el CTGAN no conserve bien la jerarquía categórica (Sección VII). La lectura más consistente es que la utilidad la aporta sobre todo la capa de texto y no la estructura tabular que distingue a las dos fuentes; la ablación no mide por separado el aporte del texto, de modo que esta lectura es una interpretación, no un resultado.
 
-Limitaciones declaradas (`docs/protocolo_tecnico.md`, L1–L17), las principales:
-- **L1** — Los archivos públicos no traen segmento ni UPM: no se reportan intervalos de confianza de diseño sobre cifras DANE.
-- **L4** — La ENPH es de 2016-2017 y no registra billeteras ni transferencias; los medios digitales se introducen por una regla de migración por escenarios (10/20/35 %), sin ancla verificada.
-- **L7** — Los extractos no ven el efectivo (un retiro es una fila, no quince compras): el TSTR se evalúa sobre el universo bancarizado.
-- **L8** — 20 voluntarios por conveniencia: diversidad, no representatividad.
-- **L16** — El repeso a bancarizados (D15) asume independencia condicional entre quintil de `ICGU` y tenencia de productos, dentro del estrato.
-- **Realismo del texto sintético** — Las descripciones provienen de una biblioteca curada de comercios y plantillas (regla propia, no calibrada con los extractos reales): son más limpias y regulares que un extracto real, por lo que el TSTR es un **techo optimista** que se estrecha al incorporar los datos reales anotados. Como el texto se genera por plantillas condicionadas a la categoría, un clasificador de texto mide en parte el sistema de plantillas, no el refinamiento del CTGAN (de ahí el brazo de control solo-estructurado, §VI.C).
-- **Fidelidad del CTGAN a las reglas, no a Colombia** — El CTGAN se entrena sobre la capa emitida, que ya es sintética (salida del generador por reglas); por tanto sus métricas de fidelidad miden cercanía a la salida de las reglas, no a la realidad colombiana. La prueba frente a la realidad es el TSTR contra datos reales.
-- **Jerarquía categórica en el CTGAN** — El CTGAN plano genera un 10,78 % de pares categoría–subcategoría inexistentes en la taxonomía (rechazo total 14,78 %, por encima del tope prerregistrado del 10 %). Modelar explícitamente la jerarquía o restringir el muestreo condicional es trabajo futuro. La amplificación de la elasticidad por el CTGAN (0,45 vs. 0,33 del train) también debe vigilarse como posible sobre-ajuste de la correlación ingreso–monto.
+**Choque de convenciones P2P/ingreso.** La clase peor clasificada se explica por una diferencia de etiquetado, confirmada en el código del generador. El generador etiqueta con el propósito declarado por el hogar simulado: el ingreso de los no asalariados llega con plantilla de transferencia recibida de persona, de modo que el 41–42 % de las transferencias P2P recibidas del sintético quedan como `ingreso`. La recolección real no tuvo declaraciones del voluntario (0 % del test), así que, por la regla R2 de la taxonomía, toda transferencia con persona queda en `transferencias_p2p`. En el test, de las 28 transferencias P2P, 9 (reglas) y 6 (CTGAN) se predicen como `ingreso`, y 7 y 10 como `movimiento_propio`: en el sintético, la única plantilla de una salida bancaria que nombra una billetera es la de recarga propia, y un envío real del banco a una billetera se le parece. La lección para el protocolo es que el espacio de etiquetas depende de la información disponible al etiquetar: el sintético debe etiquetarse en las mismas condiciones de información que el real. La taxonomía v1.1 ya anticipaba este cruce como un hallazgo esperable. Como análisis exploratorio, *post hoc* y no pre-registrado, fusionar `transferencias_p2p` e `ingreso` sube el F1-macro de 0,566 a 0,617 [0,559; 0,670] (reglas) y de 0,567 a 0,596 [0,537; 0,650] (CTGAN); esto solo dimensiona el choque, y el orden entre reglas y CTGAN no se interpreta.
 
----
+**Pipeline de referencia.** El pipeline de Pancholi *et al.* queda como contexto, no como fila comparable: solo emite compras, alcanza 8 de las 16 categorías y un clasificador entrenado con su salida tendría un techo de F1-macro de 0,50 por construcción (Sección V). Su desempeño publicado se mide sobre sus propios datos sintéticos, en inglés y con otras categorías, y no es comparable con este TSTR.
+
+### B. Limitaciones
+**Del protocolo.** Los archivos públicos no traen segmento ni UPM, por lo que no se reportan intervalos de confianza de diseño sobre cifras del DANE; la ENPH es de 2016-2017 y no registra billeteras ni transferencias, que se introducen por una regla de migración por escenarios sin ancla verificada; los extractos no ven el efectivo (un retiro es una fila, no quince compras), por lo que el TSTR se evalúa sobre el universo bancarizado. La reevaluación del pipeline de referencia ejecutó sus etapas 1–4 (la etapa 4 con un modelo sustituto en una sola corrida, como evidencia indicativa; la etapa 5 de asesoría de inversión queda fuera de alcance). Dos límites propios del CTGAN: genera un 10,78 % de pares categoría–subcategoría inexistentes (no modela bien la jerarquía categórica), y amplifica la elasticidad por encima del *train* (posible sobre-ajuste de la correlación ingreso–monto). El texto sintético se genera por plantillas, más limpias que un extracto real; y el CTGAN se entrena sobre la capa emitida, que ya es sintética, de modo que su fidelidad es a la salida de las reglas, no a la realidad colombiana —la prueba frente a la realidad es el TSTR—.
+
+**De la validación.**
+- El brazo LLM no se evaluó sobre el real por la restricción de tratamiento de datos.
+- Los pagos PSE sin facturador (4,4 % del marco) no tienen ningún ítem en el test, así que la exactitud ponderada no dice nada de ellos.
+- Con n = 200 y 6 grupos de extractos recolectados por conveniencia, la inferencia se limita a estos extractos y el IC por grupo es inestable.
+- El marco termina en septiembre de 2026, último mes con IPC incorporado.
+- La anotación se hizo sin calibración previa, y las convenciones de los casos no resueltos se fijaron en la adjudicación, antes de ver predicciones.
+- El *bootstrap* se corrigió tras la primera corrida oficial (la regla de soporte se recalculaba en cada réplica); las cifras puntuales no cambiaron y el IC anterior se conserva para trazabilidad.
+- Las tres comparaciones de la ablación no se corrigen por multiplicidad.
+- El token `LLAVE` que deja el anonimizador no existe en el sintético.
 
 ## IX. Conclusiones y trabajo futuro
+El trabajo entrega un protocolo reproducible para generar extractos bancarios sintéticos calibrado con microdatos del DANE para Bogotá, con *priors* bayesianos jerárquicos por estrato y quintil, medios de pago condicionados a la categoría, y una reevaluación prerregistrada del pipeline de referencia cuya principal diferencia —la conservación de la relación ingreso–monto— se verifica en el refinamiento propio. La validación TSTR responde la pregunta de investigación para estos extractos: un clasificador entrenado solo con sintético alcanza un F1-macro de 0,57 sobre transacciones reales anotadas, frente a 0,06 del azar, una utilidad moderada que no se generaliza a nuevos titulares. Con la misma capa de texto, el generador por reglas y el CTGAN rinden igual, y el principal error proviene de una diferencia de convenciones de etiquetado entre el sintético y el real (transferencias entre personas frente a ingreso) que la taxonomía ya anticipaba.
 
-El trabajo entrega un protocolo reproducible para generar extractos bancarios sintéticos calibrado con microdatos del DANE para Bogotá, con priors bayesianos jerárquicos por estrato y quintil, medios de pago condicionados a la categoría, y una reevaluación prerregistrada del pipeline de referencia. Contribuciones esperadas: (i) un protocolo replicable para economías de alta informalidad; (ii) el primer dataset sintético público de transacciones financieras colombianas; (iii) una taxonomía con categoría P2P y descripciones en español; (iv) evidencia empírica —vía TSTR— del valor de la contextualización.
-
-Trabajo futuro: cerrar la validación TSTR con el conjunto real anotado; extender a otras ciudades; anclar la participación de medios digitales con una fuente primaria; reemplazar la biblioteca curada de comercios por una capa empírica (p. ej. OpenStreetMap); y la etapa 5 del pipeline de referencia (asesoría de inversión), fuera de alcance de este trabajo.
+Trabajo futuro: etiquetar el sintético en las mismas condiciones de información que el real; distinguir `PERSONA` de `TITULAR` en la anonimización; ampliar el número de titulares; evaluar el LLM con autorización explícita para el tratamiento de los datos; y, en el protocolo, extender a otras ciudades, anclar la participación de medios digitales con una fuente primaria, modelar explícitamente la jerarquía categórica en el CTGAN y reemplazar la biblioteca curada de comercios por una capa empírica.
 
 ---
 
 ## Declaración de uso de herramientas de IA
-`[DECISIÓN — obligatoria]` Describir el uso de asistentes de IA (Claude / Fable) en la reconstrucción de la base de datos, la implementación de los módulos, la reevaluación del pipeline de referencia y la redacción asistida de este documento, conforme a la política de integridad académica de la Universidad.
+Este trabajo se apoyó en asistentes de IA para programación, depuración y redacción asistida, bajo la dirección de la autora, quien definió la metodología, tomó las decisiones de diseño, ejecutó el pipeline sobre los microdatos y verificó los resultados. El detalle por fase está en `docs/reporte/declaracion_uso_ia.md`. La reproducibilidad del repositorio (pruebas automatizadas, SHA-256, semillas fijas, cifras generadas por código) permite auditar cada resultado de forma independiente.
 
 ## Declaración de ética y consentimiento
-Consentimiento informado de los voluntarios y anonimización de los extractos (`docs/datos_reales/`); aval de comité de ética según el programa.
+Consentimiento informado de los voluntarios y anonimización de los extractos (`docs/datos_reales/`); aval del comité de ética. (En el `.tex` va dentro de VI.B.)
 
 ## Referencias
 
@@ -203,4 +291,4 @@ Consentimiento informado de los voluntarios y anonimización de los extractos (`
 > **Notas de verificación:** DOI de [1] y arXiv de [5]–[10] confirmados. [10]: se añadió "Transaction" al título (versión correcta). [9]: título por confirmar (ver arriba). Páginas de [6] y [7] y listas completas de autores de [8] y [10] por completar contra la fuente. [2]–[4] y [11] son reportes/datasets oficiales sin DOI.
 
 ## Figuras candidatas
-Pirámide de estrato (ENPH vs GEIH); matriz medio de pago × categoría; elasticidad de Pancholi por etapa; composición de las filas emitidas por tipo; matriz de confusión TSTR `[PRELIMINAR]`.
+Pirámide de estrato (ENPH vs GEIH); matriz medio de pago × categoría; elasticidad de Pancholi por etapa; composición de las filas emitidas por tipo (las cuatro van en el `.tex`). Opcional: matriz de confusión TSTR (`outputs/tstr/tstr/<fuente>/logreg/matriz_confusion.csv`).

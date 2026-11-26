@@ -642,8 +642,28 @@ def correr(fuente: str, ruta_train: Path, ruta_test: Path | None, clases: list[s
 
 # --------------------------------------------------------------------------- post hoc (no pre-registrado)
 CLASE_FUSION_EXPL = "transferencias_p2p+ingreso"
-EXPLORATORIO = Path("outputs/tstr/tstr/exploratorio_p2p_ingreso.json")
-HALLAZGO = Path("outputs/tstr/hallazgo_cruce_p2p_ingreso.json")
+
+
+# Todas las salidas del reporte se derivan de SALIDA EN TIEMPO DE LLAMADA: una prueba que redirige SALIDA a tmp_path
+# redirige también estas (antes eran rutas fijas y una prueba sobrescribió outputs/tstr/tablas_informe.tex).
+def ruta_exploratorio() -> Path:
+    return RAIZ / SALIDA / "tstr" / "exploratorio_p2p_ingreso.json"
+
+
+def ruta_hallazgo() -> Path:
+    return RAIZ / SALIDA / "hallazgo_cruce_p2p_ingreso.json"
+
+
+def ruta_tablas_tex() -> Path:
+    return RAIZ / SALIDA / "tablas_informe.tex"
+
+
+def _rel(p: Path) -> str:
+    """Ruta para mostrar en el reporte: relativa a la raíz del repo si cae dentro."""
+    try:
+        return Path(p).resolve().relative_to(RAIZ.resolve()).as_posix()
+    except ValueError:
+        return Path(p).as_posix()
 FAMILIAS_TEXTO = {"p2p_recibida_banco": "P2P recibida", "p2p_recibida_billetera": "P2P recibida",
                   "p2p_enviada_banco": "P2P enviada", "p2p_enviada_billetera": "P2P enviada",
                   "recarga_origen": "recarga: sale del banco", "recarga_destino": "recarga: entra a la billetera"}
@@ -674,7 +694,7 @@ def exploratorio_p2p_ingreso(clases: list[str]) -> list[dict]:
                     "ic95_grupo": _ic_boot(f1f, len(yt2), grupos=grp) if grp is not None else None,
                     "clases_evaluadas": len(etq), "clases_fusionadas_a_otros": sorted(mapa), "n_test": int(len(yt))})
     if out:
-        (RAIZ / EXPLORATORIO).write_text(json.dumps({
+        ruta_exploratorio().write_text(json.dumps({
             "aviso": "POST HOC, NO PRE-REGISTRADO: solo dimensiona el choque de convenciones P2P/ingreso; no reemplaza la "
                      "métrica principal ni entra a la tabla principal.",
             "fusion": list(fusion), "bootstrap": {"n": N_BOOTSTRAP, "semilla": SEMILLA, "regla_soporte": "fija"},
@@ -711,7 +731,7 @@ def cuantificar_cruce_p2p() -> dict:
             "token_LLAVE_aislado": int(up.str.contains(r"\bLLAVE\b").sum()),
             "token_LLAVE_dentro_de_TULLAVE": int(up.str.contains("TULLAVE").sum()),
         }
-    (RAIZ / HALLAZGO).write_text(json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8")
+    ruta_hallazgo().write_text(json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8")
     return res
 
 
@@ -731,8 +751,16 @@ def main() -> None:
     ap.add_argument("--exploratorio-p2p-ingreso", action="store_true",
                     help="POST HOC: F1 con P2P e ingreso fusionadas (lee data/_privado/ localmente) y cuantificación del "
                          "cruce en el sintético. No entrena; regenera el .md y las tablas LaTeX.")
+    ap.add_argument("--solo-reporte", action="store_true",
+                    help="No entrena ni lee el test: regenera docs/resultados_tstr.md y outputs/tstr/tablas_informe.tex "
+                         "desde los metricas.json/ablacion.json existentes (el Δ pareado se recalcula si hay "
+                         "predicciones privadas locales; misma semilla, mismos valores).")
     args = ap.parse_args()
     clases, sha_tax = cargar_taxonomia()
+    if args.solo_reporte:
+        escribir_resultados_md(clases)
+        print(f"regenerados: {RESULTADOS_MD.as_posix()} y {_rel(ruta_tablas_tex())}")
+        return
     if args.exploratorio_p2p_ingreso:
         cuantificar_cruce_p2p()
         r = exploratorio_p2p_ingreso(clases)
@@ -944,7 +972,7 @@ def _jerarquia_ablacion() -> str:
 def _seccion_post_hoc() -> str:
     """Hallazgo del cruce P2P/ingreso (solo sintético) y exploratorio post hoc, si existen sus JSON."""
     partes = []
-    h = RAIZ / HALLAZGO
+    h = ruta_hallazgo()
     if h.exists():
         H = json.loads(h.read_text(encoding="utf-8"))
         filas = []
@@ -982,8 +1010,8 @@ produce ese texto es la de recarga (`TRANSFERENCIA A {{W}}`, `RECARGA {{W}}`); l
 «TRANSFERENCIA A PERSONA». Un envío real desde un banco a la billetera de un tercero se parece así a una recarga.
 Menor: el anonimizador de WP4 deja el token `LLAVE` (pagos Bre-B) y en el sintético «LLAVE» solo aparece dentro de
 «TULLAVE» (transporte) ({', '.join(f"{NOMBRE_FUENTE.get(f, f)}: {v['token_LLAVE_dentro_de_TULLAVE']:,} filas" for f, v in H['fuentes'].items())}).
-Fuente: `{HALLAZGO.as_posix()}`.""")
-    e = RAIZ / EXPLORATORIO
+Fuente: `{_rel(h)}`.""")
+    e = ruta_exploratorio()
     if e.exists():
         E = json.loads(e.read_text(encoding="utf-8"))
         filas = [f"| LogReg completo | {NOMBRE_FUENTE.get(r['fuente'], r['fuente'])} | {r['f1_macro_original']:.3f} | "
@@ -992,7 +1020,7 @@ Fuente: `{HALLAZGO.as_posix()}`.""")
         partes.append(f"""## Exploratorio (post hoc, no pre-registrado)
 
 {E['aviso']} `transferencias_p2p` e `ingreso` se fusionan en una sola clase en la etiqueta real y en la predicha; la
-regla de soporte se fija sobre el test con la clase fusionada. Fuente: `{EXPLORATORIO.as_posix()}`.
+regla de soporte se fija sobre el test con la clase fusionada. Fuente: `{_rel(e)}`.
 
 | Brazo | Fuente train | F1-macro principal | F1-macro con P2P+ingreso fusionadas | IC95 fila estrat. | IC95 por grupo | clases evaluadas |
 |---|---|---|---|---|---|---|
@@ -1001,7 +1029,6 @@ regla de soporte se fija sobre el test con la clase fusionada. Fuente: `{EXPLORA
 
 
 # --------------------------------------------------------------------------- insumos LaTeX para el informe
-TABLAS_TEX = Path("outputs/tstr/tablas_informe.tex")
 
 
 def _n(x: float, d: int = 3) -> str:
@@ -1020,7 +1047,7 @@ def _ic_tex(v, par: str = "[]") -> str:
 
 def escribir_tablas_latex(corridas: dict, clases: list[str]) -> Path:
     """Tablas booktabs para el informe, generadas desde los mismos JSON/CSV agregados que el .md."""
-    T = [f"% Generado por tools/etapa4_tstr.py desde {SALIDA.as_posix()}/tstr/; no editar a mano.",
+    T = [f"% Generado por tools/etapa4_tstr.py desde {_rel(RAIZ / SALIDA / 'tstr')}/; no editar a mano.",
          "% Requiere \\usepackage{booktabs}. Coma decimal; IC95 bootstrap con la regla de soporte fija.", ""]
     # 1. tabla principal
     fil = []
@@ -1119,8 +1146,9 @@ def escribir_tablas_latex(corridas: dict, clases: list[str]) -> Path:
               "(b) no aplica: todas las filas tienen doble anotación. (e) $\\kappa$: lo reporta WP4 "
               "(\\texttt{acuerdo\\_wp4.py}). $^{c}$ En el umbral de $\\pm 0{,}05$ (sin alerta formal); se reporta sin redondear.",
               "\\end{table}", ""]
-    (RAIZ / TABLAS_TEX).write_text("\n".join(T), encoding="utf-8")
-    return TABLAS_TEX
+    ruta = ruta_tablas_tex()
+    ruta.write_text("\n".join(T), encoding="utf-8")
+    return ruta
 
 
 def _trazabilidad() -> str:
@@ -1137,9 +1165,9 @@ def _trazabilidad() -> str:
 | Soporte original de las clases fusionadas; pesos por clase | `{SALIDA.as_posix()}/tstr/<fuente>/<brazo>/prevalencias.csv` | `n`, `pct_ponderado` |
 | Δ de la ablación y sus IC | `{SALIDA.as_posix()}/tstr/ablacion.json` | `delta_f1_macro`, `ic95_fila_estratificado`, `ic95_grupo` |
 | Líneas base | `{SALIDA.as_posix()}/tstr/<fuente>/base_mayoritaria|base_estratificada/metricas.json` | ídem |
-| Cruce P2P/ingreso en el sintético | `{HALLAZGO.as_posix()}` | `fuentes.<fuente>.por_familia` |
-| Exploratorio P2P+ingreso fusionadas | `{EXPLORATORIO.as_posix()}` | `resultados` |
-| Tablas LaTeX | `{TABLAS_TEX.as_posix()}` | — |
+| Cruce P2P/ingreso en el sintético | `{_rel(ruta_hallazgo())}` | `fuentes.<fuente>.por_familia` |
+| Exploratorio P2P+ingreso fusionadas | `{_rel(ruta_exploratorio())}` | `resultados` |
+| Tablas LaTeX | `{_rel(ruta_tablas_tex())}` | — |
 
 `<brazo>` ∈ {{`logreg`, `logreg_n{N_COMPARABLE}`, `beto`}}; `<fuente>` ∈ {{`reglas`, `ctgan`}}."""
 
@@ -1160,8 +1188,8 @@ def _declaraciones_tstr(corridas: dict) -> str:
   descripción). Su IC sale ancho por diseño. Los PSE sin facturador (≈ 4,4 % del marco, 95 filas) no tienen ningún ítem
   en el test: la exactitud ponderada no dice nada de ellos.
 - **Etiqueta-por-texto vs. declaración:** {ste.get('nota', 'ver metricas.json') if ste.get('aplica') is False else 'ver metricas.json'}.
-- **Representatividad:** 6 grupos de ≤ 7 titulares por conveniencia; los pesos corrigen el diseño muestral, no la
-  representatividad poblacional."""
+- **Representatividad:** 7 grupos en el conjunto extraído; 6 grupos (≤6 titulares) en el marco y el test, por
+  conveniencia; los pesos corrigen el diseño muestral, no la representatividad poblacional."""
 
 
 def escribir_resultados_md(clases: list[str]) -> None:
@@ -1205,7 +1233,7 @@ def escribir_resultados_md(clases: list[str]) -> None:
                 if man.exists() else "ver")
     md = f"""# Resultados TSTR — WP8
 
-> **PROVISIONAL.** Archivo regenerado por `tools/etapa4_tstr.py`; no editar a mano.
+> Archivo regenerado por `tools/etapa4_tstr.py`; no editar a mano.
 > Última regeneración: {datetime.now(timezone.utc).isoformat(timespec='seconds')}.
 > Taxonomía {VERSION_TAXONOMIA}, target `{TARGET}`, semilla {SEMILLA}.
 
@@ -1225,7 +1253,8 @@ por `tools/consolidar_test_wp4.py`). Esquema: `{', '.join(COLUMNAS_WP4)}` y colu
 ## Tabla TSTR (único resultado reportable)
 
 Entrenamiento sobre **todo** el sintético; evaluación sobre el conjunto **real anotado de WP4** (pre-registro
-`docs/datos_reales/05_prerregistro_muestreo_anotacion.md` v1.3). **Métrica principal:** F1-macro **sin ponderar**
+`docs/datos_reales/05_prerregistro_muestreo_anotacion.md` v1.4: diseño y métricas de la v1.3; la v1.4 solo registra
+desviaciones de ejecución, §13). **Métrica principal:** F1-macro **sin ponderar**
 sobre los ítems del test, con regla de soporte: clases con < {SOPORTE_MIN} filas de la muestra se recodifican a
 `{CLASE_RESIDUAL}` (en etiqueta real y predicha) antes del promedio. **IC95 principal (D-M7):** bootstrap por fila
 ({N_BOOTSTRAP} réplicas, semilla {SEMILLA}) estratificado por `estrato_muestreo`. **Sensibilidad:** bootstrap por

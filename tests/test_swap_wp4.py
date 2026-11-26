@@ -322,6 +322,8 @@ def test_nada_desagregado_por_grupo_en_outputs(consolidado, salidas_temporales, 
         texto = pd.read_csv(p).to_csv() if p.name.endswith(".gz") else p.read_text(encoding="utf-8")
         for v in seudonimos:
             assert f'"{v}"' not in texto and f",{v}," not in texto and f" {v} " not in texto, f"{p.name} menciona {v}"
+    assert (salidas_temporales / "tstr" / "tablas_informe.tex").exists()          # el .tex sigue a SALIDA, no a outputs/
+    assert "pytest" not in base._rel(base.RAIZ / "outputs/tstr/tablas_informe.tex")
     privado = list((salidas_temporales / "privado").rglob("predicciones.csv.gz"))
     assert privado and "grupo" in pd.read_csv(privado[0], nrows=0).columns
 
@@ -341,9 +343,10 @@ def test_exploratorio_p2p_ingreso_fusiona_y_escribe_solo_agregados(tmp_path, mon
         d = tmp_path / "pred" / f
         d.mkdir(parents=True)
         pred.to_csv(d / "predicciones.csv.gz", index=False)
-    monkeypatch.setattr(base, "RAIZ", tmp_path)
+    monkeypatch.setattr(base, "SALIDA", tmp_path / "tstr")
     monkeypatch.setattr(base, "ruta_predicciones", lambda modo, f, brazo: tmp_path / "pred" / f / "predicciones.csv.gz")
-    (tmp_path / base.EXPLORATORIO).parent.mkdir(parents=True)
+    base.ruta_exploratorio().parent.mkdir(parents=True)
+    assert base.ruta_exploratorio().is_relative_to(tmp_path)
     r = base.exploratorio_p2p_ingreso(clases)
     assert len(r) == len(base.FUENTES_DEFECTO)
     fus = lambda a: np.array([base.CLASE_FUSION_EXPL if v in ("transferencias_p2p", "ingreso") else v for v in a],  # noqa: E731
@@ -352,7 +355,7 @@ def test_exploratorio_p2p_ingreso_fusiona_y_escribe_solo_agregados(tmp_path, mon
     assert r[0]["f1_macro_fusionado"] == pytest.approx(base.f1_macro_regla(fus(yt), fus(yp), c2))
     lo, hi = r[0]["ic95_fila_estratificado"]
     assert lo <= r[0]["f1_macro_fusionado"] <= hi
-    txt = (tmp_path / base.EXPLORATORIO).read_text(encoding="utf-8")
+    txt = base.ruta_exploratorio().read_text(encoding="utf-8")
     assert "POST HOC" in txt and "g1" not in txt and "y_true" not in txt
 
 

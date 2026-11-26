@@ -1,7 +1,7 @@
 # Resultados TSTR — WP8
 
-> **PROVISIONAL.** Archivo regenerado por `tools/etapa4_tstr.py`; no editar a mano.
-> Última regeneración: 2026-11-26T16:46:21+00:00.
+> Archivo regenerado por `tools/etapa4_tstr.py`; no editar a mano.
+> Última regeneración: 2026-11-26T17:59:58+00:00.
 > Taxonomía 1.1.0, target `categoria_n1`, semilla 42.
 
 **Taxonomía.** La v1.1.0 no cambió las 16 categorías ni las reglas R1–R7, solo documentación y metadatos
@@ -20,7 +20,8 @@ por `tools/consolidar_test_wp4.py`). Esquema: `descripcion, monto, fecha, signo,
 ## Tabla TSTR (único resultado reportable)
 
 Entrenamiento sobre **todo** el sintético; evaluación sobre el conjunto **real anotado de WP4** (pre-registro
-`docs/datos_reales/05_prerregistro_muestreo_anotacion.md` v1.3). **Métrica principal:** F1-macro **sin ponderar**
+`docs/datos_reales/05_prerregistro_muestreo_anotacion.md` v1.4: diseño y métricas de la v1.3; la v1.4 solo registra
+desviaciones de ejecución, §13). **Métrica principal:** F1-macro **sin ponderar**
 sobre los ítems del test, con regla de soporte: clases con < 10 filas de la muestra se recodifican a
 `otros` (en etiqueta real y predicha) antes del promedio. **IC95 principal (D-M7):** bootstrap por fila
 (1000 réplicas, semilla 42) estratificado por `estrato_muestreo`. **Sensibilidad:** bootstrap por
@@ -95,8 +96,8 @@ puntos. (d) los reversos y devoluciones de tarjeta están dentro de la métrica 
   descripción). Su IC sale ancho por diseño. Los PSE sin facturador (≈ 4,4 % del marco, 95 filas) no tienen ningún ítem
   en el test: la exactitud ponderada no dice nada de ellos.
 - **Etiqueta-por-texto vs. declaración:** todas las filas son etiqueta-por-texto (R2: ningún propósito declarado); el corte no aporta.
-- **Representatividad:** 6 grupos de ≤ 7 titulares por conveniencia; los pesos corrigen el diseño muestral, no la
-  representatividad poblacional.
+- **Representatividad:** 7 grupos en el conjunto extraído; 6 grupos (≤6 titulares) en el marco y el test, por
+  conveniencia; los pesos corrigen el diseño muestral, no la representatividad poblacional.
 
 **Asimetría de tamaño (declarada).** BETO entrena sobre una submuestra estratificada de 20,000 filas por
 costo de CPU. La comparación de igual a igual es LogReg @20k frente a BETO @20k

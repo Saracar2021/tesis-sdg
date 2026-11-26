@@ -1,4 +1,4 @@
-% Generado por tools/etapa4_tstr.py desde C:/Users/julia/AppData/Local/Temp/pytest-of-julia/pytest-8/test_nada_desagregado_por_grup0/tstr/tstr/; no editar a mano.
+% Generado por tools/etapa4_tstr.py desde outputs/tstr/tstr/; no editar a mano.
 % Requiere \usepackage{booktabs}. Coma decimal; IC95 bootstrap con la regla de soporte fija.
 
 \begin{table}[ht]\centering\small
@@ -8,14 +8,22 @@
 \toprule
 Brazo & Fuente de entrenamiento & F1-macro & IC95$^{a}$ & Exactitud & Exactitud ponderada \\
 \midrule
-LogReg (TF-IDF char 3--5) & protocolo (reglas) & 0{,}834 & [0{,}745; 0{,}910] (0{,}676; 0{,}922) & 0{,}812 & 0{,}849 \\
-LogReg (TF-IDF char 3--5) & protocolo (CTGAN) & 0{,}870 & [0{,}790; 0{,}933] (0{,}767; 0{,}946) & 0{,}841 & 0{,}912 \\
+LogReg (TF-IDF char 3--5) & protocolo (reglas) & 0{,}566 & [0{,}507; 0{,}619] (0{,}471; 0{,}601) & 0{,}440 & 0{,}324 \\
+LogReg (TF-IDF char 3--5) & protocolo (CTGAN) & 0{,}567 & [0{,}507; 0{,}619] (0{,}447; 0{,}602) & 0{,}420 & 0{,}307 \\
 \addlinespace
+LogReg @20k & protocolo (reglas) & 0{,}458 & [0{,}397; 0{,}508] (0{,}354; 0{,}544) & 0{,}350 & 0{,}230 \\
+LogReg @20k & protocolo (CTGAN) & 0{,}511 & [0{,}446; 0{,}568] (0{,}366; 0{,}578) & 0{,}370 & 0{,}290 \\
 \addlinespace
+BETO fine-tuning & protocolo (reglas) & 0{,}453 & [0{,}385; 0{,}520] (0{,}335; 0{,}491) & 0{,}385 & 0{,}225 \\
+BETO fine-tuning & protocolo (CTGAN) & 0{,}474 & [0{,}410; 0{,}528] (0{,}357; 0{,}514) & 0{,}355 & 0{,}201 \\
 \addlinespace
 LLM vía Groq, prompting few-shot & protocolo (reglas) & \multicolumn{4}{l}{no evaluado sobre el real$^{b}$} \\
 LLM vía Groq, prompting few-shot & protocolo (CTGAN) & \multicolumn{4}{l}{no evaluado sobre el real$^{b}$} \\
 \addlinespace
+Clase mayoritaria del sintético & protocolo (reglas) & 0{,}013 & [0{,}009; 0{,}017] & 0{,}075 & 0{,}105 \\
+Clase mayoritaria del sintético & protocolo (CTGAN) & 0{,}013 & [0{,}009; 0{,}017] & 0{,}075 & 0{,}105 \\
+Aleatorio estratificado & protocolo (reglas) & 0{,}060 & [0{,}038; 0{,}085] & 0{,}055 & 0{,}057 \\
+Aleatorio estratificado & protocolo (CTGAN) & 0{,}059 & [0{,}037; 0{,}083] & 0{,}055 & 0{,}057 \\
 \bottomrule
 \end{tabular}
 \par\footnotesize $^{a}$ Corchetes: bootstrap por fila estratificado por estrato de muestreo (1000 réplicas, semilla 42), principal; paréntesis: bootstrap por grupo de extractos (6 grupos), sensibilidad. $^{b}$ Restricción de tratamiento de datos: no se envían datos reales a la API; humo sobre sintético aparte.
@@ -28,7 +36,9 @@ LLM vía Groq, prompting few-shot & protocolo (CTGAN) & \multicolumn{4}{l}{no ev
 \toprule
 Brazo & Rol & $\Delta$ & IC95 fila estrat. & IC95 por grupo \\
 \midrule
-LogReg (TF-IDF char 3--5) & principal & $+$0{,}036 & [$-$0{,}043; 0{,}122] & [$-$0{,}104; 0{,}156] \\
+LogReg (TF-IDF char 3--5) & principal & $+$0{,}001 & [$-$0{,}055; 0{,}053] & [$-$0{,}061; 0{,}034] \\
+LogReg @20k & secundaria & $+$0{,}053 & [0{,}012; 0{,}096] & [$-$0{,}010; 0{,}081] \\
+BETO fine-tuning & secundaria & $+$0{,}021 & [$-$0{,}030; 0{,}073] & [$-$0{,}017; 0{,}062] \\
 \bottomrule
 \end{tabular}
 \par\footnotesize Tres comparaciones sin corrección por multiplicidad; una $\Delta$ secundaria cuyo IC (fila o grupo) toca o cruza cero no se interpreta como efecto.
@@ -41,14 +51,20 @@ LogReg (TF-IDF char 3--5) & principal & $+$0{,}036 & [$-$0{,}043; 0{,}122] & [$-
 \toprule
 Clase & Soporte & protocolo (reglas) & protocolo (CTGAN) \\
 \midrule
-\texttt{transferencias\_p2p} & 16 & 0{,}765 & 0{,}720 \\
-\texttt{otros}$^{\dagger}$ & 16 & 0{,}941 & 0{,}865 \\
-\texttt{alimentos\_mercado} & 14 & 0{,}667 & 0{,}897 \\
-\texttt{comidas\_fuera} & 13 & 0{,}889 & 0{,}960 \\
-\texttt{movimiento\_propio} & 10 & 0{,}909 & 0{,}909 \\
+\texttt{otros}$^{\dagger}$ & 44 & 0{,}485 & 0{,}441 \\
+\texttt{transferencias\_p2p} & 28 & 0{,}188 & 0{,}294 \\
+\texttt{comidas\_fuera} & 25 & 0{,}652 & 0{,}650 \\
+\texttt{obligaciones\_financieras} & 17 & 0{,}432 & 0{,}552 \\
+\texttt{hogar\_articulos} & 16 & 0{,}270 & 0{,}312 \\
+\texttt{alimentos\_mercado} & 15 & 0{,}333 & 0{,}240 \\
+\texttt{transporte} & 13 & 0{,}667 & 0{,}545 \\
+\texttt{ingreso} & 11 & 0{,}485 & 0{,}625 \\
+\texttt{salud} & 11 & 0{,}957 & 0{,}957 \\
+\texttt{educacion} & 10 & 0{,}762 & 0{,}625 \\
+\texttt{retiro\_efectivo} & 10 & 1{,}000 & 1{,}000 \\
 \bottomrule
 \end{tabular}
-\par\footnotesize $^{\dagger}$ Incluye las clases con soporte $<10$ fusionadas: \texttt{educacion} (0), \texttt{entretenimiento} (0), \texttt{hogar\_articulos} (0), \texttt{ingreso} (5), \texttt{obligaciones\_financieras} (0), \texttt{retiro\_efectivo} (5), \texttt{salud} (0), \texttt{telecom\_conectividad} (0), \texttt{transporte} (4), \texttt{vestuario\_cuidado\_personal} (0), \texttt{vivienda\_servicios} (0).
+\par\footnotesize $^{\dagger}$ Incluye las clases con soporte $<10$ fusionadas: \texttt{entretenimiento} (9), \texttt{movimiento\_propio} (1), \texttt{telecom\_conectividad} (5), \texttt{vestuario\_cuidado\_personal} (5), \texttt{vivienda\_servicios} (1).
 \end{table}
 
 \begin{table}[ht]\centering\small
@@ -58,9 +74,13 @@ Clase & Soporte & protocolo (reglas) & protocolo (CTGAN) \\
 \toprule
 Brazo & Fuente & (a) F1, una fila por descripción & (c) Exact. pond. P95 & $\Delta$ vs.\ sin recorte & (d) Reversos \\
 \midrule
-LogReg (TF-IDF char 3--5) & protocolo (reglas) & 0{,}893 [0{,}770; 0{,}975] & 0{,}844 [0{,}719; 0{,}935] & 0{,}0046 & 0/3 \\
-LogReg (TF-IDF char 3--5) & protocolo (CTGAN) & 0{,}937 [0{,}874; 1{,}000] & 0{,}909 [0{,}845; 0{,}957] & 0{,}0027 & 0/3 \\
+LogReg (TF-IDF char 3--5) & protocolo (reglas) & 0{,}531 [0{,}460; 0{,}593] & 0{,}348 [0{,}269; 0{,}430] & $-$0{,}0235 & 1/6 \\
+LogReg (TF-IDF char 3--5) & protocolo (CTGAN) & 0{,}556 [0{,}481; 0{,}626] & 0{,}327 [0{,}254; 0{,}407] & $-$0{,}0202 & 1/6 \\
+LogReg @20k & protocolo (reglas) & 0{,}404 [0{,}328; 0{,}467] & 0{,}233 [0{,}171; 0{,}303] & $-$0{,}0031 & 0/6 \\
+LogReg @20k & protocolo (CTGAN) & 0{,}498 [0{,}417; 0{,}571] & 0{,}306 [0{,}232; 0{,}383] & $-$0{,}0163 & 0/6 \\
+BETO fine-tuning & protocolo (reglas) & 0{,}447 [0{,}366; 0{,}525] & 0{,}275 [0{,}210; 0{,}349] & $-$0{,}0498$^{c}$ & 0/6 \\
+BETO fine-tuning & protocolo (CTGAN) & 0{,}433 [0{,}357; 0{,}502] & 0{,}245 [0{,}180; 0{,}314] & $-$0{,}0444 & 0/6 \\
 \bottomrule
 \end{tabular}
-\par\footnotesize (a) $n=53$; la regla de soporte fusiona además \texttt{movimiento\_propio}, \texttt{transferencias\_p2p}. (c) $\Delta$ = sin recorte $-$ con recorte al P95. (b) no aplica: todas las filas tienen doble anotación. (e) $\kappa$: lo reporta WP4 (\texttt{acuerdo\_wp4.py}). $^{c}$ En el umbral de $\pm 0{,}05$ (sin alerta formal); se reporta sin redondear.
+\par\footnotesize (a) $n=153$; la regla de soporte fusiona además \texttt{educacion}, \texttt{ingreso}, \texttt{retiro\_efectivo}. (c) $\Delta$ = sin recorte $-$ con recorte al P95. (b) no aplica: todas las filas tienen doble anotación. (e) $\kappa$: lo reporta WP4 (\texttt{acuerdo\_wp4.py}). $^{c}$ En el umbral de $\pm 0{,}05$ (sin alerta formal); se reporta sin redondear.
 \end{table}
