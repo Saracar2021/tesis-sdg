@@ -202,6 +202,8 @@ def main():
                 mot.append("posible nombre de persona")
             if f["monto"] == 0:
                 mot.append("monto 0 (< $1)")
+            if not re.search(r"[A-Za-zÁÉÍÓÚÑáéíóúñ*]{2,}", f["descripcion"]) or re.fullmatch(r"de \d+", f["descripcion"]):
+                mot.append("DESCRIPCIÓN RESIDUAL (revisar parser)")
             if mot:
                 marcas.append((f["tx_id"], f["descripcion"], ", ".join(mot)))
         with open(SALIDA / f"_sospechas_{seudo}.md", "w", encoding="utf-8") as fh:
@@ -209,6 +211,9 @@ def main():
                      "| tx_id | descripcion | motivo |\n|---|---|---|\n")
             fh.writelines(f"| {t} | {d} | {mo} |\n" for t, d, mo in marcas)
         print(f"{seudo} ({g['banco']:28}): {len(movs):4d} extraídas -> {len(filas):4d} filas | dedup={bool(g.get('dedup'))}")
+        n_res = sum("RESIDUAL" in mo for *_, mo in marcas)
+        if n_res:
+            print(f"   ALERTA: {n_res} descripciones residuales en {seudo} (ver _sospechas_{seudo}.md)")
         total += len(filas)
 
     with open(SALIDA / "_conciliacion.md", "w", encoding="utf-8") as fh:

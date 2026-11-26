@@ -98,7 +98,7 @@ RE_DIRECCION = re.compile(
 # Monto en formato colombiano (1.234,56) o anglo (1,234.56); signo '-' al inicio o al final;
 # '$' opcional. Lookarounds por espacio/borde para no tomar fragmentos de números de referencia.
 RE_MONTO = re.compile(
-    r"(?<!\S)([-−+]?)\$?\s?((?:\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{1,2})?)|(?:\d*[.,]\d{1,2})|\d+)([-−+]?)(?!\S)"
+    r"(?<!\S)([-−+]?)\$?\s?(?:[-−])?((?:\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{1,2})?)|(?:\d*[.,]\d{1,2})|\d+)([-−+]?)(?!\S)"
 )
 RE_FECHA_ISO = re.compile(r"^\s*(\d{4})-(\d{2})-(\d{2})(?!\d)")
 RE_FECHA_DMY = re.compile(r"^\s*(\d{1,2})[/-](\d{1,2})[/-](\d{4}|\d{2})(?!\d)")
@@ -185,7 +185,7 @@ def valor_monto(token):
     final. Devuelve (entero, negativo, tiene_centavos). Si hay ambos separadores, el decimal es el
     que aparece de último; si hay uno solo, 2 dígitos finales = decimales, si no = miles."""
     t = token.strip()
-    neg = t.startswith(("-", "−")) or t.endswith(("-", "−"))
+    neg = bool(re.match(r"^\$?\s*[-−]", t)) or t.endswith(("-", "−"))
     t = t.strip("-−+$ ").replace(" ", "").strip()
     if not t:
         return 0, neg, False
@@ -210,6 +210,17 @@ def valor_monto(token):
     return int(entera or "0"), neg, centavos
 
 
+RE_NO_FRAGMENTO = re.compile(r"\$|%|\d{4}-\d{2}-\d{2}|periodo|Gastos|Fecha|Valor|Total|P[áa]gina|Cupo|Saldo", re.IGNORECASE)
+
+
+def _fragmento(lineas, j):
+    """Línea vecina que es parte del nombre de un comercio partido (sin fecha, sin montos, corta)."""
+    if not (0 <= j < len(lineas)):
+        return ""
+    t = lineas[j].strip()
+    return t if 0 < len(t) <= 40 and not RE_NO_FRAGMENTO.search(t) else ""
+
+
 def parsear_extracto(lineas, mes, columna_monto, formato_fecha="auto", filtrar_mes=True):
     """Función pura (sin archivos). Devuelve movimientos y contadores; no escribe nada.
 
@@ -224,7 +235,7 @@ def parsear_extracto(lineas, mes, columna_monto, formato_fecha="auto", filtrar_m
     }
     anio, mes_n = int(mes[:4]), int(mes[5:7])
     ultima = None
-    for linea in lineas:
+    for i, linea in enumerate(lineas):
         f, resto = leer_fecha(linea, anio, formato_fecha)
         if f is None and ultima is not None and RE_SIN_FECHA.match(linea):
             # Movimiento impreso sin fecha (GMF acumulado del mes): se le asigna la del anterior.
@@ -269,6 +280,9 @@ def parsear_extracto(lineas, mes, columna_monto, formato_fecha="auto", filtrar_m
             desc = re.sub(r"\s+\d+\s+de\s+\d+\b.*$", "", desc)
             desc = re.sub(r"\s+N/?A\b.*$", "", desc)
             desc = re.sub(r"\s*[\d.,]+\s*%.*$", "", desc)
+            if re.fullmatch(r"\s*(?:de\s+\d+)?\s*", desc):
+                # Comercio largo partido en dos líneas: "SR WOK CONNECTA" / fecha + montos / "BOGOTA".
+                desc = " ".join(x for x in (_fragmento(lineas, i - 1), _fragmento(lineas, i + 1)) if x)
         res["movimientos"].append(
             {"fecha": f.isoformat(), "desc_cruda": desc, "monto": valor, "negativo": neg}
         )
@@ -312,6 +326,9 @@ def depurar(desc, nombres_titular, contadores):
 def signo_de(mov, regla):
     if regla == "minus":
         return "egreso" if mov["negativo"] else "ingreso"
+    if regla == "tarjeta":
+        # Extracto de tarjeta: compras en positivo; pagos, reversiones y anulaciones en negativo ("$-").
+        return "ingreso" if mov["negativo"] else "egreso"
     # regla 'palabras': ingreso solo si la descripción trae una palabra de ingreso
     return "ingreso" if RE_INGRESO.search(mov["desc_cruda"]) else "egreso"
 

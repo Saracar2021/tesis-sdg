@@ -122,3 +122,15 @@ def test_llaves_breb():
     assert anon.depurar("CENTRAL DE C BREB @sarac6353", [], c) == "CENTRAL DE C BREB LLAVE"
     assert anon.depurar("CENTRAL DE C BREB diegocan@live.com.ar", [], c) == "CENTRAL DE C BREB LLAVE"
     assert anon.depurar("CRUZ VERDE ACU@A UNICE", [], c) == "CRUZ VERDE ACU@A UNICE"   # Ñ mal codificada: no es llave
+
+
+def test_tarjeta_comercio_partido_y_pagos():
+    lineas = ["SR WOK CONNECTA",
+              "Virtual 2026-08-24 $24.900,00 $24.900,00 1 de 1 $0,00 0,0000% 0,00%",
+              "BOGOTA",
+              "- 2026-08-30 PAGOS POR PSE $-3.365.000,00 N/A N/A N/A 0% 0,00%",
+              "Virtual 2026-08-30 R59 CREPESYWAFFLES NUE $56.725,00 $56.725,00 1 de 1 $0,00 0,0000% 0,00%"]
+    movs = anon.parsear_extracto(lineas, "2026-08", "primera", "cc", filtrar_mes=False)["movimientos"]
+    assert [m["desc_cruda"].strip() for m in movs] == ["SR WOK CONNECTA BOGOTA", "PAGOS POR PSE", "R59 CREPESYWAFFLES NUE"]
+    assert [m["monto"] for m in movs] == [24900, 3365000, 56725]
+    assert [anon.signo_de(m, "tarjeta") for m in movs] == ["egreso", "ingreso", "egreso"]
