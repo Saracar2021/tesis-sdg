@@ -1,0 +1,60 @@
+{
+  "aviso": "POST HOC, NO PRE-REGISTRADO: solo dimensiona el choque de convenciones P2P/ingreso; no reemplaza la métrica principal ni entra a la tabla principal.",
+  "fusion": [
+    "transferencias_p2p",
+    "ingreso"
+  ],
+  "bootstrap": {
+    "n": 1000,
+    "semilla": 42,
+    "regla_soporte": "fija"
+  },
+  "resultados": [
+    {
+      "fuente": "reglas",
+      "brazo": "logreg",
+      "f1_macro_original": 0.5664625904394315,
+      "f1_macro_fusionado": 0.6174124625369876,
+      "ic95_fila_estratificado": [
+        0.5586114721293739,
+        0.6704596329621814
+      ],
+      "ic95_grupo": [
+        0.5560993729323869,
+        0.6504219978734882
+      ],
+      "clases_evaluadas": 10,
+      "clases_fusionadas_a_otros": [
+        "entretenimiento",
+        "movimiento_propio",
+        "telecom_conectividad",
+        "vestuario_cuidado_personal",
+        "vivienda_servicios"
+      ],
+      "n_test": 200
+    },
+    {
+      "fuente": "ctgan",
+      "brazo": "logreg",
+      "f1_macro_original": 0.5673875410422365,
+      "f1_macro_fusionado": 0.5958508940769416,
+      "ic95_fila_estratificado": [
+        0.5365731509554327,
+        0.649995262493697
+      ],
+      "ic95_grupo": [
+        0.497243546750589,
+        0.6391291760175278
+      ],
+      "clases_evaluadas": 10,
+      "clases_fusionadas_a_otros": [
+        "entretenimiento",
+        "movimiento_propio",
+        "telecom_conectividad",
+        "vestuario_cuidado_personal",
+        "vivienda_servicios"
+      ],
+      "n_test": 200
+    }
+  ]
+}

@@ -65,6 +65,54 @@ def test_columnas_de_analisis_no_entran_a_la_serializacion():
     assert base.serializar(t).equals(base.serializar(t2))
 
 
+def _clases_en_el_umbral(seed=0):
+    """Test sintético con varias clases justo en el umbral de soporte (10-11 filas), como el real de WP4."""
+    rng = np.random.default_rng(seed)
+    sop = {"retiro_efectivo": 10, "educacion": 10, "ingreso": 11, "salud": 11, "entretenimiento": 9,
+           "comidas_fuera": 25, "transferencias_p2p": 28, "otros": 23, "hogar_articulos": 16, "transporte": 13}
+    yt = np.array([c for c, k in sop.items() for _ in range(k)], dtype=object)
+    yp = yt.copy()
+    malas = rng.random(len(yt)) < 0.4
+    yp[malas] = rng.choice(list(sop), malas.sum())
+    yp[yt == "retiro_efectivo"] = "retiro_efectivo"           # clase de borde con F1 alto, como en el real
+    return yt, yp
+
+
+def test_bootstrap_con_regla_fija_queda_centrado():
+    clases, _ = base.cargar_taxonomia()
+    yt, yp = _clases_en_el_umbral()
+    punto = base.f1_macro_regla(yt, yp, clases)
+    mapa, etq = base.regla_fija(yt, clases)
+    assert base.f1_macro_fijo(yt, yp, mapa, etq) == pytest.approx(punto)       # mismo estimador puntual
+    idx = list(base._indices_bootstrap(len(yt), None, 300, 42))
+    fija = np.mean([base.f1_macro_fijo(yt[i], yp[i], mapa, etq) for i in idx])
+    fus = base.aplicar_regla_soporte(yt, yp, clases)[3]
+    cambia = np.mean([base.aplicar_regla_soporte(yt[i], yp[i], clases)[3] != fus for i in idx])
+    assert abs(fija - punto) < 0.02          # regla fija: el bootstrap re-evalúa el mismo estimando
+    assert cambia > 0.5                      # regla recalculada: en la mayoría de réplicas cambia el conjunto de clases
+
+
+def test_ic_sensibilidad_basico_y_bca_contienen_el_punto():
+    clases, _ = base.cargar_taxonomia()
+    yt, yp = _clases_en_el_umbral()
+    r = base.evaluar(yt, yp, clases, base.Diseno(estratos=yt.copy()), ic="fila", sens_ic=True)
+    s, p = r["ic_sensibilidad"], r["f1_macro_regla_soporte"]
+    for k in ("percentil", "basico", "bca"):
+        assert s[k][0] <= p <= s[k][1], k
+    assert r["ic95_bootstrap"] == pytest.approx(s["percentil"])
+    assert len(r["ic95_regla_recalculada_por_replica"]) == 2
+
+
+def test_lineas_base_deterministas():
+    train = pd.DataFrame({base.TARGET: ["a"] * 6 + ["b"] * 3 + ["c"]})
+    test = pd.DataFrame({"x": range(50)})
+    pm, mm = base.brazo_linea_base("mayoritaria").ajustar_predecir(train, test)
+    assert set(pm) == {"a"} and mm["clase_mayoritaria"] == "a"
+    p1, _ = base.brazo_linea_base("estratificada").ajustar_predecir(train, test)
+    p2, _ = base.brazo_linea_base("estratificada").ajustar_predecir(train, test)
+    assert (p1 == p2).all() and set(p1) <= {"a", "b", "c"}
+
+
 def test_monto_cero_va_al_bin_mas_bajo():
     """El marco real trae filas con monto 0: deben caer en el bin más bajo ('<1K', visto en el entrenamiento), nunca
     en -inf ni en un token inválido. bin_monto no usa log10: ubica |monto| con searchsorted sobre los bordes."""
@@ -229,6 +277,8 @@ def test_swap_salida_del_consolidador(consolidado, salidas_temporales):
     assert m["n_test"] == len(t) and m["contrato_wp4_faltan"] == []
     # D-M7: principal por fila estratificado; sensibilidad por grupo de extractos (6)
     assert m["ic_principal"] == "fila_estratificado" and m["bootstrap"]["estratos"] == t["estrato_muestreo"].nunique()
+    assert m["regla_soporte_en_bootstrap"] == "fija en la muestra observada"
+    assert {"percentil", "basico", "bca", "media_bootstrap"} <= set(m["ic_sensibilidad"])
     assert m["ic95_conglomerado"] is not None and m["n_grupos"] == t["voluntario_id"].nunique()
     lo, hi = m["ic95_bootstrap"]
     assert 0 <= lo <= m["f1_macro_regla_soporte"] <= hi <= 1
@@ -274,3 +324,44 @@ def test_nada_desagregado_por_grupo_en_outputs(consolidado, salidas_temporales, 
             assert f'"{v}"' not in texto and f",{v}," not in texto and f" {v} " not in texto, f"{p.name} menciona {v}"
     privado = list((salidas_temporales / "privado").rglob("predicciones.csv.gz"))
     assert privado and "grupo" in pd.read_csv(privado[0], nrows=0).columns
+
+
+# --------------------------------------------------------------------------- post hoc P2P/ingreso y reporte (26-nov-2026)
+def test_exploratorio_p2p_ingreso_fusiona_y_escribe_solo_agregados(tmp_path, monkeypatch):
+    """La fusión P2P+ingreso usa la regla fija sobre la etiqueta fusionada, su punto coincide con el cálculo directo
+    y el JSON no lleva nada por ítem ni por grupo."""
+    clases, _ = base.cargar_taxonomia()
+    rng = np.random.default_rng(3)
+    n = 120
+    yt = rng.choice(["transferencias_p2p", "ingreso", "salud", "transporte", "comidas_fuera"], size=n)
+    yp = np.where(rng.random(n) < 0.6, yt, rng.choice(["transferencias_p2p", "ingreso", "salud"], size=n))
+    pred = pd.DataFrame({"y_true": yt, "y_pred": yp, "estrato": rng.choice(["e1", "e2"], size=n),
+                         "grupo": rng.choice(["g1", "g2", "g3"], size=n), "peso": 1.0})
+    for f in base.FUENTES_DEFECTO:
+        d = tmp_path / "pred" / f
+        d.mkdir(parents=True)
+        pred.to_csv(d / "predicciones.csv.gz", index=False)
+    monkeypatch.setattr(base, "RAIZ", tmp_path)
+    monkeypatch.setattr(base, "ruta_predicciones", lambda modo, f, brazo: tmp_path / "pred" / f / "predicciones.csv.gz")
+    (tmp_path / base.EXPLORATORIO).parent.mkdir(parents=True)
+    r = base.exploratorio_p2p_ingreso(clases)
+    assert len(r) == len(base.FUENTES_DEFECTO)
+    fus = lambda a: np.array([base.CLASE_FUSION_EXPL if v in ("transferencias_p2p", "ingreso") else v for v in a],  # noqa: E731
+                             dtype=object)
+    c2 = [c for c in clases if c not in ("transferencias_p2p", "ingreso")] + [base.CLASE_FUSION_EXPL]
+    assert r[0]["f1_macro_fusionado"] == pytest.approx(base.f1_macro_regla(fus(yt), fus(yp), c2))
+    lo, hi = r[0]["ic95_fila_estratificado"]
+    assert lo <= r[0]["f1_macro_fusionado"] <= hi
+    txt = (tmp_path / base.EXPLORATORIO).read_text(encoding="utf-8")
+    assert "POST HOC" in txt and "g1" not in txt and "y_true" not in txt
+
+
+def test_sensibilidad_c_marca_en_el_umbral_sin_redondear():
+    m = {"sensibilidades": {"a_unica_por_descripcion": {"aplica": False}, "b_solo_doble_anotacion": {"aplica": False},
+                            "c_exactitud_ponderada_recorte_p95": {"valor": 0.2752, "diferencia": -0.049803,
+                                                                  "alerta_depende_de_pocos_descriptores": False},
+                            "d_subgrupo_reverso": {"aplica": False}}}
+    fila = base._fila_sens("BETO", "reglas", m)
+    assert "en el umbral" in fila and "-0.0498" in fila and "sin alerta formal" in fila
+    m["sensibilidades"]["c_exactitud_ponderada_recorte_p95"]["diferencia"] = -0.020
+    assert "en el umbral" not in base._fila_sens("BETO", "reglas", m)

@@ -245,8 +245,25 @@ def aplicar_regla_soporte(y_true: np.ndarray, y_pred: np.ndarray, clases: list[s
 
 
 def f1_macro_regla(y_true, y_pred, clases) -> float:
+    """Estimador puntual: la regla de soporte se decide sobre la muestra que se evalúa."""
     yt, yp, etiquetas, _ = aplicar_regla_soporte(y_true, y_pred, clases)
     return f1_score(yt, yp, labels=etiquetas, average="macro", zero_division=0)
+
+
+def regla_fija(y_true, clases) -> tuple[dict, list[str]]:
+    """Mapa de fusión y clases evaluadas decididos UNA vez sobre la muestra observada (corrección del 26-nov-2026).
+    El bootstrap re-evalúa el MISMO estimando: no vuelve a decidir qué clases entran en cada réplica."""
+    _, _, etiquetas, fusionadas = aplicar_regla_soporte(np.asarray(y_true), np.asarray(y_true), clases)
+    return {c: CLASE_RESIDUAL for c in fusionadas}, etiquetas
+
+
+def f1_macro_fijo(y_true, y_pred, mapa: dict, etiquetas: list[str]) -> float:
+    """F1-macro con la regla de soporte FIJA. Una clase fija ausente de la réplica (rarísimo con soporte >= 10) no
+    entra en el promedio de esa réplica."""
+    yt = np.array([mapa.get(v, v) for v in y_true])
+    yp = np.array([mapa.get(v, v) for v in y_pred])
+    pres = [e for e in etiquetas if (yt == e).any()]
+    return f1_score(yt, yp, labels=pres, average="macro", zero_division=0)
 
 
 def exactitud_ponderada(y_true, y_pred, pesos) -> float:
@@ -289,22 +306,50 @@ def _ic_boot(estadistico, n: int, grupos=None, estratos=None, n_rep=N_BOOTSTRAP,
 
 
 def bootstrap_ic(y_true, y_pred, clases, grupos=None, n=N_BOOTSTRAP, semilla=SEMILLA, estratos=None):
-    """IC95 percentil del F1-macro con regla de soporte."""
+    """IC95 percentil del F1-macro con la regla de soporte fija en la muestra observada."""
     y_true, y_pred = np.asarray(y_true), np.asarray(y_pred)
-    lo, hi = _ic_boot(lambda i: f1_macro_regla(y_true[i], y_pred[i], clases), len(y_true), grupos, estratos, n, semilla)
+    mapa, etq = regla_fija(y_true, clases)
+    lo, hi = _ic_boot(lambda i: f1_macro_fijo(y_true[i], y_pred[i], mapa, etq), len(y_true), grupos, estratos, n, semilla)
     return lo, hi
 
 
 def bootstrap_delta(y_true, pred_a, pred_b, clases, grupos=None, n=N_BOOTSTRAP, semilla=SEMILLA, estratos=None):
-    """Δ = F1(b) − F1(a) con bootstrap PAREADO (mismas réplicas del mismo test para ambos brazos)."""
+    """Δ = F1(b) − F1(a) con bootstrap PAREADO (mismas réplicas del mismo test para ambos brazos) y la regla de
+    soporte fija en el test observado."""
     y_true, pred_a, pred_b = map(np.asarray, (y_true, pred_a, pred_b))
-    d = f1_macro_regla(y_true, pred_b, clases) - f1_macro_regla(y_true, pred_a, clases)
-    lo, hi = _ic_boot(lambda i: f1_macro_regla(y_true[i], pred_b[i], clases) - f1_macro_regla(y_true[i], pred_a[i], clases),
+    mapa, etq = regla_fija(y_true, clases)
+    d = f1_macro_fijo(y_true, pred_b, mapa, etq) - f1_macro_fijo(y_true, pred_a, mapa, etq)
+    lo, hi = _ic_boot(lambda i: f1_macro_fijo(y_true[i], pred_b[i], mapa, etq) - f1_macro_fijo(y_true[i], pred_a[i], mapa, etq),
                       len(y_true), grupos, estratos, n, semilla)
     return float(d), lo, hi
 
 
-def evaluar(y_true, y_pred, clases, diseno: Diseno | None = None, ic: str = "ambos") -> dict:
+def ic_sensibilidad(estadistico, theta: float, n: int, estratos=None, n_rep=N_BOOTSTRAP, semilla=SEMILLA,
+                    jackknife: bool = True) -> dict:
+    """Sensibilidad del IC principal (mismas réplicas): percentil, básico (2θ − q) y BCa (sesgo z0 + aceleración por
+    jackknife de filas; aproximación con remuestreo estratificado). También la media del bootstrap y su sesgo."""
+    from statistics import NormalDist
+    nd = NormalDist()
+    vals = np.array([estadistico(i) for i in _indices_bootstrap(n, None, n_rep, semilla, estratos)])
+    q_lo, q_hi = np.percentile(vals, [2.5, 97.5])
+    out = {"percentil": [float(q_lo), float(q_hi)], "basico": [float(2 * theta - q_hi), float(2 * theta - q_lo)],
+           "media_bootstrap": float(vals.mean()), "sesgo_bootstrap": float(vals.mean() - theta),
+           "prop_replicas_bajo_el_punto": float((vals < theta).mean())}
+    if jackknife:
+        p0 = (vals < theta).mean() + 0.5 * (vals == theta).mean()
+        p0 = min(max(p0, 1 / (2 * n_rep)), 1 - 1 / (2 * n_rep))
+        z0 = nd.inv_cdf(p0)
+        jk = np.array([estadistico(np.delete(np.arange(n), i)) for i in range(n)])
+        dif = jk.mean() - jk
+        den = 6 * (np.sum(dif ** 2) ** 1.5)
+        a = float(np.sum(dif ** 3) / den) if den > 0 else 0.0
+        alfas = [nd.cdf(z0 + (z0 + z) / (1 - a * (z0 + z))) for z in (nd.inv_cdf(0.025), nd.inv_cdf(0.975))]
+        out["bca"] = [float(np.percentile(vals, 100 * alfas[0])), float(np.percentile(vals, 100 * alfas[1]))]
+        out["bca_z0"], out["bca_aceleracion"] = float(z0), a
+    return out
+
+
+def evaluar(y_true, y_pred, clases, diseno: Diseno | None = None, ic: str = "ambos", sens_ic: bool = False) -> dict:
     """Métrica principal: F1-macro SIN ponderar con regla de soporte. IC principal: bootstrap por fila (estratificado
     por estrato_muestreo si existe); sensibilidad: bootstrap por grupo de extractos (D-M7). Si hay pesos: exactitud
     ponderada (Hájek) con su IC y la sensibilidad de pesos recortados al P95 (D-M6, pre-registro §4.2)."""
@@ -318,7 +363,8 @@ def evaluar(y_true, y_pred, clases, diseno: Diseno | None = None, ic: str = "amb
     if len(etiquetas) < 2:
         print(f"  AVISO: solo {len(etiquetas)} clase(s) con soporte >= {SOPORTE_MIN}; el F1-macro no es interpretable")
 
-    f1 = lambda i: f1_macro_regla(y_true[i], y_pred[i], clases)  # noqa: E731
+    mapa, etq_fijas = regla_fija(y_true, clases)
+    f1 = lambda i: f1_macro_fijo(y_true[i], y_pred[i], mapa, etq_fijas)  # noqa: E731
     usa_conglomerado_principal = ic == "conglomerado" and d.grupos is not None
     tipo_principal = ("conglomerado" if usa_conglomerado_principal
                       else "fila_estratificado" if d.estratos is not None else "fila")
@@ -336,7 +382,13 @@ def evaluar(y_true, y_pred, clases, diseno: Diseno | None = None, ic: str = "amb
         "clases_evaluadas": len(etiquetas),
         "clases_fusionadas_a_otros": fusionadas,
         "_por_clase": por_clase,
+        "regla_soporte_en_bootstrap": "fija en la muestra observada",
     }
+    if sens_ic:
+        est = None if usa_conglomerado_principal else d.estratos
+        res["ic_sensibilidad"] = ic_sensibilidad(f1, res["f1_macro_regla_soporte"], n, estratos=est)
+        res["ic95_regla_recalculada_por_replica"] = _ic_boot(
+            lambda i: f1_macro_regla(y_true[i], y_pred[i], clases), n, estratos=est)   # IC de la 1.ª corrida oficial
     if d.pesos is not None:
         w = d.pesos
         p95 = float(np.percentile(w, P_RECORTE_PESOS))
@@ -401,6 +453,22 @@ def brazo_logreg_n(n: int | None = None) -> Brazo:
 
 
 BRAZO_LOGREG = brazo_logreg_n(None)
+
+
+def brazo_linea_base(tipo: str) -> Brazo:
+    """Líneas base de contexto (no entran a la ablación): 'mayoritaria' = la clase más frecuente del sintético de
+    entrenamiento; 'estratificada' = predicción aleatoria con la distribución de clases del sintético (semilla fija).
+    No leen ninguna columna del test salvo su número de filas."""
+    def ajustar_predecir(train: pd.DataFrame, test: pd.DataFrame) -> tuple[np.ndarray, dict]:
+        frec = train[TARGET].value_counts(normalize=True).sort_index()
+        if tipo == "mayoritaria":
+            clase = frec.idxmax()
+            return np.full(len(test), clase, dtype=object), {"clase_mayoritaria": clase, "n_train_efectivo": len(train)}
+        rng = np.random.default_rng(SEMILLA)
+        pred = rng.choice(frec.index.to_numpy(dtype=object), size=len(test), p=frec.to_numpy())
+        return pred, {"distribucion": "frecuencias de categoria_n1 del sintético", "semilla": SEMILLA,
+                      "n_train_efectivo": len(train)}
+    return Brazo(f"base_{tipo}", f"linea_base_{tipo}", ajustar_predecir)
 
 
 # --------------------------------------------------------------------------- una corrida
@@ -497,7 +565,7 @@ def correr(fuente: str, ruta_train: Path, ruta_test: Path | None, clases: list[s
     segundos = (datetime.now(timezone.utc) - t0).total_seconds()
     y_true = test[TARGET].to_numpy(dtype=object)
 
-    res = evaluar(y_true, y_pred, clases, d, ic=ic if modo == "tstr" else "fila")
+    res = evaluar(y_true, y_pred, clases, d, ic=ic if modo == "tstr" else "fila", sens_ic=modo == "tstr")
     por_clase = res.pop("_por_clase")
     if fe is not None:
         m = fe == ETIQUETA_TEXTO
@@ -572,6 +640,81 @@ def correr(fuente: str, ruta_train: Path, ruta_test: Path | None, clases: list[s
     return metricas
 
 
+# --------------------------------------------------------------------------- post hoc (no pre-registrado)
+CLASE_FUSION_EXPL = "transferencias_p2p+ingreso"
+EXPLORATORIO = Path("outputs/tstr/tstr/exploratorio_p2p_ingreso.json")
+HALLAZGO = Path("outputs/tstr/hallazgo_cruce_p2p_ingreso.json")
+FAMILIAS_TEXTO = {"p2p_recibida_banco": "P2P recibida", "p2p_recibida_billetera": "P2P recibida",
+                  "p2p_enviada_banco": "P2P enviada", "p2p_enviada_billetera": "P2P enviada",
+                  "recarga_origen": "recarga: sale del banco", "recarga_destino": "recarga: entra a la billetera"}
+
+
+def exploratorio_p2p_ingreso(clases: list[str]) -> list[dict]:
+    """POST HOC, NO PRE-REGISTRADO: F1-macro de LogReg completo con transferencias_p2p e ingreso fusionadas en una sola
+    clase, para dimensionar el choque de convenciones P2P/ingreso. Lee las predicciones por ítem SOLO en la máquina
+    local (data/_privado/tstr/) y escribe agregados. La regla de soporte se fija sobre el test con la clase fusionada."""
+    fusion = ("transferencias_p2p", "ingreso")
+    c2 = [c for c in clases if c not in fusion] + [CLASE_FUSION_EXPL]
+    mp = lambda a: np.array([CLASE_FUSION_EXPL if v in fusion else v for v in a], dtype=object)  # noqa: E731
+    out = []
+    for f in FUENTES_DEFECTO:
+        rp = ruta_predicciones("tstr", f, "logreg")
+        if not rp.exists():
+            continue
+        p = pd.read_csv(rp, keep_default_na=False)
+        yt, yp = p["y_true"].to_numpy(dtype=object), p["y_pred"].to_numpy(dtype=object)
+        est = p["estrato"].astype(str).to_numpy() if (p["estrato"].astype(str) != "").any() else None
+        grp = p["grupo"].astype(str).to_numpy() if (p["grupo"].astype(str) != "").any() else None
+        yt2, yp2 = mp(yt), mp(yp)
+        mapa, etq = regla_fija(yt2, c2)
+        f1f = lambda i: f1_macro_fijo(yt2[i], yp2[i], mapa, etq)  # noqa: E731
+        out.append({"fuente": f, "brazo": "logreg", "f1_macro_original": f1_macro_regla(yt, yp, clases),
+                    "f1_macro_fusionado": f1_macro_regla(yt2, yp2, c2),
+                    "ic95_fila_estratificado": _ic_boot(f1f, len(yt2), estratos=est),
+                    "ic95_grupo": _ic_boot(f1f, len(yt2), grupos=grp) if grp is not None else None,
+                    "clases_evaluadas": len(etq), "clases_fusionadas_a_otros": sorted(mapa), "n_test": int(len(yt))})
+    if out:
+        (RAIZ / EXPLORATORIO).write_text(json.dumps({
+            "aviso": "POST HOC, NO PRE-REGISTRADO: solo dimensiona el choque de convenciones P2P/ingreso; no reemplaza la "
+                     "métrica principal ni entra a la tabla principal.",
+            "fusion": list(fusion), "bootstrap": {"n": N_BOOTSTRAP, "semilla": SEMILLA, "regla_soporte": "fija"},
+            "resultados": out}, ensure_ascii=False, indent=2), encoding="utf-8")
+    return out
+
+
+def cuantificar_cruce_p2p() -> dict:
+    """Hallazgo del protocolo, SOLO desde el sintético (ningún dato real): cómo se reparten las etiquetas dentro de las
+    familias de texto de transferencia y recarga, y qué textos de billetera existen en salidas desde banco."""
+    res = {"fuente_codigo": {
+        "ingreso_p2p": "src/sdg/generador.py:607-632 (no asalariados: con prob. ingreso.p_p2p_otros = 0,6 el depósito usa "
+                       "plantilla p2p_recibida_* y queda categoria_n1 = ingreso; consignación a billetera -> p2p_recibida_billetera)",
+        "p2p_sin_proposito": "src/sdg/generador.py:634-655 (P2P recibida/enviada sin propósito -> transferencias_p2p)",
+        "recargas": "src/sdg/generador.py:691-707 (recarga banco->billetera -> movimiento_propio; plantillas 'RECARGA {W}', "
+                    "'TRANSFERENCIA A {W}', 'RECARGA DESDE {B}')",
+        "capa_texto_ctgan": "src/sdg/texto.py:95 (ingreso_no_asalariado + canal_p2p -> p2p_recibida_*; ingreso + billetera -> "
+                            "p2p_recibida_billetera)"}, "fuentes": {}}
+    for f in FUENTES_DEFECTO:
+        d = pd.read_csv(RAIZ / FUENTES[f], usecols=["tipo_evento", TARGET, "signo", "cuenta_tipo", "descripcion"])
+        d["familia"] = d["tipo_evento"].map(FAMILIAS_TEXTO)
+        t = pd.crosstab(d["familia"], d[TARGET])
+        claves = ["ingreso", "transferencias_p2p", "movimiento_propio"]
+        tabla = {fam: {**{k: int(t.loc[fam].get(k, 0)) for k in claves},
+                       "otras_proposito_declarado": int(t.loc[fam].drop(labels=[k for k in claves if k in t.columns]).sum()),
+                       "total": int(t.loc[fam].sum())} for fam in t.index}
+        rec = d[d["familia"] == "P2P recibida"]
+        up = d["descripcion"].astype(str).str.upper()
+        banco_billetera = (d["signo"] == "-") & (d["cuenta_tipo"] == "banco") & up.str.contains(r"\bNEQUI\b|\bDAVIPLATA\b")
+        res["fuentes"][f] = {
+            "por_familia": tabla,
+            "p2p_recibida_etiquetada_ingreso": float((rec[TARGET] == "ingreso").mean()),
+            "salidas_banco_con_billetera_en_texto": {k: int(v) for k, v in d.loc[banco_billetera, TARGET].value_counts().items()},
+            "token_LLAVE_aislado": int(up.str.contains(r"\bLLAVE\b").sum()),
+            "token_LLAVE_dentro_de_TULLAVE": int(up.str.contains("TULLAVE").sum()),
+        }
+    (RAIZ / HALLAZGO).write_text(json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8")
+    return res
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--fuentes", nargs="+", default=FUENTES_DEFECTO,
@@ -583,13 +726,28 @@ def main() -> None:
                          f"Por defecto solo completo; '--n-train 0 {N_COMPARABLE}' corre ambas.")
     ap.add_argument("--ic", choices=MODOS_IC, default="ambos",
                     help="TSTR: 'ambos' (D-M7) = principal por fila estratificado + sensibilidad por grupo.")
+    ap.add_argument("--lineas-base", action="store_true",
+                    help="Agrega las líneas base de contexto (clase mayoritaria y aleatorio estratificado del sintético).")
+    ap.add_argument("--exploratorio-p2p-ingreso", action="store_true",
+                    help="POST HOC: F1 con P2P e ingreso fusionadas (lee data/_privado/ localmente) y cuantificación del "
+                         "cruce en el sintético. No entrena; regenera el .md y las tablas LaTeX.")
     args = ap.parse_args()
     clases, sha_tax = cargar_taxonomia()
+    if args.exploratorio_p2p_ingreso:
+        cuantificar_cruce_p2p()
+        r = exploratorio_p2p_ingreso(clases)
+        print(json.dumps([{k: x[k] for k in ("fuente", "f1_macro_original", "f1_macro_fusionado",
+                                             "ic95_fila_estratificado", "ic95_grupo")} for x in r], ensure_ascii=False))
+        escribir_resultados_md(clases)
+        return
     for f in args.fuentes:
         ruta = FUENTES.get(f, Path(f))
         nombre = f if f in FUENTES else ruta.name.split(".")[0]
         for n in args.n_train:
             correr(nombre, ruta, args.test, clases, sha_tax, brazo_logreg_n(n or None), ic=args.ic)
+        if args.lineas_base:
+            for tipo in ("mayoritaria", "estratificada"):
+                correr(nombre, ruta, args.test, clases, sha_tax, brazo_linea_base(tipo), ic=args.ic)
     escribir_resultados_md(clases)
 
 
@@ -608,8 +766,14 @@ CAB = ("| Brazo | Fuente train | F1-macro (soporte ≥10) | IC95 | F1-macro solo
 CAB_TSTR = ("| Brazo | Fuente train | F1-macro (soporte ≥10) | IC95 principal (fila estrat.) | IC95 por grupo "
             "(sensibilidad) | Exactitud | Exactitud ponderada [IC95] | n train | n test | fusionadas a otros |\n"
             "|---|---|---|---|---|---|---|---|---|---|")
+LINEAS_BASE = [("base_mayoritaria", "Clase mayoritaria del sintético"),
+               ("base_estratificada", "Aleatorio estratificado (distribución del sintético, semilla 42)")]
+CAB_IC = ("| Brazo | Fuente train | F1-macro | IC95 percentil (principal) | IC95 básico | IC95 BCa | media bootstrap "
+          "(sesgo) | IC95 con la regla recalculada por réplica (1.ª corrida) |\n|---|---|---|---|---|---|---|---|")
+CAB_BASE = ("| Línea base | Fuente train | F1-macro (soporte ≥10) | IC95 principal | Exactitud | Exactitud ponderada |\n"
+            "|---|---|---|---|---|---|")
 CAB_SENS = ("| Brazo | Fuente train | (a) F1 una fila por descripción [IC95] | (b) F1 solo doble anotación [IC95] | "
-            "(c) Exactitud ponderada P95 (Δ vs. sin recorte) | (d) Reversos: aciertos/n |\n|---|---|---|---|---|---|")
+            "(c) Exactitud ponderada P95 (Δ = sin recorte − P95) | (d) Reversos: aciertos/n |\n|---|---|---|---|---|---|")
 
 
 def _ic(v) -> str:
@@ -624,6 +788,22 @@ def _fila_tstr(nombre: str, fuente: str, m: dict) -> str:
             f"{_fusionadas(m['clases_fusionadas_a_otros'])} |")
 
 
+def _fila_ic(nombre: str, fuente: str, m: dict) -> str:
+    s = m.get("ic_sensibilidad")
+    if not s:
+        return f"| {nombre} | {fuente} | {m['f1_macro_regla_soporte']:.3f} | {_ic(m['ic95_bootstrap'])} | — | — | — | — |"
+    return (f"| {nombre} | {fuente} | {m['f1_macro_regla_soporte']:.3f} | {_ic(s['percentil'])} | {_ic(s['basico'])} | "
+            f"{_ic(s.get('bca'))} | {s['media_bootstrap']:.3f} ({s['sesgo_bootstrap']:+.3f}) | "
+            f"{_ic(m.get('ic95_regla_recalculada_por_replica'))} |")
+
+
+def _fila_base(nombre: str, fuente: str, m: dict) -> str:
+    ew = m.get("exactitud_ponderada")
+    return (f"| {nombre} | {fuente} | {m['f1_macro_regla_soporte']:.3f} | {_ic(m['ic95_bootstrap'])} | "
+            f"{m['accuracy']:.3f} | {ew['valor']:.3f} |" if ew else
+            f"| {nombre} | {fuente} | {m['f1_macro_regla_soporte']:.3f} | {_ic(m['ic95_bootstrap'])} | {m['accuracy']:.3f} | — |")
+
+
 def _fila_sens(nombre: str, fuente: str, m: dict) -> str:
     s = m.get("sensibilidades", {})
 
@@ -635,8 +815,14 @@ def _fila_sens(nombre: str, fuente: str, m: dict) -> str:
         return (f"{x['f1_macro_regla_soporte']:.3f} {_ic(x['ic95_bootstrap'])} (n={x['n']})"
                 + (f"; fusiona además: {', '.join(extra)}" if extra else ""))
     c = s.get("c_exactitud_ponderada_recorte_p95", {})
-    c_txt = ("no aplica" if c.get("aplica") is False else
-             f"{c['valor']:.3f} (Δ {c['diferencia']:+.3f}{'; ⚠ > 5 pts: depende de pocos descriptores' if c['alerta_depende_de_pocos_descriptores'] else ''})")
+    if c.get("aplica") is False:
+        c_txt = "no aplica"
+    elif abs(abs(c["diferencia"]) - UMBRAL_ALERTA_PESOS) < 0.0005:
+        c_txt = (f"{c['valor']:.3f} (Δ {c['diferencia']:+.4f}: **en el umbral** de ±{UMBRAL_ALERTA_PESOS:.2f}; "
+                 f"{'alerta' if c['alerta_depende_de_pocos_descriptores'] else 'sin alerta formal'})")
+    else:
+        c_txt = (f"{c['valor']:.3f} (Δ {c['diferencia']:+.3f}"
+                 f"{'; ⚠ > 5 pts: depende de pocos descriptores' if c['alerta_depende_de_pocos_descriptores'] else ''})")
     dd = s.get("d_subgrupo_reverso", {})
     d_txt = "no aplica" if dd.get("aplica") is False else f"{dd['aciertos']}/{dd['n']}"
     return f"| {nombre} | {fuente} | {f1('a_unica_por_descripcion')} | {f1('b_solo_doble_anotacion')} | {c_txt} | {d_txt} |"
@@ -689,9 +875,16 @@ def _ablacion(modo: str, corridas: dict, clases: list[str]) -> list[str]:
         registro.append({"brazo": brazo, "delta_f1_macro": d, "ic95_fila_estratificado": [lo, hi],
                          "ic95_grupo": [lo2, hi2] if grp is not None else None, "n_test": int(len(yt)),
                          "test": a["test"], "bootstrap": {"n": N_BOOTSTRAP, "semilla": SEMILLA}})
+    ruta_abl = RAIZ / SALIDA / modo / "ablacion.json"
     if registro:
-        (RAIZ / SALIDA / modo / "ablacion.json").write_text(json.dumps(registro, ensure_ascii=False, indent=2),
-                                                            encoding="utf-8")
+        ruta_abl.write_text(json.dumps(registro, ensure_ascii=False, indent=2), encoding="utf-8")
+    elif ruta_abl.exists():          # sin predicciones privadas en esta máquina: se lee el agregado ya calculado
+        nombres = dict(BRAZOS_TABLA)
+        for r in json.loads(ruta_abl.read_text(encoding="utf-8")):
+            g = r.get("ic95_grupo")
+            filas.append(f"| {nombres.get(r['brazo'], r['brazo'])} | {r['delta_f1_macro']:+.3f} | "
+                         f"[{r['ic95_fila_estratificado'][0]:+.3f}, {r['ic95_fila_estratificado'][1]:+.3f}] | "
+                         + (f"[{g[0]:+.3f}, {g[1]:+.3f}] |" if g else "— |"))
     return filas
 
 
@@ -722,6 +915,233 @@ def _contexto_pancholi() -> str:
         f"sobre un hold-out de sus propios datos sintéticos de D.C., con otras categorías y en inglés: no es "
         f"comparable con el TSTR del protocolo."
     )
+
+
+def _jerarquia_ablacion() -> str:
+    """Jerarquía de la ablación y lectura de las secundarias, desde ablacion.json."""
+    ruta = RAIZ / SALIDA / "tstr" / "ablacion.json"
+    base_txt = ("**Jerarquía.** La comparación principal es LogReg con el train completo; LogReg @20k y BETO @20k son "
+                "secundarias. Son tres comparaciones sin corrección por comparaciones múltiples: una Δ secundaria no se "
+                "interpreta como efecto si su IC95 (por fila o por grupo) toca o cruza cero.")
+    if not ruta.exists():
+        return base_txt
+    lineas = []
+    nombres = dict(BRAZOS_TABLA)
+    for r in json.loads(ruta.read_text(encoding="utf-8")):
+        ics = [r["ic95_fila_estratificado"]] + ([r["ic95_grupo"]] if r.get("ic95_grupo") else [])
+        toca = any(lo <= 0 <= hi for lo, hi in ics)
+        rol = "principal" if r["brazo"] == "logreg" else "secundaria"
+        if rol == "principal":
+            lectura = ("el IC contiene cero: **sin diferencia detectable** entre fuentes." if toca
+                       else "ningún IC toca cero.")
+        else:
+            lectura = ("algún IC toca o cruza cero → **no se interpreta como efecto**." if toca
+                       else "ningún IC toca cero (secundaria, sin corrección por multiplicidad).")
+        lineas.append(f"- {nombres.get(r['brazo'], r['brazo'])} ({rol}): Δ {r['delta_f1_macro']:+.3f}; {lectura}")
+    return base_txt + "\n\n" + "\n".join(lineas)
+
+
+def _seccion_post_hoc() -> str:
+    """Hallazgo del cruce P2P/ingreso (solo sintético) y exploratorio post hoc, si existen sus JSON."""
+    partes = []
+    h = RAIZ / HALLAZGO
+    if h.exists():
+        H = json.loads(h.read_text(encoding="utf-8"))
+        filas = []
+        for f, v in H["fuentes"].items():
+            for fam, t in v["por_familia"].items():
+                filas.append(f"| {NOMBRE_FUENTE.get(f, f)} | {fam} | {t['ingreso']:,} | {t['transferencias_p2p']:,} | "
+                             f"{t['movimiento_propio']:,} | {t['otras_proposito_declarado']:,} | {t['total']:,} |")
+        sb = {}
+        for f, v in H["fuentes"].items():
+            x = v["salidas_banco_con_billetera_en_texto"]
+            tot = sum(x.values())
+            sb[f] = f"{x.get('movimiento_propio', 0):,} de {tot:,} son `movimiento_propio` ({x.get('movimiento_propio', 0) / max(tot, 1):.1%})"
+        partes.append(f"""## Hallazgo del protocolo: cruce de convenciones P2P / ingreso (cuantificado solo en el sintético)
+
+La regla R2 manda a `transferencias_p2p` toda transferencia con persona sin propósito declarado, y en el test real de
+WP4 ninguna etiqueta proviene de declaración del voluntario (`frac_test_etiqueta_por_declaracion` = 0 en
+`metricas.json`): todo P2P real queda en `transferencias_p2p`. El generador, en cambio, etiqueta como `ingreso` una parte de las
+transferencias **recibidas** de persona: el ingreso de los no asalariados llega con plantilla de P2P recibida con
+probabilidad 0,6 (`{H['fuente_codigo']['ingreso_p2p']}`; capa de texto del CTGAN: `{H['fuente_codigo']['capa_texto_ctgan']}`).
+La taxonomía v1.1 lo anticipa: «Este cruce P2P/ingreso es un hallazgo esperable y debe cuantificarse en la tesis»
+(caso límite de `ingreso`). No se cambió el generador, ni las etiquetas del test, ni los modelos.
+
+| Fuente | Familia de texto | ingreso | transferencias_p2p | movimiento_propio | otras (propósito declarado) | total |
+|---|---|---|---|---|---|---|
+{chr(10).join(filas)}
+
+Segundo canal del mismo choque: las P2P **enviadas** con propósito declarado se etiquetan con la categoría del
+propósito (R2 con `canal_p2p` = true; columna «otras»), así que en el entrenamiento el texto «… A PERSONA» aparece
+también bajo categorías de bienes, mientras en el test ese texto es siempre `transferencias_p2p`.
+
+P2P recibida etiquetada `ingreso`: {', '.join(f"{NOMBRE_FUENTE.get(f, f)} {v['p2p_recibida_etiquetada_ingreso']:.1%}" for f, v in H['fuentes'].items())}.
+**Errores hacia `movimiento_propio`:** en el sintético, las salidas desde banco que nombran NEQUI/DAVIPLATA son casi
+siempre recargas propias ({'; '.join(f"{NOMBRE_FUENTE.get(f, f)}: {x}" for f, x in sb.items())}), porque la única plantilla que
+produce ese texto es la de recarga (`TRANSFERENCIA A {{W}}`, `RECARGA {{W}}`); los envíos P2P desde banco usan
+«TRANSFERENCIA A PERSONA». Un envío real desde un banco a la billetera de un tercero se parece así a una recarga.
+Menor: el anonimizador de WP4 deja el token `LLAVE` (pagos Bre-B) y en el sintético «LLAVE» solo aparece dentro de
+«TULLAVE» (transporte) ({', '.join(f"{NOMBRE_FUENTE.get(f, f)}: {v['token_LLAVE_dentro_de_TULLAVE']:,} filas" for f, v in H['fuentes'].items())}).
+Fuente: `{HALLAZGO.as_posix()}`.""")
+    e = RAIZ / EXPLORATORIO
+    if e.exists():
+        E = json.loads(e.read_text(encoding="utf-8"))
+        filas = [f"| LogReg completo | {NOMBRE_FUENTE.get(r['fuente'], r['fuente'])} | {r['f1_macro_original']:.3f} | "
+                 f"{r['f1_macro_fusionado']:.3f} | {_ic(r['ic95_fila_estratificado'])} | {_ic(r.get('ic95_grupo'))} | "
+                 f"{r['clases_evaluadas']} |" for r in E["resultados"]]
+        partes.append(f"""## Exploratorio (post hoc, no pre-registrado)
+
+{E['aviso']} `transferencias_p2p` e `ingreso` se fusionan en una sola clase en la etiqueta real y en la predicha; la
+regla de soporte se fija sobre el test con la clase fusionada. Fuente: `{EXPLORATORIO.as_posix()}`.
+
+| Brazo | Fuente train | F1-macro principal | F1-macro con P2P+ingreso fusionadas | IC95 fila estrat. | IC95 por grupo | clases evaluadas |
+|---|---|---|---|---|---|---|
+{chr(10).join(filas)}""")
+    return "\n\n---\n\n".join(partes)
+
+
+# --------------------------------------------------------------------------- insumos LaTeX para el informe
+TABLAS_TEX = Path("outputs/tstr/tablas_informe.tex")
+
+
+def _n(x: float, d: int = 3) -> str:
+    """Número con coma decimal para LaTeX en español."""
+    return f"{x:.{d}f}".replace("-", "$-$").replace(".", "{,}")
+
+
+def _ns(x: float, d: int = 3) -> str:
+    """Como _n, con signo explícito (para Δ)."""
+    return ("$+$" if x >= 0 else "") + _n(x, d)
+
+
+def _ic_tex(v, par: str = "[]") -> str:
+    return f"{par[0]}{_n(v[0])}; {_n(v[1])}{par[1]}" if v else "---"
+
+
+def escribir_tablas_latex(corridas: dict, clases: list[str]) -> Path:
+    """Tablas booktabs para el informe, generadas desde los mismos JSON/CSV agregados que el .md."""
+    T = [f"% Generado por tools/etapa4_tstr.py desde {SALIDA.as_posix()}/tstr/; no editar a mano.",
+         "% Requiere \\usepackage{booktabs}. Coma decimal; IC95 bootstrap con la regla de soporte fija.", ""]
+    # 1. tabla principal
+    fil = []
+    for brazo, nombre in BRAZOS_TABLA:
+        corto = nombre.split(" (")[0].replace("Baseline: ", "").replace("+ TF-IDF char 3-5", "(TF-IDF char 3--5)")
+        corto = corto.replace("@", "@")
+        for f in FUENTES_DEFECTO:
+            m = corridas.get(("tstr", f, brazo))
+            if brazo == "llm_groq":
+                fil.append(f"{corto} & {NOMBRE_FUENTE[f]} & \\multicolumn{{4}}{{l}}{{no evaluado sobre el real$^{{b}}$}} \\\\")
+            elif m:
+                ew = m.get("exactitud_ponderada") or {}
+                fil.append(f"{corto} & {NOMBRE_FUENTE[f]} & {_n(m['f1_macro_regla_soporte'])} & {_ic_tex(m['ic95_bootstrap'])} "
+                           f"{_ic_tex(m.get('ic95_conglomerado'), '()')} & {_n(m['accuracy'])} & "
+                           f"{_n(ew['valor']) if ew else '---'} \\\\")
+        fil.append("\\addlinespace")
+    for brazo, nombre in LINEAS_BASE:
+        for f in FUENTES_DEFECTO:
+            m = corridas.get(("tstr", f, brazo))
+            if m:
+                ew = m.get("exactitud_ponderada") or {}
+                fil.append(f"{nombre.split(' (')[0]} & {NOMBRE_FUENTE[f]} & {_n(m['f1_macro_regla_soporte'])} & "
+                           f"{_ic_tex(m['ic95_bootstrap'])} & {_n(m['accuracy'])} & {_n(ew['valor']) if ew else '---'} \\\\")
+    T += ["\\begin{table}[ht]\\centering\\small",
+          "\\caption{TSTR: entrenado en sintético, evaluado en el real anotado de WP4 ($n=200$). F1-macro con soporte $\\geq 10$.}",
+          "\\label{tab:tstr}", "\\begin{tabular}{llcccc}", "\\toprule",
+          "Brazo & Fuente de entrenamiento & F1-macro & IC95$^{a}$ & Exactitud & Exactitud ponderada \\\\", "\\midrule",
+          *fil, "\\bottomrule", "\\end{tabular}",
+          "\\par\\footnotesize $^{a}$ Corchetes: bootstrap por fila estratificado por estrato de muestreo (1000 réplicas, "
+          "semilla 42), principal; paréntesis: bootstrap por grupo de extractos (6 grupos), sensibilidad. "
+          "$^{b}$ Restricción de tratamiento de datos: no se envían datos reales a la API; humo sobre sintético aparte.",
+          "\\end{table}", ""]
+    # 2. ablación
+    ab = RAIZ / SALIDA / "tstr" / "ablacion.json"
+    if ab.exists():
+        nombres = {b: n.split(" (")[0].replace("Baseline: ", "").replace("+ TF-IDF char 3-5", "(TF-IDF char 3--5)")
+                   for b, n in BRAZOS_TABLA}
+        fa = [f"{nombres.get(r['brazo'], r['brazo'])} & {'principal' if r['brazo'] == 'logreg' else 'secundaria'} & "
+              f"{_ns(r['delta_f1_macro'])} & {_ic_tex(r['ic95_fila_estratificado'])} & {_ic_tex(r.get('ic95_grupo'))} \\\\"
+              for r in json.loads(ab.read_text(encoding="utf-8"))]
+        T += ["\\begin{table}[ht]\\centering\\small",
+              "\\caption{Ablación: $\\Delta$ F1-macro = CTGAN $-$ reglas, con plantillas de texto idénticas (bootstrap pareado).}",
+              "\\label{tab:ablacion}", "\\begin{tabular}{llccc}", "\\toprule",
+              "Brazo & Rol & $\\Delta$ & IC95 fila estrat. & IC95 por grupo \\\\", "\\midrule", *fa, "\\bottomrule",
+              "\\end{tabular}",
+              "\\par\\footnotesize Tres comparaciones sin corrección por multiplicidad; una $\\Delta$ secundaria cuyo IC "
+              "(fila o grupo) toca o cruza cero no se interpreta como efecto.", "\\end{table}", ""]
+    # 3. F1 por clase, LogReg completo
+    pc = {f: pd.read_csv(RAIZ / SALIDA / "tstr" / f / "logreg" / "por_clase.csv").set_index("clase") for f in FUENTES_DEFECTO
+          if (RAIZ / SALIDA / "tstr" / f / "logreg" / "por_clase.csv").exists()}
+    m0 = corridas.get(("tstr", FUENTES_DEFECTO[0], "logreg"))
+    if len(pc) == len(FUENTES_DEFECTO) and m0:
+        prev = pd.read_csv(RAIZ / SALIDA / "tstr" / FUENTES_DEFECTO[0] / "logreg" / "prevalencias.csv").set_index("clase")
+        fus = m0["clases_fusionadas_a_otros"]
+        base = pc[FUENTES_DEFECTO[0]].sort_values("soporte", ascending=False)
+        dag, tt = "$^{\\dagger}$", lambda c: "\\texttt{" + c.replace("_", "\\_") + "}"  # noqa: E731
+        fc = [f"{tt(c)}{dag if c == CLASE_RESIDUAL else ''} & "
+              f"{int(base.loc[c, 'soporte'])} & " + " & ".join(_n(pc[f].loc[c, 'f1']) if c in pc[f].index else "---"
+                                                            for f in FUENTES_DEFECTO) + " \\\\" for c in base.index]
+        nota = ", ".join(f"{tt(c)} ({int(prev.loc[c, 'n']) if c in prev.index else '?'})"
+                         for c in fus)
+        T += ["\\begin{table}[ht]\\centering\\small",
+              "\\caption{F1 por clase, LogReg (TF-IDF char 3--5) con el train completo, sobre el real de WP4.}",
+              "\\label{tab:por_clase}", "\\begin{tabular}{lccc}", "\\toprule",
+              "Clase & Soporte & " + " & ".join(NOMBRE_FUENTE[f] for f in FUENTES_DEFECTO) + " \\\\", "\\midrule",
+              *fc, "\\bottomrule", "\\end{tabular}",
+              f"\\par\\footnotesize $^{{\\dagger}}$ Incluye las clases con soporte $<10$ fusionadas: {nota}.",
+              "\\end{table}", ""]
+    # 4. sensibilidades
+    fs = []
+    for brazo, nombre in BRAZOS_TABLA:
+        for f in FUENTES_DEFECTO:
+            m = corridas.get(("tstr", f, brazo))
+            if not m or brazo == "llm_groq":
+                continue
+            s_ = m["sensibilidades"]
+            a, c, d = s_["a_unica_por_descripcion"], s_["c_exactitud_ponderada_recorte_p95"], s_["d_subgrupo_reverso"]
+            corto = nombre.split(" (")[0].replace("Baseline: ", "").replace("+ TF-IDF char 3-5", "(TF-IDF char 3--5)")
+            umbral = c.get("aplica") is not False and abs(abs(c["diferencia"]) - UMBRAL_ALERTA_PESOS) < 0.0005
+            c_txt = ("---" if c.get("aplica") is False else
+                     f"{_n(c['valor'])} {_ic_tex(c['ic95_bootstrap'])} & {_n(c['diferencia'], 4)}"
+                     + ("$^{c}$" if umbral else ""))
+            fs.append(f"{corto} & {NOMBRE_FUENTE[f]} & "
+                      + ("---" if a.get("aplica") is False else f"{_n(a['f1_macro_regla_soporte'])} {_ic_tex(a['ic95_bootstrap'])}")
+                      + f" & {c_txt} & {'---' if d.get('aplica') is False else str(d['aciertos']) + '/' + str(d['n'])} \\\\")
+    if fs:
+        a0 = m0["sensibilidades"]["a_unica_por_descripcion"] if m0 else {}
+        extra = ", ".join("\\texttt{" + c.replace("_", "\\_") + "}" for c in a0.get("fusiona_ademas_de_la_principal") or [])
+        nota_a = (f"(a) $n={a0['n']}$" + (f"; la regla de soporte fusiona además {extra}" if extra else "") + ". ") if a0.get("n") else ""
+        T += ["\\begin{table}[ht]\\centering\\small",
+              "\\caption{Sensibilidades pre-registradas (IC95 por fila estratificado, regla de soporte fija).}",
+              "\\label{tab:sensibilidades}", "\\begin{tabular}{llcccc}", "\\toprule",
+              "Brazo & Fuente & (a) F1, una fila por descripción & (c) Exact. pond. P95 & $\\Delta$ vs.\\ sin recorte & (d) Reversos \\\\",
+              "\\midrule", *fs, "\\bottomrule", "\\end{tabular}",
+              "\\par\\footnotesize " + nota_a + "(c) $\\Delta$ = sin recorte $-$ con recorte al P95. "
+              "(b) no aplica: todas las filas tienen doble anotación. (e) $\\kappa$: lo reporta WP4 "
+              "(\\texttt{acuerdo\\_wp4.py}). $^{c}$ En el umbral de $\\pm 0{,}05$ (sin alerta formal); se reporta sin redondear.",
+              "\\end{table}", ""]
+    (RAIZ / TABLAS_TEX).write_text("\n".join(T), encoding="utf-8")
+    return TABLAS_TEX
+
+
+def _trazabilidad() -> str:
+    return f"""## Trazabilidad: qué archivo respalda cada número
+
+| Número | Archivo (agregado, en `outputs/`) | Campo |
+|---|---|---|
+| F1-macro, IC95 fila y grupo, exactitud, exactitud ponderada, n | `{SALIDA.as_posix()}/tstr/<fuente>/<brazo>/metricas.json` | `f1_macro_regla_soporte`, `ic95_bootstrap`, `ic95_conglomerado`, `accuracy`, `exactitud_ponderada` |
+| IC básico, BCa, media/sesgo; IC anterior | ídem | `ic_sensibilidad`, `ic95_regla_recalculada_por_replica` |
+| Sensibilidades (a)–(e) | ídem | `sensibilidades` |
+| Clases fusionadas a `otros` | ídem | `clases_fusionadas_a_otros` |
+| F1/precisión/recall por clase y soporte | `{SALIDA.as_posix()}/tstr/<fuente>/<brazo>/por_clase.csv` | — |
+| Errores entre clases (agregados) | `{SALIDA.as_posix()}/tstr/<fuente>/<brazo>/matriz_confusion.csv` | — |
+| Soporte original de las clases fusionadas; pesos por clase | `{SALIDA.as_posix()}/tstr/<fuente>/<brazo>/prevalencias.csv` | `n`, `pct_ponderado` |
+| Δ de la ablación y sus IC | `{SALIDA.as_posix()}/tstr/ablacion.json` | `delta_f1_macro`, `ic95_fila_estratificado`, `ic95_grupo` |
+| Líneas base | `{SALIDA.as_posix()}/tstr/<fuente>/base_mayoritaria|base_estratificada/metricas.json` | ídem |
+| Cruce P2P/ingreso en el sintético | `{HALLAZGO.as_posix()}` | `fuentes.<fuente>.por_familia` |
+| Exploratorio P2P+ingreso fusionadas | `{EXPLORATORIO.as_posix()}` | `resultados` |
+| Tablas LaTeX | `{TABLAS_TEX.as_posix()}` | — |
+
+`<brazo>` ∈ {{`logreg`, `logreg_n{N_COMPARABLE}`, `beto`}}; `<fuente>` ∈ {{`reglas`, `ctgan`}}."""
 
 
 def _declaraciones_tstr(corridas: dict) -> str:
@@ -765,6 +1185,12 @@ def escribir_resultados_md(clases: list[str]) -> None:
             for b, nombre in BRAZOS_TABLA for f in FUENTES_DEFECTO if ("tstr", f, b) in corridas] \
         or ["| — | pendiente WP4 | | | | |"]
     abl = _ablacion("tstr", corridas, clases) or ["| — | pendiente WP4 | | |"]
+    filas_ic = [_fila_ic(nombre, NOMBRE_FUENTE[f], corridas[("tstr", f, b)])
+                for b, nombre in BRAZOS_TABLA for f in FUENTES_DEFECTO if ("tstr", f, b) in corridas and b != "llm_groq"] \
+        or ["| — | pendiente WP4 | | | | | | |"]
+    filas_base = [_fila_base(nombre, NOMBRE_FUENTE[f], corridas[("tstr", f, b)])
+                  for b, nombre in LINEAS_BASE for f in FUENTES_DEFECTO if ("tstr", f, b) in corridas] \
+        or ["| — | sin correr (`--lineas-base`) | | | | |"]
     decl = _declaraciones_tstr(corridas)
 
     sanity = sorted((k, m) for k, m in corridas.items() if k[0] == "sanity")
@@ -810,6 +1236,27 @@ la muestra, no la de un extracto.
 {CAB_TSTR}
 {chr(10).join(filas)}
 
+### Sensibilidad del intervalo (misma réplica; corrección del 26-nov-2026)
+
+**Corrección posterior a la primera corrida oficial (26-nov-2026).** Qué estaba mal: el bootstrap recalculaba la
+regla de soporte (≥ 10) dentro de cada réplica. Con cinco clases en el umbral en el test (`educacion` y
+`retiro_efectivo` con 10, `ingreso` y `salud` con 11, `entretenimiento` con 9), en ~95 % de las réplicas cambiaba el
+conjunto de clases evaluadas: el IC no correspondía al estimador reportado y quedaba desplazado ~0,05 hacia abajo
+(punto pegado al límite superior). Qué se cambió: la regla se fija una vez sobre el test observado y todas las
+réplicas evalúan las mismas clases (IC principal, por grupo, sensibilidades y Δ de la ablación). Las cifras
+**puntuales no cambiaron** (la corrida repetida las reproduce exactamente); solo cambian los IC. El IC anterior se
+conserva en la última columna para trazabilidad. Como sensibilidad
+se reportan el IC básico y el BCa (z0 por proporción de réplicas bajo el punto; aceleración por jackknife de filas,
+aproximación con remuestreo estratificado).
+
+{CAB_IC}
+{chr(10).join(filas_ic)}
+
+### Líneas base (contexto, mismo test y misma regla de soporte; no entran a la ablación)
+
+{CAB_BASE}
+{chr(10).join(filas_base)}
+
 ### Sensibilidades pre-registradas (§4)
 
 Cada F1 recalcula la regla de soporte en su subconjunto («fusiona además» = clases que se pierden frente a la
@@ -835,6 +1282,8 @@ igualdad de datos. El brazo LLM no entrena: el sintético solo entra por los eje
 |---|---|---|---|
 {chr(10).join(abl)}
 
+{_jerarquia_ablacion()}
+
 **Entrada (idéntica en los tres brazos).** `{FORMATO_ENTRADA}`; `monto` en bins log10 de media década, en
 pesos de promedio 2025 (el sintético ya lo está; el real de WP4 se deflacta con el IPC total nacional del mes si trae
 `fecha`). Son observables del extracto, no anotaciones. Indicio del sanity (no reportable): frente a solo
@@ -855,6 +1304,12 @@ del protocolo completo, no de la Etapa 3 sola. La diferencia reglas → CTGAN, c
 aísla la capa estructural: es el número que atribuye una mejora (o un deterioro) al generador CTGAN y no al
 texto. Las filas que el CTGAN emite con combinaciones que el generador por reglas nunca produce ({frac_inc},
 `outputs/texto/manifest.json`) no se reparan: su error es de la Etapa 3 y el TSTR lo cobra.
+
+{_seccion_post_hoc()}
+
+---
+
+{_trazabilidad()}
 
 ---
 
@@ -877,6 +1332,7 @@ por reglas (diagnóstico de la capa de texto factorizada).
 {chr(10).join(filas_s)}
 """
     (RAIZ / RESULTADOS_MD).write_text(md, encoding="utf-8")
+    escribir_tablas_latex(corridas, clases)
 
 
 if __name__ == "__main__":

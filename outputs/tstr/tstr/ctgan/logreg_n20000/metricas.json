@@ -6,13 +6,13 @@
   "advertencia": null,
   "f1_macro_regla_soporte": 0.5111664657392583,
   "ic95_bootstrap": [
-    0.3911178184945206,
-    0.5633575578887056
+    0.44607794394255984,
+    0.5675661034897407
   ],
   "ic_principal": "fila_estratificado",
   "ic95_conglomerado": [
-    0.312615368530142,
-    0.6068731412799556
+    0.36644093624110513,
+    0.5781764188573442
   ],
   "n_grupos": 6,
   "f1_macro_sin_regla": 0.3768427824974274,
@@ -25,6 +25,30 @@
     "telecom_conectividad",
     "vestuario_cuidado_personal",
     "vivienda_servicios"
+  ],
+  "regla_soporte_en_bootstrap": "fija en la muestra observada",
+  "ic_sensibilidad": {
+    "percentil": [
+      0.44607794394255984,
+      0.5675661034897407
+    ],
+    "basico": [
+      0.4547668279887759,
+      0.5762549875359567
+    ],
+    "media_bootstrap": 0.5080717182003741,
+    "sesgo_bootstrap": -0.0030947475388841683,
+    "prop_replicas_bajo_el_punto": 0.538,
+    "bca": [
+      0.4536764850660679,
+      0.5751077248560817
+    ],
+    "bca_z0": 0.09539636905689201,
+    "bca_aceleracion": 0.009682049146026708
+  },
+  "ic95_regla_recalculada_por_replica": [
+    0.3911178184945206,
+    0.5633575578887056
   ],
   "exactitud_ponderada": {
     "valor": 0.2896087360816527,
@@ -55,8 +79,8 @@
       "n": 153,
       "f1_macro_regla_soporte": 0.49784083652618133,
       "ic95_bootstrap": [
-        0.40845894973759406,
-        0.5873280358526447
+        0.41672437757812986,
+        0.5712217250253157
       ],
       "clases_evaluadas": 8,
       "clases_fusionadas_a_otros": [
@@ -114,7 +138,7 @@
     "estratos": 17,
     "alcance": "incertidumbre de muestreo dentro de estos extractos, no generalización a nuevos titulares (D-M7)"
   },
-  "segundos_entrenamiento_y_prediccion": 4.1,
+  "segundos_entrenamiento_y_prediccion": 2.4,
   "n_train": 20000,
   "n_train_disponible": 122211,
   "n_test_completo": 200,
@@ -180,5 +204,5 @@
     "numpy": "2.4.6"
   },
   "plataforma": "Windows-10-10.0.26300-SP0",
-  "fecha_utc": "2026-11-26T15:42:35+00:00"
+  "fecha_utc": "2026-11-26T16:10:14+00:00"
 }

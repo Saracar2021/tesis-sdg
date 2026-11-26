@@ -1,0 +1,96 @@
+{
+  "fuente_codigo": {
+    "ingreso_p2p": "src/sdg/generador.py:607-632 (no asalariados: con prob. ingreso.p_p2p_otros = 0,6 el depósito usa plantilla p2p_recibida_* y queda categoria_n1 = ingreso; consignación a billetera -> p2p_recibida_billetera)",
+    "p2p_sin_proposito": "src/sdg/generador.py:634-655 (P2P recibida/enviada sin propósito -> transferencias_p2p)",
+    "recargas": "src/sdg/generador.py:691-707 (recarga banco->billetera -> movimiento_propio; plantillas 'RECARGA {W}', 'TRANSFERENCIA A {W}', 'RECARGA DESDE {B}')",
+    "capa_texto_ctgan": "src/sdg/texto.py:95 (ingreso_no_asalariado + canal_p2p -> p2p_recibida_*; ingreso + billetera -> p2p_recibida_billetera)"
+  },
+  "fuentes": {
+    "reglas": {
+      "por_familia": {
+        "P2P enviada": {
+          "ingreso": 0,
+          "transferencias_p2p": 4577,
+          "movimiento_propio": 0,
+          "otras_proposito_declarado": 6472,
+          "total": 11049
+        },
+        "P2P recibida": {
+          "ingreso": 2157,
+          "transferencias_p2p": 3076,
+          "movimiento_propio": 0,
+          "otras_proposito_declarado": 0,
+          "total": 5233
+        },
+        "recarga: entra a la billetera": {
+          "ingreso": 0,
+          "transferencias_p2p": 0,
+          "movimiento_propio": 6143,
+          "otras_proposito_declarado": 0,
+          "total": 6143
+        },
+        "recarga: sale del banco": {
+          "ingreso": 0,
+          "transferencias_p2p": 0,
+          "movimiento_propio": 6143,
+          "otras_proposito_declarado": 0,
+          "total": 6143
+        }
+      },
+      "p2p_recibida_etiquetada_ingreso": 0.41219185935409897,
+      "salidas_banco_con_billetera_en_texto": {
+        "movimiento_propio": 6143
+      },
+      "token_LLAVE_aislado": 0,
+      "token_LLAVE_dentro_de_TULLAVE": 8097
+    },
+    "ctgan": {
+      "por_familia": {
+        "P2P enviada": {
+          "ingreso": 2,
+          "transferencias_p2p": 4171,
+          "movimiento_propio": 49,
+          "otras_proposito_declarado": 12069,
+          "total": 16291
+        },
+        "P2P recibida": {
+          "ingreso": 2461,
+          "transferencias_p2p": 3264,
+          "movimiento_propio": 100,
+          "otras_proposito_declarado": 15,
+          "total": 5840
+        },
+        "recarga: entra a la billetera": {
+          "ingreso": 17,
+          "transferencias_p2p": 8,
+          "movimiento_propio": 7702,
+          "otras_proposito_declarado": 15,
+          "total": 7742
+        },
+        "recarga: sale del banco": {
+          "ingreso": 0,
+          "transferencias_p2p": 39,
+          "movimiento_propio": 3676,
+          "otras_proposito_declarado": 251,
+          "total": 3966
+        }
+      },
+      "p2p_recibida_etiquetada_ingreso": 0.4214041095890411,
+      "salidas_banco_con_billetera_en_texto": {
+        "movimiento_propio": 3666,
+        "retiro_efectivo": 89,
+        "telecom_conectividad": 52,
+        "transporte": 40,
+        "transferencias_p2p": 39,
+        "alimentos_mercado": 38,
+        "comidas_fuera": 24,
+        "vivienda_servicios": 3,
+        "obligaciones_financieras": 2,
+        "vestuario_cuidado_personal": 2,
+        "entretenimiento": 1
+      },
+      "token_LLAVE_aislado": 0,
+      "token_LLAVE_dentro_de_TULLAVE": 7728
+    }
+  }
+}

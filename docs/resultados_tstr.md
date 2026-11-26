@@ -1,7 +1,7 @@
 # Resultados TSTR — WP8
 
 > **PROVISIONAL.** Archivo regenerado por `tools/etapa4_tstr.py`; no editar a mano.
-> Última regeneración: 2026-11-26T15:46:51+00:00.
+> Última regeneración: 2026-11-26T16:46:21+00:00.
 > Taxonomía 1.1.0, target `categoria_n1`, semilla 42.
 
 **Taxonomía.** La v1.1.0 no cambió las 16 categorías ni las reglas R1–R7, solo documentación y metadatos
@@ -30,14 +30,45 @@ la muestra, no la de un extracto.
 
 | Brazo | Fuente train | F1-macro (soporte ≥10) | IC95 principal (fila estrat.) | IC95 por grupo (sensibilidad) | Exactitud | Exactitud ponderada [IC95] | n train | n test | fusionadas a otros |
 |---|---|---|---|---|---|---|---|---|---|
-| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (reglas) | 0.566 | [0.440, 0.611] | [0.392, 0.598] | 0.440 | 0.324 [0.222, 0.438] | 122,211 | 200 | 5 clases (lista en metricas.json) |
-| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (CTGAN) | 0.567 | [0.452, 0.612] | [0.386, 0.642] | 0.420 | 0.307 [0.210, 0.421] | 122,211 | 200 | 5 clases (lista en metricas.json) |
-| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (reglas) | 0.458 | [0.345, 0.503] | [0.297, 0.593] | 0.350 | 0.230 [0.146, 0.350] | 20,000 | 200 | 5 clases (lista en metricas.json) |
-| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (CTGAN) | 0.511 | [0.391, 0.563] | [0.313, 0.607] | 0.370 | 0.290 [0.194, 0.406] | 20,000 | 200 | 5 clases (lista en metricas.json) |
-| BETO fine-tuning | protocolo (reglas) | 0.453 | [0.351, 0.520] | [0.342, 0.520] | 0.385 | 0.225 [0.164, 0.304] | 20,000 | 200 | 5 clases (lista en metricas.json) |
-| BETO fine-tuning | protocolo (CTGAN) | 0.474 | [0.354, 0.522] | [0.341, 0.507] | 0.355 | 0.201 [0.143, 0.275] | 20,000 | 200 | 5 clases (lista en metricas.json) |
+| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (reglas) | 0.566 | [0.507, 0.619] | [0.471, 0.601] | 0.440 | 0.324 [0.222, 0.438] | 122,211 | 200 | 5 clases (lista en metricas.json) |
+| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (CTGAN) | 0.567 | [0.507, 0.619] | [0.447, 0.602] | 0.420 | 0.307 [0.210, 0.421] | 122,211 | 200 | 5 clases (lista en metricas.json) |
+| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (reglas) | 0.458 | [0.397, 0.508] | [0.354, 0.544] | 0.350 | 0.230 [0.146, 0.350] | 20,000 | 200 | 5 clases (lista en metricas.json) |
+| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (CTGAN) | 0.511 | [0.446, 0.568] | [0.366, 0.578] | 0.370 | 0.290 [0.194, 0.406] | 20,000 | 200 | 5 clases (lista en metricas.json) |
+| BETO fine-tuning | protocolo (reglas) | 0.453 | [0.385, 0.520] | [0.335, 0.491] | 0.385 | 0.225 [0.164, 0.304] | 20,000 | 200 | 5 clases (lista en metricas.json) |
+| BETO fine-tuning | protocolo (CTGAN) | 0.474 | [0.410, 0.528] | [0.357, 0.514] | 0.355 | 0.201 [0.143, 0.275] | 20,000 | 200 | 5 clases (lista en metricas.json) |
 | LLM vía Groq, prompting few-shot (modelo y desviación en Costo) | protocolo (reglas) | no evaluado: brazo LLM no evaluado sobre el real por restricción de tratamiento de datos; humo sobre sintético en `outputs/tstr/sanity/reglas/llm_groq/` | | | | | | | |
 | LLM vía Groq, prompting few-shot (modelo y desviación en Costo) | protocolo (CTGAN) | no evaluado: brazo LLM no evaluado sobre el real por restricción de tratamiento de datos; humo sobre sintético en `outputs/tstr/sanity/ctgan/llm_groq/` | | | | | | | |
+
+### Sensibilidad del intervalo (misma réplica; corrección del 26-nov-2026)
+
+**Corrección posterior a la primera corrida oficial (26-nov-2026).** Qué estaba mal: el bootstrap recalculaba la
+regla de soporte (≥ 10) dentro de cada réplica. Con cinco clases en el umbral en el test (`educacion` y
+`retiro_efectivo` con 10, `ingreso` y `salud` con 11, `entretenimiento` con 9), en ~95 % de las réplicas cambiaba el
+conjunto de clases evaluadas: el IC no correspondía al estimador reportado y quedaba desplazado ~0,05 hacia abajo
+(punto pegado al límite superior). Qué se cambió: la regla se fija una vez sobre el test observado y todas las
+réplicas evalúan las mismas clases (IC principal, por grupo, sensibilidades y Δ de la ablación). Las cifras
+**puntuales no cambiaron** (la corrida repetida las reproduce exactamente); solo cambian los IC. El IC anterior se
+conserva en la última columna para trazabilidad. Como sensibilidad
+se reportan el IC básico y el BCa (z0 por proporción de réplicas bajo el punto; aceleración por jackknife de filas,
+aproximación con remuestreo estratificado).
+
+| Brazo | Fuente train | F1-macro | IC95 percentil (principal) | IC95 básico | IC95 BCa | media bootstrap (sesgo) | IC95 con la regla recalculada por réplica (1.ª corrida) |
+|---|---|---|---|---|---|---|---|
+| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (reglas) | 0.566 | [0.507, 0.619] | [0.513, 0.626] | [0.511, 0.623] | 0.565 (-0.002) | [0.440, 0.611] |
+| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (CTGAN) | 0.567 | [0.507, 0.619] | [0.516, 0.628] | [0.516, 0.633] | 0.563 (-0.004) | [0.452, 0.612] |
+| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (reglas) | 0.458 | [0.397, 0.508] | [0.408, 0.519] | [0.404, 0.517] | 0.455 (-0.003) | [0.345, 0.503] |
+| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (CTGAN) | 0.511 | [0.446, 0.568] | [0.455, 0.576] | [0.454, 0.575] | 0.508 (-0.003) | [0.391, 0.563] |
+| BETO fine-tuning | protocolo (reglas) | 0.453 | [0.385, 0.520] | [0.387, 0.521] | [0.398, 0.529] | 0.450 (-0.003) | [0.351, 0.520] |
+| BETO fine-tuning | protocolo (CTGAN) | 0.474 | [0.410, 0.528] | [0.421, 0.539] | [0.422, 0.533] | 0.469 (-0.005) | [0.354, 0.522] |
+
+### Líneas base (contexto, mismo test y misma regla de soporte; no entran a la ablación)
+
+| Línea base | Fuente train | F1-macro (soporte ≥10) | IC95 principal | Exactitud | Exactitud ponderada |
+|---|---|---|---|---|---|
+| Clase mayoritaria del sintético | protocolo (reglas) | 0.013 | [0.009, 0.017] | 0.075 | 0.105 |
+| Clase mayoritaria del sintético | protocolo (CTGAN) | 0.013 | [0.009, 0.017] | 0.075 | 0.105 |
+| Aleatorio estratificado (distribución del sintético, semilla 42) | protocolo (reglas) | 0.060 | [0.038, 0.085] | 0.055 | 0.057 |
+| Aleatorio estratificado (distribución del sintético, semilla 42) | protocolo (CTGAN) | 0.059 | [0.037, 0.083] | 0.055 | 0.057 |
 
 ### Sensibilidades pre-registradas (§4)
 
@@ -46,14 +77,14 @@ principal). (c) recorta los pesos al percentil 95 y renormaliza; ⚠ si cambia l
 puntos. (d) los reversos y devoluciones de tarjeta están dentro de la métrica principal y se muestran aparte.
 (e) el κ sin los casos de convención lo calcula `tools/acuerdo_wp4.py`, no WP8.
 
-| Brazo | Fuente train | (a) F1 una fila por descripción [IC95] | (b) F1 solo doble anotación [IC95] | (c) Exactitud ponderada P95 (Δ vs. sin recorte) | (d) Reversos: aciertos/n |
+| Brazo | Fuente train | (a) F1 una fila por descripción [IC95] | (b) F1 solo doble anotación [IC95] | (c) Exactitud ponderada P95 (Δ = sin recorte − P95) | (d) Reversos: aciertos/n |
 |---|---|---|---|---|---|
-| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (reglas) | 0.531 [0.452, 0.622] (n=153); fusiona además: educacion, ingreso, retiro_efectivo | no aplica | 0.348 (Δ -0.024) | 1/6 |
-| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (CTGAN) | 0.556 [0.464, 0.655] (n=153); fusiona además: educacion, ingreso, retiro_efectivo | no aplica | 0.327 (Δ -0.020) | 1/6 |
-| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (reglas) | 0.404 [0.335, 0.492] (n=153); fusiona además: educacion, ingreso, retiro_efectivo | no aplica | 0.233 (Δ -0.003) | 0/6 |
-| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (CTGAN) | 0.498 [0.408, 0.587] (n=153); fusiona además: educacion, ingreso, retiro_efectivo | no aplica | 0.306 (Δ -0.016) | 0/6 |
-| BETO fine-tuning | protocolo (reglas) | 0.447 [0.362, 0.525] (n=153); fusiona además: educacion, ingreso, retiro_efectivo | no aplica | 0.275 (Δ -0.050) | 0/6 |
-| BETO fine-tuning | protocolo (CTGAN) | 0.433 [0.350, 0.518] (n=153); fusiona además: educacion, ingreso, retiro_efectivo | no aplica | 0.245 (Δ -0.044) | 0/6 |
+| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (reglas) | 0.531 [0.460, 0.593] (n=153); fusiona además: educacion, ingreso, retiro_efectivo | no aplica | 0.348 (Δ -0.024) | 1/6 |
+| Baseline: LogReg + TF-IDF char 3-5 (train completo) | protocolo (CTGAN) | 0.556 [0.481, 0.626] (n=153); fusiona además: educacion, ingreso, retiro_efectivo | no aplica | 0.327 (Δ -0.020) | 1/6 |
+| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (reglas) | 0.404 [0.328, 0.467] (n=153); fusiona además: educacion, ingreso, retiro_efectivo | no aplica | 0.233 (Δ -0.003) | 0/6 |
+| Baseline: LogReg @20k (mismas filas que BETO) | protocolo (CTGAN) | 0.498 [0.417, 0.571] (n=153); fusiona además: educacion, ingreso, retiro_efectivo | no aplica | 0.306 (Δ -0.016) | 0/6 |
+| BETO fine-tuning | protocolo (reglas) | 0.447 [0.366, 0.525] (n=153); fusiona además: educacion, ingreso, retiro_efectivo | no aplica | 0.275 (Δ -0.0498: **en el umbral** de ±0.05; sin alerta formal) | 0/6 |
+| BETO fine-tuning | protocolo (CTGAN) | 0.433 [0.357, 0.502] (n=153); fusiona además: educacion, ingreso, retiro_efectivo | no aplica | 0.245 (Δ -0.044) | 0/6 |
 
 **Declaraciones (D-M6, D-M7, pre-registro §3–§4).**
 - **Alcance del IC:** incertidumbre de muestreo **dentro de estos extractos**; no es generalización a nuevos titulares.
@@ -78,9 +109,15 @@ igualdad de datos. El brazo LLM no entrena: el sintético solo entra por los eje
 
 | Brazo | Δ F1-macro | IC95 principal (fila estrat.) | IC95 por grupo (sensibilidad) |
 |---|---|---|---|
-| Baseline: LogReg + TF-IDF char 3-5 (train completo) | +0.001 | [-0.055, +0.059] | [-0.051, +0.076] |
-| Baseline: LogReg @20k (mismas filas que BETO) | +0.053 | [+0.001, +0.105] | [-0.025, +0.095] |
-| BETO fine-tuning | +0.021 | [-0.065, +0.059] | [-0.052, +0.049] |
+| Baseline: LogReg + TF-IDF char 3-5 (train completo) | +0.001 | [-0.055, +0.053] | [-0.061, +0.034] |
+| Baseline: LogReg @20k (mismas filas que BETO) | +0.053 | [+0.012, +0.096] | [-0.010, +0.081] |
+| BETO fine-tuning | +0.021 | [-0.030, +0.073] | [-0.017, +0.062] |
+
+**Jerarquía.** La comparación principal es LogReg con el train completo; LogReg @20k y BETO @20k son secundarias. Son tres comparaciones sin corrección por comparaciones múltiples: una Δ secundaria no se interpreta como efecto si su IC95 (por fila o por grupo) toca o cruza cero.
+
+- Baseline: LogReg + TF-IDF char 3-5 (train completo) (principal): Δ +0.001; el IC contiene cero: **sin diferencia detectable** entre fuentes.
+- Baseline: LogReg @20k (mismas filas que BETO) (secundaria): Δ +0.053; algún IC toca o cruza cero → **no se interpreta como efecto**.
+- BETO fine-tuning (secundaria): Δ +0.021; algún IC toca o cruza cero → **no se interpreta como efecto**.
 
 **Entrada (idéntica en los tres brazos).** `[CUENTA=<cuenta_tipo>] [SIGNO=<signo>] [MONTO=<bin_log>] <descripcion>`; `monto` en bins log10 de media década, en
 pesos de promedio 2025 (el sintético ya lo está; el real de WP4 se deflacta con el IPC total nacional del mes si trae
@@ -103,6 +140,73 @@ aísla la capa estructural: es el número que atribuye una mejora (o un deterior
 texto. Las filas que el CTGAN emite con combinaciones que el generador por reglas nunca produce (1.8%,
 `outputs/texto/manifest.json`) no se reparan: su error es de la Etapa 3 y el TSTR lo cobra.
 
+## Hallazgo del protocolo: cruce de convenciones P2P / ingreso (cuantificado solo en el sintético)
+
+La regla R2 manda a `transferencias_p2p` toda transferencia con persona sin propósito declarado, y en el test real de
+WP4 ninguna etiqueta proviene de declaración del voluntario (`frac_test_etiqueta_por_declaracion` = 0 en
+`metricas.json`): todo P2P real queda en `transferencias_p2p`. El generador, en cambio, etiqueta como `ingreso` una parte de las
+transferencias **recibidas** de persona: el ingreso de los no asalariados llega con plantilla de P2P recibida con
+probabilidad 0,6 (`src/sdg/generador.py:607-632 (no asalariados: con prob. ingreso.p_p2p_otros = 0,6 el depósito usa plantilla p2p_recibida_* y queda categoria_n1 = ingreso; consignación a billetera -> p2p_recibida_billetera)`; capa de texto del CTGAN: `src/sdg/texto.py:95 (ingreso_no_asalariado + canal_p2p -> p2p_recibida_*; ingreso + billetera -> p2p_recibida_billetera)`).
+La taxonomía v1.1 lo anticipa: «Este cruce P2P/ingreso es un hallazgo esperable y debe cuantificarse en la tesis»
+(caso límite de `ingreso`). No se cambió el generador, ni las etiquetas del test, ni los modelos.
+
+| Fuente | Familia de texto | ingreso | transferencias_p2p | movimiento_propio | otras (propósito declarado) | total |
+|---|---|---|---|---|---|---|
+| protocolo (reglas) | P2P enviada | 0 | 4,577 | 0 | 6,472 | 11,049 |
+| protocolo (reglas) | P2P recibida | 2,157 | 3,076 | 0 | 0 | 5,233 |
+| protocolo (reglas) | recarga: entra a la billetera | 0 | 0 | 6,143 | 0 | 6,143 |
+| protocolo (reglas) | recarga: sale del banco | 0 | 0 | 6,143 | 0 | 6,143 |
+| protocolo (CTGAN) | P2P enviada | 2 | 4,171 | 49 | 12,069 | 16,291 |
+| protocolo (CTGAN) | P2P recibida | 2,461 | 3,264 | 100 | 15 | 5,840 |
+| protocolo (CTGAN) | recarga: entra a la billetera | 17 | 8 | 7,702 | 15 | 7,742 |
+| protocolo (CTGAN) | recarga: sale del banco | 0 | 39 | 3,676 | 251 | 3,966 |
+
+Segundo canal del mismo choque: las P2P **enviadas** con propósito declarado se etiquetan con la categoría del
+propósito (R2 con `canal_p2p` = true; columna «otras»), así que en el entrenamiento el texto «… A PERSONA» aparece
+también bajo categorías de bienes, mientras en el test ese texto es siempre `transferencias_p2p`.
+
+P2P recibida etiquetada `ingreso`: protocolo (reglas) 41.2%, protocolo (CTGAN) 42.1%.
+**Errores hacia `movimiento_propio`:** en el sintético, las salidas desde banco que nombran NEQUI/DAVIPLATA son casi
+siempre recargas propias (protocolo (reglas): 6,143 de 6,143 son `movimiento_propio` (100.0%); protocolo (CTGAN): 3,666 de 3,956 son `movimiento_propio` (92.7%)), porque la única plantilla que
+produce ese texto es la de recarga (`TRANSFERENCIA A {W}`, `RECARGA {W}`); los envíos P2P desde banco usan
+«TRANSFERENCIA A PERSONA». Un envío real desde un banco a la billetera de un tercero se parece así a una recarga.
+Menor: el anonimizador de WP4 deja el token `LLAVE` (pagos Bre-B) y en el sintético «LLAVE» solo aparece dentro de
+«TULLAVE» (transporte) (protocolo (reglas): 8,097 filas, protocolo (CTGAN): 7,728 filas).
+Fuente: `outputs/tstr/hallazgo_cruce_p2p_ingreso.json`.
+
+---
+
+## Exploratorio (post hoc, no pre-registrado)
+
+POST HOC, NO PRE-REGISTRADO: solo dimensiona el choque de convenciones P2P/ingreso; no reemplaza la métrica principal ni entra a la tabla principal. `transferencias_p2p` e `ingreso` se fusionan en una sola clase en la etiqueta real y en la predicha; la
+regla de soporte se fija sobre el test con la clase fusionada. Fuente: `outputs/tstr/tstr/exploratorio_p2p_ingreso.json`.
+
+| Brazo | Fuente train | F1-macro principal | F1-macro con P2P+ingreso fusionadas | IC95 fila estrat. | IC95 por grupo | clases evaluadas |
+|---|---|---|---|---|---|---|
+| LogReg completo | protocolo (reglas) | 0.566 | 0.617 | [0.559, 0.670] | [0.556, 0.650] | 10 |
+| LogReg completo | protocolo (CTGAN) | 0.567 | 0.596 | [0.537, 0.650] | [0.497, 0.639] | 10 |
+
+---
+
+## Trazabilidad: qué archivo respalda cada número
+
+| Número | Archivo (agregado, en `outputs/`) | Campo |
+|---|---|---|
+| F1-macro, IC95 fila y grupo, exactitud, exactitud ponderada, n | `outputs/tstr/tstr/<fuente>/<brazo>/metricas.json` | `f1_macro_regla_soporte`, `ic95_bootstrap`, `ic95_conglomerado`, `accuracy`, `exactitud_ponderada` |
+| IC básico, BCa, media/sesgo; IC anterior | ídem | `ic_sensibilidad`, `ic95_regla_recalculada_por_replica` |
+| Sensibilidades (a)–(e) | ídem | `sensibilidades` |
+| Clases fusionadas a `otros` | ídem | `clases_fusionadas_a_otros` |
+| F1/precisión/recall por clase y soporte | `outputs/tstr/tstr/<fuente>/<brazo>/por_clase.csv` | — |
+| Errores entre clases (agregados) | `outputs/tstr/tstr/<fuente>/<brazo>/matriz_confusion.csv` | — |
+| Soporte original de las clases fusionadas; pesos por clase | `outputs/tstr/tstr/<fuente>/<brazo>/prevalencias.csv` | `n`, `pct_ponderado` |
+| Δ de la ablación y sus IC | `outputs/tstr/tstr/ablacion.json` | `delta_f1_macro`, `ic95_fila_estratificado`, `ic95_grupo` |
+| Líneas base | `outputs/tstr/tstr/<fuente>/base_mayoritaria|base_estratificada/metricas.json` | ídem |
+| Cruce P2P/ingreso en el sintético | `outputs/tstr/hallazgo_cruce_p2p_ingreso.json` | `fuentes.<fuente>.por_familia` |
+| Exploratorio P2P+ingreso fusionadas | `outputs/tstr/tstr/exploratorio_p2p_ingreso.json` | `resultados` |
+| Tablas LaTeX | `outputs/tstr/tablas_informe.tex` | — |
+
+`<brazo>` ∈ {`logreg`, `logreg_n20000`, `beto`}; `<fuente>` ∈ {`reglas`, `ctgan`}.
+
 ---
 
 ## Costo de cómputo (declarado)
@@ -117,12 +221,16 @@ texto. Las filas que el CTGAN emite con combinaciones que el generador por regla
 | sanity | reglas | llm_groq | 18 | 0 | openai/gpt-oss-120b: 38 entradas únicas (0 llamadas nuevas, 38 del registro), 62,384 tokens; DESVIACIÓN: llama-3.3-70b-versatile no disponible para esta cuenta (retirado por Groq 16-ago-2026); sustituido por openai/gpt-oss-120b |
 | sanity | reglas | logreg | 97,768 | 34 |  |
 | sanity | reglas | logreg_n20000 | 20,000 | 11 |  |
-| tstr | ctgan | beto | 20,000 | 10 | BETO CPU 4 hilos: 20,000 filas x 3 épocas = 3,750 pasos, 1.27 s/paso, 1.33 h de entrenamiento (entrenado aparte con --solo-entrenar) |
-| tstr | ctgan | logreg | 122,211 | 28 |  |
-| tstr | ctgan | logreg_n20000 | 20,000 | 4 |  |
-| tstr | reglas | beto | 20,000 | 20 | BETO CPU 4 hilos: 20,000 filas x 3 épocas = 3,750 pasos, 1.47 s/paso, 1.53 h de entrenamiento (entrenado aparte con --solo-entrenar) |
-| tstr | reglas | logreg | 122,211 | 32 |  |
-| tstr | reglas | logreg_n20000 | 20,000 | 4 |  |
+| tstr | ctgan | base_estratificada | 122,211 | 0 |  |
+| tstr | ctgan | base_mayoritaria | 122,211 | 0 |  |
+| tstr | ctgan | beto | 20,000 | 5 | BETO CPU 4 hilos: 20,000 filas x 3 épocas = 3,750 pasos, 1.27 s/paso, 1.33 h de entrenamiento (entrenado aparte con --solo-entrenar) |
+| tstr | ctgan | logreg | 122,211 | 17 |  |
+| tstr | ctgan | logreg_n20000 | 20,000 | 2 |  |
+| tstr | reglas | base_estratificada | 122,211 | 0 |  |
+| tstr | reglas | base_mayoritaria | 122,211 | 0 |  |
+| tstr | reglas | beto | 20,000 | 8 | BETO CPU 4 hilos: 20,000 filas x 3 épocas = 3,750 pasos, 1.47 s/paso, 1.53 h de entrenamiento (entrenado aparte con --solo-entrenar) |
+| tstr | reglas | logreg | 122,211 | 17 |  |
+| tstr | reglas | logreg_n20000 | 20,000 | 2 |  |
 
 ---
 

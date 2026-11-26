@@ -1,0 +1,12 @@
+clase,precision,recall,f1,soporte
+alimentos_mercado,0.075,1.0,0.13953488372093023,15
+comidas_fuera,0.0,0.0,0.0,25
+transporte,0.0,0.0,0.0,13
+salud,0.0,0.0,0.0,11
+educacion,0.0,0.0,0.0,10
+hogar_articulos,0.0,0.0,0.0,16
+obligaciones_financieras,0.0,0.0,0.0,17
+transferencias_p2p,0.0,0.0,0.0,28
+retiro_efectivo,0.0,0.0,0.0,10
+ingreso,0.0,0.0,0.0,11
+otros,0.0,0.0,0.0,44

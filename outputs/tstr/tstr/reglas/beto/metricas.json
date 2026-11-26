@@ -6,13 +6,13 @@
   "advertencia": null,
   "f1_macro_regla_soporte": 0.4532518485742734,
   "ic95_bootstrap": [
-    0.3508897922846581,
-    0.5196938790003821
+    0.38543955112936407,
+    0.5197572239680093
   ],
   "ic_principal": "fila_estratificado",
   "ic95_conglomerado": [
-    0.34245355129132365,
-    0.5195103682498641
+    0.3346060474442655,
+    0.4912326046046976
   ],
   "n_grupos": 6,
   "f1_macro_sin_regla": 0.38106413601101863,
@@ -25,6 +25,30 @@
     "telecom_conectividad",
     "vestuario_cuidado_personal",
     "vivienda_servicios"
+  ],
+  "regla_soporte_en_bootstrap": "fija en la muestra observada",
+  "ic_sensibilidad": {
+    "percentil": [
+      0.38543955112936407,
+      0.5197572239680093
+    ],
+    "basico": [
+      0.38674647318053756,
+      0.5210641460191827
+    ],
+    "media_bootstrap": 0.4499110103750871,
+    "sesgo_bootstrap": -0.0033408381991863467,
+    "prop_replicas_bajo_el_punto": 0.561,
+    "bca": [
+      0.3980752284376863,
+      0.5294932384838966
+    ],
+    "bca_z0": 0.15350506037805722,
+    "bca_aceleracion": 0.010424244368017357
+  },
+  "ic95_regla_recalculada_por_replica": [
+    0.3508897922846581,
+    0.5196938790003821
   ],
   "exactitud_ponderada": {
     "valor": 0.22538687279880854,
@@ -55,8 +79,8 @@
       "n": 153,
       "f1_macro_regla_soporte": 0.44736988727779137,
       "ic95_bootstrap": [
-        0.36229415392800496,
-        0.5250472624746837
+        0.36624674490601766,
+        0.5250374383795752
       ],
       "clases_evaluadas": 8,
       "clases_fusionadas_a_otros": [
@@ -116,7 +140,7 @@
     "estratos": 17,
     "alcance": "incertidumbre de muestreo dentro de estos extractos, no generalización a nuevos titulares (D-M7)"
   },
-  "segundos_entrenamiento_y_prediccion": 19.8,
+  "segundos_entrenamiento_y_prediccion": 7.6,
   "n_train": 20000,
   "n_train_disponible": 122211,
   "n_test_completo": 200,
@@ -139,7 +163,7 @@
       "torch": "2.15.0+cpu",
       "transformers": "5.24.0"
     },
-    "segundos_prediccion": 9.6,
+    "segundos_prediccion": 4.3,
     "torch": "2.15.0+cpu",
     "transformers": "5.24.0",
     "costo": "BETO CPU 4 hilos: 20,000 filas x 3 épocas = 3,750 pasos, 1.47 s/paso, 1.53 h de entrenamiento (entrenado aparte con --solo-entrenar)"
@@ -200,5 +224,5 @@
     "numpy": "2.4.6"
   },
   "plataforma": "Windows-10-10.0.26300-SP0",
-  "fecha_utc": "2026-11-26T15:44:42+00:00"
+  "fecha_utc": "2026-11-26T16:10:53+00:00"
 }
