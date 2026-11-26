@@ -1,0 +1,184 @@
+{
+  "modo": "tstr",
+  "reportable": true,
+  "fuente": "reglas",
+  "brazo": "logreg_tfidf_char_wb_3_5_n20000",
+  "advertencia": null,
+  "f1_macro_regla_soporte": 0.4579462688358255,
+  "ic95_bootstrap": [
+    0.34479497293037664,
+    0.5026359639861506
+  ],
+  "ic_principal": "fila_estratificado",
+  "ic95_conglomerado": [
+    0.2974902231799515,
+    0.5931546887760952
+  ],
+  "n_grupos": 6,
+  "f1_macro_sin_regla": 0.37238751629040395,
+  "accuracy": 0.35,
+  "n_test": 200,
+  "clases_evaluadas": 11,
+  "clases_fusionadas_a_otros": [
+    "entretenimiento",
+    "movimiento_propio",
+    "telecom_conectividad",
+    "vestuario_cuidado_personal",
+    "vivienda_servicios"
+  ],
+  "exactitud_ponderada": {
+    "valor": 0.22988492813536007,
+    "ic95_bootstrap": [
+      0.14577747579639855,
+      0.3502533641460277
+    ],
+    "n_efectivo_kish": 48.45533403289755,
+    "suma_pesos": 2238.3064824064822,
+    "recorte_p95": {
+      "p95": 40.97162004662003,
+      "valor": 0.23302737908155277,
+      "ic95_bootstrap": [
+        0.1709881867299347,
+        0.30311427474721014
+      ],
+      "diferencia": -0.0031424509461926986,
+      "alerta_depende_de_pocos_descriptores": false
+    }
+  },
+  "solo_etiqueta_por_texto": {
+    "aplica": false,
+    "nota": "todas las filas son etiqueta-por-texto (R2: ningún propósito declarado); el corte no aporta"
+  },
+  "frac_test_etiqueta_por_declaracion": 0.0,
+  "sensibilidades": {
+    "a_unica_por_descripcion": {
+      "n": 153,
+      "f1_macro_regla_soporte": 0.4037597855797647,
+      "ic95_bootstrap": [
+        0.33465102109856865,
+        0.4923123326215177
+      ],
+      "clases_evaluadas": 8,
+      "clases_fusionadas_a_otros": [
+        "educacion",
+        "entretenimiento",
+        "ingreso",
+        "movimiento_propio",
+        "retiro_efectivo",
+        "telecom_conectividad",
+        "vestuario_cuidado_personal",
+        "vivienda_servicios"
+      ],
+      "fusiona_ademas_de_la_principal": [
+        "educacion",
+        "ingreso",
+        "retiro_efectivo"
+      ],
+      "nota": "una fila por descripción (§4.3)"
+    },
+    "b_solo_doble_anotacion": {
+      "aplica": false,
+      "nota": "todos los ítems tienen doble anotación: igual a la principal"
+    },
+    "c_exactitud_ponderada_recorte_p95": {
+      "p95": 40.97162004662003,
+      "valor": 0.23302737908155277,
+      "ic95_bootstrap": [
+        0.1709881867299347,
+        0.30311427474721014
+      ],
+      "diferencia": -0.0031424509461926986,
+      "alerta_depende_de_pocos_descriptores": false,
+      "sin_recorte": 0.22988492813536007
+    },
+    "d_subgrupo_reverso": {
+      "n": 6,
+      "aciertos": 0,
+      "exactitud": 0.0,
+      "real_a_predicho": {
+        "otros -> obligaciones_financieras": 4,
+        "comidas_fuera -> obligaciones_financieras": 1,
+        "otros -> vestuario_cuidado_personal": 1
+      },
+      "nota": "reversos y devoluciones de tarjeta: incluidos en la métrica principal, reportados aparte (§4.6)"
+    },
+    "e_kappa_sin_casos_convencion": {
+      "aplica": false,
+      "nota": "lo calcula tools/acuerdo_wp4.py, no WP8"
+    }
+  },
+  "bootstrap": {
+    "n": 1000,
+    "principal": "fila_estratificado",
+    "sensibilidad": "conglomerado:voluntario_id",
+    "estratos": 17,
+    "alcance": "incertidumbre de muestreo dentro de estos extractos, no generalización a nuevos titulares (D-M7)"
+  },
+  "segundos_entrenamiento_y_prediccion": 3.7,
+  "n_train": 20000,
+  "n_train_disponible": 122211,
+  "n_test_completo": 200,
+  "contrato_wp4_faltan": [],
+  "predicciones": "data/_privado/tstr/reglas/logreg_n20000/predicciones.csv.gz",
+  "brazo_meta": {
+    "n_vocabulario": 4776,
+    "submuestra": "estratificada categoria_n1, n=20000, semilla 42 (mismas filas que BETO)"
+  },
+  "entrada": {
+    "version": "serializacion_v1",
+    "formato": "[CUENTA=<cuenta_tipo>] [SIGNO=<signo>] [MONTO=<bin_log>] <descripcion>",
+    "bordes_monto_cop_2025": [
+      1000.0,
+      3162.2776601683795,
+      10000.0,
+      31622.776601683792,
+      100000.0,
+      316227.7660168379,
+      1000000.0,
+      3162277.6601683795,
+      10000000.0
+    ],
+    "etiquetas_monto": [
+      "<1K",
+      "1K-3K",
+      "3K-10K",
+      "10K-30K",
+      "30K-100K",
+      "100K-300K",
+      "300K-1M",
+      "1M-3M",
+      "3M-10M",
+      ">=10M"
+    ],
+    "deflactor_test": {
+      "deflactado": true,
+      "base": "promedio 2025",
+      "ipc": "outputs/ipc/ipc_total_nacional.csv",
+      "factor_min": 0.9327122153209109,
+      "factor_max": 0.9746651954739187
+    }
+  },
+  "semilla": 42,
+  "soporte_min": 10,
+  "train": {
+    "ruta": "outputs/sintetico_reglas/sintetico_reglas_con_texto_v1.csv.gz",
+    "sha256": "4d920e3755add8239df87872100ea39f8bdacabbaf9e08ad68ebbfb32b2ae3e3"
+  },
+  "test": {
+    "ruta": "data/reales_anon/test_real_wp4_20261126.csv",
+    "sha256": "2ee64b819beb185b555fc4d6d11670fe71dd6319fd5fd49d69e9e11e876b9350"
+  },
+  "taxonomia": {
+    "ruta": "docs/taxonomia/taxonomia_gastos_colombia_v1.json",
+    "version": "1.1.0",
+    "sha256": "8f4e4a19a9b9598a894940063c324f40adb9f3bc11a0815b8a957f5033526997"
+  },
+  "versiones": {
+    "python": "3.11.9",
+    "sklearn": "1.9.1",
+    "pandas": "3.0.6",
+    "numpy": "2.4.6"
+  },
+  "plataforma": "Windows-10-10.0.26300-SP0",
+  "fecha_utc": "2026-11-26T15:41:47+00:00"
+}

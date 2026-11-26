@@ -1,6 +1,6 @@
 # Pre-registro — muestreo y anotación del conjunto real de test (WP4 → WP8)
 
-**Estado:** CERRADO **v1.3** — 2026-11-26 (v1.0 y v1.1 del 25 nov; v1.2 y v1.3 del 26 nov). Las decisiones de
+**Estado:** CERRADO **v1.3** — 2026-11-26 (v1.0 y v1.1 del 25 nov; v1.2 y v1.3 del 26 nov). **v1.4 (26 nov, después de anotar): solo registra desviaciones de ejecución en la §13; no cambia ni el diseño ni las métricas.** Las decisiones de
 diseño (D-M1 a D-M7) se aprobaron **antes de muestrear**; las enmiendas v1.1 a v1.3 se aprobaron **antes de cualquier
 anotación**.
 Al cerrar este documento **no existe ninguna etiqueta**.
@@ -119,6 +119,8 @@ ponderada saldrá ancho; se reporta así.
 
 ## 5. Ronda de calibración
 
+> **v1.4: no se realizó (ver §13.1).** Lo que sigue es el plan pre-registrado; se conserva para trazabilidad.
+
 - 20 ítems (`calibracion.xlsx`, ids `C01–C20`) **fuera del test y de descriptores que no aparecen en el test**, para
   que discutirlos juntos no contamine el κ. Reparto por estrato en orden de tamaño (1–2 por estrato).
 - Se anotan juntos con los 6 campos; no entran al κ ni al test. Después la guía no se cambia: las dudas se resuelven
@@ -129,7 +131,9 @@ ponderada saldrá ancho; se reporta así.
   - La convención se elige **con el texto de la taxonomía v1.1** (citando la regla o definición) y **nunca** mirando lo
     que hace el generador sintético. Queda como hallazgo para la v1.2 de la taxonomía.
   - Se registra que «TRANSFERENCIAS A NEQUI» pesa **235 transacciones** del marco (3 ítems del test con peso ≈ 119).
-  - En estos casos **el κ mide el seguimiento de una convención pactada**, no un acuerdo independiente. Por eso el
+  - ~~En estos casos el κ mide el seguimiento de una convención pactada~~ **[superado en v1.4, §13]:** al no haber
+    calibración, en estos casos el κ mide acuerdo **sin** convención previa; la convención solo corrige la etiqueta
+    final. El κ sin estos ítems se mantiene como dato descriptivo. Por eso el
     κ se reporta también **sin los ítems de los 4 casos** (identificados por patrón de texto en `tools/acuerdo_wp4.py`,
     fijado antes de anotar; el patrón de PSE se corrigió en la v1.3, también antes de anotar), como dato descriptivo.
     En el test: compra en PERSONA 4 ítems, reversos 6, transferencias a billetera 7, PSE sin facturador 0.
@@ -166,8 +170,9 @@ ponderada saldrá ancho; se reporta así.
 
 ### Declaraciones sobre la anotación (enmienda v1.1)
 
-- **El κ se mide después de la sesión de calibración.** Mide el acuerdo entre anotadores con criterios alineados, no
-  el de anotadores sin entrenamiento; puede ser mayor que el que lograrían anotadores independientes sin calibrar.
+- ~~El κ se mide después de la sesión de calibración.~~ **[superado en v1.4, §13.1]:** no hubo calibración. **El κ
+  mide acuerdo entre anotadores independientes sin calibración ni convenciones previas**, con las anotaciones
+  originales.
 - **A1 no anota a ciegas respecto a los datos.** La investigadora revisó los extractos durante la extracción y la
   anonimización, y puede reconocer comercios, patrones o el grupo de origen. Sí es ciega respecto a las etiquetas de
   A2. Mitigación: A1 anota solo desde `lote_A1.xlsx` (sin fecha, grupo ni contexto), y en la adjudicación la etiqueta
@@ -240,6 +245,11 @@ Adjudicación (20–30 % de desacuerdo, ≈ 1,5 min por caso entre los dos): ≈
 | 2026-11-25 | v1.1 | Métricas (§4), razón del corte (§1), declaraciones (§6), plan B (§12); antes de anotar | Investigadora |
 | 2026-11-26 | v1.1 | Visto bueno: plan B 154, recorte P95 con umbral 5 pts, sensibilidad por descripción única, κ sobre ≥ 80 en común | Investigadora |
 | 2026-11-26 | v1.2 | Redacción del corte, regla R7 para ambas, F1 solo doble anotación, 4 casos de calibración, dominio PSE sub-representado | Investigadora / Claude (dominio PSE) |
+| 2026-11-26 | v1.4 | Desviaciones de ejecución (§13): sin calibración previa; convenciones fijadas en la adjudicación y aplicadas a todos los ítems de cada caso; caso 4 con 7 ítems; incidente de archivos mal copiados | Investigadora |
+| 2026-11-26 | v1.4 | Coherencia: §5 y §6 marcadas como superadas; interpretación del κ sin calibración; efecto verificado de las convenciones (0 cambios en `categoria_n1`, 6 en `categoria_n2`); κ sin convención con patrón v1.3 y ampliado (§13.6–13.8) | Claude (pedido por la investigadora) |
+| 2026-11-26 | v1.4 | §13.4 caso 4 = 13 ítems (patrón ampliado después de anotar); §13.7 7 correcciones solo de subtipo; §13.8 cerrada con las 3 variantes del κ | Investigadora / Claude |
+| 2026-11-26 | v1.4 | §13.9 error de `doble_anotacion` (7 ítems, solo sensibilidad b; regeneración pendiente al registrar); §13.10 patrones de los casos 1 y 3 sin efecto en los datos reales; §13.11 incidente del lote_A2 v1.0/v1.1 (solo trazabilidad) | Investigadora / Claude |
+| 2026-11-26 | v1.4 | §13.9 cerrado: test regenerado (`2ee64b81…`), anterior en `data/_privado/descartados/`; verificado en disco | Investigadora / Claude |
 | 2026-11-26 | v1.3 | Verificación de pesos (insesgados, sin π = 0; simulación de 400 semillas). Corrección del dominio PSE sin facturador: 95 filas, 0 en el test (la v1.2 decía 101 y 4). Patrón corregido en `acuerdo_wp4.py`. Sin cambios en ítems, lotes ni pesos. | Claude (pedido por la investigadora) |
 
 ## 11. Ejecución
@@ -254,7 +264,7 @@ Adjudicación (20–30 % de desacuerdo, ≈ 1,5 min por caso entre los dos): ≈
 | marco_muestreo.csv | `bfeb7f7b3ad3338ce20da98c314c5991e1b0b66c124e10b2fb0522e873d66c76` |
 | muestra_test_clave.csv | `fde28575f031dbb384ce273e17554297bbc7ed395467dd0f84a5c5506d2c2f9a` |
 | lote_A1.csv | `8b73f2e351d5ffc6a3cf894724f89d8e8c86fd029ada4269a17a84806578d025` |
-| lote_A2.csv (v1.1: orden por bloques + columna `orden`) | `b8b0a52847d01c645585998bf0da87b0c7bdd7d335f666ff897f710b65909a4e` |
+| lote_A2.csv (v1.1: orden por bloques + columna `orden`) | `b8b0a52847d01c645585998bf0da87b0c7bdd7d335f666ff897f710b65909a4e` — **no llegó al disco ni se anotó: ver §13.11** |
 | muestra_test_clave_planb.csv (v1.1) | `82ae9dfd97cd4a3fa6e9865d76fa4317db0bdd30350f6e41df632dd7be7f0010` |
 | calibracion.csv | `55029627e4714304762c01d6ec5e8028bc13e1fb18c989df6d6af312176ba645` |
 | calibracion_clave.csv | `a54e1f6b6fe95402fd6ae0d1f1b460e078415d420ba9715142dba3da3410c168` |
@@ -292,3 +302,89 @@ de los scripts de las tareas 4 y 5). Los 46 ítems restantes no entran al test n
 **Si A2 tampoco completó los 154 a las 12:00:** el κ se calcula sobre los ítems que ambos anotaron (la guía v1.0 §6
 pide un solapamiento ≥ 80), se declara el n y el test para WP8 sigue siendo el de 154 con la etiqueta de A1 en los
 ítems sin doble anotación, marcados como tales.
+
+## 13. Desviaciones de ejecución (v1.4, 2026-11-26, después de anotar y antes de cualquier predicción)
+
+1. **No hubo sesión de calibración (§5).** A1 y A2 anotaron los 200 ítems del test **por separado y sin convenciones
+   previas**. Consecuencia: el κ mide acuerdo **sin coordinación previa**, que es una prueba más exigente que la
+   prevista. Los 20 ítems de `calibracion.xlsx` no se usaron.
+2. **Las convenciones de los 4 casos se fijaron en la adjudicación**, citando la taxonomía v1.1 y antes de ver
+   predicciones de los modelos (texto completo y reglas citadas en `07_hoja_calibracion_casos.md`):
+   reversos → categoría del bien si se identifica (R1), si no `otros` (R7) · PSE sin facturador → `otros` (R7) ·
+   billetera sin persona, «A» y «DESDE» → `transferencias_p2p.indeterminada` (caso límite de `movimiento_propio`),
+   extendido por analogía a traslados a otros bancos, llaves Bre-B y «Rec.Inter TFR» · «COMPRA/PAGO/RBM\* PERSONA» →
+   `otros` (R7); «TRANSF … PERSONA» → `transferencias_p2p.indeterminada`, porque `PERSONA` también enmascara al propio
+   titular.
+3. **Las convenciones se aplicaron a todos los ítems de cada caso**, también donde A1 y A2 coincidieron. Las etiquetas
+   finales del test incluyen esa corrección. El κ se calcula con las anotaciones **originales**.
+4. **Caso 4 ampliado:** con «COMPRA/COMPRA EN/PAGO QR/RBM\* PERSONA», «PERSONA» sola y «TRANSF … PERSONA», el caso 4
+   tiene **13 ítems en el test** (7 de compra + 6 de «TRANSF … PERSONA»), no los 4 de la v1.3. **El patrón se amplió
+   después de anotar.** El κ sin los casos de convención (§5) se recalculó con el patrón ampliado como dato
+   descriptivo (§13.8).
+5. **Incidente de archivos:** la primera corrida de `acuerdo_wp4.py` dio κ = 1,000 (0 desacuerdos) porque se había
+   copiado mal un lote. Se detectó por lo inverosímil del valor, se corrigieron los archivos y se descartó esa salida
+   (su `adjudicacion.xlsx` vacío se reemplazó por el de la corrida válida).
+   **Corrida válida:** κ = 0,934 [0,896; 0,967] sobre 200 ítems, 12 desacuerdos.
+6. **Interpretación del κ (v1.4).** El κ = 0,934 mide acuerdo **sin calibración**: A1 y A2 anotaron por separado,
+   sin convenciones, y el cálculo usa las anotaciones originales (los lotes no se editan para aplicar convenciones).
+   Las convenciones las fijó A1 **viendo ya las anotaciones de ambos** (no las predicciones). No afecta a D14, pero se
+   declara: la etiqueta final de esos casos no es ciega a las anotaciones.
+7. **Efecto verificado de aplicar las convenciones a los ítems acordados (26 nov).** Los ítems de los tipos con
+   convención son 39 en el test (reversos 6, billetera 7, extensión por analogía 13, «COMPRA/PAGO/RBM\* PERSONA» 7,
+   «TRANSF … PERSONA» 6). En los 38 donde A1 y A2 coinciden, la convención **no cambia ninguna `categoria_n1`**: las
+   dos anotaciones ya coincidían con ella. Hay **7 correcciones por convención, todas solo de subtipo; ninguna cambia
+   `categoria_n1`**: 6 «TRANSF … PERSONA» (T002, T003, T012, T057, T134, T170) pasan de
+   `enviada_persona`/`recibida_persona` a `indeterminada`, y un reverso (T187) pasa de `otros` sin subtipo a
+   `otros.ininteligible`. `categoria_n2` no entra al TSTR. Las correcciones están en
+   `data/reales_anon/anotacion/acuerdo_muestra_test_clave/correcciones_convencion.csv` (las escribe
+   `tools/acuerdo_wp4.py`) y `tools/consolidar_test_wp4.py` las aplica con `origen_etiqueta = acuerdo+convencion`.
+   El único desacuerdo de los 4 casos (T024, reverso) se resuelve en la adjudicación con la convención del caso 1
+   (`comidas_fuera.domicilios_app`); el script de consolidación exige que los 39 ítems lleven la etiqueta de su
+   convención.
+8. **κ sin casos de convención (cerrado, 26 nov).** Dato descriptivo, con las anotaciones originales:
+
+   | Variante | Ítems excluidos | κ | Ítems usados |
+   |---|---|---|---|
+   | Patrón pre-registrado (v1.3) | 17 | 0,935 | 183 |
+   | v1.4: caso 4 ampliado (definido después de anotar) | 26 | 0,931 | 174 |
+   | v1.4: caso 4 ampliado + analogía del caso 3 (definido después de anotar) | 39 | 0,925 | 161 |
+
+   El κ principal no cambia (0,934 [0,896; 0,967]); excluyendo los casos de convención varía entre 0,925 y 0,935.
+9. **Error en `doble_anotacion` del archivo de test (26 nov).** `tools/consolidar_test_wp4.py` marcaba
+   `doble_anotacion = no` en los ítems con `origen_etiqueta = acuerdo+convencion`: **7 ítems** (T002, T003, T012, T057,
+   T134, T170, T187) que sí tienen doble anotación. **Solo afecta la sensibilidad (b) «solo doble anotación»** (§4.5),
+   que los habría excluido. **Ninguna etiqueta cambió:** `--verificar` muestra que la única diferencia entre el archivo
+   anterior y el corregido son esas 7 celdas de `doble_anotacion` (`no` → `si`). El error se corrigió en el script y lo
+   cubre la prueba `test_swap_wp4.py` (5 ítems de un solo anotador, no 8).
+   - Archivo anterior: SHA-256 `d1f52f1d69675458eaab7a0331e47ab46bdc53918406c6c1899ff96956456254`, quedó guardado en
+     `data/_privado/descartados/test_real_wp4_20261126_SHA_d1f52f1d.csv` (con su ficha).
+   - Archivo corregido: `data/reales_anon/test_real_wp4_20261126.csv`, SHA-256
+     `2ee64b819beb185b555fc4d6d11670fe71dd6319fd5fd49d69e9e11e876b9350`, regenerado el 26 nov. Verificado en disco: su
+     ficha registra el mismo SHA, y frente al archivo anterior solo difieren las 7 celdas de `doble_anotacion`.
+10. **Patrones de los casos 1 y 3 ajustados, sin efecto en los datos reales (26 nov).** Caso 1: la convención automática
+    cubre solo los reversos que nombra la hoja 07 (RAPPI → `comidas_fuera.domicilios_app`; DEVOLUCION, GW-SIA, dLocal,
+    Falabella → `otros.ininteligible`); cualquier otro reverso detiene la consolidación para decidirlo con R1/R7.
+    Caso 3: el patrón de billetera exige «TRANSFERENCIA(S)…»; el anterior (`NEQUI|DAVIPLATA`) habría atrapado
+    «RECARGA NEQUI DESDE …», que la taxonomía pone como ejemplo de `movimiento_propio`. Verificado sobre los datos
+    reales: mismas correcciones por convención (archivo idéntico), mismos tres κ y mismo archivo de test byte a byte
+    (antes de corregir el error del punto 9).
+11. **Incidente: el `lote_A2` de la v1.1 no llegó al disco; A2 anotó el lote v1.0 (detectado el 26 nov con
+    `tools/muestreo_wp4.py --verificar`, que da «DIFERENCIAS en ['lote_A2.csv']»).**
+    - **Causa (error de Claude al copiar los archivos):** al regenerar la v1.1 se sobrescribieron `lote_A2.csv`,
+      `lote_A2.xlsx` y `_resumen_muestreo.md` y se subieron al instante; la herramienta de copia entregó la versión
+      anterior (v1.0) aunque informó «escrito». El script `tools/muestreo_wp4.py` (v1.1) y `muestra_test_clave_planb.csv`
+      sí llegaron bien.
+    - **Qué hay en disco:** `lote_A2.csv` = v1.0 (SHA `552f0d59…`, el de la tabla v1.0 del §11); `lote_A2_respaldo.xlsx`
+      = lote v1.0 sin anotar; `_resumen_muestreo.md` = versión v1.0 (sin la sección del plan B).
+    - **Qué anotó A2:** el lote v1.0. Comparado con el diseño: **mismos 200 `item_id`**; columnas de datos
+      (`cuenta_tipo`, `signo`, `monto`, `descripcion`) **idénticas a la clave en los 200**; las de anotación, iguales.
+      Diferencias: **sin columna `orden`** y **orden aleatorio de la v1.0**, no el de bloques de la v1.1: los 154
+      ítems del plan B quedaron repartidos entre las posiciones 1 y 200. Las instrucciones (06) mencionaban una
+      columna `orden` que ese archivo no tenía.
+    - **Efecto en el test: ninguno.** A2 anotó los 200 ítems, el plan B no se activó, y el κ, la adjudicación y la
+      consolidación unen por `item_id`, no por posición. **Solo afecta a la trazabilidad:** el `lote_A2.csv` (v1.1)
+      registrado en el §11 no es el que se entregó ni se anotó, y durante la anotación no existió la protección del
+      plan B (anotar primero los 154).
+    - **Decisión:** no se reescribe nada en disco. `lote_A2.csv` (v1.0) es el lote que realmente se entregó, y
+      `muestreo_wp4.py --verificar` seguirá reportando la diferencia en `lote_A2.csv`, explicada aquí. El lote
+      anotado (`lote_A2.xlsx`) no se toca.

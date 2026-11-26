@@ -1,0 +1,65 @@
+[
+  {
+    "brazo": "logreg",
+    "delta_f1_macro": 0.0009249506028050636,
+    "ic95_fila_estratificado": [
+      -0.055070464027543384,
+      0.05893986351471793
+    ],
+    "ic95_grupo": [
+      -0.051040941593731265,
+      0.07589868276319123
+    ],
+    "n_test": 200,
+    "test": {
+      "ruta": "data/reales_anon/test_real_wp4_20261126.csv",
+      "sha256": "2ee64b819beb185b555fc4d6d11670fe71dd6319fd5fd49d69e9e11e876b9350"
+    },
+    "bootstrap": {
+      "n": 1000,
+      "semilla": 42
+    }
+  },
+  {
+    "brazo": "logreg_n20000",
+    "delta_f1_macro": 0.05322019690343277,
+    "ic95_fila_estratificado": [
+      0.0009542030945598096,
+      0.10455304777416588
+    ],
+    "ic95_grupo": [
+      -0.024701302900295763,
+      0.09535261717384075
+    ],
+    "n_test": 200,
+    "test": {
+      "ruta": "data/reales_anon/test_real_wp4_20261126.csv",
+      "sha256": "2ee64b819beb185b555fc4d6d11670fe71dd6319fd5fd49d69e9e11e876b9350"
+    },
+    "bootstrap": {
+      "n": 1000,
+      "semilla": 42
+    }
+  },
+  {
+    "brazo": "beto",
+    "delta_f1_macro": 0.020993235887258765,
+    "ic95_fila_estratificado": [
+      -0.06463807185353625,
+      0.05884316705221332
+    ],
+    "ic95_grupo": [
+      -0.05203213578767557,
+      0.04865136193722861
+    ],
+    "n_test": 200,
+    "test": {
+      "ruta": "data/reales_anon/test_real_wp4_20261126.csv",
+      "sha256": "2ee64b819beb185b555fc4d6d11670fe71dd6319fd5fd49d69e9e11e876b9350"
+    },
+    "bootstrap": {
+      "n": 1000,
+      "semilla": 42
+    }
+  }
+]

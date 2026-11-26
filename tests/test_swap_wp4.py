@@ -3,7 +3,9 @@
 1. Real simulado mínimo (tests/fixtures/real_simulado_wp4.csv: 30 filas ficticias, solo las 8 columnas de WP4):
    ruta de respaldo sin estratos ni pesos (IC por fila simple + sensibilidad por grupo).
 2. Salida de tools/consolidar_test_wp4.py sobre insumos simulados (clave, lotes A1/A2 con desacuerdos y ítems de un
-   solo anotador, adjudicación, reversos): esquema completo del pre-registro 05 v1.3 §7. Verifica el diseño D-M6/D-M7:
+   solo anotador, adjudicación, reversos y correcciones por convención): esquema del pre-registro 05 v1.4 §7 y §13.
+   Los insumos siguen las convenciones v1.4 de tools/acuerdo_wp4.py; los 3 reversos llegan acordados con una etiqueta
+   distinta de la convención y se corrigen con un archivo de correcciones simulado (--correcciones). Verifica el diseño D-M6/D-M7:
    IC principal por fila estratificado, sensibilidad por grupo, exactitud ponderada (Hájek) y recorte P95,
    sensibilidades (a)-(d), corte texto/declaración no informativo y Δ pareado CTGAN − reglas.
 Entrena un LogReg pequeño (3.000 filas) para que la prueba sea rápida.
@@ -63,6 +65,31 @@ def test_columnas_de_analisis_no_entran_a_la_serializacion():
     assert base.serializar(t).equals(base.serializar(t2))
 
 
+def test_monto_cero_va_al_bin_mas_bajo():
+    """El marco real trae filas con monto 0: deben caer en el bin más bajo ('<1K', visto en el entrenamiento), nunca
+    en -inf ni en un token inválido. bin_monto no usa log10: ubica |monto| con searchsorted sobre los bordes."""
+    assert list(base.bin_monto([0, 0.0, -0.0, "0", 999.99, 1000])) == ["<1K"] * 5 + ["1K-3K"]
+    t = pd.DataFrame({"cuenta_tipo": ["banco"], "signo": ["-"], "monto": [0], "descripcion": ["CUOTA MANEJO"],
+                      "fecha": ["2026-09-30"]})
+    d, meta = base.deflactar_test_a_2025(t)
+    assert meta["deflactado"] and d["monto"].iloc[0] == 0
+    assert base.serializar(d).iloc[0] == "[CUENTA=banco] [SIGNO=-] [MONTO=<1K] CUOTA MANEJO"
+
+
+def test_ipc_cubre_la_ventana_del_test_real():
+    """Ventana del pre-registro 05: dic-2025 a sep-2026. Ningún mes sin IPC (si faltara, deflactar aborta)."""
+    meses = pd.date_range("2025-12-01", "2026-09-01", freq="MS").strftime("%Y-%m-15")
+    t = pd.DataFrame({"monto": [100000] * len(meses), "fecha": meses})
+    _, meta = base.deflactar_test_a_2025(t)
+    assert meta["deflactado"] and 0.9 < meta["factor_min"] <= meta["factor_max"] < 1.0
+
+
+def test_columnas_de_analisis_no_entran_a_la_serializacion():
+    t = pd.read_csv(RAIZ / REAL_SIMULADO)
+    t2 = t.assign(peso_muestreo=999.0, estrato_muestreo="x", item_id="T999", doble_anotacion="no")
+    assert base.serializar(t).equals(base.serializar(t2))
+
+
 # --------------------------------------------------------------------------- 1. real simulado mínimo
 def test_fixture_cumple_esquema_wp4():
     t = pd.read_csv(RAIZ / REAL_SIMULADO)
@@ -114,10 +141,20 @@ def _insumos_simulados(d: Path) -> dict:
         filas.append(s.assign(estrato_muestreo=np.where(rng.random(k) < 0.8, c, "sin_heuristica")))
     t = pd.concat(filas, ignore_index=True)
     t.loc[t.index[:4], "descripcion"] = t.loc[t.index[4], "descripcion"]          # descripciones repetidas
-    rev = pd.DataFrame({"descripcion": ["COMPRA REVERSADA EXITO", "DEVOLUCION COMPRA FALABELLA", "ANUL. COMPRA D1"],
+    # Reversos con las formas que la hoja 07 resuelve: dos a otros.ininteligible y uno (RAPPI) a comidas_fuera.
+    rev = pd.DataFrame({"descripcion": ["DEVOLUCION", "REVERSADA - FALABELLA COM S A S", "ANUL. CONSUMO NACI RAPPI APP"],
                         "monto": [52000, 89000, 15000], "signo": ["+"] * 3, "cuenta_tipo": ["tarjeta_credito"] * 3,
                         base.TARGET: ["otros"] * 3, "categoria_n2": [""] * 3, "estrato_muestreo": ["reverso_devolucion"] * 3})
     t = pd.concat([t, rev], ignore_index=True)
+    t["categoria_n2"] = t["categoria_n2"].fillna("")
+    # Convenciones v1.4: toda fila sintética que caiga en un caso lleva ya la etiqueta de la convención.
+    import acuerdo_wp4
+    es_rev = t.index >= len(t) - len(rev)
+    for i, r in t.iterrows():
+        cv = acuerdo_wp4.convencion(r["descripcion"], r["cuenta_tipo"])
+        if cv is not None and not es_rev[i]:
+            assert cv["categoria_n1"] is not None, f"sintético con reverso sin regla: {r['descripcion']}"
+            t.loc[i, [base.TARGET, "categoria_n2"]] = [cv["categoria_n1"], cv["categoria_n2"]]
     n = len(t)
     meses = ["2025-12", "2026-02", "2026-05", "2026-07", "2026-09"]
     clave = pd.DataFrame({
@@ -130,16 +167,25 @@ def _insumos_simulados(d: Path) -> dict:
     clave["peso_muestreo"] = np.round(np.where(rng.random(n) < 0.08, rng.uniform(80, 120, n), rng.uniform(2, 20, n)), 3)
     for c in ("N_d", "pi1", "pi2", "pi"):
         clave[c] = ""
-    a1 = pd.DataFrame({"item_id": clave["item_id"], "categoria_n1": t[base.TARGET], "categoria_n2": t["categoria_n2"].fillna(""),
+    a1 = pd.DataFrame({"item_id": clave["item_id"], "categoria_n1": t[base.TARGET], "categoria_n2": t["categoria_n2"],
                        "duda": "", "notas": "", "medio_pago": "", "formalidad_comercio": ""})
     a2 = a1.copy()
     desac = [10, 20, 30, 40, 50, 60]
     a2.loc[desac, "categoria_n1"] = "otros"
     a2.loc[[5, 15, 25, 35, 45], ["categoria_n1", "categoria_n2"]] = ""          # ítems de un solo anotador
     adj = pd.DataFrame({"item_id": a1.loc[desac, "item_id"], "categoria_n1_final": a1.loc[desac, "categoria_n1"],
-                        "categoria_n2_final": "", "causa": "error_anotador"})
-    rutas = {k: d / f"{k}.csv" for k in ("clave", "lote_A1", "lote_A2", "adjudicacion")}
-    for k, df in zip(rutas, (clave, a1, a2, adj)):
+                        "categoria_n2_final": a1.loc[desac, "categoria_n2"], "causa": "error_anotador"})
+    # Correcciones por convención (formato de tools/acuerdo_wp4.py): los 3 reversos, acordados como «otros» sin subtipo.
+    filas_corr = []
+    for i in np.flatnonzero(es_rev):
+        cv = acuerdo_wp4.convencion(clave.at[i, "descripcion"], clave.at[i, "cuenta_tipo"])
+        filas_corr.append({"item_id": clave.at[i, "item_id"], "etiqueta_A1": "otros", "etiqueta_A2": "otros",
+                           "etiqueta_convencion": f"{cv['categoria_n1']}.{cv['categoria_n2']}", "caso": cv["caso"],
+                           "regla_citada": cv["regla"],
+                           "cambia": "categoria_n1" if cv["categoria_n1"] != "otros" else "solo categoria_n2"})
+    corr = pd.DataFrame(filas_corr)
+    rutas = {k: d / f"{k}.csv" for k in ("clave", "lote_A1", "lote_A2", "adjudicacion", "correcciones")}
+    for k, df in zip(rutas, (clave, a1, a2, adj, corr)):
         df.to_csv(rutas[k], index=False)
     return rutas
 
@@ -158,7 +204,8 @@ def consolidado(tmp_path, monkeypatch):
     monkeypatch.setattr(acuerdo_wp4, "RAIZ", raiz_tmp)
     monkeypatch.setattr(base, "RAIZ", raiz_tmp)          # la verificación del consolidador usa las funciones de WP8
     cons.main(["--clave", str(r["clave"]), "--a1", str(r["lote_A1"]), "--a2", str(r["lote_A2"]),
-               "--adjudicacion", str(r["adjudicacion"]), "--fecha", "SIMULADO"])
+               "--adjudicacion", str(r["adjudicacion"]), "--correcciones", str(r["correcciones"]),
+               "--fecha", "SIMULADO"])
     monkeypatch.setattr(base, "RAIZ", RAIZ)
     salida = raiz_tmp / "data/reales_anon/test_real_wp4_SIMULADO.csv"
     assert salida.exists() and not (RAIZ / "data/reales_anon/test_real_wp4_SIMULADO.csv").exists()
@@ -171,6 +218,11 @@ def test_swap_salida_del_consolidador(consolidado, salidas_temporales):
     assert list(t.columns[:8]) == base.COLUMNAS_WP4 and set(base.COLUMNAS_ANALISIS_WP4) <= set(t.columns)
     assert (t["doble_anotacion"] == "no").sum() == 5 and (t["subgrupo_reverso"] == "si").sum() == 3
     assert (t["unica_por_descripcion"] == "no").sum() >= 4
+    # Correcciones por convención (v1.4 §13.3): los 3 reversos, trazados en origen_etiqueta
+    corr = t[t["origen_etiqueta"] == "acuerdo+convencion"]
+    assert len(corr) == 3 and set(corr["caso_convencion"]) == {"reverso_devolucion"}
+    assert sorted(corr["categoria_n1"] + "." + corr["categoria_n2"]) == [
+        "comidas_fuera.domicilios_app", "otros.ininteligible", "otros.ininteligible"]
 
     clases, corridas = _correr_dos_fuentes(salidas_temporales, consolidado)
     m = corridas[("tstr", "reglas", "logreg")]

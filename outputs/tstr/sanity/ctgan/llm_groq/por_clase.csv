@@ -1,2 +1,2 @@
 clase,precision,recall,f1,soporte
-otros,1.0,1.0,1.0,40
+otros,1.0,0.975,0.9873417721518988,40

@@ -4,11 +4,14 @@
   "fuente": "ctgan",
   "brazo": "llm_groq_openai/gpt-oss-120b",
   "advertencia": "solo 1 clase(s) evaluable(s): F1-macro no interpretable",
-  "f1_macro_regla_soporte": 1.0,
+  "f1_macro_regla_soporte": 0.9873417721518988,
   "ic95_bootstrap": [
-    0.7132506203473945,
+    0.7023424369747898,
     1.0
   ],
+  "ic_principal": "fila",
+  "ic95_conglomerado": null,
+  "n_grupos": null,
   "f1_macro_sin_regla": 0.7010822510822511,
   "accuracy": 0.775,
   "n_test": 40,
@@ -31,9 +34,9 @@
     "vivienda_servicios"
   ],
   "solo_etiqueta_por_texto": {
-    "f1_macro_regla_soporte": 1.0,
+    "f1_macro_regla_soporte": 0.9859154929577465,
     "ic95_bootstrap": [
-      0.7894736842105263,
+      0.7696969696969697,
       1.0
     ],
     "n_test": 36,
@@ -59,13 +62,17 @@
   "frac_test_etiqueta_por_declaracion": 0.1,
   "bootstrap": {
     "n": 1000,
-    "unidad": "fila"
+    "principal": "fila",
+    "sensibilidad": null,
+    "estratos": null,
+    "alcance": "holdout sintético"
   },
-  "segundos_entrenamiento_y_prediccion": 184.5,
+  "segundos_entrenamiento_y_prediccion": 0.1,
   "n_train": 18,
   "n_train_disponible": 97768,
   "n_test_completo": 24443,
   "contrato_wp4_faltan": null,
+  "predicciones": "outputs/tstr/sanity/ctgan/llm_groq/predicciones.csv.gz",
   "brazo_meta": {
     "modelo_pedido": "llama-3.3-70b-versatile",
     "modelo": "openai/gpt-oss-120b",
@@ -163,19 +170,25 @@
     "sha256_system": "9ef97adf1f1eb8e9eec56c525c687ec26115ffaaea5f7e2b035f40c5a77987f1",
     "regla_incluida": "R1",
     "entradas_unicas": 38,
-    "llamadas_nuevas": 38,
-    "respuestas_de_registro": 0,
+    "llamadas_nuevas": 0,
+    "respuestas_de_registro": 38,
     "llamadas_fallidas": 0,
     "estado_parseo_filas": {
       "exacta": 39,
       "fuera_de_enum": 1
     },
+    "fuera_de_enum_contadas_como_error": 1,
+    "etiqueta_fuera_de_enum": "__fuera_de_enum__",
     "tokens_llamadas_nuevas": {
+      "prompt": 0,
+      "completion": 0
+    },
+    "tokens_totales_entradas_usadas": {
       "prompt": 60594,
       "completion": 1433
     },
     "registro": "outputs/tstr/llm_cache/openai_gpt-oss-120b.jsonl",
-    "costo": "openai/gpt-oss-120b: 38 entradas únicas, 38 llamadas nuevas, 62,027 tokens; DESVIACIÓN: llama-3.3-70b-versatile no disponible para esta cuenta (retirado por Groq 16-ago-2026); sustituido por openai/gpt-oss-120b"
+    "costo": "openai/gpt-oss-120b: 38 entradas únicas (0 llamadas nuevas, 38 del registro), 62,027 tokens; DESVIACIÓN: llama-3.3-70b-versatile no disponible para esta cuenta (retirado por Groq 16-ago-2026); sustituido por openai/gpt-oss-120b"
   },
   "entrada": {
     "version": "serializacion_v1",
@@ -212,7 +225,7 @@
   "soporte_min": 10,
   "train": {
     "ruta": "outputs/ctgan/sintetico_v1_con_texto.csv.gz",
-    "sha256": "62efb64ec42d5f56ad9c4f49d683972a31864cad24180c4e7d6750b971925574"
+    "sha256": "7f07dc229d3c0f3591a6348e744c1b3782071947b406b8ba36b9f7924e2ee1ed"
   },
   "test": {
     "split": "estratificado categoria_n1 0.2"
@@ -223,11 +236,11 @@
     "sha256": "8f4e4a19a9b9598a894940063c324f40adb9f3bc11a0815b8a957f5033526997"
   },
   "versiones": {
-    "python": "3.11.9",
+    "python": "3.13.18",
     "sklearn": "1.9.1",
     "pandas": "3.0.6",
     "numpy": "2.4.6"
   },
-  "plataforma": "Windows-10-10.0.26200-SP0",
-  "fecha_utc": "2026-11-24T03:05:34+00:00"
+  "plataforma": "Linux-6.18.44-fc-v880-x86_64-with-glibc2.39",
+  "fecha_utc": "2026-11-26T06:08:33+00:00"
 }

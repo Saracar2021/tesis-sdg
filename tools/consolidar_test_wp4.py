@@ -3,7 +3,7 @@
 """
 WP4 — Etiqueta final (acuerdo + adjudicación) → archivo de test real para WP8 (`etapa4_tstr.py --test`).
 
-Pre-registro: docs/datos_reales/05_prerregistro_muestreo_anotacion.md (v1.3), §7 y §12.
+Pre-registro: docs/datos_reales/05_prerregistro_muestreo_anotacion.md (v1.4), §7, §12 y §13.
 
 Lee     : la clave del test (--clave), lote_A1.xlsx, lote_A2.xlsx y la adjudicación escrita por tools/acuerdo_wp4.py.
 Escribe : data/reales_anon/test_real_wp4_<AAAAMMDD>[_planb].csv  y su ficha _test_real_wp4_<AAAAMMDD>[_planb].md
@@ -11,12 +11,18 @@ Escribe : data/reales_anon/test_real_wp4_<AAAAMMDD>[_planb].csv  y su ficha _tes
 Uso (desde la raíz del repo):
   python tools/consolidar_test_wp4.py                       # test de 200
   python tools/consolidar_test_wp4.py --clave data/reales_anon/anotacion/muestra_test_clave_planb.csv   # plan B
+  python tools/consolidar_test_wp4.py --fecha 20261126 --verificar   # recalcula y compara con el archivo existente;
+                                                                     # no escribe nada
 
 Etiqueta final de categoria_n1, por ítem:
   * acuerdo       A1 = A2
   * adjudicacion  A1 ≠ A2 → categoria_n1_final de adjudicacion.xlsx (obligatoria, con causa)
   * solo_A1 / solo_A2  un solo anotador (pre-registro §12); doble_anotacion = "no"
-  Un ítem sin ninguna anotación, o un desacuerdo sin adjudicar, detiene el script.
+  * acuerdo+convencion  A1 = A2, pero la etiqueta acordada difiere de la convención de su caso (v1.4 §13.3): se usa
+                        la de `correcciones_convencion.csv` (lo escribe tools/acuerdo_wp4.py). Los lotes no se tocan.
+  Un ítem sin ninguna anotación, o un desacuerdo sin adjudicar, detiene el script. Al final se exige que TODOS los
+  ítems de los 4 casos (convenciones v1.4 de acuerdo_wp4.py) lleven la etiqueta de su convención, también los
+  adjudicados; si no, se detiene y lista cuáles.
 
 Columnas: primero las 8 de COLUMNAS_WP4 de etapa4_tstr.py, en su orden; después las de análisis (ninguna es feature).
   `signo` se recodifica egreso → "-", ingreso → "+" (como el sintético). `monto` va tal cual (incluido 0): lo que se
@@ -37,7 +43,6 @@ RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ / "tools"))
 import acuerdo_wp4 as ac  # noqa: E402  (mismos patrones de casos y validaciones que el κ)
 
-ANOT = RAIZ / "data" / "reales_anon" / "anotacion"
 COLUMNAS_WP4 = ["descripcion", "monto", "fecha", "signo", "cuenta_tipo", "categoria_n1", "fuente_etiqueta",
                 "voluntario_id"]
 EXTRA = ["item_id", "tx_id", "categoria_n2", "medio_pago", "formalidad_comercio", "canal_p2p", "peso_muestreo",
@@ -68,20 +73,30 @@ def leer_adjudicacion(ruta):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Archivo de test real para WP8 (WP4, tarea 5).")
-    ap.add_argument("--clave", type=Path, default=ANOT / "muestra_test_clave.csv")
-    ap.add_argument("--a1", type=Path, default=ANOT / "lote_A1.xlsx")
-    ap.add_argument("--a2", type=Path, default=ANOT / "lote_A2.xlsx")
+    ap.add_argument("--clave", type=Path, default=None, help="por defecto: anotacion/muestra_test_clave.csv")
+    ap.add_argument("--a1", type=Path, default=None, help="por defecto: anotacion/lote_A1.xlsx")
+    ap.add_argument("--a2", type=Path, default=None, help="por defecto: anotacion/lote_A2.xlsx")
     ap.add_argument("--adjudicacion", type=Path, default=None,
                     help="por defecto: anotacion/acuerdo_<clave>/adjudicacion.xlsx")
+    ap.add_argument("--correcciones", type=Path, default=None,
+                    help="por defecto: anotacion/acuerdo_<clave>/correcciones_convencion.csv")
     ap.add_argument("--fecha", default=date.today().strftime("%Y%m%d"), help="AAAAMMDD para el nombre del archivo")
+    ap.add_argument("--verificar", action="store_true",
+                    help="recalcula el test y lo compara byte a byte (SHA-256) con el archivo existente; no escribe")
     a = ap.parse_args(argv)
-    a.clave, a.a1, a.a2 = abs_(a.clave), abs_(a.a1), abs_(a.a2)
-    adj_ruta = abs_(a.adjudicacion) if a.adjudicacion else ANOT / f"acuerdo_{a.clave.stem}" / "adjudicacion.xlsx"
+    anot = RAIZ / "data" / "reales_anon" / "anotacion"          # en tiempo de ejecución (monkeypatch de RAIZ)
+    a.clave = abs_(a.clave or anot / "muestra_test_clave.csv")
+    a.a1 = abs_(a.a1 or anot / "lote_A1.xlsx")
+    a.a2 = abs_(a.a2 or anot / "lote_A2.xlsx")
+    adj_ruta = abs_(a.adjudicacion) if a.adjudicacion else anot / f"acuerdo_{a.clave.stem}" / "adjudicacion.xlsx"
+    corr_ruta = abs_(a.correcciones) if a.correcciones else anot / f"acuerdo_{a.clave.stem}" / "correcciones_convencion.csv"
     planb = a.clave.stem.endswith("_planb")
     nombre = f"test_real_wp4_{a.fecha}{'_planb' if planb else ''}"
     salida = RAIZ / "data" / "reales_anon" / f"{nombre}.csv"
-    if salida.exists():
-        sys.exit(f"Ya existe {ac.rel(salida)}: no se sobrescribe. Usa otra --fecha o bórralo a mano.")
+    if a.verificar and not salida.exists():
+        sys.exit(f"--verificar: no existe {ac.rel(salida)} para comparar.")
+    if salida.exists() and not a.verificar:
+        sys.exit(f"Ya existe {ac.rel(salida)}: no se sobrescribe. Usa otra --fecha, --verificar, o bórralo a mano.")
 
     n1, n2 = ac.taxonomia()
     clave = pd.read_csv(a.clave, dtype=str, keep_default_na=False)
@@ -96,7 +111,7 @@ def main(argv=None):
     for an in ("A1", "A2"):
         malos = m.loc[m[f"categoria_n1_{an}"].ne("") & ~m[f"categoria_n1_{an}"].isin(n1), "item_id"]
         errores += [f"{an} {i}: categoria_n1 fuera de la taxonomía" for i in malos]
-    tax = __import__("json").loads(ac.TAXONOMIA.read_text(encoding="utf-8"))
+    tax = __import__("json").loads(ac.ruta_taxonomia().read_text(encoding="utf-8"))
     mp = {v["id"] for v in tax["dimension_medio_pago"]["valores"]}
     fc = {v["id"] for v in tax["dimension_formalidad_comercio"]["valores"]}
     errores += [f"A1 {i}: medio_pago '{v}'" for i, v in zip(m.item_id, m.medio_pago) if v and v not in mp]
@@ -149,6 +164,42 @@ def main(argv=None):
         final_n2.append(f2)
         origen.append(o)
 
+    # Correcciones por convención en ítems acordados (v1.4 §13.3)
+    pos = {i: k for k, i in enumerate(m["item_id"])}
+    corr = pd.read_csv(corr_ruta, dtype=str, keep_default_na=False) if corr_ruta.exists() else pd.DataFrame()
+    err_corr = []
+    for r in corr.itertuples(index=False):
+        if r.item_id not in pos:
+            err_corr.append(f"{r.item_id}: no está en la clave")
+            continue
+        k = pos[r.item_id]
+        fila = m.iloc[k]
+        e1 = f"{fila.categoria_n1_A1}.{fila.categoria_n2_A1}" if fila.categoria_n2_A1 else fila.categoria_n1_A1
+        e2 = f"{fila.categoria_n1_A2}.{fila.categoria_n2_A2}" if fila.categoria_n2_A2 else fila.categoria_n1_A2
+        if origen[k] != "acuerdo" or (e1, e2) != (r.etiqueta_A1, r.etiqueta_A2):
+            err_corr.append(f"{r.item_id}: la corrección no corresponde a los lotes actuales (¿se editó un lote?)")
+            continue
+        c1, _, c2 = r.etiqueta_convencion.partition(".")
+        if c1 not in n1 or (c2 and c2 not in n2.get(c1, set())):
+            err_corr.append(f"{r.item_id}: etiqueta_convencion '{r.etiqueta_convencion}' fuera de la taxonomía")
+            continue
+        final_n1[k], final_n2[k], origen[k] = c1, c2, "acuerdo+convencion"
+    if err_corr:
+        sys.exit("Correcciones por convención inválidas:\n  " + "\n  ".join(err_corr))
+
+    # Todos los ítems de los 4 casos deben llevar la etiqueta de su convención (también los adjudicados)
+    fuera = []
+    for k, r in enumerate(m.itertuples(index=False)):
+        cv = ac.convencion(r.descripcion, r.cuenta_tipo)
+        if cv and cv["categoria_n1"] is None:
+            fuera.append(f"{r.item_id} [{cv['caso']}] {cv['regla']}")
+        elif cv and (final_n1[k], final_n2[k]) != (cv["categoria_n1"], cv["categoria_n2"]):
+            fuera.append(f"{r.item_id} [{cv['caso']}] final {final_n1[k]}.{final_n2[k] or '∅'} ≠ convención "
+                         f"{cv['categoria_n1']}.{cv['categoria_n2']} (origen: {origen[k]})")
+    if fuera:
+        sys.exit("Ítems de los 4 casos que no siguen su convención (v1.4 §13.3). Corrige la adjudicación, o vuelve a "
+                 f"correr acuerdo_wp4.py si faltan correcciones ({ac.rel(corr_ruta)}):\n  " + "\n  ".join(fuera))
+
     caso = [ac.caso_convencion(d, c) for d, c in zip(m["descripcion"], m["cuenta_tipo"])]
     unica = ~m.sort_values("item_id")["descriptor_norm"].duplicated()
     out = pd.DataFrame({
@@ -168,7 +219,7 @@ def main(argv=None):
         "canal_p2p": "false",                          # R2: solo true con propósito declarado
         "peso_muestreo": pd.to_numeric(m["peso_muestreo"]),
         "estrato_muestreo": m["estrato_muestreo"],
-        "doble_anotacion": ["si" if o in ("acuerdo", "adjudicacion") else "no" for o in origen],
+        "doble_anotacion": ["si" if o in ("acuerdo", "adjudicacion", "acuerdo+convencion") else "no" for o in origen],
         "origen_etiqueta": origen,
         "caso_convencion": caso,
         "subgrupo_reverso": ["si" if c == "reverso_devolucion" else "no" for c in caso],
@@ -176,8 +227,30 @@ def main(argv=None):
     })[COLUMNAS_WP4 + EXTRA].sort_values("item_id", kind="mergesort").reset_index(drop=True)
     assert out["subgrupo_reverso"].eq("si").sum() == m["estrato_muestreo"].eq("reverso_devolucion").sum()
 
+    contenido = out.to_csv(index=False, lineterminator="\n").encode("utf-8")
+    if a.verificar:
+        nuevo, existente = hashlib.sha256(contenido).hexdigest(), sha(salida)
+        igual = nuevo == existente
+        print(f"--verificar {ac.rel(salida)}: {'IDÉNTICO' if igual else 'DIFERENTE'} · existente {existente} · "
+              f"recalculado {nuevo} · no se escribió nada")
+        if not igual:
+            import io
+            viejo = pd.read_csv(salida, dtype=str, keep_default_na=False)
+            nuevo_df = pd.read_csv(io.BytesIO(contenido), dtype=str, keep_default_na=False)
+            if list(viejo.columns) != list(nuevo_df.columns) or len(viejo) != len(nuevo_df):
+                print(f"  columnas o filas distintas: {list(viejo.columns)} / {len(viejo)} filas → "
+                      f"{list(nuevo_df.columns)} / {len(nuevo_df)} filas")
+            else:
+                v, n_ = viejo.set_index("item_id"), nuevo_df.set_index("item_id")
+                for c in v.columns:          # solo columna, item_id y valores de columnas no textuales
+                    dif = v.index[v[c].ne(n_.loc[v.index, c])]
+                    if len(dif):
+                        muestra = "" if c == "descripcion" else " · " + ", ".join(
+                            f"{i}: {v.at[i, c]!r}→{n_.at[i, c]!r}" for i in dif[:10])
+                        print(f"  {c}: {len(dif)} celdas ({', '.join(dif[:10])}{' …' if len(dif) > 10 else ''}){muestra}")
+        sys.exit(0 if igual else 1)
     salida.parent.mkdir(parents=True, exist_ok=True)
-    salida.write_bytes(out.to_csv(index=False, lineterminator="\n").encode("utf-8"))
+    salida.write_bytes(contenido)
 
     # Verificación con el código de WP8: mismo cargador, deflactor y serializador que usará --test.
     import etapa4_tstr as wp8
@@ -213,13 +286,16 @@ def main(argv=None):
          f"- Clave: `{ac.rel(a.clave)}` · SHA-256 `{sha(a.clave)}`",
          f"- Lote A1 SHA-256 `{sha(a.a1)}` · Lote A2 SHA-256 `{sha(a.a2)}`",
          f"- Adjudicación: " + (f"`{ac.rel(adj_ruta)}` · SHA-256 `{sha(adj_ruta)}`" if desac.any() else "no hubo desacuerdos"),
-         f"- Taxonomía v{ac.VERSION_TAXONOMIA} · pre-registro 05 v1.3\n",
+         f"- Correcciones por convención: " + (f"`{ac.rel(corr_ruta)}` · {len(corr)} filas · SHA-256 `{sha(corr_ruta)}`"
+                                               if corr_ruta.exists() else "no hay archivo"),
+         f"- Taxonomía v{ac.VERSION_TAXONOMIA} · pre-registro 05 v1.4\n",
          "## Verificación con `etapa4_tstr.py`\n",
          f"- `cargar_tabla`: {len(t)} filas, columnas WP4 completas · `deflactar_test_a_2025`: factor "
          f"{meta['factor_min']:.4f}–{meta['factor_max']:.4f} · tokens SIGNO {sorted(signos)} · CUENTA {sorted(cuentas)}",
          f"- Comando: `python tools/etapa4_tstr.py --test {ac.rel(salida)}`",
-         "- Pendiente en WP8 (nota D-M6/D-M7): exactitud ponderada con `peso_muestreo` e IC por fila estratificado por "
-         "`estrato_muestreo`. Sin ese cambio, el arnés usará `voluntario_id` como conglomerado principal.\n",
+         "- IC principal (D-M7): bootstrap por fila, estratificado por `estrato_muestreo`. El bootstrap por grupo de "
+         "extractos (`voluntario_id`) es solo una sensibilidad. Secundaria (D-M6): exactitud ponderada con "
+         "`peso_muestreo`.\n",
          "## Origen de la etiqueta\n",
          f"{out['origen_etiqueta'].value_counts().to_dict()} · doble anotación: "
          f"{int(out['doble_anotacion'].eq('si').sum())}/{len(out)}",

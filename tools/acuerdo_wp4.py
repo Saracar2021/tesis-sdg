@@ -3,7 +3,8 @@
 """
 WP4 — Acuerdo entre anotadores (Cohen's κ sobre categoria_n1) y lista de desacuerdos para adjudicar.
 
-Pre-registro: docs/datos_reales/05_prerregistro_muestreo_anotacion.md (v1.3), §6 y §12.
+Pre-registro: docs/datos_reales/05_prerregistro_muestreo_anotacion.md (v1.4), §6, §12 y §13.
+Convenciones de los 4 casos: docs/datos_reales/07_hoja_calibracion_casos.md (fijadas en la adjudicación, v1.4).
 
 Lee     : data/reales_anon/anotacion/lote_A1.xlsx, lote_A2.xlsx (o .csv) y la clave del test (--clave).
 Escribe : data/reales_anon/anotacion/acuerdo_<clave>/
@@ -12,6 +13,8 @@ Escribe : data/reales_anon/anotacion/acuerdo_<clave>/
             adjudicacion.xlsx / .csv     desacuerdos con las dos etiquetas y columnas vacías para la etiqueta final
             una_sola_anotacion.csv       ítems de la clave anotados por un solo anotador (si los hay)
             inconsistencias_n2.csv       categoria_n2 que no pertenece a su categoria_n1 (si las hay)
+            correcciones_convencion.csv  ítems ACORDADOS (A1 = A2 en categoria_n1) cuya etiqueta difiere de la
+                                         convención de su caso; la aplica tools/consolidar_test_wp4.py
 
 Uso (desde la raíz del repo):
   python tools/acuerdo_wp4.py                                   # test de 200 ítems
@@ -21,7 +24,8 @@ Reglas pre-registradas:
   * κ de Cohen sobre categoria_n1, solo ítems con doble anotación. Mínimo 80 en común; si hay menos, se detiene.
   * IC95 percentil por bootstrap: 2.000 réplicas, semilla 42, remuestreo por fila ESTRATIFICADO por estrato_muestreo.
   * Valores fuera de la taxonomía v1.1.0 en categoria_n1: el script se detiene y los lista (no corrige nada).
-  * κ también sin los ítems de los 4 casos de convención (patrones de CASOS_CONVENCION), como dato descriptivo.
+  * κ sobre las anotaciones ORIGINALES (sin calibración ni convenciones previas, v1.4 §13). Sin los ítems de los 4
+    casos se reporta como dato descriptivo con el patrón pre-registrado (v1.3) y con los ampliados de la v1.4.
 """
 
 import argparse
@@ -35,15 +39,22 @@ import numpy as np
 import pandas as pd
 
 RAIZ = Path(__file__).resolve().parent.parent
-ANOT = RAIZ / "data" / "reales_anon" / "anotacion"
-TAXONOMIA = RAIZ / "docs" / "taxonomia" / "taxonomia_gastos_colombia_v1.json"
 VERSION_TAXONOMIA = "1.1.0"
+
+
+# Rutas derivadas de RAIZ: se calculan al llamarlas (no al importar), para que un monkeypatch de RAIZ las redirija.
+def ruta_anotacion():
+    return RAIZ / "data" / "reales_anon" / "anotacion"
+
+
+def ruta_taxonomia():
+    return RAIZ / "docs" / "taxonomia" / "taxonomia_gastos_colombia_v1.json"
 SEMILLA = 42
 N_BOOT = 2000
 MIN_COMUN = 80
 CAUSAS = ["error_anotador", "ambiguedad_regla", "descripcion_insuficiente", "convencion_calibracion"]
 
-# Patrones de los 4 casos de convención (pre-registro v1.2 §5). Fijados antes de anotar; no se ajustan después.
+# Patrones PRE-REGISTRADOS de los 4 casos (v1.2 §5, PSE corregido en v1.3). Fijados antes de anotar; no se cambian.
 CASOS_CONVENCION = {
     "reverso_devolucion": (r"REVERSAD|ANUL\.|DEVOLUCION", None),
     # Solo pasarela o banco, sin facturador identificable (corrección v1.3, antes de anotar: la v1.2 incluía
@@ -55,7 +66,8 @@ CASOS_CONVENCION = {
 }
 
 
-def caso_convencion(desc, cuenta):
+def caso_convencion_v13(desc, cuenta):
+    """Caso según los patrones pre-registrados (v1.3). Solo para el κ descriptivo pre-registrado."""
     d = str(desc).upper().strip()
     for nombre, (pat, cta) in CASOS_CONVENCION.items():
         if cta is not None and cuenta != cta:
@@ -65,6 +77,56 @@ def caso_convencion(desc, cuenta):
         if re.search(pat, d):
             return nombre
     return ""
+
+
+# Convenciones v1.4 (hoja 07, fijadas en la adjudicación el 26 nov, antes de ver predicciones). Definidas DESPUÉS de
+# anotar: lo que se calcule con ellas se marca como tal. Orden: la primera que coincide gana.
+# (caso, subcaso, patrón, cuenta o None, exige_no_persona, categoria_n1, categoria_n2, regla citada)
+CONVENCIONES_V14 = [
+    ("reverso_devolucion", "reverso_comercio_identificable", r"(?=.*(?:REVERSAD|ANUL\.|DEVOLUCION))(?=.*RAPPI)", None,
+     False, "comidas_fuera", "domicilios_app", "caso 1: R1 (comercio identificable) + R4 (domicilio de plataforma)"),
+    # Solo los reversos que la hoja nombra como «sin bien identificable». Cualquier otro reverso no tiene regla
+    # automática: R1 exige decidir el bien caso a caso, así que se lista y se detiene la consolidación.
+    ("reverso_devolucion", "reverso_sin_bien_identificable",
+     r"^(?:DEVOLUCION|DEVOLUCION GW-SIA|REVERSADA - DLOCAL\b.*|REVERSADA - FALABELLA\b.*)$", None,
+     False, "otros", "ininteligible", "caso 1: R7 (sin comercio, o pasarela/tienda que no permite saber el bien)"),
+    ("reverso_devolucion", "reverso_sin_regla", r"REVERSAD|ANUL\.|DEVOLUCION", None,
+     False, None, None, "caso 1: reverso no listado en la hoja; decidir con R1 (bien identificable) o R7"),
+    ("pse_sin_facturador", "pse_sin_facturador", CASOS_CONVENCION["pse_sin_facturador"][0], "banco",
+     False, "otros", "ininteligible", "caso 2: R7 (R5 no aplica: el texto no nombra la factura)"),
+    ("compra_en_persona", "compra_o_pago_a_persona",
+     r"^(?:COMPRA(?: EN)? |PAGO QR )?(?:RBM\*)?PERSONA(?: FRANQUICIA MASTER CARD)?$", None,
+     False, "otros", "ininteligible", "caso 4: exclusión de transferencias_p2p (pago por bien/servicio) + R7"),
+    ("compra_en_persona", "transf_persona", r"^TRANSF\b.*\bPERSONA$", None,
+     False, "transferencias_p2p", "indeterminada",
+     "caso 4: criterio del caso 3 (PERSONA también enmascara al titular; no distingue cuenta propia de tercero)"),
+    ("transf_billetera_sin_persona", "billetera", r"^TRANSFERENCIAS?\b.*(?:NEQUI|DAVIPLATA)", "banco",
+     True, "transferencias_p2p", "indeterminada", "caso 3: caso límite de movimiento_propio (sin titularidad en el texto)"),
+    ("transf_billetera_sin_persona", "analogia_cuenta_otra_entidad",
+     r"^(?!COMPRA).*(?:TRASLADO VIRTUAL OTROS BANCOS|BREB|REC\.INTER TFR)", "banco",
+     True, "transferencias_p2p", "indeterminada", "caso 3: extensión por analogía (decisión de la investigadora)"),
+]
+
+
+def convencion(desc, cuenta, con_analogia=True):
+    """Devuelve el dict de la convención v1.4 que aplica, o None."""
+    d = str(desc).upper().strip()
+    for caso, sub, pat, cta, sin_persona, n1, n2, regla in CONVENCIONES_V14:
+        if cta is not None and cuenta != cta:
+            continue
+        if sin_persona and ("PERSONA" in d or "PSE" in d):
+            continue
+        if sub == "analogia_cuenta_otra_entidad" and not con_analogia:
+            continue
+        if re.search(pat, d):
+            return {"caso": caso, "subcaso": sub, "categoria_n1": n1, "categoria_n2": n2, "regla": regla}
+    return None
+
+
+def caso_convencion(desc, cuenta):
+    """Caso v1.4 (con extensiones). Es el que se escribe en el test y el que guía las correcciones."""
+    c = convencion(desc, cuenta)
+    return c["caso"] if c else ""
 
 
 def sha256_archivo(ruta):
@@ -83,7 +145,7 @@ def rel(p):
 
 
 def taxonomia():
-    tax = json.loads(TAXONOMIA.read_text(encoding="utf-8"))
+    tax = json.loads(ruta_taxonomia().read_text(encoding="utf-8"))
     if tax["metadata"]["version"] != VERSION_TAXONOMIA:
         sys.exit(f"Taxonomía {tax['metadata']['version']} ≠ {VERSION_TAXONOMIA}")
     n1 = [c["id"] for c in tax["categorias_nivel_1"]]
@@ -195,17 +257,21 @@ def tabla_md(df):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description="κ entre anotadores y desacuerdos para adjudicar (WP4).")
-    ap.add_argument("--clave", type=Path, default=ANOT / "muestra_test_clave.csv")
-    ap.add_argument("--a1", type=Path, default=ANOT / "lote_A1.xlsx")
-    ap.add_argument("--a2", type=Path, default=ANOT / "lote_A2.xlsx")
+    ap.add_argument("--clave", type=Path, default=None, help="por defecto: anotacion/muestra_test_clave.csv")
+    ap.add_argument("--a1", type=Path, default=None, help="por defecto: anotacion/lote_A1.xlsx")
+    ap.add_argument("--a2", type=Path, default=None, help="por defecto: anotacion/lote_A2.xlsx")
     ap.add_argument("--salida", type=Path, default=None, help="por defecto: anotacion/acuerdo_<nombre de la clave>/")
     a = ap.parse_args(argv)
+    anot = ruta_anotacion()
+    a.clave = a.clave or anot / "muestra_test_clave.csv"
+    a.a1 = a.a1 or anot / "lote_A1.xlsx"
+    a.a2 = a.a2 or anot / "lote_A2.xlsx"
     for p in ("clave", "a1", "a2"):
         r = getattr(a, p)
         setattr(a, p, r if r.is_absolute() else (RAIZ / r))
         if not getattr(a, p).exists():
             sys.exit(f"No existe {rel(getattr(a, p))}")
-    salida = a.salida or (ANOT / f"acuerdo_{a.clave.stem}")
+    salida = a.salida or (anot / f"acuerdo_{a.clave.stem}")
     salida = salida if salida.is_absolute() else RAIZ / salida
 
     n1, n2 = taxonomia()
@@ -252,8 +318,41 @@ def main(argv=None):
     k, po, pe = kappa(a1, a2, n1)
     ic, nulos = bootstrap_kappa(a1, a2, comun["estrato_muestreo"], n1)
     comun["caso_convencion"] = [caso_convencion(d, c) for d, c in zip(comun["descripcion"], comun["cuenta_tipo"])]
-    sin = comun[comun["caso_convencion"].eq("")]
-    k_sin = kappa(sin["categoria_n1_A1"], sin["categoria_n1_A2"], n1)[0] if len(sin) else float("nan")
+    variantes = {
+        "pre-registrado (v1.3)": [caso_convencion_v13(d, c) != "" for d, c in zip(comun.descripcion, comun.cuenta_tipo)],
+        "v1.4: caso 4 ampliado": [convencion(d, c, con_analogia=False) is not None
+                                  for d, c in zip(comun.descripcion, comun.cuenta_tipo)],
+        "v1.4: caso 4 ampliado + analogía del caso 3": [convencion(d, c) is not None
+                                                        for d, c in zip(comun.descripcion, comun.cuenta_tipo)],
+    }
+    k_sin_var = {}
+    for nom, mask in variantes.items():
+        sub = comun[~np.asarray(mask)]
+        k_sin_var[nom] = (kappa(sub["categoria_n1_A1"], sub["categoria_n1_A2"], n1)[0] if len(sub) else float("nan"),
+                          int(np.sum(mask)), len(sub))
+
+    # Correcciones por convención: ítems con A1 = A2 en categoria_n1 cuya etiqueta acordada difiere de la convención.
+    corr = []
+    conv_desac = []
+    sin_regla = []
+    for r in comun.itertuples(index=False):
+        cv = convencion(r.descripcion, r.cuenta_tipo)
+        if cv is None:
+            continue
+        if cv["categoria_n1"] is None:
+            sin_regla.append(r.item_id)
+            continue
+        e1 = f"{r.categoria_n1_A1}.{r.categoria_n2_A1}" if r.categoria_n2_A1 else r.categoria_n1_A1
+        e2 = f"{r.categoria_n1_A2}.{r.categoria_n2_A2}" if r.categoria_n2_A2 else r.categoria_n1_A2
+        ec = f"{cv['categoria_n1']}.{cv['categoria_n2']}"
+        if r.categoria_n1_A1 != r.categoria_n1_A2:
+            conv_desac.append({"item_id": r.item_id, "caso": cv["caso"], "etiqueta_convencion": ec})
+            continue
+        n2_acordada = r.categoria_n2_A1 if r.categoria_n2_A1 == r.categoria_n2_A2 else None
+        if r.categoria_n1_A1 != cv["categoria_n1"] or n2_acordada != cv["categoria_n2"]:
+            corr.append({"item_id": r.item_id, "etiqueta_A1": e1, "etiqueta_A2": e2, "etiqueta_convencion": ec,
+                         "caso": cv["caso"], "regla_citada": cv["regla"],
+                         "cambia": "categoria_n1" if r.categoria_n1_A1 != cv["categoria_n1"] else "solo categoria_n2"})
 
     # Matriz y acuerdo por clase (acuerdo específico positivo: 2·n_ii / (fila_i + columna_i))
     mat = pd.crosstab(pd.Categorical(a1, categories=n1), pd.Categorical(a2, categories=n1), dropna=False)
@@ -288,6 +387,9 @@ def main(argv=None):
                                                                          index=False, lineterminator="\n")
     if incons:
         pd.DataFrame(incons).to_csv(salida / "inconsistencias_n2.csv", index=False, lineterminator="\n")
+    cols_corr = ["item_id", "etiqueta_A1", "etiqueta_A2", "etiqueta_convencion", "caso", "regla_citada", "cambia"]
+    pd.DataFrame(corr, columns=cols_corr).sort_values("item_id").to_csv(
+        salida / "correcciones_convencion.csv", index=False, lineterminator="\n")
 
     mat_nz = mat.loc[mat.sum(axis=1) > 0, mat.sum(axis=0) > 0]
     L = [f"# Acuerdo entre anotadores — WP4 (`tools/acuerdo_wp4.py`)\n",
@@ -307,10 +409,18 @@ def main(argv=None):
          f"(Landis & Koch) · meta de la guía κ ≥ 0,61: **{'cumple' if k >= 0.61 else 'NO cumple'}**",
          f"- Acuerdo bruto p_o = {po:.3f} · acuerdo esperado por azar p_e = {pe:.3f}"
          + (f" · réplicas con κ indefinido: {nulos}" if nulos else ""),
-         f"- Sin los ítems de los 4 casos de convención ({len(comun) - len(sin)} ítems; descriptivo, pre-registro §5): "
-         f"κ = {k_sin:.3f} sobre {len(sin)} ítems. En los casos de convención el κ mide el seguimiento de una "
-         "convención pactada.",
-         f"- Casos de convención en común: {comun['caso_convencion'].replace('', np.nan).value_counts().to_dict()}",
+         "- El κ usa las anotaciones **originales**: mide acuerdo **sin calibración ni convenciones previas** "
+         "(pre-registro v1.4, §13). Las convenciones solo corrigen la etiqueta final.",
+         "- κ sin los ítems de los 4 casos (dato descriptivo):",
+         *[f"  - {nom}: κ = {v[0]:.3f} sobre {v[2]} ítems ({v[1]} excluidos)"
+           + (" · patrón definido después de anotar" if "v1.4" in nom else "") for nom, v in k_sin_var.items()],
+         f"- Ítems de los 4 casos (v1.4) en común: {comun['caso_convencion'].replace('', np.nan).value_counts().to_dict()}",
+         f"- Correcciones por convención en ítems acordados: **{len(corr)}** "
+         f"({sum(c['cambia'] == 'categoria_n1' for c in corr)} cambian `categoria_n1`) → `correcciones_convencion.csv`",
+         "- Reversos sin regla automática (decidir y agregar a la hoja 07 antes de consolidar): "
+         + (", ".join(sin_regla) or "ninguno"),
+         "- Desacuerdos de los 4 casos (la adjudicación debe asignar la etiqueta de la convención): "
+         + (", ".join(f"{c['item_id']} → {c['etiqueta_convencion']}" for c in conv_desac) or "ninguno"),
          f"- Desacuerdos para adjudicar: **{len(adj)}** → `{rel(ruta_adj)}`",
          f"- Inconsistencias `categoria_n2` ∉ `categoria_n1`: {len(incons)}"
          + (" → `inconsistencias_n2.csv` (no afectan al κ; corregir en la adjudicación)" if incons else ""),
